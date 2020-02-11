@@ -1,0 +1,2 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+WinterSaturday,0,0,0,0,0,1,0,20200104,20200314

@@ -1,0 +1,4 @@
+service_id,date,exception_type
+FULLW,20070604,2
+MONDAY,20070101,2
+MONDAY2,20070101,2

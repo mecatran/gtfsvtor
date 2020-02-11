@@ -1,0 +1,43 @@
+plugins {
+  id 'java'
+  id 'application'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+description = 'GTFSVTOR - General Transit Feed Specification Validator'
+version = '0.1.0'
+mainClassName = 'com.mecatran.gtfsvtor.cmdline.GtfsVtorMain'
+
+repositories {
+  mavenCentral()
+}
+startScripts {
+    applicationName = 'gtfsvtor'
+}
+distZip {
+    archiveName "gtfsvtor.zip"
+}
+tasks.distTar.enabled = false
+
+jar {
+  manifest {
+    attributes 'Implementation-Title'  : project.description,
+               'Implementation-Version': version,
+               'Built-By'              : System.properties['user.name'],
+               'Build-Date'            : new java.text.SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+               'Build-Revision'        : "TODO",
+               'Created-By'            : "Gradle ${gradle.gradleVersion}",
+               'Build-Jdk'             : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+               'Build-OS'              : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
+  }
+}
+
+dependencies {
+  compile 'com.google.guava:guava:21.0'
+  compile 'org.apache.commons:commons-csv:1.7'
+  compile 'commons-io:commons-io:2.6'
+  compile 'org.locationtech.jts:jts-core:1.16.1'
+  compile 'com.googlecode.jatl:jatl:0.2.3'
+  testCompile 'junit:junit:4.12'
+}

@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,route_fare_class,line_id,listed_route
+214216,1,214/216,Houghs Neck - Quincy Center via Germantown,Local Bus,3,,FFC72C,000000,52141,Local Bus,line-214216,1

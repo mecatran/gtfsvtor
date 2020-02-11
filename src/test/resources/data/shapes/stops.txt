@@ -1,0 +1,4 @@
+stop_id,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,stop_code,location_type,parent_station
+S1,Stop 1,,45.00,0.00,,,,,
+S2,Stop 2,,45.00,0.01,,,,,
+S3,Stop 3,,45.00,0.02,,,,,

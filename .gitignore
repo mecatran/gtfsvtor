@@ -1,0 +1,8 @@
+build
+bin
+validation-report.html
+.classpath
+.gradle
+.project
+.settings
+src/test/resources/xdata
