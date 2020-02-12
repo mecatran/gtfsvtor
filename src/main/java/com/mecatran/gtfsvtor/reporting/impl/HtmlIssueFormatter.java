@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.reporting.impl;
 import java.text.MessageFormat;
 
 import com.googlecode.jatl.MarkupUtils;
+import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 
@@ -31,6 +32,13 @@ public class HtmlIssueFormatter implements IssueFormatter {
 	@Override
 	public String var(String name) {
 		return span("var", name);
+	}
+
+	@Override
+	public String colors(GtfsColor color, GtfsColor textColor) {
+		return String.format(
+				"<span style='display:inline-block; padding-left:0.4em; padding-right:0.4em; color:%s; background-color:%s'>%s</span>",
+				textColor.toHtmlString(), color.toHtmlString(), "TEXT");
 	}
 
 	private String span(String cssClass, Object data) {

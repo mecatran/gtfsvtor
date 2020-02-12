@@ -1,0 +1,6 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+AB,DTA,,Airport ⇒ Bullfrog,,3,,FF0000,000000
+BFC,DTA,,Bullfrog ⇒ Furnace Creek Resort,,3,,FF0000,AA0000
+STBA,DTA,,Stagecoach ⇒ Airport Shuttle,,3,,FE0000,AB0000
+CITY,DTA,Ō,Bar Circle,Route with ĸool unicode shortname,3,,000000,
+AAMV,DTA,,Airport ⇒ Amargosa Valley,,3,,,

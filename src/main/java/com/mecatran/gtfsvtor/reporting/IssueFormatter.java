@@ -1,5 +1,6 @@
 package com.mecatran.gtfsvtor.reporting;
 
+import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
@@ -22,6 +23,9 @@ public interface IssueFormatter {
 
 	/** Format a variable, object field value, general message... */
 	public String var(String name);
+
+	/** Format two colors (either colors themselves or a sample in HTML) */
+	public String colors(GtfsColor color, GtfsColor textColor);
 
 	/** Format a time */
 	public default String time(GtfsLogicalTime time) {

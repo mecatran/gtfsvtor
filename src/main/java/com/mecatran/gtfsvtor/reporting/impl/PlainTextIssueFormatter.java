@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.reporting.impl;
 
 import java.text.MessageFormat;
 
+import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 
@@ -30,6 +31,11 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 	@Override
 	public String var(String var) {
 		return "`" + var + "'";
+	}
+
+	@Override
+	public String colors(GtfsColor color, GtfsColor textColor) {
+		return textColor.toHtmlString() + "/" + color.toHtmlString();
 	}
 
 	public String getPlainTextResult() {

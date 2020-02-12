@@ -8,6 +8,9 @@ public class GtfsColor {
 
 	private final int rgb;
 
+	public static final GtfsColor WHITE = new GtfsColor(0xFFFFFF);
+	public static final GtfsColor BLACK = new GtfsColor(0x000000);
+
 	private GtfsColor(int rgb) {
 		this.rgb = rgb;
 	}
@@ -29,6 +32,23 @@ public class GtfsColor {
 
 	public int getRgb() {
 		return rgb;
+	}
+
+	public String toHtmlString() {
+		return String.format("#%06X", rgb);
+	}
+
+	/**
+	 * Compute the brightness of an sRGB color using the formula from
+	 * http://www.w3.org/TR/2000/WD-AERT-20000426#color-contrast
+	 *
+	 * @return Brightness, ranging [0..1]
+	 */
+	public double getBrightness() {
+		int r = (rgb & 0xff0000) >> 16;
+		int g = (rgb & 0x00ff00) >> 8;
+		int b = (rgb & 0x0000ff);
+		return (299 * r + 587 * g + 114 * b) / 255000.;
 	}
 
 	@Override

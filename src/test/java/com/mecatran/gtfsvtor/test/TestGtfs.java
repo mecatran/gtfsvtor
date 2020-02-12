@@ -58,6 +58,7 @@ import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
+import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
@@ -758,6 +759,7 @@ public class TestGtfs {
 			GtfsStop stop = dao.getStop(stopTime.getStopId());
 			ProjectedPoint pp = lgi.getProjectedPoint(stopTime);
 			avgDist += pp.getDistanceToShapeMeters();
+			assertTrue(pp.getDistanceToShapeMeters() < 10.0);
 			double d = Geodesics.fastDistanceMeters(stop.getCoordinates(),
 					pp.getProjectedPoint());
 			assertEquals(pp.getDistanceToShapeMeters(), d, 1e-4);
@@ -779,6 +781,18 @@ public class TestGtfs {
 		avgK /= stopTimes.size();
 		assertTrue(avgDist < 6.0);
 		assertTrue(avgK < 1.1);
+	}
+
+	@Test
+	public void testRouteColors() {
+		TestBundle tb = loadAndValidate("route_colors");
+		List<RouteColorContrastIssue> rccs = tb.report
+				.getReportIssues(RouteColorContrastIssue.class);
+		assertEquals(3, rccs.size());
+		RouteColorContrastIssue rcc0 = rccs.get(0);
+		assertEquals(0.1, rcc0.getBrightnessDelta(), 1e-2);
+		RouteColorContrastIssue rcc2 = rccs.get(2);
+		assertEquals(0.0, rcc2.getBrightnessDelta(), 1e-2);
 	}
 
 	@Test
