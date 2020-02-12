@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
+import java.util.Optional;
+
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 
 public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceInfo {
@@ -52,12 +54,20 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 		return url;
 	}
 
-	public GtfsColor getColor() {
-		return color;
+	public Optional<GtfsColor> getColor() {
+		return Optional.ofNullable(color);
 	}
 
-	public GtfsColor getTextColor() {
-		return textColor;
+	public GtfsColor getNonNullColor() {
+		return color == null ? GtfsColor.WHITE : color;
+	}
+
+	public Optional<GtfsColor> getTextColor() {
+		return Optional.ofNullable(textColor);
+	}
+
+	public GtfsColor getNonNullTextColor() {
+		return textColor == null ? GtfsColor.BLACK : textColor;
 	}
 
 	public Integer getSortOrder() {
