@@ -1,9 +1,9 @@
 package com.mecatran.gtfsvtor.validation.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
@@ -11,7 +11,8 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 public class CompoundStreamingValidator
 		implements StreamingValidator<GtfsObject<?>> {
 
-	private Map<Class<? extends GtfsObject<?>>, StreamingValidator<? extends GtfsObject<?>>> validators = new HashMap<>();
+	private ListMultimap<Class<? extends GtfsObject<?>>, StreamingValidator<? extends GtfsObject<?>>> validators = ArrayListMultimap
+			.create();
 
 	public CompoundStreamingValidator(
 			List<? extends StreamingValidator<GtfsObject<?>>> validators) {
@@ -33,12 +34,15 @@ public class CompoundStreamingValidator
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void validate(GtfsObject<?> object, Context context) {
-		@SuppressWarnings("unchecked")
-		StreamingValidator<GtfsObject<?>> validator = (StreamingValidator<GtfsObject<?>>) validators
-				.get(object.getClass());
-		if (validator != null) {
-			validator.validate(object, context);
+		Class<? extends GtfsObject<?>> clazz = (Class<? extends GtfsObject<?>>) object
+				.getClass();
+		List<StreamingValidator<? extends GtfsObject<?>>> vtors = validators
+				.get(clazz);
+		for (StreamingValidator<? extends GtfsObject<?>> vtor : vtors) {
+			StreamingValidator<GtfsObject<?>> vtor2 = (StreamingValidator<GtfsObject<?>>) vtor;
+			vtor2.validate(object, context);
 		}
 	}
 }
