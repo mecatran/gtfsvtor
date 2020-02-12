@@ -51,6 +51,33 @@ public class GtfsColor {
 		return (299 * r + 587 * g + 114 * b) / 255000.;
 	}
 
+	/**
+	 * Approximate version of a color perceived distance function.
+	 * https://www.compuphase.com/cmetric.htm
+	 *
+	 * @return Perceived distance, ranging [0..1]
+	 */
+	public double getDistance(GtfsColor c) {
+		if (rgb == c.rgb)
+			return 0.0;
+		int r1 = (rgb & 0xff0000) >> 16;
+		int g1 = (rgb & 0x00ff00) >> 8;
+		int b1 = (rgb & 0x0000ff);
+		int r2 = (c.rgb & 0xff0000) >> 16;
+		int g2 = (c.rgb & 0x00ff00) >> 8;
+		int b2 = (c.rgb & 0x0000ff);
+
+		double rmean = (r1 + r2) / 2;
+		double dr = r1 - r2;
+		double dg = g1 - g2;
+		double db = b1 - b2;
+		double ret = Math
+				.sqrt((((512.0 + rmean) * dr * dr) / 256.0) + 4.0 * dg * dg
+						+ (((767.0 - rmean) * db * db) / 256.0))
+				/ 764.8339663572415;
+		return ret;
+	}
+
 	@Override
 	public int hashCode() {
 		return Integer.hashCode(rgb);

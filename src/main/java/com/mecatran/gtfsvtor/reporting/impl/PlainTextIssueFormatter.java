@@ -35,7 +35,7 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 
 	@Override
 	public String colors(GtfsColor color, GtfsColor textColor) {
-		return textColor.toHtmlString() + "/" + color.toHtmlString();
+		return color.toHtmlString() + "/" + textColor.toHtmlString();
 	}
 
 	public String getPlainTextResult() {

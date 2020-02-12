@@ -18,7 +18,7 @@ public class RouteColorsStreamingValidator
 
 	// Errors are disabled by default
 	@ConfigurableOption
-	public double minErrorBrightnessDelta = 0.0;
+	public double minErrorBrightnessDelta = -1.0;
 
 	@Override
 	public void validate(GtfsRoute route, StreamingValidator.Context context) {

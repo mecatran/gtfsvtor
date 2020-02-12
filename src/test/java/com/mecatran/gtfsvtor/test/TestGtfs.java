@@ -59,6 +59,7 @@ import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
+import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
@@ -788,11 +789,17 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("route_colors");
 		List<RouteColorContrastIssue> rccs = tb.report
 				.getReportIssues(RouteColorContrastIssue.class);
-		assertEquals(3, rccs.size());
+		assertEquals(4, rccs.size());
 		RouteColorContrastIssue rcc0 = rccs.get(0);
-		assertEquals(0.1, rcc0.getBrightnessDelta(), 1e-2);
+		assertEquals(0.195, rcc0.getBrightnessDelta(), 1e-3);
 		RouteColorContrastIssue rcc2 = rccs.get(2);
-		assertEquals(0.0, rcc2.getBrightnessDelta(), 1e-2);
+		assertEquals(0.0, rcc2.getBrightnessDelta(), 1e-3);
+
+		List<SimilarRouteColorWarning> srcs = tb.report
+				.getReportIssues(SimilarRouteColorWarning.class);
+		assertEquals(4, srcs.size());
+		SimilarRouteColorWarning src0 = srcs.get(0);
+		assertEquals(0.00226, src0.getColorDistance(), 1e-4);
 	}
 
 	@Test
