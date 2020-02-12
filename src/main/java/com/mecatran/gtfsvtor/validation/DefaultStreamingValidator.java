@@ -22,7 +22,8 @@ public class DefaultStreamingValidator
 	}
 
 	@Override
-	public void validate(GtfsObject<?> object, Context context) {
-		compound.validate(object, context);
+	public void validate(Class<? extends GtfsObject<?>> clazz,
+			GtfsObject<?> object, Context context) {
+		compound.validate(clazz, object, context);
 	}
 }

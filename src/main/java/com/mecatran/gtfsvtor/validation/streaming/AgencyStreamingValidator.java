@@ -11,8 +11,8 @@ public class AgencyStreamingValidator
 		implements StreamingValidator<GtfsAgency> {
 
 	@Override
-	public void validate(GtfsAgency agency,
-			StreamingValidator.Context context) {
+	public void validate(Class<? extends GtfsAgency> clazz, GtfsAgency agency,
+			Context context) {
 		checkNonNull(agency::getName, "agency_name", context);
 		checkNonNull(agency::getUrl, "agency_url", context);
 		checkNonNull(agency::getTimezone, "agency_timezone", context);

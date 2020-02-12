@@ -15,7 +15,8 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 
 	@Override
-	public void validate(GtfsRoute route, StreamingValidator.Context context) {
+	public void validate(Class<? extends GtfsRoute> clazz, GtfsRoute route,
+			StreamingValidator.Context context) {
 		ReportSink reportSink = context.getReportSink();
 		ReadOnlyDao dao = context.getPartialDao();
 		checkNonNull(route::getAgencyId, "agency_id", context);

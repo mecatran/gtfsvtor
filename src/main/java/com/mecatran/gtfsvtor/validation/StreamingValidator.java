@@ -22,5 +22,5 @@ public interface StreamingValidator<T extends GtfsObject<?>> {
 		public ReadOnlyDao getPartialDao();
 	}
 
-	public void validate(T object, Context context);
+	public void validate(Class<? extends T> clazz, T object, Context context);
 }

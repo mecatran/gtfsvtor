@@ -35,14 +35,13 @@ public class CompoundStreamingValidator
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void validate(GtfsObject<?> object, Context context) {
-		Class<? extends GtfsObject<?>> clazz = (Class<? extends GtfsObject<?>>) object
-				.getClass();
+	public void validate(Class<? extends GtfsObject<?>> clazz,
+			GtfsObject<?> object, Context context) {
 		List<StreamingValidator<? extends GtfsObject<?>>> vtors = validators
 				.get(clazz);
 		for (StreamingValidator<? extends GtfsObject<?>> vtor : vtors) {
 			StreamingValidator<GtfsObject<?>> vtor2 = (StreamingValidator<GtfsObject<?>>) vtor;
-			vtor2.validate(object, context);
+			vtor2.validate(clazz, object, context);
 		}
 	}
 }

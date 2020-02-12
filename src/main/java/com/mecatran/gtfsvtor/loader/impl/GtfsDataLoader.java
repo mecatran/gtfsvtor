@@ -21,6 +21,7 @@ import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsZone;
+import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
@@ -89,7 +90,8 @@ public class GtfsDataLoader implements DataLoader {
 					.withEmail(erow.getString("agency_email"));
 			GtfsAgency agency = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(agency, sourceContext);
+			context.getStreamingValidator().validate(GtfsAgency.class, agency,
+					sourceContext);
 			context.getDao().addAgency(agency, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
@@ -121,7 +123,8 @@ public class GtfsDataLoader implements DataLoader {
 					.withSortOrder(erow.getInteger("route_sort_order"));
 			GtfsRoute route = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(route, sourceContext);
+			context.getStreamingValidator().validate(GtfsRoute.class, route,
+					sourceContext);
 			context.getDao().addRoute(route, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
@@ -155,7 +158,8 @@ public class GtfsDataLoader implements DataLoader {
 					.withPlatformCode(erow.getString("platform_code"));
 			GtfsStop stop = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(stop, sourceContext);
+			context.getStreamingValidator().validate(GtfsStop.class, stop,
+					sourceContext);
 			context.getDao().addStop(stop, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
@@ -184,7 +188,8 @@ public class GtfsDataLoader implements DataLoader {
 					.withEndDate(erow.getLogicalDate("end_date"));
 			GtfsCalendar calendar = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(calendar, sourceContext);
+			context.getStreamingValidator().validate(GtfsCalendar.class,
+					calendar, sourceContext);
 			context.getDao().addCalendar(calendar, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
@@ -209,8 +214,8 @@ public class GtfsDataLoader implements DataLoader {
 							.getCalendarDateExceptionType("exception_type"));
 			GtfsCalendarDate calendarDate = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(calendarDate,
-					sourceContext);
+			context.getStreamingValidator().validate(GtfsCalendarDate.class,
+					calendarDate, sourceContext);
 			context.getDao().addCalendarDate(calendarDate, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
@@ -236,7 +241,8 @@ public class GtfsDataLoader implements DataLoader {
 							erow.getDouble("shape_dist_traveled"));
 			GtfsShapePoint shapePoint = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(shapePoint, sourceContext);
+			context.getStreamingValidator().validate(GtfsShapePoint.class,
+					shapePoint, sourceContext);
 			context.getDao().addShapePoint(shapePoint, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
@@ -268,7 +274,8 @@ public class GtfsDataLoader implements DataLoader {
 					.withBikesAllowed(erow.getBikeAccess("bikes_allowed"));
 			GtfsTrip trip = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(trip, sourceContext);
+			context.getStreamingValidator().validate(GtfsTrip.class, trip,
+					sourceContext);
 			context.getDao().addTrip(trip, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
@@ -284,7 +291,8 @@ public class GtfsDataLoader implements DataLoader {
 		for (DataRow row : table) {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
-			GtfsStopTime.Builder builder = new GtfsStopTime.Builder();
+			// TODO Make this configurable
+			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
 			builder.withTripId(GtfsTrip.id(erow.getString("trip_id")))
 					.withArrivalTime(erow.getLogicalTime("arrival_time"))
 					.withDepartureTime(erow.getLogicalTime("departure_time"))
@@ -298,8 +306,12 @@ public class GtfsDataLoader implements DataLoader {
 					.withTimepoint(erow.getTimepoint("timepoint"));
 			GtfsStopTime stopTime = builder.build();
 			sourceContext.setRow(row);
-			context.getStreamingValidator().validate(stopTime, sourceContext);
+			context.getStreamingValidator().validate(GtfsStopTime.class,
+					stopTime, sourceContext);
 			context.getDao().addStopTime(stopTime, sourceContext);
+			if ((table.getCurrentLineNumber() % 10000) == 0) {
+				System.out.print(table.getCurrentLineNumber() + "\r");
+			}
 		}
 		closeTable(table, context.getReportSink());
 	}

@@ -13,8 +13,8 @@ public class ShapePointStreamingValidator
 		implements StreamingValidator<GtfsShapePoint> {
 
 	@Override
-	public void validate(GtfsShapePoint shapePoint,
-			StreamingValidator.Context context) {
+	public void validate(Class<? extends GtfsShapePoint> clazz,
+			GtfsShapePoint shapePoint, StreamingValidator.Context context) {
 		ReportSink reportSink = context.getReportSink();
 		// Trip id / stop sequence is primary key and tested by DAO
 		checkNonNull(shapePoint::getLat, "shape_pt_lat", context);

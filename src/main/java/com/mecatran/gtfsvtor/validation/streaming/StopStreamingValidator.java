@@ -11,7 +11,8 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 public class StopStreamingValidator implements StreamingValidator<GtfsStop> {
 
 	@Override
-	public void validate(GtfsStop stop, StreamingValidator.Context context) {
+	public void validate(Class<? extends GtfsStop> clazz, GtfsStop stop,
+			StreamingValidator.Context context) {
 		GtfsStopType stopType = stop.getType();
 		boolean namePosMandatory = stopType == GtfsStopType.STOP
 				|| stopType == GtfsStopType.STATION

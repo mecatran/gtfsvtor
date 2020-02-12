@@ -11,8 +11,8 @@ public class CalendarStreamingValidator
 		implements StreamingValidator<GtfsCalendar> {
 
 	@Override
-	public void validate(GtfsCalendar calendar,
-			StreamingValidator.Context context) {
+	public void validate(Class<? extends GtfsCalendar> clazz,
+			GtfsCalendar calendar, StreamingValidator.Context context) {
 		checkNonNull(calendar::isMonday, "monday", context);
 		checkNonNull(calendar::isTuesday, "tuesday", context);
 		checkNonNull(calendar::isWednesday, "wednesday", context);

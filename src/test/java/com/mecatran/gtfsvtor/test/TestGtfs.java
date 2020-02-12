@@ -1,5 +1,6 @@
 package com.mecatran.gtfsvtor.test;
 
+import static com.mecatran.gtfsvtor.test.TestUtils.loadAndValidate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -19,14 +20,8 @@ import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex.ProjectedPoint;
-import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
-import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
-import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
-import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
-import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
-import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsBlockId;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
@@ -44,9 +39,7 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
-import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
@@ -65,47 +58,9 @@ import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
-import com.mecatran.gtfsvtor.validation.DaoValidator;
-import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
-import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
-import com.mecatran.gtfsvtor.validation.impl.DefaultDaoValidatorContext;
-import com.mecatran.gtfsvtor.validation.impl.DefaultValidatorConfig;
+import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
 public class TestGtfs {
-
-	public class TestBundle {
-		public ReviewReport report;
-		public IndexedReadOnlyDao dao;
-	}
-
-	private TestBundle loadAndValidate(String file) {
-		InMemoryReportLog report = new InMemoryReportLog();
-		TestBundle ret = new TestBundle();
-		ret.report = report;
-		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
-				.autoGuess("src/test/resources/data/" + file, report);
-		if (inputStreamSource == null)
-			return ret;
-		NamedTabularDataSource dataSource = new CsvDataSource(
-				inputStreamSource);
-		InMemoryDao dao = new InMemoryDao();
-
-		DefaultValidatorConfig config = new DefaultValidatorConfig();
-		DefaultStreamingValidator streamingValidator = new DefaultStreamingValidator(
-				config);
-		GtfsDataLoader loader = new GtfsDataLoader(dataSource);
-		loader.load(new DefaultDataLoaderContext(dao, dao, report,
-				streamingValidator));
-
-		// TODO make this cleaner
-		DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
-				report, config);
-		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config);
-		daoValidator.validate(context);
-
-		ret.dao = dao;
-		return ret;
-	}
 
 	private void testGoodDao(IndexedReadOnlyDao dao) {
 		assertEquals(1, dao.getAgencies().size());

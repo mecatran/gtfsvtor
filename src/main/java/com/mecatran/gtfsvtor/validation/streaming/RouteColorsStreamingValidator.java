@@ -21,7 +21,8 @@ public class RouteColorsStreamingValidator
 	public double minErrorBrightnessDelta = -1.0;
 
 	@Override
-	public void validate(GtfsRoute route, StreamingValidator.Context context) {
+	public void validate(Class<? extends GtfsRoute> clazz, GtfsRoute route,
+			StreamingValidator.Context context) {
 		ReportSink reportSink = context.getReportSink();
 
 		double colorBrightness = route.getNonNullColor().getBrightness();

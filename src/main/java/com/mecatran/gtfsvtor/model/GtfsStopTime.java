@@ -5,154 +5,77 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * TODO Make this class an interface to allow for optimization on memory usage
- * (for example using some kind of flyweight pattern).
+ * This class is an interface to allow for optimization on memory usage.
  */
-public class GtfsStopTime implements GtfsObject<String> {
+public interface GtfsStopTime extends GtfsObject<String> {
 
 	public static final String TABLE_NAME = "stop_times.txt";
 
-	private GtfsTrip.Id tripId;
-	// TODO Associate the values (departure/arrival) and cache
-	private GtfsLogicalTime departureTime;
-	private GtfsLogicalTime arrivalTime;
-	// TODO Associate the values (stopid/sequence/headsign) and cache
-	private GtfsStop.Id stopId;
-	private GtfsTripStopSequence stopSequence;
-	private String stopHeadsign;
-	// TODO Associate the values (pickup/dropoff/timepoint) and cache
-	private GtfsPickupType pickupType;
-	private GtfsDropoffType dropoffType;
-	private Double shapeDistTraveled;
-	private GtfsTimepoint timepoint;
+	public GtfsTrip.Id getTripId();
 
-	public GtfsTrip.Id getTripId() {
-		return tripId;
+	public GtfsLogicalTime getDepartureTime();
+
+	public default GtfsLogicalTime getDepartureOrArrivalTime() {
+		GtfsLogicalTime dep = getDepartureTime();
+		return dep != null ? dep : getArrivalTime();
 	}
 
-	public GtfsLogicalTime getDepartureTime() {
-		return departureTime;
+	public GtfsLogicalTime getArrivalTime();
+
+	public default GtfsLogicalTime getArrivalOrDepartureTime() {
+		GtfsLogicalTime arr = getArrivalTime();
+		return arr != null ? arr : getDepartureTime();
 	}
 
-	public GtfsLogicalTime getDepartureOrArrivalTime() {
-		return departureTime != null ? departureTime : arrivalTime;
+	public GtfsStop.Id getStopId();
+
+	public GtfsTripStopSequence getStopSequence();
+
+	public String getStopHeadsign();
+
+	public Optional<GtfsPickupType> getPickupType();
+
+	public default GtfsPickupType getNonNullPickupType() {
+		return getPickupType().orElse(GtfsPickupType.DEFAULT_PICKUP);
 	}
 
-	public GtfsLogicalTime getArrivalTime() {
-		return arrivalTime;
+	public Optional<GtfsDropoffType> getDropoffType();
+
+	public default GtfsDropoffType getNonNullDropoffType() {
+		return getDropoffType().orElse(GtfsDropoffType.DEFAULT_DROPOFF);
 	}
 
-	public GtfsLogicalTime getArrivalOrDepartureTime() {
-		return arrivalTime != null ? arrivalTime : departureTime;
+	public Double getShapeDistTraveled();
+
+	public Optional<GtfsTimepoint> getTimepoint();
+
+	public default GtfsTimepoint getNonNullTimepoint() {
+		return getTimepoint().orElse(GtfsTimepoint.EXACT);
 	}
 
-	public GtfsStop.Id getStopId() {
-		return stopId;
-	}
+	public interface Builder {
 
-	public GtfsTripStopSequence getStopSequence() {
-		return stopSequence;
-	}
+		public Builder withTripId(GtfsTrip.Id tripId);
 
-	public String getStopHeadsign() {
-		return stopHeadsign;
-	}
+		public Builder withDepartureTime(GtfsLogicalTime departureTime);
 
-	public Optional<GtfsPickupType> getPickupType() {
-		return Optional.ofNullable(pickupType);
-	}
+		public Builder withArrivalTime(GtfsLogicalTime arrivalTime);
 
-	public GtfsPickupType getNonNullPickupType() {
-		return pickupType == null ? GtfsPickupType.DEFAULT_PICKUP : pickupType;
-	}
+		public Builder withStopId(GtfsStop.Id stopId);
 
-	public Optional<GtfsDropoffType> getDropoffType() {
-		return Optional.ofNullable(dropoffType);
-	}
+		public Builder withStopSequence(GtfsTripStopSequence stopSequence);
 
-	public GtfsDropoffType getNonNullDropoffType() {
-		return dropoffType == null ? GtfsDropoffType.DEFAULT_DROPOFF
-				: dropoffType;
-	}
+		public Builder withStopHeadsign(String stopHeadsign);
 
-	public Double getShapeDistTraveled() {
-		return shapeDistTraveled;
-	}
+		public Builder withPickupType(GtfsPickupType pickupType);
 
-	public Optional<GtfsTimepoint> getTimepoint() {
-		return Optional.ofNullable(timepoint);
-	}
+		public Builder withDropoffType(GtfsDropoffType dropoffType);
 
-	public GtfsTimepoint getNonNullTimepoint() {
-		return timepoint == null ? GtfsTimepoint.EXACT : timepoint;
-	}
+		public Builder withShapeDistTraveled(Double shapeDistTraveled);
 
-	@Override
-	public String toString() {
-		return "StopTime{trip=" + tripId + ", arr=" + arrivalTime + ", dep="
-				+ departureTime + ", stop=" + stopId + "}";
-	}
+		public Builder withTimepoint(GtfsTimepoint timepoint);
 
-	public static class Builder {
-		private GtfsStopTime stopTime;
-
-		public Builder() {
-			stopTime = new GtfsStopTime();
-		}
-
-		public Builder withTripId(GtfsTrip.Id tripId) {
-			stopTime.tripId = tripId;
-			return this;
-		}
-
-		public Builder withDepartureTime(GtfsLogicalTime departureTime) {
-			stopTime.departureTime = departureTime;
-			return this;
-		}
-
-		public Builder withArrivalTime(GtfsLogicalTime arrivalTime) {
-			stopTime.arrivalTime = arrivalTime;
-			return this;
-		}
-
-		public Builder withStopId(GtfsStop.Id stopId) {
-			stopTime.stopId = stopId;
-			return this;
-		}
-
-		public Builder withStopSequence(GtfsTripStopSequence stopSequence) {
-			stopTime.stopSequence = stopSequence;
-			return this;
-		}
-
-		public Builder withStopHeadsign(String stopHeadsign) {
-			stopTime.stopHeadsign = stopHeadsign;
-			return this;
-		}
-
-		public Builder withPickupType(GtfsPickupType pickupType) {
-			stopTime.pickupType = pickupType;
-			return this;
-		}
-
-		public Builder withDropoffType(GtfsDropoffType dropoffType) {
-			stopTime.dropoffType = dropoffType;
-			return this;
-		}
-
-		public Builder withShapeDistTraveled(Double shapeDistTraveled) {
-			stopTime.shapeDistTraveled = shapeDistTraveled;
-			return this;
-		}
-
-		public Builder withTimepoint(GtfsTimepoint timepoint) {
-			stopTime.timepoint = timepoint;
-			return this;
-		}
-
-		public GtfsStopTime build() {
-			return stopTime;
-		}
+		public GtfsStopTime build();
 	}
 
 	public static final Comparator<GtfsStopTime> STOP_SEQ_COMPARATOR = new Comparator<GtfsStopTime>() {

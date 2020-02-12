@@ -16,8 +16,8 @@ public class StopTimeStreamingValidator
 		implements StreamingValidator<GtfsStopTime> {
 
 	@Override
-	public void validate(GtfsStopTime stopTime,
-			StreamingValidator.Context context) {
+	public void validate(Class<? extends GtfsStopTime> clazz,
+			GtfsStopTime stopTime, StreamingValidator.Context context) {
 		ReportSink reportSink = context.getReportSink();
 		// Trip id / stop sequence is primary key and tested by DAO
 		checkNonNull(stopTime::getStopId, "stop_id", context);
