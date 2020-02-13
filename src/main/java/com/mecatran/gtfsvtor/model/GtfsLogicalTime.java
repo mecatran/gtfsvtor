@@ -69,6 +69,11 @@ public class GtfsLogicalTime implements Comparable<GtfsLogicalTime> {
 		return CACHE.computeIfAbsent(ssm, GtfsLogicalTime::new);
 	}
 
+	public static GtfsLogicalTime getTime(int secSinceMidnight) {
+		// TODO synchronize CACHE?
+		return CACHE.computeIfAbsent(secSinceMidnight, GtfsLogicalTime::new);
+	}
+
 	public int getHour() {
 		return ssm / 3600;
 	}

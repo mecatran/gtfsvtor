@@ -22,6 +22,7 @@ import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsZone;
 import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime;
+import com.mecatran.gtfsvtor.model.impl.SmallGtfsStopTime;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
@@ -33,6 +34,9 @@ import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
 public class GtfsDataLoader implements DataLoader {
+
+	// TODO Make this configurable
+	private static final boolean OPTIMIZE_FOR_SIZE = true;
 
 	private NamedTabularDataSource dataSource;
 	private boolean missingCalendarsTable = false;
@@ -288,11 +292,13 @@ public class GtfsDataLoader implements DataLoader {
 			return;
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
+		int nStopTimes = 0;
 		for (DataRow row : table) {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
-			// TODO Make this configurable
-			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
+			GtfsStopTime.Builder builder = OPTIMIZE_FOR_SIZE
+					? new SmallGtfsStopTime.Builder()
+					: new SimpleGtfsStopTime.Builder();
 			builder.withTripId(GtfsTrip.id(erow.getString("trip_id")))
 					.withArrivalTime(erow.getLogicalTime("arrival_time"))
 					.withDepartureTime(erow.getLogicalTime("departure_time"))
@@ -309,10 +315,14 @@ public class GtfsDataLoader implements DataLoader {
 			context.getStreamingValidator().validate(GtfsStopTime.class,
 					stopTime, sourceContext);
 			context.getDao().addStopTime(stopTime, sourceContext);
-			if ((table.getCurrentLineNumber() % 10000) == 0) {
-				System.out.print(table.getCurrentLineNumber() + "\r");
+			nStopTimes++;
+			if ((nStopTimes % 100000) == 0) {
+				// TODO Fancier progress bar
+				System.out.print("\r" + nStopTimes);
 			}
 		}
+		if (nStopTimes > 100000)
+			System.out.println("\rLoaded " + nStopTimes + " stop times.");
 		closeTable(table, context.getReportSink());
 	}
 
