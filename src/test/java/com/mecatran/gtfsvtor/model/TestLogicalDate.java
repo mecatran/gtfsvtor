@@ -2,12 +2,11 @@ package com.mecatran.gtfsvtor.model;
 
 import static org.junit.Assert.assertEquals;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.junit.Test;
-
-import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 
 public class TestLogicalDate {
 
@@ -75,4 +74,17 @@ public class TestLogicalDate {
 		GtfsLogicalDate date2 = GtfsLogicalDate.getDate(2020, 1, 10);
 		assertEquals(date1, date2);
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testWrongDateFormat() {
+		GtfsLogicalDate.clearCache();
+		GtfsLogicalDate.getDate(2020, 2, 30);
+	}
+
+	@Test(expected = ParseException.class)
+	public void testWrongDateFormat2() throws ParseException {
+		GtfsLogicalDate.clearCache();
+		GtfsLogicalDate.parseFromYYYYMMDD("20200230");
+	}
+
 }
