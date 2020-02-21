@@ -1,10 +1,14 @@
 package com.mecatran.gtfsvtor.validation.dao;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsCalendar;
+import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
@@ -28,13 +32,36 @@ public class UnusedObjectsValidator implements DaoValidator {
 			}
 		}
 
-		/* Look for unused stops */
+		/* Look for unused (empty) routes */
+		for (GtfsRoute route : dao.getRoutes()) {
+			if (dao.getTripsOfRoute(route.getId()).isEmpty()) {
+				reportSink.report(new UnusedObjectWarning(route.getId(),
+						route.getSourceInfo(), "route_id"));
+			}
+		}
+
+		/* Look for unused calendars and stops */
+		Set<GtfsCalendar.Id> unusedCalendarIds = new HashSet<>(
+				dao.getCalendarIndex().getAllCalendarIds());
 		Set<GtfsStop.Id> unusedStopsIds = dao.getStops().stream()
 				.filter(s -> s.getType() == GtfsStopType.STOP)
 				.map(GtfsStop::getId).collect(Collectors.toSet());
 		for (GtfsTrip trip : dao.getTrips()) {
+			unusedCalendarIds.remove(trip.getServiceId());
 			for (GtfsStopTime stopTime : dao.getStopTimesOfTrip(trip.getId())) {
 				unusedStopsIds.remove(stopTime.getStopId());
+			}
+		}
+		for (GtfsCalendar.Id unusedCalendarId : unusedCalendarIds) {
+			GtfsCalendar calendar = dao.getCalendar(unusedCalendarId);
+			if (calendar != null) {
+				reportSink.report(new UnusedObjectWarning(unusedCalendarId,
+						calendar.getSourceInfo(), "calendar_id"));
+			}
+			for (GtfsCalendarDate calendarDate : dao
+					.getCalendarDates(unusedCalendarId)) {
+				reportSink.report(new UnusedObjectWarning(unusedCalendarId,
+						calendarDate.getSourceInfo(), "calendar_id"));
 			}
 		}
 		for (GtfsStop.Id unusedStopId : unusedStopsIds) {
@@ -42,5 +69,21 @@ public class UnusedObjectsValidator implements DaoValidator {
 			reportSink.report(new UnusedObjectWarning(unusedStopId,
 					stop.getSourceInfo(), "stop_id"));
 		}
+
+		/* Look for unused stations */
+		for (GtfsStop station : dao.getStopsOfType(GtfsStopType.STATION)) {
+			// TODO - shouldn't we warn of station w/o stops?
+			// A station with only entrances and nodes would be suspicious
+			boolean noStops = dao.getStopsOfStation(station.getId()).isEmpty();
+			boolean noEntrances = dao.getEntrancesOfStation(station.getId())
+					.isEmpty();
+			boolean noNodes = dao.getNodesOfStation(station.getId()).isEmpty();
+			if (noStops && noEntrances && noNodes) {
+				reportSink.report(new UnusedObjectWarning(station.getId(),
+						station.getSourceInfo(), "stop_id"));
+			}
+		}
+
+		/* Empty (or single stop) trips do have a special validator */
 	}
 }

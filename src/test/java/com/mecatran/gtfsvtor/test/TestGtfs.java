@@ -9,9 +9,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -28,6 +31,7 @@ import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
+import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -598,6 +602,25 @@ public class TestGtfs {
 		assertEquals(1, uows.size());
 		UnusedObjectWarning uow = uows.get(0);
 		assertEquals(GtfsStop.id("BOGUS"), uow.getId());
+	}
+
+	@Test
+	public void testUnusedData() {
+		TestBundle tb = loadAndValidate("unused_data");
+		List<UnusedObjectWarning> uows = tb.report
+				.getReportIssues(UnusedObjectWarning.class);
+		assertEquals(6, uows.size());
+		Set<GtfsId<?, ?>> unusedIds = uows.stream()
+				.map(UnusedObjectWarning::getId).collect(Collectors.toSet());
+		System.out.println(Arrays.toString(unusedIds.toArray()));
+		for (GtfsId<?, ?> id : Arrays.asList(GtfsAgency.id("UNUSED_AGENCY"),
+				GtfsRoute.id("UNUSED_ROUTE"),
+				GtfsCalendar.id("UNUSED_CALENDAR"),
+				GtfsCalendar.id("UNUSED_CALENDAR_DATE"),
+				GtfsStop.id("UNUSED_STOP"), GtfsStop.id("UNUSED_STATION"))) {
+			System.out.println(id);
+			assertTrue(unusedIds.contains(id));
+		}
 	}
 
 	@Test
