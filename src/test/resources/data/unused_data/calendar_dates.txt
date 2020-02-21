@@ -1,0 +1,3 @@
+service_id,date,exception_type
+FULLW,20070604,2
+UNUSED_CALENDAR_DATE,20070821,1
