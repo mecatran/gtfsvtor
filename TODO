@@ -26,7 +26,6 @@ Route long name is not same as long name
 Route description not the same as long name
 Route URL format
 Route color contrast (max luminance[256] delta > 510/7)
-Unused route
 
 Calendars
 ---------
@@ -37,13 +36,12 @@ Too many days w/o service
 Date outside valid range
 No service exception
 Calendar is not active any day of the week
-Unused calendar
 
 Stops
 -----
 Stop too close to origin (0,0)
 Stop description not the same as stop name
-Unused station, stop, node, quay, entrance
+Unused node, quay, entrance
 Wrong stop type in stop times
 Station too close
 Different station too close (station is close to stop but not parent)
@@ -97,4 +95,3 @@ Fares
 Duplicated rule
 Fare w/o rule
 Currency is within ISO-4217 spec
-
