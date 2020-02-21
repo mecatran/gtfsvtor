@@ -26,10 +26,24 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 
 	// You are not allowed to build a date
 	private GtfsLogicalDate(int year, int month, int day, int julianDay) {
-		this.year = year;
-		this.month = month;
-		this.day = day;
+		// Check if calendar is valid first, otherwise doom will ensue
+		GregorianCalendar cal = calendarForYmd(year, month, day);
+		int year2 = cal.get(Calendar.YEAR);
+		int month2 = cal.get(Calendar.MONTH) + 1;
+		int day2 = cal.get(Calendar.DAY_OF_MONTH);
+		if (year != year2 || month2 != month || day2 != day) {
+			throw new IllegalArgumentException(String.format(
+					"Invalid date: %04d-%02d-%02d (did you mean %04d-%02d-%02d ?)",
+					year, month, day, year2, month2, day2));
+		}
+		this.year = year2;
+		this.month = month2;
+		this.day = day2;
 		this.julianDay = julianDay;
+	}
+
+	static void clearCache() {
+		CACHE.clear();
 	}
 
 	/**
@@ -60,7 +74,11 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 		} catch (NumberFormatException e) {
 			throw new ParseException("Invalid format for " + yyyymmdd, 6);
 		}
-		return getDate(year, month, day);
+		try {
+			return getDate(year, month, day);
+		} catch (IllegalArgumentException e) {
+			throw new ParseException(e.getMessage(), 0);
+		}
 	}
 
 	public static GtfsLogicalDate getDate(int year, int month, int day) {
@@ -77,14 +95,7 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 		if (ret != null)
 			return ret;
 		// Use slower code
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month - 1);
-		cal.set(Calendar.DAY_OF_MONTH, day);
-		cal.set(Calendar.HOUR_OF_DAY, 12);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
+		GregorianCalendar cal = calendarForYmd(year, month, day);
 		cal.add(Calendar.DATE, nDays);
 		return getDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
 				cal.get(Calendar.DAY_OF_MONTH));
@@ -139,9 +150,21 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 		return jdn;
 	}
 
+	private GregorianCalendar calendarForYmd(int year, int month, int day) {
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month - 1);
+		cal.set(Calendar.DAY_OF_MONTH, day);
+		cal.set(Calendar.HOUR_OF_DAY, 12);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal;
+	}
+
 	@Override
 	public int hashCode() {
-		return (year * 97 + month) * 97 + day;
+		return Integer.hashCode(julianDay);
 	}
 
 	@Override
@@ -153,9 +176,7 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 		if (!(obj instanceof GtfsLogicalDate))
 			return false;
 		GtfsLogicalDate other = (GtfsLogicalDate) obj;
-		// Start by comparing days as it will more often differ than year
-		return other.day == this.day && other.month == this.month
-				&& other.year == this.year;
+		return other.julianDay == this.julianDay;
 	}
 
 	@Override
