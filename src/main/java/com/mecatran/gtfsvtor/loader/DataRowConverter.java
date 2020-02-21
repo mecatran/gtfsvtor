@@ -142,8 +142,8 @@ public class DataRowConverter {
 				GtfsLogicalDate ret = GtfsLogicalDate.parseFromYYYYMMDD(value);
 				return ret;
 			} catch (ParseException e) {
-				reportSink.report(
-						fieldFormatError(field, value, "date (YYYYMMDD)"));
+				reportSink.report(fieldFormatError(field, value,
+						"date (YYYYMMDD)", e.getMessage()));
 				return defaultValue;
 			}
 		}
@@ -320,7 +320,12 @@ public class DataRowConverter {
 
 	private InvalidFieldFormatError fieldFormatError(String field, String value,
 			String expectedFormat) {
+		return fieldFormatError(field, value, expectedFormat, null);
+	}
+
+	private InvalidFieldFormatError fieldFormatError(String field, String value,
+			String expectedFormat, String additionalInfo) {
 		return new InvalidFieldFormatError(row.getSourceInfo(), field, value,
-				expectedFormat);
+				expectedFormat, additionalInfo);
 	}
 }

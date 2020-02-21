@@ -16,12 +16,20 @@ public class InvalidFieldFormatError implements ReportIssue {
 	private SourceInfoWithFields sourceInfo;
 	private String value;
 	private String expectedFormat;
+	private String additionalInfo;
 
 	public InvalidFieldFormatError(DataObjectSourceInfo sourceInfo,
 			String fieldName, String value, String expectedFormat) {
+		this(sourceInfo, fieldName, value, expectedFormat, null);
+	}
+
+	public InvalidFieldFormatError(DataObjectSourceInfo sourceInfo,
+			String fieldName, String value, String expectedFormat,
+			String additionalInfo) {
 		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldName);
 		this.value = value;
 		this.expectedFormat = expectedFormat;
+		this.additionalInfo = additionalInfo;
 	}
 
 	@Override
@@ -39,7 +47,8 @@ public class InvalidFieldFormatError implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		fmt.text("Invalid format for value {0}, expected: {1}", fmt.var(value),
-				expectedFormat);
+		fmt.text("Invalid format for value {0}, expected: {1}{2}",
+				fmt.var(value), expectedFormat,
+				additionalInfo == null ? "" : " - " + additionalInfo);
 	}
 }
