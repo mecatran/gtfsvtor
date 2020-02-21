@@ -25,6 +25,7 @@ import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
+import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
@@ -47,6 +48,16 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Multimap<GtfsRoute.Id, GtfsTrip> tripsPerRoute = ArrayListMultimap
 			.create();
 	private Multimap<GtfsCalendar.Id, GtfsTrip> tripsPerCalendar = ArrayListMultimap
+			.create();
+	private Multimap<GtfsStopType, GtfsStop> stopsPerType = ArrayListMultimap
+			.create();
+	private Multimap<GtfsStop.Id, GtfsStop> stopsPerStation = ArrayListMultimap
+			.create();
+	private Multimap<GtfsStop.Id, GtfsStop> entrancesPerStation = ArrayListMultimap
+			.create();
+	private Multimap<GtfsStop.Id, GtfsStop> nodesPerStation = ArrayListMultimap
+			.create();
+	private Multimap<GtfsStop.Id, GtfsStop> boardingAreasPerStop = ArrayListMultimap
 			.create();
 
 	private CalendarIndex calendarIndex = null;
@@ -136,6 +147,36 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public int getShapePointsCount() {
 		return shapePoints.size();
+	}
+
+	@Override
+	public Collection<GtfsStop> getStopsOfType(GtfsStopType stopType) {
+		return Collections.unmodifiableCollection(stopsPerType.get(stopType));
+	}
+
+	@Override
+	public Collection<GtfsStop> getStopsOfStation(GtfsStop.Id station) {
+		return Collections.unmodifiableCollection(stopsPerStation.get(station));
+	}
+
+	@Override
+	public Collection<GtfsStop> getEntrancesOfStation(
+			com.mecatran.gtfsvtor.model.GtfsStop.Id station) {
+		return Collections
+				.unmodifiableCollection(entrancesPerStation.get(station));
+	}
+
+	@Override
+	public Collection<GtfsStop> getNodesOfStation(
+			com.mecatran.gtfsvtor.model.GtfsStop.Id station) {
+		return Collections.unmodifiableCollection(nodesPerStation.get(station));
+	}
+
+	@Override
+	public Collection<GtfsStop> getBoardingAreasOfStop(
+			com.mecatran.gtfsvtor.model.GtfsStop.Id stop) {
+		return Collections
+				.unmodifiableCollection(boardingAreasPerStop.get(stop));
 	}
 
 	@Override
@@ -231,6 +272,27 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		stops.put(stop.getId(), stop);
+		stopsPerType.put(stop.getType(), stop);
+		GtfsStop.Id parentId = stop.getParentId();
+		if (parentId != null) {
+			// Add to parent->child index
+			switch (stop.getType()) {
+			case STOP:
+				stopsPerStation.put(parentId, stop);
+				break;
+			case ENTRANCE:
+				entrancesPerStation.put(parentId, stop);
+				break;
+			case NODE:
+				nodesPerStation.put(parentId, stop);
+				break;
+			case BOARDING_AREA:
+				boardingAreasPerStop.put(parentId, stop);
+				break;
+			case STATION:
+				// Nothing to index
+			}
+		}
 	}
 
 	@Override

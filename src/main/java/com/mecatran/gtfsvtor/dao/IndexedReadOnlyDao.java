@@ -8,7 +8,9 @@ import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
+import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
+import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 
 /**
@@ -21,6 +23,16 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 public interface IndexedReadOnlyDao extends ReadOnlyDao {
 
 	public Collection<GtfsRoute> getRoutesOfAgency(GtfsAgency.Id agencyId);
+
+	public Collection<GtfsStop> getStopsOfType(GtfsStopType stopType);
+
+	public Collection<GtfsStop> getStopsOfStation(GtfsStop.Id station);
+
+	public Collection<GtfsStop> getEntrancesOfStation(GtfsStop.Id station);
+
+	public Collection<GtfsStop> getNodesOfStation(GtfsStop.Id station);
+
+	public Collection<GtfsStop> getBoardingAreasOfStop(GtfsStop.Id stop);
 
 	public List<GtfsStopTime> getStopTimesOfTrip(GtfsTrip.Id tripId);
 
