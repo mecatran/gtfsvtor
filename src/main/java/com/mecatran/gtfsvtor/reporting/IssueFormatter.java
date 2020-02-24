@@ -11,7 +11,8 @@ public interface IssueFormatter {
 	public void text(String template, Object... arguments);
 
 	/** Format an object ID */
-	public default <U, V extends GtfsObject<U>> String id(GtfsId<U, V> id) {
+	public default <U extends Comparable<U>, V extends GtfsObject<U>> String id(
+			GtfsId<U, V> id) {
 		return id(id == null ? "(null)" : id.getInternalId().toString());
 	}
 
