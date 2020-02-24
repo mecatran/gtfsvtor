@@ -51,7 +51,6 @@ Entrance too far from station
 Trips
 -----
 First and last stop time should be set
-Duplicated trip
 Overlapping trip in same block
 Too many consecutive stop time with same time
 No pickup/dropoff and no timepoint (useless timepoint)
