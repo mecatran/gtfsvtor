@@ -47,7 +47,6 @@ public class GtfsDataLoader implements DataLoader {
 
 	@Override
 	public void load(DataLoader.Context context) {
-		long start = System.currentTimeMillis();
 		/*
 		 * Warning! The order below is important, as streaming validators rely
 		 * on the partially loaded DAO to check for references, when possible.
@@ -68,8 +67,6 @@ public class GtfsDataLoader implements DataLoader {
 		loadStopTimes(context);
 		reportUnreadTables(context.getReportSink());
 		context.getDao().close();
-		long end = System.currentTimeMillis();
-		System.out.println("Loaded in " + (end - start) + "ms");
 	}
 
 	private void loadAgencies(DataLoader.Context context) {

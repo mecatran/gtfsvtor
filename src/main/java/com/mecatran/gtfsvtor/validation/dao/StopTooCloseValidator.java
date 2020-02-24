@@ -15,7 +15,7 @@ import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDisabledValidator;
 
-@DefaultDisabledValidator // TODO Remove this?
+// @DefaultDisabledValidator
 public class StopTooCloseValidator implements DaoValidator {
 
 	@ConfigurableOption

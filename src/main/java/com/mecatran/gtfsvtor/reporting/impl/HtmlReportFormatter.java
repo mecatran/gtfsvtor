@@ -25,6 +25,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 	private Writer writer;
 	private Html html;
 
+	// TODO Option to output to any output stream
 	public HtmlReportFormatter(String outfileFile) throws IOException {
 		writer = new FileWriter(outfileFile);
 		html = new Html(writer);

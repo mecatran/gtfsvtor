@@ -43,6 +43,7 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 	}
 
 	public static String format(ReportIssue issue) {
+		// TODO Add source context infos
 		PlainTextIssueFormatter fmt = new PlainTextIssueFormatter();
 		issue.format(fmt);
 		return fmt.getPlainTextResult();

@@ -18,6 +18,11 @@ public class DefaultDaoValidator implements DaoValidator {
 		compound = new CompoundDaoValidator(validators);
 	}
 
+	public DefaultDaoValidator withVerbose(boolean verbose) {
+		this.compound.withVerbose(verbose);
+		return this;
+	}
+
 	@Override
 	public void validate(DaoValidator.Context context) {
 		compound.validate(context);

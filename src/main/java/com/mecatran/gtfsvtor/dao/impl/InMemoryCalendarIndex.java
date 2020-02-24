@@ -27,7 +27,6 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 			.create();
 
 	protected InMemoryCalendarIndex(ReadOnlyDao dao) {
-		long start = System.currentTimeMillis();
 		/*
 		 * Here we do not validate any fields for mandatory values. If not
 		 * provided, we just ignore them or assume sane default values (null is
@@ -92,10 +91,6 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 				calendarsPerDate.put(date, calendarId);
 			}
 		}
-		long end = System.currentTimeMillis();
-		System.out.println("Indexed " + calendarsPerDate.size() + " days for "
-				+ allCalendarIds.size() + " calendars in " + (end - start)
-				+ "ms");
 	}
 
 	@Override

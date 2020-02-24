@@ -20,7 +20,6 @@ public class InMemoryDaoSpatialIndex implements DaoSpatialIndex {
 	private SpatialIndex spatialIndex;
 
 	public InMemoryDaoSpatialIndex(ReadOnlyDao dao) {
-		long start = System.currentTimeMillis();
 		/*
 		 * Note: do not use Quadtree, performance is very bad (around 24 sec for
 		 * a stop too close validator on MBTA GTFS, vs 100 ms with STRtree).
@@ -33,9 +32,6 @@ public class InMemoryDaoSpatialIndex implements DaoSpatialIndex {
 			Envelope env = new Envelope(new Coordinate(p.getLon(), p.getLat()));
 			spatialIndex.insert(env, stop);
 		}
-		long end = System.currentTimeMillis();
-		System.out.println("Spatial-indexed " + dao.getStops().size()
-				+ " stops in " + (end - start) + "ms");
 	}
 
 	@Override

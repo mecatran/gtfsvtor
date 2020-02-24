@@ -63,8 +63,14 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private CalendarIndex calendarIndex = null;
 	private DaoSpatialIndex spatialIndex = null;
 	private LinearGeometryIndex linearGeometryIndex = null;
+	private boolean verbose = false;
 
 	public InMemoryDao() {
+	}
+
+	public InMemoryDao withVerbose(boolean verbose) {
+		this.verbose = verbose;
+		return this;
 	}
 
 	@Override
@@ -204,7 +210,14 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public CalendarIndex getCalendarIndex() {
 		// Lazy create the calendar index
 		if (calendarIndex == null) {
+			long start = System.currentTimeMillis();
 			calendarIndex = new InMemoryCalendarIndex(this);
+			long end = System.currentTimeMillis();
+			if (verbose) {
+				System.out.println(
+						"Indexed " + calendarIndex.getAllCalendarIds().size()
+								+ " calendars in " + (end - start) + "ms");
+			}
 		}
 		return calendarIndex;
 	}
@@ -213,7 +226,13 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public DaoSpatialIndex getSpatialIndex() {
 		// Lazy create the spatial index
 		if (spatialIndex == null) {
+			long start = System.currentTimeMillis();
 			spatialIndex = new InMemoryDaoSpatialIndex(this);
+			long end = System.currentTimeMillis();
+			if (verbose) {
+				System.out.println("Spatial-indexed " + stops.size()
+						+ " stops in " + (end - start) + "ms");
+			}
 		}
 		return spatialIndex;
 	}
@@ -222,7 +241,15 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public LinearGeometryIndex getLinearGeometryIndex() {
 		// Lazy create the index
 		if (linearGeometryIndex == null) {
-			linearGeometryIndex = new InMemoryLinearGeometryIndex(this);
+			long start = System.currentTimeMillis();
+			InMemoryLinearGeometryIndex imlgi = new InMemoryLinearGeometryIndex(
+					this);
+			linearGeometryIndex = imlgi;
+			long end = System.currentTimeMillis();
+			if (verbose) {
+				System.out.println("Linear-indexed " + imlgi.getPatternCount()
+						+ " shape.patterns in " + (end - start) + "ms");
+			}
 		}
 		return linearGeometryIndex;
 	}

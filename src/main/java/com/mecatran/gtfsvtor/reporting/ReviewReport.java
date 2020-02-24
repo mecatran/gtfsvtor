@@ -18,4 +18,10 @@ public interface ReviewReport {
 	public <T extends ReportIssue> List<T> getReportIssues(
 			Class<T> reportClass);
 
+	/**
+	 * @param severity
+	 * @return The total number of issues so far of this severity.
+	 */
+	public int issuesCountOfSeverity(ReportIssueSeverity severity);
+
 }
