@@ -788,4 +788,16 @@ public class TestGtfs {
 			// Just check if it does not throw an exception
 		}
 	}
+
+	@Test
+	public void testLoadingAll2() {
+		File base = new File("src/test/resources/xdata");
+		for (String file : base.list()) {
+			System.out.println("===================================================");
+			System.out.println("   Loading and testing: " + file);
+			System.out.println("---------------------------------------------------");
+			TestBundle tb = loadAndValidate(file, "src/test/resources/xdata/");
+			// Just check if it does not throw an exception
+		}
+	}
 }

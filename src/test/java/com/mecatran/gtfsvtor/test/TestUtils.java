@@ -23,11 +23,15 @@ public class TestUtils {
 	}
 
 	public static TestBundle loadAndValidate(String gtfsFileOrDirectory) {
+		return loadAndValidate(gtfsFileOrDirectory, "src/test/resources/data/");
+	}
+
+	public static TestBundle loadAndValidate(String gtfsFileOrDirectory, String base) {
 		InMemoryReportLog report = new InMemoryReportLog();
 		TestBundle ret = new TestBundle();
 		ret.report = report;
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
-				.autoGuess("src/test/resources/data/" + gtfsFileOrDirectory,
+				.autoGuess(base + gtfsFileOrDirectory,
 						report);
 		if (inputStreamSource == null)
 			return ret;
