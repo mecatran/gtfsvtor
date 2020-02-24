@@ -45,6 +45,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
+import com.mecatran.gtfsvtor.reporting.issues.DuplicatedTripIssue;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
@@ -721,7 +722,47 @@ public class TestGtfs {
 	}
 
 	@Test
-	public void testMBTAShape() {
+	public void testRouteColors() {
+		TestBundle tb = loadAndValidate("route_colors");
+		List<RouteColorContrastIssue> rccs = tb.report
+				.getReportIssues(RouteColorContrastIssue.class);
+		assertEquals(4, rccs.size());
+		RouteColorContrastIssue rcc0 = rccs.get(0);
+		assertEquals(0.195, rcc0.getBrightnessDelta(), 1e-3);
+		RouteColorContrastIssue rcc2 = rccs.get(2);
+		assertEquals(0.0, rcc2.getBrightnessDelta(), 1e-3);
+
+		List<SimilarRouteColorWarning> srcs = tb.report
+				.getReportIssues(SimilarRouteColorWarning.class);
+		assertEquals(4, srcs.size());
+		SimilarRouteColorWarning src0 = srcs.get(0);
+		assertEquals(0.00226, src0.getColorDistance(), 1e-4);
+	}
+
+	@Test
+	public void testDupTrips() {
+		TestBundle tb = loadAndValidate("duplicate_trips");
+		List<DuplicatedTripIssue> dtis = tb.report
+				.getReportIssues(DuplicatedTripIssue.class);
+		assertEquals(3, dtis.size());
+		assertEquals(261, dtis.get(0).getCalendarOverlap().getDaysCount());
+		// Both following dates should be Mondays
+		assertEquals(GtfsLogicalDate.getDate(2007, 1, 1),
+				dtis.get(0).getCalendarOverlap().getFrom());
+		assertEquals(GtfsLogicalDate.getDate(2011, 12, 26),
+				dtis.get(0).getCalendarOverlap().getTo());
+		assertEquals(GtfsTrip.id("STBA1"), dtis.get(0).getTrip1().getId());
+		assertEquals(GtfsTrip.id("STBA2"), dtis.get(0).getTrip2().getId());
+		assertEquals(1305, dtis.get(1).getCalendarOverlap().getDaysCount());
+		assertEquals(GtfsTrip.id("STBA1"), dtis.get(1).getTrip1().getId());
+		assertEquals(GtfsTrip.id("STBA5"), dtis.get(1).getTrip2().getId());
+		assertEquals(261, dtis.get(2).getCalendarOverlap().getDaysCount());
+		assertEquals(GtfsTrip.id("STBA2"), dtis.get(2).getTrip1().getId());
+		assertEquals(GtfsTrip.id("STBA5"), dtis.get(2).getTrip2().getId());
+	}
+
+	@Test
+	public void testMBTA42951766() {
 		TestBundle tb = loadAndValidate("MBTA_42951766");
 		IndexedReadOnlyDao dao = tb.dao;
 		LinearGeometryIndex lgi = dao.getLinearGeometryIndex();
@@ -763,21 +804,29 @@ public class TestGtfs {
 	}
 
 	@Test
-	public void testRouteColors() {
-		TestBundle tb = loadAndValidate("route_colors");
-		List<RouteColorContrastIssue> rccs = tb.report
-				.getReportIssues(RouteColorContrastIssue.class);
-		assertEquals(4, rccs.size());
-		RouteColorContrastIssue rcc0 = rccs.get(0);
-		assertEquals(0.195, rcc0.getBrightnessDelta(), 1e-3);
-		RouteColorContrastIssue rcc2 = rccs.get(2);
-		assertEquals(0.0, rcc2.getBrightnessDelta(), 1e-3);
+	public void testAachener74431429() {
+		TestBundle tb = loadAndValidate("aachener_74431429");
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
+		List<TooFastTravelIssue> tftis = tb.report
+				.getReportIssues(TooFastTravelIssue.class);
+		assertEquals(1, tftis.size());
+		TooFastTravelIssue tfti0 = tftis.get(0);
+		assertEquals(14.66, tfti0.getSpeedMps(), 1e-2);
+		assertEquals(439.82, tfti0.getDistanceMeters(), 1e-2);
+	}
 
-		List<SimilarRouteColorWarning> srcs = tb.report
-				.getReportIssues(SimilarRouteColorWarning.class);
-		assertEquals(4, srcs.size());
-		SimilarRouteColorWarning src0 = srcs.get(0);
-		assertEquals(0.00226, src0.getColorDistance(), 1e-4);
+	@Test
+	public void testAachener73069683() {
+		TestBundle tb = loadAndValidate("aachener_73069683");
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.WARNING));
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
 	}
 
 	@Test
@@ -793,40 +842,11 @@ public class TestGtfs {
 	public void testLoadingAll2() {
 		File base = new File("src/test/resources/xdata");
 		for (String file : base.list()) {
-			System.out.println(
-					"===================================================");
-			System.out.println("   Loading and testing: " + file);
-			System.out.println(
-					"---------------------------------------------------");
+			System.out.println("===================================");
+			System.out.println("Loading and testing: " + file);
 			TestBundle tb = loadAndValidate(file, "src/test/resources/xdata/");
 			// Just check if it does not throw an exception
+			System.out.println("-----------------------------------");
 		}
 	}
-
-	@Test
-	public void testAachener74431429() {
-		TestBundle tb = loadAndValidate("aachener74431429");
-		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
-		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
-		List<TooFastTravelIssue> tftis = tb.report
-				.getReportIssues(TooFastTravelIssue.class);
-		assertEquals(1, tftis.size());
-		TooFastTravelIssue tfti0 = tftis.get(0);
-		assertEquals(14.66, tfti0.getSpeedMps(), 1e-2);
-		assertEquals(439.82, tfti0.getDistanceMeters(), 1e-2);
-	}
-
-	@Test
-	public void testAachener73069683() {
-		TestBundle tb = loadAndValidate("aachener73069683");
-		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.WARNING));
-		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
-		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
-	}
-
 }
