@@ -17,7 +17,14 @@ public class GtfsVtorMain {
 				+ "under certain conditions; see the license file for details.\n");
 
 		CmdLineArgs cmdLineArgs = new CmdLineArgs();
-		JCommander.newBuilder().addObject(cmdLineArgs).build().parse(args);
+		JCommander jcmd = JCommander.newBuilder().addObject(cmdLineArgs)
+				.build();
+		jcmd.setProgramName("GTFSVTOR");
+		jcmd.parse(args);
+		if (cmdLineArgs.isHelp() || cmdLineArgs.getGtfsFile() == null) {
+			jcmd.usage();
+			System.exit(1);
+		}
 
 		long start = System.currentTimeMillis();
 		GtfsVtor gtfsVtor = new GtfsVtor(cmdLineArgs);

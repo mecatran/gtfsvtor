@@ -4,6 +4,10 @@ import com.beust.jcommander.Parameter;
 
 public class CmdLineArgs {
 
+	@Parameter(names = { "-h",
+			"--help" }, description = "Display this help and exit")
+	private boolean help = false;
+
 	@Parameter(names = { "-v",
 			"--verbose" }, description = "Enable verbose mode")
 	private boolean verbose = false;
@@ -20,8 +24,12 @@ public class CmdLineArgs {
 			"--output" }, description = "Validation report output file")
 	private String outputReportFile = "validation-report.html";
 
-	@Parameter(description = "GTFS file to validate")
-	private String gtfsFile = ".";
+	@Parameter(description = "<GTFS file to validate>")
+	private String gtfsFile;
+
+	public boolean isHelp() {
+		return help;
+	}
 
 	public boolean isVerbose() {
 		return verbose;
