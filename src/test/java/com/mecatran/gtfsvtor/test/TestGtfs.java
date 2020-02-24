@@ -682,17 +682,17 @@ public class TestGtfs {
 		pp0 = lgi.getProjectedPoint(st0);
 		pp1 = lgi.getProjectedPoint(st1);
 		pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(0.0, pp0.getLinearDistanceMeters(), 1e-4);
-		assertEquals(0.0, pp1.getLinearDistanceMeters(), 1e-4);
-		assertEquals(0.0, pp2.getLinearDistanceMeters(), 1e-4);
-		assertEquals(d01 + d12, pp0.getDistanceToShapeMeters(), 1e-4);
+		assertEquals(d01 + d12, pp0.getLinearDistanceMeters(), 1e-4);
+		assertEquals(d01 + d12, pp1.getLinearDistanceMeters(), 1e-4);
+		assertEquals(d01 + d12, pp2.getLinearDistanceMeters(), 1e-4);
+		assertEquals(0, pp0.getDistanceToShapeMeters(), 1e-4);
 		assertEquals(d01, pp1.getDistanceToShapeMeters(), 1e-4);
-		assertEquals(0.0, pp2.getDistanceToShapeMeters(), 1e-4);
-		assertTrue(Geodesics.distanceMeters(s2.getCoordinates(),
+		assertEquals(d01 + d12, pp2.getDistanceToShapeMeters(), 1e-4);
+		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
 				pp0.getProjectedPoint()) < 1e-4);
-		assertTrue(Geodesics.distanceMeters(s2.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
 				pp1.getProjectedPoint()) < 1e-4);
-		assertTrue(Geodesics.distanceMeters(s2.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
 				pp2.getProjectedPoint()) < 1e-4);
 
 		/* A backtracing 2 segment shape (S1->S3->S2) */
@@ -793,11 +793,40 @@ public class TestGtfs {
 	public void testLoadingAll2() {
 		File base = new File("src/test/resources/xdata");
 		for (String file : base.list()) {
-			System.out.println("===================================================");
+			System.out.println(
+					"===================================================");
 			System.out.println("   Loading and testing: " + file);
-			System.out.println("---------------------------------------------------");
+			System.out.println(
+					"---------------------------------------------------");
 			TestBundle tb = loadAndValidate(file, "src/test/resources/xdata/");
 			// Just check if it does not throw an exception
 		}
 	}
+
+	@Test
+	public void testAachener74431429() {
+		TestBundle tb = loadAndValidate("aachener74431429");
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
+		List<TooFastTravelIssue> tftis = tb.report
+				.getReportIssues(TooFastTravelIssue.class);
+		assertEquals(1, tftis.size());
+		TooFastTravelIssue tfti0 = tftis.get(0);
+		assertEquals(14.66, tfti0.getSpeedMps(), 1e-2);
+		assertEquals(439.82, tfti0.getDistanceMeters(), 1e-2);
+	}
+
+	@Test
+	public void testAachener73069683() {
+		TestBundle tb = loadAndValidate("aachener73069683");
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.WARNING));
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
+		assertEquals(0,
+				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
+	}
+
 }

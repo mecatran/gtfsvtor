@@ -7,6 +7,7 @@ import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
 import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
+import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
@@ -26,18 +27,21 @@ public class TestUtils {
 		return loadAndValidate(gtfsFileOrDirectory, "src/test/resources/data/");
 	}
 
-	public static TestBundle loadAndValidate(String gtfsFileOrDirectory, String base) {
-		InMemoryReportLog report = new InMemoryReportLog();
+	public static TestBundle loadAndValidate(String gtfsFileOrDirectory,
+			String base) {
+		InMemoryReportLog report = new InMemoryReportLog()
+				.withPrintIssues(true);
 		TestBundle ret = new TestBundle();
 		ret.report = report;
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
-				.autoGuess(base + gtfsFileOrDirectory,
-						report);
-		if (inputStreamSource == null)
+				.autoGuess(base + gtfsFileOrDirectory, report);
+		if (inputStreamSource == null) {
+
 			return ret;
+		}
 		NamedTabularDataSource dataSource = new CsvDataSource(
 				inputStreamSource);
-		InMemoryDao dao = new InMemoryDao();
+		InMemoryDao dao = new InMemoryDao().withVerbose(true);
 
 		DefaultValidatorConfig config = new DefaultValidatorConfig();
 		DefaultStreamingValidator streamingValidator = new DefaultStreamingValidator(
@@ -48,8 +52,16 @@ public class TestUtils {
 
 		DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
 				report, config);
-		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config);
+		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
+				.withVerbose(true);
 		daoValidator.validate(context);
+		System.out.println(String.format(
+				"Validation result for '%s': %d INFO, %d WARNING, %d ERROR, %d CRITICAL",
+				gtfsFileOrDirectory,
+				report.issuesCountOfSeverity(ReportIssueSeverity.INFO),
+				report.issuesCountOfSeverity(ReportIssueSeverity.WARNING),
+				report.issuesCountOfSeverity(ReportIssueSeverity.ERROR),
+				report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL)));
 
 		ret.dao = dao;
 		return ret;

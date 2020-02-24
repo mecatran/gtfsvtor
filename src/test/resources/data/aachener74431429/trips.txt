@@ -1,0 +1,2 @@
+route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,wheelchair_accessible
+ASEAG__33_704,1025,74431429,"Aachen, Uniklinik",,0,2649,1258,1

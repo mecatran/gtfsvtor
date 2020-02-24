@@ -366,18 +366,18 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		localMinsPerStop.add(Arrays.asList(goal));
 
 		/*
-		 * This is the tricky part. Here we add virtual local minimum to the
-		 * local min of the previous stop, if needed, in order to be able to
-		 * backtrack in case we did not detected the correct "optimal" local
-		 * minimum.
+		 * This is the tricky part. Here we add virtual local minimum if needed,
+		 * to make sure we find a solution for corner cases.
 		 */
-		LocalMin currentMax = goal;
-		for (int i = stopTimes.size() - 1; i >= 0; i--) {
+		LocalMin currentMax = start;
+		for (int i = 0; i < stopTimes.size(); i++) {
 			GtfsStopTime stopTime = stopTimes.get(i);
 			GtfsStop stop = dao.getStop(stopTime.getStopId());
 			List<LocalMin> localMinsForStop = localMinsPerStop.get(i + 1);
-			LocalMin minForStop = localMinsForStop.get(0);
-			if (minForStop.compareTo(currentMax) > 0) {
+			LocalMin maxForStop = localMinsForStop
+					.get(localMinsForStop.size() - 1);
+			if (maxForStop.compareTo(currentMax) < 0) {
+				// Add extra local min after maxForStop
 				double d2 = Geodesics.distanceMeters(currentMax.projectedPoint,
 						stop.getCoordinates());
 				LocalMin extraLocalMin = new LocalMin(i,
@@ -386,8 +386,10 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 				if (_debug)
 					System.out.println("---" + extraLocalMin);
 				localMinsForStop.add(0, extraLocalMin);
+				// currentMax do not change
 			} else {
-				currentMax = localMinsForStop.get(localMinsForStop.size() - 1);
+				// increase currentMax
+				currentMax = maxForStop;
 			}
 		}
 
@@ -411,13 +413,20 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			}
 		}, start, goal);
 		// Path contains start and end
-		assert (path != null);
-		assert (path.size() == stopTimes.size() + 2);
 
-		if (_debug) {
+		if (_debug && path != null) {
 			System.out.println("=== Shortest path through local min graph ===");
 			path.forEach(lm -> System.out.println(lm));
 			System.out.println("===");
+		}
+
+		if (path == null || path.size() != stopTimes.size() + 2) {
+			throw new AssertionError("Cannot compute path for shape "
+					+ shapePoints.get(0).getShapeId() + " / trip "
+					+ trip.getId() + ": "
+					+ (path == null ? "no path"
+							: "invalid path size " + path.size() + "!="
+									+ (stopTimes.size() + 2)));
 		}
 
 		PatternLinearIndex pattern = new PatternLinearIndex();

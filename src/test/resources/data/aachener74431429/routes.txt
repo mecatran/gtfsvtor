@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order
+ASEAG__33_704,243,33,,,704,,F3953F,FFFFFF,
