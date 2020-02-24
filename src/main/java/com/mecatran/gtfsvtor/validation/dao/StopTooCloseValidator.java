@@ -13,7 +13,6 @@ import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseIssue;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
-import com.mecatran.gtfsvtor.validation.DefaultDisabledValidator;
 
 // @DefaultDisabledValidator
 public class StopTooCloseValidator implements DaoValidator {
