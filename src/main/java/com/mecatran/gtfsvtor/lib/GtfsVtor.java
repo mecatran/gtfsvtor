@@ -38,6 +38,10 @@ public class GtfsVtor {
 		report = new InMemoryReportLog().withPrintIssues(args.isPrintIssues());
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
 				.autoGuess(args.getGtfsFile(), report);
+		if (inputStreamSource == null) {
+			// No input found, no need to go further
+			return;
+		}
 		NamedTabularDataSource dataSource = new CsvDataSource(
 				inputStreamSource);
 		InMemoryDao dao = new InMemoryDao().withVerbose(args.isVerbose());
