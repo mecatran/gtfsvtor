@@ -16,7 +16,7 @@ How to use GTFSVTOR
 
 GTFSVTOR is still beta, but should be usable as-is.
 Only the following tables are loaded:
-`agency.txt, routes.txt, calendar.txt, calendar\_dates.txt, trips.txt, stop\_times.txt, shapes.txt`.
+`agency.txt, routes.txt, calendar.txt, calendar_dates.txt, trips.txt, stop_times.txt, shapes.txt`.
 Not all validation rules of the legacy feedvalidator.py are implemented, however.
 See the [TODO](TODO) file to check what rules are missing.
 
