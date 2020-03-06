@@ -58,6 +58,7 @@ import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
+import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
@@ -792,6 +793,16 @@ public class TestGtfs {
 		List<InvalidFieldFormatError> iffs = tb.report
 				.getReportIssues(InvalidFieldFormatError.class);
 		assertEquals(3, iffs.size());
+	}
+
+	@Test
+	public void testOverlappingBlocks() {
+		TestBundle tb = loadAndValidate("overlapping_blockid");
+		List<OverlappingBlockIdIssue> obis = tb.report
+				.getReportIssues(OverlappingBlockIdIssue.class);
+		assertEquals(3, obis.size());
+		OverlappingBlockIdIssue obi0 = obis.get(0);
+		assertEquals(GtfsBlockId.fromValue("B1"), obi0.getBlockId());
 	}
 
 	@Test
