@@ -14,7 +14,9 @@ public interface DataTable extends Closeable, Iterable<DataRow> {
 
 	public TableSourceInfo getTableSourceInfo();
 
-	public List<String> unreadColumns();
+	public List<String> getUnreadColumnHeaders();
+
+	public List<String> getColumnHeaders();
 
 	public Charset getCharset();
 

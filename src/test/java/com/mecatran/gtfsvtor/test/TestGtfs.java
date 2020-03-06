@@ -44,6 +44,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedTripIssue;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
@@ -53,6 +54,7 @@ import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
+import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
@@ -260,6 +262,23 @@ public class TestGtfs {
 		assertTrue(agencyLange);
 		assertTrue(routeTextColor);
 		assertTrue(stopUri);
+
+		List<MissingMandatoryColumnError> mmcs = tb.report
+				.getReportIssues(MissingMandatoryColumnError.class);
+		assertEquals(1, mmcs.size());
+		MissingMandatoryColumnError mmc = mmcs.get(0);
+		assertEquals(mmc.getSourceInfos().get(0).getSourceInfo().getTable()
+				.getTableName(), GtfsAgency.TABLE_NAME);
+		assertEquals(mmc.getColumnName(), "agency_name");
+
+		List<DuplicatedColumnError> dcs = tb.report
+				.getReportIssues(DuplicatedColumnError.class);
+		assertEquals(1, dcs.size());
+		DuplicatedColumnError dc = dcs.get(0);
+		assertEquals(dc.getSourceInfos().get(0).getSourceInfo().getTable()
+				.getTableName(), GtfsAgency.TABLE_NAME);
+		assertTrue(dc.getSourceInfos().get(0).getFieldNames()
+				.contains("agency_url"));
 	}
 
 	@Test

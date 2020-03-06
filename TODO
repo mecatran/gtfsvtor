@@ -6,10 +6,7 @@ Low-level
 The header row should not contains any space (bad_eol.zip)
 Line contains ASCII Form Feed 0x0C (bad_eol.zip, trips.txt)
 Found 1 CR LF "\r\n" line end (line 2) and 2 LF "\n" line ends (lines 1, 3). A file must use a consistent line end. (bad_eol.zip)
-Empty file
-Missing column
 Deprecated column (headway vs frequency)
-Duplicated column (supported by CSV parser?)
 Invalid float value (comma instead of point, exponent notation)
 
 Agency

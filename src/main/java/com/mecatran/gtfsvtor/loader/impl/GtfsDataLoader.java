@@ -2,6 +2,8 @@ package com.mecatran.gtfsvtor.loader.impl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.loader.DataLoader;
@@ -24,9 +26,11 @@ import com.mecatran.gtfsvtor.model.GtfsZone;
 import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime;
 import com.mecatran.gtfsvtor.model.impl.SmallGtfsStopTime;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
+import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
+import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.TableIOError;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
@@ -74,6 +78,8 @@ public class GtfsDataLoader implements DataLoader {
 				context.getReportSink());
 		if (table == null)
 			return;
+		checkMandatoryColumns(context.getReportSink(), table, "agency_id",
+				"agency_name", "agency_url", "agency_timezone");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		for (DataRow row : table) {
@@ -349,7 +355,7 @@ public class GtfsDataLoader implements DataLoader {
 			reportSink.report(new EmptyTableError(
 					table.getTableSourceInfo().getTableName()));
 		}
-		for (String unknownColumn : table.unreadColumns()) {
+		for (String unknownColumn : table.getUnreadColumnHeaders()) {
 			reportSink.report(new UnrecognizedColumnInfo(
 					new DataObjectSourceInfoImpl(table.getTableSourceInfo()),
 					unknownColumn));
@@ -372,6 +378,31 @@ public class GtfsDataLoader implements DataLoader {
 	private void reportUnreadTables(ReportSink reportSink) {
 		for (String unreadTable : dataSource.getUnreadEntries()) {
 			reportSink.report(new UnknownFileInfo(unreadTable));
+		}
+	}
+
+	private void checkMandatoryColumns(ReportSink reportSink, DataTable table,
+			String... columnHeaders) {
+		Set<String> headerSet = new HashSet<>();
+		for (String columnHeader : table.getColumnHeaders()) {
+			if (headerSet.contains(columnHeader)) {
+				reportSink
+						.report(new DuplicatedColumnError(
+								new DataObjectSourceInfoImpl(
+										table.getTableSourceInfo()),
+								columnHeader));
+			} else {
+				headerSet.add(columnHeader);
+			}
+		}
+		for (String columnHeader : columnHeaders) {
+			if (!headerSet.contains(columnHeader)) {
+				reportSink
+						.report(new MissingMandatoryColumnError(
+								new DataObjectSourceInfoImpl(
+										table.getTableSourceInfo()),
+								columnHeader));
+			}
 		}
 	}
 

@@ -10,6 +10,7 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -124,13 +125,19 @@ public class CsvDataTable implements DataTable {
 	}
 
 	@Override
-	public List<String> unreadColumns() {
+	public List<String> getUnreadColumnHeaders() {
 		List<String> ret = new ArrayList<>(csvParser.getHeaderNames());
 		for (String readField : readFields) {
 			// This is O(n), but number of CSV headers is probably low
-			ret.remove(readField);
+			while (ret.remove(readField)) {
+			}
 		}
 		return ret;
+	}
+
+	@Override
+	public List<String> getColumnHeaders() {
+		return Collections.unmodifiableList(csvParser.getHeaderNames());
 	}
 
 	@Override
