@@ -205,8 +205,7 @@ public class DataRowConverter {
 	public GtfsLogicalTime getLogicalTime(String field) {
 		String value = getString(field);
 		if (value == null || value.isEmpty()) {
-			reportSink.report(
-					new MissingMandatoryValueError(row.getSourceInfo(), field));
+			// Logical time is not mandatory!
 			return null;
 		} else {
 			try {
