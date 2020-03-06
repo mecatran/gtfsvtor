@@ -74,7 +74,8 @@ public class GtfsVtor {
 
 		DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
 				report, config);
-		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config);
+		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
+				.withVerbose(args.isVerbose());
 		daoValidator.validate(context);
 
 		ReportFormatter formatter = new HtmlReportFormatter(
