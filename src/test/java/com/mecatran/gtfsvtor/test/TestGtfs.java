@@ -266,17 +266,17 @@ public class TestGtfs {
 		List<MissingMandatoryColumnError> mmcs = tb.report
 				.getReportIssues(MissingMandatoryColumnError.class);
 		assertEquals(1, mmcs.size());
-		MissingMandatoryColumnError mmc = mmcs.get(0);
-		assertEquals(mmc.getSourceInfos().get(0).getSourceInfo().getTable()
-				.getTableName(), GtfsAgency.TABLE_NAME);
-		assertEquals(mmc.getColumnName(), "agency_name");
+		MissingMandatoryColumnError mmc0 = mmcs.get(0);
+		assertEquals(GtfsAgency.TABLE_NAME, mmc0.getSourceInfos().get(0)
+				.getSourceInfo().getTable().getTableName());
+		assertEquals("agency_name", mmc0.getColumnName());
 
 		List<DuplicatedColumnError> dcs = tb.report
 				.getReportIssues(DuplicatedColumnError.class);
 		assertEquals(1, dcs.size());
 		DuplicatedColumnError dc = dcs.get(0);
-		assertEquals(dc.getSourceInfos().get(0).getSourceInfo().getTable()
-				.getTableName(), GtfsAgency.TABLE_NAME);
+		assertEquals(GtfsAgency.TABLE_NAME, dc.getSourceInfos().get(0)
+				.getSourceInfo().getTable().getTableName());
 		assertTrue(dc.getSourceInfos().get(0).getFieldNames()
 				.contains("agency_url"));
 	}
