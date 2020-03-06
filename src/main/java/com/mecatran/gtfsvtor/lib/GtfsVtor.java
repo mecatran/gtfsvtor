@@ -38,45 +38,43 @@ public class GtfsVtor {
 		report = new InMemoryReportLog().withPrintIssues(args.isPrintIssues());
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
 				.autoGuess(args.getGtfsFile(), report);
-		if (inputStreamSource == null) {
-			// No input found, no need to go further
-			return;
-		}
-		NamedTabularDataSource dataSource = new CsvDataSource(
-				inputStreamSource);
-		InMemoryDao dao = new InMemoryDao().withVerbose(args.isVerbose());
-		DefaultValidatorConfig config = new DefaultValidatorConfig();
+		if (inputStreamSource != null) {
+			NamedTabularDataSource dataSource = new CsvDataSource(
+					inputStreamSource);
+			InMemoryDao dao = new InMemoryDao().withVerbose(args.isVerbose());
+			DefaultValidatorConfig config = new DefaultValidatorConfig();
 
-		DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
-				config);
-		GtfsDataLoader loader = new GtfsDataLoader(dataSource);
+			DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
+					config);
+			GtfsDataLoader loader = new GtfsDataLoader(dataSource);
 
-		long start = System.currentTimeMillis();
-		loader.load(new DefaultDataLoaderContext(dao, dao, report,
-				defStreamingValidator));
-		long end = System.currentTimeMillis();
-		System.out.println("Loaded '" + args.getGtfsFile() + "' in "
-				+ (end - start) + "ms");
+			long start = System.currentTimeMillis();
+			loader.load(new DefaultDataLoaderContext(dao, dao, report,
+					defStreamingValidator));
+			long end = System.currentTimeMillis();
+			System.out.println("Loaded '" + args.getGtfsFile() + "' in "
+					+ (end - start) + "ms");
 
-		if (args.getConfigFile() != null) {
-			File propFile = new File(args.getConfigFile());
-			if (propFile.exists() && propFile.canRead()) {
-				if (args.isVerbose()) {
-					System.out.println(
-							"Loading config from " + propFile.getName());
+			if (args.getConfigFile() != null) {
+				File propFile = new File(args.getConfigFile());
+				if (propFile.exists() && propFile.canRead()) {
+					if (args.isVerbose()) {
+						System.out.println(
+								"Loading config from " + propFile.getName());
+					}
+					config.loadProperties(propFile);
+				} else {
+					System.err.println("Cannot load " + propFile.getName());
 				}
-				config.loadProperties(propFile);
-			} else {
-				System.err.println("Cannot load " + propFile.getName());
 			}
-		}
-		// TODO Add remaining cmd line args to config
+			// TODO Add remaining cmd line args to config
 
-		DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
-				report, config);
-		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
-				.withVerbose(args.isVerbose());
-		daoValidator.validate(context);
+			DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
+					report, config);
+			DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
+					.withVerbose(args.isVerbose());
+			daoValidator.validate(context);
+		}
 
 		ReportFormatter formatter = new HtmlReportFormatter(
 				args.getOutputReportFile());
