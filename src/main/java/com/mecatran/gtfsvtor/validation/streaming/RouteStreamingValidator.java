@@ -20,7 +20,6 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 		ReportSink reportSink = context.getReportSink();
 		ReadOnlyDao dao = context.getPartialDao();
 		checkNonNull(route::getAgencyId, "agency_id", context);
-		checkNonNull(route::getType, "route_type", context);
 		// Check route->agency reference
 		if (route.getAgencyId() != null
 				&& dao.getAgency(route.getAgencyId()) == null) {

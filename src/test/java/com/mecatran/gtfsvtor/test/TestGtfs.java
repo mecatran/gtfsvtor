@@ -632,7 +632,7 @@ public class TestGtfs {
 		assertEquals(3, mois.size());
 		List<MissingMandatoryValueError> mmvs = tb.report
 				.getReportIssues(MissingMandatoryValueError.class);
-		assertEquals(7, mmvs.size());
+		assertEquals(5, mmvs.size());
 		List<InvalidFieldFormatError> iffs = tb.report
 				.getReportIssues(InvalidFieldFormatError.class);
 		assertEquals(6, iffs.size());
@@ -840,12 +840,12 @@ public class TestGtfs {
 
 	@Test
 	public void testLoadingAll2() {
+		// Just check if it does not throw an exception
 		File base = new File("src/test/resources/xdata");
 		for (String file : base.list()) {
 			System.out.println("===================================");
 			System.out.println("Loading and testing: " + file);
 			TestBundle tb = loadAndValidate(file, "src/test/resources/xdata/");
-			// Just check if it does not throw an exception
 			System.out.println("-----------------------------------");
 		}
 	}

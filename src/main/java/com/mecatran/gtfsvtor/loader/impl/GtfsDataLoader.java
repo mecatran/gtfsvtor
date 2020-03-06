@@ -82,9 +82,9 @@ public class GtfsDataLoader implements DataLoader {
 			GtfsAgency.Builder builder = new GtfsAgency.Builder(
 					erow.getString("agency_id"));
 			builder.withSourceInfo(row.getSourceInfo())
-					.withName(erow.getString("agency_name"))
-					.withUrl(erow.getString("agency_url"))
-					.withTimezone(erow.getTimeZone("agency_timezone"))
+					.withName(erow.getString("agency_name", true))
+					.withUrl(erow.getString("agency_url", true))
+					.withTimezone(erow.getTimeZone("agency_timezone", true))
 					.withLang(erow.getLocale("agency_lang"))
 					.withPhone(erow.getString("agency_phone"))
 					.withFareUrl(erow.getString("agency_fare_url"))
@@ -111,10 +111,10 @@ public class GtfsDataLoader implements DataLoader {
 			GtfsRoute.Builder builder = new GtfsRoute.Builder(
 					erow.getString("route_id"));
 			builder.withSourceInfo(row.getSourceInfo())
-					.withAgencyId(
-							GtfsAgency.id(erow.getString("agency_id", "")))
+					.withAgencyId(GtfsAgency
+							.id(erow.getString("agency_id", "", false)))
 					.withType(GtfsRouteType
-							.fromValue(erow.getInteger("route_type")))
+							.fromValue(erow.getInteger("route_type", true)))
 					.withShortName(erow.getString("route_short_name"))
 					.withLongName(erow.getString("route_long_name"))
 					.withDescription(erow.getString("route_desc"))
@@ -146,9 +146,10 @@ public class GtfsDataLoader implements DataLoader {
 			builder.withSourceInfo(row.getSourceInfo())
 					.withType(erow.getStopType("location_type"))
 					.withCode(erow.getString("stop_code"))
-					.withName(erow.getString("stop_name"))
-					.withCoordinates(erow.getDouble("stop_lat"),
-							erow.getDouble("stop_lon"))
+					.withName(erow.getString("stop_name", true))
+					.withCoordinates(
+							erow.getDouble("stop_lat", null, Double.NaN, false),
+							erow.getDouble("stop_lon", null, Double.NaN, false))
 					.withParentId(GtfsStop.id(erow.getString("parent_station")))
 					.withDescription(erow.getString("stop_desc"))
 					.withZoneId(GtfsZone.id(erow.getString("zone_id")))
@@ -180,13 +181,16 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsCalendar.Builder builder = new GtfsCalendar.Builder(
 					erow.getString("service_id"));
-			builder.withSourceInfo(row.getSourceInfo()).withDow(
-					erow.getBoolean("monday"), erow.getBoolean("tuesday"),
-					erow.getBoolean("wednesday"), erow.getBoolean("thursday"),
-					erow.getBoolean("friday"), erow.getBoolean("saturday"),
-					erow.getBoolean("sunday"))
-					.withStartDate(erow.getLogicalDate("start_date"))
-					.withEndDate(erow.getLogicalDate("end_date"));
+			builder.withSourceInfo(row.getSourceInfo())
+					.withDow(erow.getBoolean("monday", null, true),
+							erow.getBoolean("tuesday", null, true),
+							erow.getBoolean("wednesday", null, true),
+							erow.getBoolean("thursday", null, true),
+							erow.getBoolean("friday", null, true),
+							erow.getBoolean("saturday", null, true),
+							erow.getBoolean("sunday", null, true))
+					.withStartDate(erow.getLogicalDate("start_date", true))
+					.withEndDate(erow.getLogicalDate("end_date", true));
 			GtfsCalendar calendar = builder.build();
 			sourceContext.setRow(row);
 			context.getStreamingValidator().validate(GtfsCalendar.class,
@@ -210,7 +214,7 @@ public class GtfsDataLoader implements DataLoader {
 			builder.withSourceInfo(row.getSourceInfo())
 					.withCalendarId(
 							GtfsCalendar.id(erow.getString("service_id")))
-					.withDate(erow.getLogicalDate("date"))
+					.withDate(erow.getLogicalDate("date", true))
 					.withExceptionType(erow
 							.getCalendarDateExceptionType("exception_type"));
 			GtfsCalendarDate calendarDate = builder.build();
@@ -234,8 +238,8 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsShapePoint.Builder builder = new GtfsShapePoint.Builder();
 			builder.withShapeId(GtfsShape.id(erow.getString("shape_id")))
-					.withCoordinates(erow.getDouble("shape_pt_lat"),
-							erow.getDouble("shape_pt_lon"))
+					.withCoordinates(erow.getDouble("shape_pt_lat", true),
+							erow.getDouble("shape_pt_lon", true))
 					.withPointSequence(
 							erow.getShapePointSequence("shape_pt_sequence"))
 					.withShapeDistTraveled(

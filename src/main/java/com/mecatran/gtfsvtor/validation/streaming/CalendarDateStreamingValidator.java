@@ -1,7 +1,5 @@
 package com.mecatran.gtfsvtor.validation.streaming;
 
-import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkNonNull;
-
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
@@ -13,7 +11,6 @@ public class CalendarDateStreamingValidator
 	@Override
 	public void validate(Class<? extends GtfsCalendarDate> clazz,
 			GtfsCalendarDate calendarDate, StreamingValidator.Context context) {
-		checkNonNull(calendarDate::getDate, "date", context);
-		checkNonNull(calendarDate::getExceptionType, "exception_type", context);
+		// Nothing to validate for the moment
 	}
 }

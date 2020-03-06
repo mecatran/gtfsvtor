@@ -23,6 +23,7 @@ import com.mecatran.gtfsvtor.model.GtfsWheelchairAccess;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
+import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 
 public class DataRowConverter {
 
@@ -35,29 +36,49 @@ public class DataRowConverter {
 	}
 
 	public String getString(String field) {
-		return getString(field, null);
+		return getString(field, null, false);
 	}
 
-	public String getString(String field, String defaultValue) {
+	public String getString(String field, boolean mandatory) {
+		return getString(field, null, mandatory);
+	}
+
+	public String getString(String field, String defaultValue,
+			boolean mandatory) {
 		String ret = row.getString(field);
 		if (ret != null && ret.contains("\uFFFD")) {
 			reportSink.report(
 					new InvalidEncodingError(row.getSourceInfo(), field, ret));
+			// Return the string anyway
 		}
 		if (ret == null || ret.isEmpty()) {
+			if (mandatory) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+			}
 			return defaultValue;
 		}
 		return ret;
 	}
 
 	public Integer getInteger(String field) {
-		return this.getInteger(field, null);
+		return this.getInteger(field, null, false);
 	}
 
-	public Integer getInteger(String field, Integer defaultValue) {
+	public Integer getInteger(String field, boolean mandatory) {
+		return this.getInteger(field, null, mandatory);
+	}
+
+	public Integer getInteger(String field, Integer defaultValue,
+			boolean mandatory) {
 		String value = getString(field);
-		if (value == null || value.isEmpty())
+		if (value == null || value.isEmpty()) {
+			if (mandatory) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+			}
 			return defaultValue;
+		}
 		try {
 			return Integer.parseInt(value);
 		} catch (NumberFormatException e) {
@@ -67,29 +88,44 @@ public class DataRowConverter {
 	}
 
 	public Double getDouble(String field) {
-		return this.getDouble(field, null);
+		return this.getDouble(field, null, null, false);
 	}
 
-	public Double getDouble(String field, Double defaultValue) {
+	public Double getDouble(String field, boolean mandatory) {
+		return this.getDouble(field, null, null, mandatory);
+	}
+
+	public Double getDouble(String field, Double defaultValue,
+			Double defaultValueIfInvalid, boolean mandatory) {
 		String value = getString(field);
-		if (value == null || value.isEmpty())
+		if (value == null || value.isEmpty()) {
+			if (mandatory) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+			}
 			return defaultValue;
+		}
 		try {
 			return Double.parseDouble(value);
 		} catch (NumberFormatException e) {
 			reportSink.report(
 					fieldFormatError(field, value, "floating-point (double)"));
-			return defaultValue;
+			return defaultValueIfInvalid;
 		}
 	}
 
 	public Boolean getBoolean(String field) {
-		return this.getBoolean(field, null);
+		return this.getBoolean(field, null, false);
 	}
 
-	public Boolean getBoolean(String field, Boolean defaultValue) {
+	public Boolean getBoolean(String field, Boolean defaultValue,
+			boolean mandatory) {
 		String value = getString(field);
 		if (value == null || value.isEmpty()) {
+			if (mandatory) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+			}
 			return defaultValue;
 		} else if (value.equals("0")) {
 			return false;
@@ -103,9 +139,18 @@ public class DataRowConverter {
 	}
 
 	public TimeZone getTimeZone(String field) {
+		return getTimeZone(field, false);
+	}
+
+	public TimeZone getTimeZone(String field, boolean mandatory) {
 		String tz = getString(field);
-		if (tz == null || tz.isEmpty())
+		if (tz == null || tz.isEmpty()) {
+			if (mandatory) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+			}
 			return null;
+		}
 		try {
 			ZoneId zoneId = ZoneId.of(tz);
 			return TimeZone.getTimeZone(zoneId);
@@ -129,13 +174,21 @@ public class DataRowConverter {
 	}
 
 	public GtfsLogicalDate getLogicalDate(String field) {
-		return this.getLogicalDate(field, null);
+		return this.getLogicalDate(field, null, false);
+	}
+
+	public GtfsLogicalDate getLogicalDate(String field, boolean mandatory) {
+		return this.getLogicalDate(field, null, mandatory);
 	}
 
 	public GtfsLogicalDate getLogicalDate(String field,
-			GtfsLogicalDate defaultValue) {
+			GtfsLogicalDate defaultValue, boolean mandatory) {
 		String value = getString(field);
 		if (value == null || value.isEmpty()) {
+			if (mandatory) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+			}
 			return defaultValue;
 		} else {
 			try {
@@ -174,9 +227,11 @@ public class DataRowConverter {
 			String field) {
 		String str = getString(field);
 		try {
-			if (str == null || str.isEmpty())
-				throw new IllegalArgumentException(
-						"Exception type cannot be null");
+			if (str == null || str.isEmpty()) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+				return null;
+			}
 			return GtfsCalendarDateExceptionType
 					.fromValue(Integer.parseInt(str));
 		} catch (IllegalArgumentException e) {

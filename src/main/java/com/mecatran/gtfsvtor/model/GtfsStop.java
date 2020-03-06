@@ -56,12 +56,26 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 		return name;
 	}
 
-	public Double getLat() {
+	/*
+	 * Here lies a hack. We store Double.NaN in lat/lon when the input data is
+	 * malformed, null when it is not present. This is necessary because lat/lon
+	 * is sometimes mandatory, sometimes not. The standard getters (getLat,
+	 * getLon) will hide this to the user.
+	 */
+	public Double getLatOrNaN() {
 		return lat;
 	}
 
-	public Double getLon() {
+	public Double getLat() {
+		return lat == null ? null : Double.isNaN(lat) ? null : lat;
+	}
+
+	public Double getLonOrNaN() {
 		return lon;
+	}
+
+	public Double getLon() {
+		return lon == null ? null : Double.isNaN(lon) ? null : lon;
 	}
 
 	/**

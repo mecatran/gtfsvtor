@@ -18,7 +18,6 @@ public class StopStreamingValidator implements StreamingValidator<GtfsStop> {
 				|| stopType == GtfsStopType.STATION
 				|| stopType == GtfsStopType.ENTRANCE;
 		if (namePosMandatory) {
-			checkNonNull(stop::getName, "stop_name", context);
 			checkNonNull(stop::getLat, "stop_lat", context);
 			checkNonNull(stop::getLon, "stop_lon", context);
 		}
