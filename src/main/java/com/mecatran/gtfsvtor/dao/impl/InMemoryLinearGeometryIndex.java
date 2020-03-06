@@ -12,6 +12,7 @@ import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
+import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
@@ -70,6 +71,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 
 	private static class PatternLinearIndex {
 		private Map<GtfsTripStopSequence, ProjectedPointImpl> projections = new HashMap<>();
+		private GtfsShape.Id shapeId;
 	}
 
 	private Map<GtfsTrip.Id, PatternLinearIndex> patternIndexByTrips = new HashMap<>();
@@ -190,6 +192,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 	private PatternLinearIndex computeShapelessPatternIndex(GtfsTrip trip,
 			List<GtfsStopTime> stopTimes, IndexedReadOnlyDao dao) {
 		PatternLinearIndex patternIndex = new PatternLinearIndex();
+		patternIndex.shapeId = null;
 		GeoCoordinates lastGeocodedPoint = null;
 		double totalDistance = 0.0;
 		for (GtfsStopTime stopTime : stopTimes) {
@@ -219,6 +222,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			List<GtfsStopTime> stopTimes, List<GtfsShapePoint> shapePoints,
 			IndexedReadOnlyDao dao) {
 		PatternLinearIndex patternIndex = new PatternLinearIndex();
+		patternIndex.shapeId = shapePoints.isEmpty() ? null
+				: shapePoints.get(0).getShapeId();
 
 		int stopIndex = 0;
 		int segmentIndex = 0;
@@ -430,6 +435,9 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		}
 
 		PatternLinearIndex pattern = new PatternLinearIndex();
+		pattern.shapeId = shapePoints.isEmpty() ? null
+				: shapePoints.get(0).getShapeId();
+
 		for (int i = 0; i < stopTimes.size(); i++) {
 			GtfsStopTime stopTime = stopTimes.get(i);
 			LocalMin min = path.get(i + 1);
