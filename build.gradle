@@ -8,6 +8,7 @@ targetCompatibility = 1.8
 description = 'GTFSVTOR - General Transit Feed Specification Validator'
 version = '0.1.0'
 mainClassName = 'com.mecatran.gtfsvtor.cmdline.GtfsVtorMain'
+applicationDefaultJvmArgs = [ "-Xmx4G" ]
 
 repositories {
   mavenCentral()
