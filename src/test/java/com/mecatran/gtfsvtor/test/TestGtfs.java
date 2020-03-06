@@ -781,6 +781,20 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testRouteNames() {
+		TestBundle tb = loadAndValidate("route_names");
+		List<MissingMandatoryValueError> mmvs = tb.report
+				.getReportIssues(MissingMandatoryValueError.class);
+		assertEquals(1, mmvs.size());
+		MissingMandatoryValueError mmv0 = mmvs.get(0);
+		assertEquals(GtfsRoute.TABLE_NAME, mmv0.getSourceInfos().get(0)
+				.getSourceInfo().getTable().getTableName());
+		List<InvalidFieldFormatError> iffs = tb.report
+				.getReportIssues(InvalidFieldFormatError.class);
+		assertEquals(3, iffs.size());
+	}
+
+	@Test
 	public void testMBTA42951766() {
 		TestBundle tb = loadAndValidate("MBTA_42951766");
 		IndexedReadOnlyDao dao = tb.dao;

@@ -16,10 +16,6 @@ Lang is within ISO 639-1 spec
 
 Routes
 ------
-Both route short name and long name are blank
-Route short name is not too long (max 6 chars)
-Route long name does not contain short name
-Route long name is not same as long name
 Route description not the same as long name
 Route URL format
 

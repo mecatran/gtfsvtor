@@ -6,13 +6,18 @@ import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
+import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
 @StreamingValidateType(GtfsRoute.class)
 public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
+
+	@ConfigurableOption
+	public int maxShortNameLen = 6;
 
 	@Override
 	public void validate(Class<? extends GtfsRoute> clazz, GtfsRoute route,
@@ -32,6 +37,23 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 			reportSink.report(
 					new MissingMandatoryValueError(context.getSourceInfo(),
 							"route_short_name", "route_long_name"));
+		}
+		if (route.getShortName() != null
+				&& route.getShortName().length() > maxShortNameLen) {
+			// TODO specific report for this for better explanation
+			reportSink.report(new InvalidFieldFormatError(
+					context.getSourceInfo(), "route_short_name",
+					route.getShortName(),
+					"Max " + maxShortNameLen + " chars long"));
+		}
+		if (route.getShortName() != null && route.getLongName() != null
+				&& route.getLongName().startsWith(route.getShortName())) {
+			// TODO Are we sure about this test?
+			// TODO specific report for this for better explanation
+			reportSink.report(new InvalidFieldFormatError(
+					context.getSourceInfo(), "route_long_name",
+					route.getShortName(),
+					"Long name should not start or be equals with short name"));
 		}
 	}
 }
