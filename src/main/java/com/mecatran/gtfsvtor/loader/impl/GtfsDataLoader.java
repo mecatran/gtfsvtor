@@ -109,6 +109,8 @@ public class GtfsDataLoader implements DataLoader {
 				context.getReportSink());
 		if (table == null)
 			return;
+		checkMandatoryColumns(context.getReportSink(), table, "route_id",
+				"route_type");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		for (DataRow row : table) {
@@ -142,6 +144,8 @@ public class GtfsDataLoader implements DataLoader {
 				context.getReportSink());
 		if (table == null)
 			return;
+		checkMandatoryColumns(context.getReportSink(), table, "stop_id",
+				"stop_name", "stop_lat", "stop_lon");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		for (DataRow row : table) {
@@ -180,6 +184,9 @@ public class GtfsDataLoader implements DataLoader {
 			missingCalendarsTable = true;
 			return;
 		}
+		checkMandatoryColumns(context.getReportSink(), table, "service_id",
+				"monday", "tuesday", "wednesday", "thursday", "friday",
+				"saturday", "sunday", "start_date", "end_date");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		for (DataRow row : table) {
@@ -211,6 +218,8 @@ public class GtfsDataLoader implements DataLoader {
 				missingCalendarsTable, context.getReportSink());
 		if (table == null)
 			return;
+		checkMandatoryColumns(context.getReportSink(), table, "service_id",
+				"date", "exception_type");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		for (DataRow row : table) {
@@ -237,6 +246,8 @@ public class GtfsDataLoader implements DataLoader {
 				context.getReportSink());
 		if (table == null)
 			return;
+		checkMandatoryColumns(context.getReportSink(), table, "shape_id",
+				"shape_pt_lat", "shape_pt_lon", "shape_pt_sequence");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		for (DataRow row : table) {
@@ -264,6 +275,8 @@ public class GtfsDataLoader implements DataLoader {
 				context.getReportSink());
 		if (table == null)
 			return;
+		checkMandatoryColumns(context.getReportSink(), table, "route_id",
+				"service_id", "trip_id");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		for (DataRow row : table) {
@@ -297,6 +310,8 @@ public class GtfsDataLoader implements DataLoader {
 				context.getReportSink());
 		if (table == null)
 			return;
+		checkMandatoryColumns(context.getReportSink(), table, "trip_id",
+				"arrival_time", "departure_time", "stop_id", "stop_sequence");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
 		int nStopTimes = 0;
