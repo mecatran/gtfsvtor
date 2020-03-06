@@ -43,10 +43,12 @@ Performance tests are done using:
 - duplicate trips detection option (-d) disabled for feedvalidator.py
 - small memory-footprint GtfsStopTime implementation enabled for GTFSVTOR
 
-  | GTFS        | Routes | Stops | Trips  | Times  | Shp pts | FeedValidator | GTFSVTOR      |
-  |-------------|--------|-------|--------|--------|---------|---------------|---------------|
-  | MBTA Boston |    236 |  9861 |  70446 |  1829k |    323k | 2m20s         | 11s           |
-  | IDFM Paris  |   1870 | 63471 | 467457 | 10564k |       - | 57m50s        | 50s           |
+  | GTFS            | Routes | Stops | Trips  | Times  | Shp pts | FeedValidator | GTFSVTOR      |
+  |-----------------|--------|-------|--------|--------|---------|---------------|---------------|
+  | MBTA Boston     |    236 |  9861 |  70446 |  1829k |    323k | 2m20s         | 11s           |
+  | Montréal        |    229 |  9241 | 206069 |  7814k |    199k | 9m23s         | 27s           |
+  | IDFM Paris      |   1870 | 63471 | 467457 | 10564k |       - | 57m50s        | 50s           |
+  | OV Netherlands  |   2703 | 63995 | 787736 | 16103k |   3384k | ?             | 2m27s         |
 
 **Note**: Performances comparisons are not 100% accurate as GTFSVTOR do not have all validators implemented,
 some of them can be a bit slow (block ID overlap...)
