@@ -203,14 +203,11 @@ public class DataRowConverter {
 	}
 
 	public GtfsLogicalTime getLogicalTime(String field) {
-		return this.getLogicalTime(field, null);
-	}
-
-	public GtfsLogicalTime getLogicalTime(String field,
-			GtfsLogicalTime defaultValue) {
 		String value = getString(field);
 		if (value == null || value.isEmpty()) {
-			return defaultValue;
+			reportSink.report(
+					new MissingMandatoryValueError(row.getSourceInfo(), field));
+			return null;
 		} else {
 			try {
 				GtfsLogicalTime ret = GtfsLogicalTime.parseFromHH_MM_SS(value);
@@ -218,7 +215,7 @@ public class DataRowConverter {
 			} catch (ParseException e) {
 				reportSink.report(fieldFormatError(field, value,
 						"time (HH:MM:SS) " + e.getLocalizedMessage()));
-				return defaultValue;
+				return null;
 			}
 		}
 	}
@@ -260,8 +257,9 @@ public class DataRowConverter {
 
 	public GtfsTripDirectionId getDirectionId(String field) {
 		String str = getString(field);
-		if (str == null || str.isEmpty())
+		if (str == null || str.isEmpty()) {
 			return null;
+		}
 		try {
 			return GtfsTripDirectionId.fromValue(Integer.parseInt(str));
 		} catch (IllegalArgumentException e) {
@@ -273,8 +271,10 @@ public class DataRowConverter {
 
 	public GtfsTripStopSequence getTripStopSequence(String field) {
 		String str = getString(field);
-		if (str == null || str.isEmpty())
+		if (str == null || str.isEmpty()) {
+			// No need to report a missing value error, this is considered an ID
 			return null;
+		}
 		try {
 			return GtfsTripStopSequence.fromSequence(Integer.parseInt(str));
 		} catch (IllegalArgumentException e) {
@@ -286,8 +286,10 @@ public class DataRowConverter {
 
 	public GtfsShapePointSequence getShapePointSequence(String field) {
 		String str = getString(field);
-		if (str == null || str.isEmpty())
+		if (str == null || str.isEmpty()) {
+			// No need to report a missing value error, this is considered an ID
 			return null;
+		}
 		try {
 			return GtfsShapePointSequence.fromSequence(Integer.parseInt(str));
 		} catch (IllegalArgumentException e) {
