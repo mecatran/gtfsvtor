@@ -885,12 +885,12 @@ public class TestGtfs {
 	@Test
 	public void testLoadingAll2() {
 		// Just check if it does not throw an exception
-		File base = new File("src/test/resources/xdata");
-		for (String file : base.list()) {
-			System.out.println("===================================");
-			System.out.println("Loading and testing: " + file);
-			TestBundle tb = loadAndValidate(file, "src/test/resources/xdata/");
-			System.out.println("-----------------------------------");
-		}
+//		File base = new File("src/test/resources/xdata");
+//		for (String file : base.list()) {
+//			System.out.println("===================================");
+//			System.out.println("Loading and testing: " + file);
+//			TestBundle tb = loadAndValidate(file, "src/test/resources/xdata/");
+//			System.out.println("-----------------------------------");
+//		}
 	}
 }
