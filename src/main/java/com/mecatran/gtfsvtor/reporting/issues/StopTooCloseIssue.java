@@ -11,7 +11,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
-@ReportIssuePolicy(categoryName = "Stop too close")
+@ReportIssuePolicy(categoryName = "Stops too close")
 public class StopTooCloseIssue implements ReportIssue {
 
 	private GtfsStop stop1, stop2;
