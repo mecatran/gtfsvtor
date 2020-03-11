@@ -18,6 +18,7 @@ public class DuplicatedObjectIdError implements ReportIssue {
 	private GtfsObjectWithSourceInfo duplicatedObject;
 	private GtfsId<?, ?> duplicatedId;
 	private List<SourceInfoWithFields> sourceInfos;
+	private String fieldName;
 
 	public DuplicatedObjectIdError(GtfsObjectWithSourceInfo existingObject,
 			GtfsObjectWithSourceInfo duplicatedObject,
@@ -34,6 +35,7 @@ public class DuplicatedObjectIdError implements ReportIssue {
 						fieldName),
 				new SourceInfoWithFields(duplicatedObject.getSourceInfo(),
 						fieldName));
+		this.fieldName = fieldName;
 	}
 
 	public GtfsId<?, ?> getDuplicatedId() {
@@ -51,6 +53,11 @@ public class DuplicatedObjectIdError implements ReportIssue {
 	@Override
 	public List<SourceInfoWithFields> getSourceInfos() {
 		return sourceInfos;
+	}
+
+	@Override
+	public String getCategoryName() {
+		return "Duplicated ID " + fieldName;
 	}
 
 	@Override

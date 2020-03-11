@@ -15,11 +15,13 @@ import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 @ReportIssuePolicy(severity = ReportIssueSeverity.WARNING)
 public class UnusedObjectWarning implements ReportIssue {
 
+	private String typeName;
 	private GtfsId<?, ?> id;
 	private List<SourceInfoWithFields> sourceInfos;
 
-	public UnusedObjectWarning(GtfsId<?, ?> id, DataObjectSourceInfo sourceInfo,
-			String fieldName) {
+	public UnusedObjectWarning(String typeName, GtfsId<?, ?> id,
+			DataObjectSourceInfo sourceInfo, String fieldName) {
+		this.typeName = typeName;
 		this.id = id;
 		if (sourceInfo != null) {
 			this.sourceInfos = Arrays
@@ -34,12 +36,17 @@ public class UnusedObjectWarning implements ReportIssue {
 	}
 
 	@Override
+	public String getCategoryName() {
+		return "Unused " + typeName;
+	}
+
+	@Override
 	public List<SourceInfoWithFields> getSourceInfos() {
 		return sourceInfos;
 	}
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		fmt.text("Unused object ID {0}", fmt.id(id));
+		fmt.text("Unused {0} ID {1}", fmt.var(typeName), fmt.id(id));
 	}
 }

@@ -41,10 +41,10 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 		if (route.getShortName() != null
 				&& route.getShortName().length() > maxShortNameLen) {
 			// TODO specific report for this for better explanation
-			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceInfo(), "route_short_name",
-					route.getShortName(),
-					"Max " + maxShortNameLen + " chars long"));
+			reportSink
+					.report(new InvalidFieldFormatError(context.getSourceInfo(),
+							"route_short_name", route.getShortName(),
+							"Max " + maxShortNameLen + " chars long"));
 		}
 		if (route.getShortName() != null && route.getLongName() != null
 				&& route.getLongName().startsWith(route.getShortName())) {

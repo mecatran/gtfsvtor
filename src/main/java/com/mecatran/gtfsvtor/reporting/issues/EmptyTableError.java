@@ -5,7 +5,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR)
+@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Empty table")
 public class EmptyTableError implements ReportIssue {
 
 	private String tableName;

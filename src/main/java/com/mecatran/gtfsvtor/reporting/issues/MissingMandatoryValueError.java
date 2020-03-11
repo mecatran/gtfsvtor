@@ -14,20 +14,29 @@ import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 public class MissingMandatoryValueError implements ReportIssue {
 
 	private SourceInfoWithFields sourceInfo;
+	private String fieldName;
 
 	public MissingMandatoryValueError(DataObjectSourceInfo sourceInfo,
 			String fieldName) {
 		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldName);
+		this.fieldName = fieldName;
 	}
 
+	// TODO Remove this constructor
 	public MissingMandatoryValueError(DataObjectSourceInfo sourceInfo,
 			String... fieldNames) {
 		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldNames);
+		this.fieldName = String.join("/", fieldNames);
 	}
 
 	@Override
 	public List<SourceInfoWithFields> getSourceInfos() {
 		return Arrays.asList(sourceInfo);
+	}
+
+	@Override
+	public String getCategoryName() {
+		return "Missing mandatory " + fieldName + " value";
 	}
 
 	@Override

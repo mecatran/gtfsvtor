@@ -215,7 +215,8 @@ public class HtmlReportFormatter implements ReportFormatter {
 
 	private void formatFooter() throws IOException {
 		html.hr();
-		html.p().text("Validation done at " + new Date()).end();
+		html.p().classAttr("comments").text("Validation done at " + new Date()
+				+ " by GTFSVTOR - Copyright (c) 2020 Mecatran").end();
 		html.end(); // html
 	}
 

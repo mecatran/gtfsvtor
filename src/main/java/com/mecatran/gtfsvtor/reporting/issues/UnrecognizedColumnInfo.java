@@ -14,15 +14,22 @@ import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 public class UnrecognizedColumnInfo implements ReportIssue {
 
 	private SourceInfoWithFields sourceInfo;
+	private String columnName;
 
 	public UnrecognizedColumnInfo(DataObjectSourceInfo sourceInfo,
 			String columnName) {
 		this.sourceInfo = new SourceInfoWithFields(sourceInfo, columnName);
+		this.columnName = columnName;
 	}
 
 	@Override
 	public List<SourceInfoWithFields> getSourceInfos() {
 		return Arrays.asList(sourceInfo);
+	}
+
+	@Override
+	public String getCategoryName() {
+		return "Unrecognized column " + columnName;
 	}
 
 	@Override

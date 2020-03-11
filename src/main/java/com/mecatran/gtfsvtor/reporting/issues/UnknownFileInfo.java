@@ -5,7 +5,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.INFO)
+@ReportIssuePolicy(severity = ReportIssueSeverity.INFO, categoryName = "Unknown file")
 public class UnknownFileInfo implements ReportIssue {
 
 	private String fileName;

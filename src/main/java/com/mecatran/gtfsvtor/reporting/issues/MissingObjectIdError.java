@@ -10,7 +10,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR)
+@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Missing object ID")
 public class MissingObjectIdError implements ReportIssue {
 
 	private SourceInfoWithFields sourceInfo;

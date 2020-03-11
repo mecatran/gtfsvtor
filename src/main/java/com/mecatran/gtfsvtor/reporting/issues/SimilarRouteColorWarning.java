@@ -11,7 +11,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING)
+@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Similar colors")
 public class SimilarRouteColorWarning implements ReportIssue {
 
 	private GtfsRoute route1, route2;

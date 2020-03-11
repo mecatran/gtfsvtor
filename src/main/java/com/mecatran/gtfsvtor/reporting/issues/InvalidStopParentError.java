@@ -39,6 +39,12 @@ public class InvalidStopParentError implements ReportIssue {
 	}
 
 	@Override
+	public String getCategoryName() {
+		return "Invalid " + expectedParentType.toString().toLowerCase()
+				+ " parent type";
+	}
+
+	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text(
 				"Invalid type {0} for parent ID {1}, a child of type {2} should {3}",

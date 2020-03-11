@@ -32,6 +32,11 @@ public class MissingMandatoryColumnError implements ReportIssue {
 	}
 
 	@Override
+	public String getCategoryName() {
+		return "Missing mandatory " + columnName + " column";
+	}
+
+	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text("Missing mandatory column: {0}", fmt.pre(columnName));
 	}

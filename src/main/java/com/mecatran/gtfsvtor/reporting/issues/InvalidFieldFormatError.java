@@ -14,6 +14,7 @@ import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 public class InvalidFieldFormatError implements ReportIssue {
 
 	private SourceInfoWithFields sourceInfo;
+	private String fieldName;
 	private String value;
 	private String expectedFormat;
 	private String additionalInfo;
@@ -27,6 +28,7 @@ public class InvalidFieldFormatError implements ReportIssue {
 			String fieldName, String value, String expectedFormat,
 			String additionalInfo) {
 		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldName);
+		this.fieldName = fieldName;
 		this.value = value;
 		this.expectedFormat = expectedFormat;
 		this.additionalInfo = additionalInfo;
@@ -35,6 +37,11 @@ public class InvalidFieldFormatError implements ReportIssue {
 	@Override
 	public List<SourceInfoWithFields> getSourceInfos() {
 		return Arrays.asList(sourceInfo);
+	}
+
+	@Override
+	public String getCategoryName() {
+		return "Invalid " + fieldName + " format";
 	}
 
 	public String getValue() {

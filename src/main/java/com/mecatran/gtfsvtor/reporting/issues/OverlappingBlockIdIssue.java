@@ -14,7 +14,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING)
+@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Overlapping trip in block")
 public class OverlappingBlockIdIssue implements ReportIssue {
 
 	private GtfsBlockId blockId;

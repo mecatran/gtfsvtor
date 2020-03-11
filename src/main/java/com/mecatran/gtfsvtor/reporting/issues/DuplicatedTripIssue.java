@@ -12,7 +12,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING)
+@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Duplicated trips")
 public class DuplicatedTripIssue implements ReportIssue {
 
 	private GtfsTrip trip1, trip2;

@@ -9,5 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ReportIssuePolicy {
 
-	ReportIssueSeverity severity();
+	ReportIssueSeverity severity() default ReportIssueSeverity.ERROR;
+
+	String categoryName() default "";
 }

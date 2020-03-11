@@ -19,6 +19,11 @@ public class MissingMandatoryTableError implements ReportIssue {
 	}
 
 	@Override
+	public String getCategoryName() {
+		return "Missing mandatory table " + tableName;
+	}
+
+	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text("Missing mandatory table {0}", fmt.pre(tableName));
 	}

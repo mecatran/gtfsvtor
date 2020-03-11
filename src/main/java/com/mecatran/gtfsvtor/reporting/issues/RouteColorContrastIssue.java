@@ -6,9 +6,11 @@ import java.util.List;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
+import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
+@ReportIssuePolicy(categoryName = "Color contrast")
 public class RouteColorContrastIssue implements ReportIssue {
 
 	private GtfsRoute route;

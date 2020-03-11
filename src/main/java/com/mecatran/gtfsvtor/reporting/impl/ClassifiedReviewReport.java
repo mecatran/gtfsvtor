@@ -174,7 +174,7 @@ public class ClassifiedReviewReport {
 					name -> new CategoryCounter(severity.toString(), severity,
 							Integer.MAX_VALUE))
 					.inc();
-			String categoryName = issue.getClass().getSimpleName();
+			String categoryName = issue.getCategoryName();
 			boolean overflow = categoryCounters.computeIfAbsent(categoryName,
 					name -> new CategoryCounter(name, severity, maxIssues))
 					.inc();
@@ -235,8 +235,7 @@ public class ClassifiedReviewReport {
 		List<SourceInfoWithFields> sourceInfos = issue.getSourceInfos();
 		if (sourceInfos.isEmpty()) {
 			// Issues w/o source info: use the issue class as category
-			// TODO Use translated issue name
-			return issue.getClass().getSimpleName();
+			return issue.getCategoryName();
 		} else {
 			// Issues w source info: use the FIRST table name as category
 			return sourceInfos.get(0).getSourceInfo().getTable().getTableName();

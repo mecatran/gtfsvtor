@@ -40,6 +40,27 @@ public interface ReportIssue {
 		return ReportIssueSeverity.ERROR;
 	}
 
+	/**
+	 * This method can be overriden by specific issue class that want to return
+	 * various names for the same issue class. Be careful, as this will split
+	 * issues with different names in different categories; so refrain from
+	 * using variables in the name which would create dozens of different name /
+	 * categories.
+	 */
+	public default String getCategoryName() {
+		Class<? extends ReportIssue> issueClass = this.getClass();
+		String name = null;
+		if (issueClass.isAnnotationPresent(ReportIssuePolicy.class)) {
+			ReportIssuePolicy policy = issueClass
+					.getAnnotation(ReportIssuePolicy.class);
+			name = policy.categoryName();
+		}
+		if (name == null || name.isEmpty()) {
+			name = issueClass.getSimpleName();
+		}
+		return name;
+	}
+
 	public static Comparator<ReportIssue> makeComparator() {
 		return new Comparator<ReportIssue>() {
 			@Override

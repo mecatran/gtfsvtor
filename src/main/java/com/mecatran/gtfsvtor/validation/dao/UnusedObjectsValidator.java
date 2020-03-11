@@ -27,16 +27,16 @@ public class UnusedObjectsValidator implements DaoValidator {
 		/* Look for unused agencies */
 		for (GtfsAgency agency : dao.getAgencies()) {
 			if (dao.getRoutesOfAgency(agency.getId()).isEmpty()) {
-				reportSink.report(new UnusedObjectWarning(agency.getId(),
-						agency.getSourceInfo(), "agency_id"));
+				reportSink.report(new UnusedObjectWarning("agency",
+						agency.getId(), agency.getSourceInfo(), "agency_id"));
 			}
 		}
 
 		/* Look for unused (empty) routes */
 		for (GtfsRoute route : dao.getRoutes()) {
 			if (dao.getTripsOfRoute(route.getId()).isEmpty()) {
-				reportSink.report(new UnusedObjectWarning(route.getId(),
-						route.getSourceInfo(), "route_id"));
+				reportSink.report(new UnusedObjectWarning("route",
+						route.getId(), route.getSourceInfo(), "route_id"));
 			}
 		}
 
@@ -55,18 +55,20 @@ public class UnusedObjectsValidator implements DaoValidator {
 		for (GtfsCalendar.Id unusedCalendarId : unusedCalendarIds) {
 			GtfsCalendar calendar = dao.getCalendar(unusedCalendarId);
 			if (calendar != null) {
-				reportSink.report(new UnusedObjectWarning(unusedCalendarId,
-						calendar.getSourceInfo(), "calendar_id"));
+				reportSink.report(
+						new UnusedObjectWarning("calendar", unusedCalendarId,
+								calendar.getSourceInfo(), "calendar_id"));
 			}
 			for (GtfsCalendarDate calendarDate : dao
 					.getCalendarDates(unusedCalendarId)) {
-				reportSink.report(new UnusedObjectWarning(unusedCalendarId,
-						calendarDate.getSourceInfo(), "calendar_id"));
+				reportSink.report(new UnusedObjectWarning("calendar date",
+						unusedCalendarId, calendarDate.getSourceInfo(),
+						"calendar_id"));
 			}
 		}
 		for (GtfsStop.Id unusedStopId : unusedStopsIds) {
 			GtfsStop stop = dao.getStop(unusedStopId);
-			reportSink.report(new UnusedObjectWarning(unusedStopId,
+			reportSink.report(new UnusedObjectWarning("stop", unusedStopId,
 					stop.getSourceInfo(), "stop_id"));
 		}
 
@@ -79,8 +81,8 @@ public class UnusedObjectsValidator implements DaoValidator {
 					.isEmpty();
 			boolean noNodes = dao.getNodesOfStation(station.getId()).isEmpty();
 			if (noStops && noEntrances && noNodes) {
-				reportSink.report(new UnusedObjectWarning(station.getId(),
-						station.getSourceInfo(), "stop_id"));
+				reportSink.report(new UnusedObjectWarning("station",
+						station.getId(), station.getSourceInfo(), "stop_id"));
 			}
 		}
 
