@@ -10,10 +10,11 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Invalid reference")
+@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR)
 public class InvalidReferenceError implements ReportIssue {
 
 	private SourceInfoWithFields sourceInfo;
+	private String fieldName;
 	private String value; // Should we use a GtfsId<?,?> ?
 	private String refTableName;
 	private String refFieldName;
@@ -22,6 +23,7 @@ public class InvalidReferenceError implements ReportIssue {
 			String fieldName, String value, String refTableName,
 			String refFieldName) {
 		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldName);
+		this.fieldName = fieldName;
 		this.value = value;
 		this.refTableName = refTableName;
 		this.refFieldName = refFieldName;
@@ -30,6 +32,11 @@ public class InvalidReferenceError implements ReportIssue {
 	@Override
 	public List<SourceInfoWithFields> getSourceInfos() {
 		return Arrays.asList(sourceInfo);
+	}
+
+	@Override
+	public String getCategoryName() {
+		return "Invalid " + fieldName + " reference";
 	}
 
 	public String getValue() {
@@ -47,7 +54,7 @@ public class InvalidReferenceError implements ReportIssue {
 	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text(
-				"Invalid id {0}, it should reference an existing {1} in table {2}",
+				"Invalid ID {0}, it should reference an existing {1} in table {2}",
 				fmt.id(value), fmt.pre(refFieldName), fmt.pre(refTableName));
 	}
 }
