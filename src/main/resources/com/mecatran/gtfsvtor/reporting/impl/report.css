@@ -22,6 +22,19 @@ hr {
 	background-color: #c0392b;
 }
 
+span.badge {
+	font-weight: bold;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+	margin-left: 0.2em;
+	margin-right: 0.2em;
+	border-radius: 0.4em;
+}
+
+span.small {
+	font-size: small;
+}
+
 span.tablename {
 	font-family: monospace;
 	border-radius: 0.2em;
@@ -34,6 +47,10 @@ div.subcategory {
 	border-top: dashed 1px;
 	padding-top: 0.4em;
 	margin-bottom: 1em;
+}
+
+span.comments {
+	color: #888888;
 }
 
 table.sourceinfo {

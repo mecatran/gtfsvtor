@@ -17,6 +17,7 @@ import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.CategoryCounter;
 import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesCategory;
 import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesSubCategory;
 
@@ -24,17 +25,22 @@ public class HtmlReportFormatter implements ReportFormatter {
 
 	private Writer writer;
 	private Html html;
+	private int maxIssuesPerCategory;
 
 	// TODO Option to output to any output stream
-	public HtmlReportFormatter(String outfileFile) throws IOException {
+	public HtmlReportFormatter(String outfileFile, int maxIssuesPerCategory)
+			throws IOException {
 		writer = new FileWriter(outfileFile);
 		html = new Html(writer);
+		this.maxIssuesPerCategory = maxIssuesPerCategory;
 	}
 
 	@Override
 	public void format(ReviewReport report) throws IOException {
-		ClassifiedReviewReport clsReport = new ClassifiedReviewReport(report);
+		ClassifiedReviewReport clsReport = new ClassifiedReviewReport(report,
+				maxIssuesPerCategory);
 		formatHeader();
+		formatSummary(clsReport);
 		for (IssuesCategory category : clsReport.getCategories()) {
 			formatCategory(category);
 		}
@@ -43,7 +49,37 @@ public class HtmlReportFormatter implements ReportFormatter {
 	}
 
 	private void formatCategory(IssuesCategory category) throws IOException {
-		html.h2().text(category.getCategoryName()).end();
+		html.h2();
+		html.text(category.getCategoryName());
+		for (CategoryCounter cc : category.getSeverityCounters()) {
+			html.span().classAttr("small");
+			html.text(" • " + cc.getTotalCount());
+			html.span().classAttr("badge " + cc.getSeverity().toString())
+					.text(cc.getCategoryName()).end();
+			html.end(); // span.small
+		}
+		html.end(); // h2;
+
+		if (category.getCategoryCounters().size() >= 2) {
+			html.ul();
+			for (CategoryCounter cc : category.getCategoryCounters()) {
+				html.li();
+				html.text("" + cc.getTotalCount());
+				html.span()
+						.classAttr("small badge " + cc.getSeverity().toString())
+						.text(cc.getSeverity().toString()).end();
+				html.text(cc.getCategoryName());
+				if (cc.isTruncated()) {
+					html.span().classAttr("comments")
+							.text(" (of which only the first "
+									+ cc.getDisplayedCount()
+									+ " are displayed)")
+							.end();
+				}
+				html.end(); // li
+			}
+			html.end(); // ul
+		}
 		for (IssuesSubCategory subCategory : category.getSubCategories()) {
 			formatSubCategory(subCategory);
 		}
@@ -149,6 +185,32 @@ public class HtmlReportFormatter implements ReportFormatter {
 		writer.close();
 		html.end(); // style
 		html.h1().text("GTFS validation report").end();
+	}
+
+	private void formatSummary(ClassifiedReviewReport clsReport)
+			throws IOException {
+		html.div();
+		for (CategoryCounter cc : clsReport.getSeverityCounters()) {
+			html.text(" • " + cc.getTotalCount() + " ");
+			html.span().classAttr("badge " + cc.getSeverity().toString())
+					.text(cc.getCategoryName()).end();
+		}
+		html.end(); // div
+
+		html.ul();
+		for (CategoryCounter cc : clsReport.getCategoryCounters()) {
+			html.li();
+			html.text(cc.getTotalCount() + " ");
+			html.span().classAttr("small badge " + cc.getSeverity().toString())
+					.text(cc.getSeverity().toString()).end();
+			html.text(cc.getCategoryName());
+			if (cc.isTruncated()) {
+				html.span().classAttr("comments").text(" (of which "
+						+ cc.getDisplayedCount() + " are displayed)").end();
+			}
+			html.end(); // li
+		}
+		html.end(); // ul
 	}
 
 	private void formatFooter() throws IOException {

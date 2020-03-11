@@ -24,6 +24,10 @@ public class CmdLineArgs {
 			"--output" }, description = "Validation report output file")
 	private String outputReportFile = "validation-report.html";
 
+	@Parameter(names = { "-l",
+			"--limit" }, description = "Limit number of issues per category")
+	private int maxIssuesPerCategoryLimit = 1000;
+
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
 
@@ -51,4 +55,7 @@ public class CmdLineArgs {
 		return gtfsFile;
 	}
 
+	public int getMaxIssuesPerCategoryLimit() {
+		return maxIssuesPerCategoryLimit;
+	}
 }

@@ -77,7 +77,8 @@ public class GtfsVtor {
 		}
 
 		ReportFormatter formatter = new HtmlReportFormatter(
-				args.getOutputReportFile());
+				args.getOutputReportFile(),
+				args.getMaxIssuesPerCategoryLimit());
 		formatter.format(report);
 		System.out.println("Report output to " + args.getOutputReportFile());
 	}
