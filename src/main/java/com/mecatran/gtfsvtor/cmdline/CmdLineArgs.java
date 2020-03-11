@@ -26,7 +26,7 @@ public class CmdLineArgs {
 
 	@Parameter(names = { "-l",
 			"--limit" }, description = "Limit number of issues per category")
-	private int maxIssuesPerCategoryLimit = 1000;
+	private int maxIssuesPerCategoryLimit = 100;
 
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
