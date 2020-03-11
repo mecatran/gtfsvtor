@@ -31,8 +31,12 @@ hr {
 	border-radius: 0.4em;
 }
 
-.small {
-	font-size: small;
+.smaller {
+	font-size: 80%;
+}
+
+.xsmaller {
+	font-size: 60%;
 }
 
 .comments {

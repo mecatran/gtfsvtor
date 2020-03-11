@@ -52,11 +52,11 @@ public class HtmlReportFormatter implements ReportFormatter {
 		html.h2();
 		html.text(category.getCategoryName());
 		for (CategoryCounter cc : category.getSeverityCounters()) {
-			html.span().classAttr("small");
+			html.span().classAttr("smaller");
 			html.text(" • " + cc.getTotalCount());
 			html.span().classAttr("badge " + cc.getSeverity().toString())
 					.text(cc.getCategoryName()).end();
-			html.end(); // span.small
+			html.end(); // span
 		}
 		html.end(); // h2;
 
@@ -66,7 +66,8 @@ public class HtmlReportFormatter implements ReportFormatter {
 				html.li();
 				html.text("" + cc.getTotalCount());
 				html.span()
-						.classAttr("small badge " + cc.getSeverity().toString())
+						.classAttr(
+								"smaller badge " + cc.getSeverity().toString())
 						.text(cc.getSeverity().toString()).end();
 				html.text(cc.getCategoryName());
 				if (cc.isTruncated()) {
@@ -184,24 +185,26 @@ public class HtmlReportFormatter implements ReportFormatter {
 		html.raw(writer.toString());
 		writer.close();
 		html.end(); // style
-		html.h1().text("GTFS validation report").end();
 	}
 
 	private void formatSummary(ClassifiedReviewReport clsReport)
 			throws IOException {
-		html.div();
+		html.h1().text("GTFS validation report");
 		for (CategoryCounter cc : clsReport.getSeverityCounters()) {
+			html.span().classAttr("xsmaller");
 			html.text(" • " + cc.getTotalCount() + " ");
 			html.span().classAttr("badge " + cc.getSeverity().toString())
 					.text(cc.getCategoryName()).end();
+			html.end();
 		}
-		html.end(); // div
+		html.end(); // h1
 
 		html.ul();
 		for (CategoryCounter cc : clsReport.getCategoryCounters()) {
 			html.li();
 			html.text(cc.getTotalCount() + " ");
-			html.span().classAttr("small badge " + cc.getSeverity().toString())
+			html.span()
+					.classAttr("smaller badge " + cc.getSeverity().toString())
 					.text(cc.getSeverity().toString()).end();
 			html.text(cc.getCategoryName());
 			if (cc.isTruncated()) {
