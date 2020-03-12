@@ -412,14 +412,27 @@ public class TestGtfs {
 	@Test
 	public void testMissingStopTimes() {
 		TestBundle tb = loadAndValidate("missing_stop_times");
-		Collection<MissingMandatoryTableError> mmts = tb.report
+		List<MissingMandatoryTableError> mmts = tb.report
 				.getReportIssues(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
-		MissingMandatoryTableError mmt = mmts.iterator().next();
+		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsStopTime.TABLE_NAME, mmt.getTableName());
 		for (GtfsTrip trip : tb.dao.getTrips()) {
 			assertTrue(tb.dao.getStopTimesOfTrip(trip.getId()).isEmpty());
 		}
+	}
+
+	@Test
+	public void testMissingDepartureTime() {
+		TestBundle tb = loadAndValidate("missing_departure_time");
+		List<MissingMandatoryValueError> mmvs = tb.report
+				.getReportIssues(MissingMandatoryValueError.class);
+		assertEquals(1, mmvs.size());
+		MissingMandatoryValueError mmv = mmvs.get(0);
+		assertEquals(GtfsStopTime.TABLE_NAME, mmv.getSourceInfos().get(0)
+				.getSourceInfo().getTable().getTableName());
+		assertEquals("departure_time",
+				mmv.getSourceInfos().get(0).getFieldNames().iterator().next());
 	}
 
 	@Test

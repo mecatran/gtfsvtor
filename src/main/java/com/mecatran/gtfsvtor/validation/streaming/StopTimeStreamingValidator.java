@@ -8,6 +8,7 @@ import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
+import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
@@ -36,6 +37,17 @@ public class StopTimeStreamingValidator
 					stopTime.getStopId() == null ? null
 							: stopTime.getStopId().getInternalId(),
 					GtfsStop.TABLE_NAME, "stop_id"));
+		}
+		// Departure/arrival should be either set or not
+		if (stopTime.getDepartureTime() == null
+				&& stopTime.getArrivalTime() != null) {
+			reportSink.report(new MissingMandatoryValueError(
+					context.getSourceInfo(), "departure_time"));
+		}
+		if (stopTime.getDepartureTime() != null
+				&& stopTime.getArrivalTime() == null) {
+			reportSink.report(new MissingMandatoryValueError(
+					context.getSourceInfo(), "arrival_time"));
 		}
 	}
 }
