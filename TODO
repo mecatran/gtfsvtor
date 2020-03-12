@@ -55,10 +55,8 @@ Start time greater than end time
 
 Shapes
 ------
-Stop too far from shape (max distance 100m)
 Wrong shape projection
 Non increasing shape_dist_traveled
-Unused shape
 
 Transfers
 ---------

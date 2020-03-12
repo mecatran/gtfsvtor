@@ -9,6 +9,7 @@ import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
+import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
@@ -84,6 +85,18 @@ public class UnusedObjectsValidator implements DaoValidator {
 				reportSink.report(new UnusedObjectWarning("station",
 						station.getId(), station.getSourceInfo(), "stop_id"));
 			}
+		}
+
+		/* Look for unused shapes */
+		Set<GtfsShape.Id> unusedShapeIds = new HashSet<>(dao.getShapeIds());
+		for (GtfsTrip trip : dao.getTrips()) {
+			if (trip.getShapeId() != null) {
+				unusedShapeIds.remove(trip.getShapeId());
+			}
+		}
+		for (GtfsShape.Id unusedShapeId : unusedShapeIds) {
+			reportSink.report(new UnusedObjectWarning("shape", unusedShapeId,
+					null, "shape_id"));
 		}
 
 		/* Empty (or single stop) trips do have a special validator */

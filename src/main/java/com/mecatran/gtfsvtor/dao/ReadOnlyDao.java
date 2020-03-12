@@ -42,6 +42,8 @@ public interface ReadOnlyDao {
 
 	public boolean hasShape(GtfsShape.Id shapeId);
 
+	public Collection<GtfsShape.Id> getShapeIds();
+
 	public Collection<GtfsTrip> getTrips();
 
 	public GtfsTrip getTrip(GtfsTrip.Id tripId);

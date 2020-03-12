@@ -136,6 +136,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
+	public Collection<GtfsShape.Id> getShapeIds() {
+		return Collections.unmodifiableCollection(shapePoints.keySet());
+	}
+
+	@Override
 	public Collection<GtfsTrip> getTrips() {
 		return Collections.unmodifiableCollection(trips.values());
 	}

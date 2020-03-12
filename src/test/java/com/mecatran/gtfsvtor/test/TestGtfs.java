@@ -36,6 +36,7 @@ import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
+import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
@@ -635,16 +636,15 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("unused_data");
 		List<UnusedObjectWarning> uows = tb.report
 				.getReportIssues(UnusedObjectWarning.class);
-		assertEquals(6, uows.size());
+		assertEquals(7, uows.size());
 		Set<GtfsId<?, ?>> unusedIds = uows.stream()
 				.map(UnusedObjectWarning::getId).collect(Collectors.toSet());
-		System.out.println(Arrays.toString(unusedIds.toArray()));
 		for (GtfsId<?, ?> id : Arrays.asList(GtfsAgency.id("UNUSED_AGENCY"),
 				GtfsRoute.id("UNUSED_ROUTE"),
 				GtfsCalendar.id("UNUSED_CALENDAR"),
 				GtfsCalendar.id("UNUSED_CALENDAR_DATE"),
-				GtfsStop.id("UNUSED_STOP"), GtfsStop.id("UNUSED_STATION"))) {
-			System.out.println(id);
+				GtfsStop.id("UNUSED_STOP"), GtfsStop.id("UNUSED_STATION"),
+				GtfsShape.id("UNUSED_SHAPE"))) {
 			assertTrue(unusedIds.contains(id));
 		}
 	}

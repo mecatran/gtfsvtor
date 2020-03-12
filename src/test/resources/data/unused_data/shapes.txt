@@ -1,0 +1,3 @@
+shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence,shape_dist_traveled
+UNUSED_SHAPE,36.884,-116.789,1,
+UNUSED_SHAPE,36.856,-116.887,2,
