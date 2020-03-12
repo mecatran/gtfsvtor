@@ -21,11 +21,9 @@ Route URL format
 
 Calendars
 ---------
-Start date before end date
 Last service date in the past (expired feed)
 Future service (feed in the future only)
 Too many days w/o service
-Date outside valid range
 No service exception
 Calendar is not active any day of the week
 
