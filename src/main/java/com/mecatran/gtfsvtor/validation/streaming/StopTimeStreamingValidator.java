@@ -42,9 +42,7 @@ public class StopTimeStreamingValidator
 		if (stopTime.getStopId() != null
 				&& dao.getStop(stopTime.getStopId()) == null) {
 			reportSink.report(new InvalidReferenceError(context.getSourceInfo(),
-					"stop_id",
-					stopTime.getStopId() == null ? null
-							: stopTime.getStopId().getInternalId(),
+					"stop_id", stopTime.getStopId().getInternalId(),
 					GtfsStop.TABLE_NAME, "stop_id"));
 		}
 		// Departure/arrival should be either set or not
