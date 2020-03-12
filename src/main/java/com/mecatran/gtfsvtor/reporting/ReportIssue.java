@@ -68,6 +68,13 @@ public interface ReportIssue {
 				List<SourceInfoWithFields> si1 = o1.getSourceInfos();
 				List<SourceInfoWithFields> si2 = o2.getSourceInfos();
 				if (si1.isEmpty() && si2.isEmpty()) {
+					if (o1 instanceof Comparable
+							&& o1.getClass().equals(o2.getClass())) {
+						@SuppressWarnings("unchecked")
+						Comparable<ReportIssue> co1 = (Comparable<ReportIssue>) o1;
+						return co1.compareTo(o2);
+					}
+					// TODO: Sort issues by severity?
 					return si1.getClass().getSimpleName()
 							.compareTo(si2.getClass().getSimpleName());
 				}
