@@ -10,7 +10,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 
 @ReportIssuePolicy(categoryName = "Too fast travel")
-public class TooFastTravelIssue implements ReportIssue {
+public class TooFastTravelIssue implements ReportIssue, Comparable<TooFastTravelIssue> {
 
 	private GtfsRoute route;
 	private GtfsTrip trip;
@@ -79,5 +79,11 @@ public class TooFastTravelIssue implements ReportIssue {
 				fmt.var(route.getShortName()),
 				fmt.var(String.format("%.2f", speedMps)),
 				fmt.var(String.format("%.2f", maxSpeedMps)));
+	}
+
+	@Override
+	public int compareTo(TooFastTravelIssue o) {
+		// Compare on computed speed, highest first
+		return -Double.compare(speedMps, o.speedMps);
 	}
 }
