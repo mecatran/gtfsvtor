@@ -11,7 +11,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Departure before arrival")
+@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Time travel at stop")
 public class TimeTravelAtStopError implements ReportIssue {
 
 	private GtfsStopTime stopTime;
