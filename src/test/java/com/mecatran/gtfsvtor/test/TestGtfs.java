@@ -64,6 +64,7 @@ import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromShapeIssue;
+import com.mecatran.gtfsvtor.reporting.issues.TimeTravelAtStopError;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
@@ -821,6 +822,18 @@ public class TestGtfs {
 		assertEquals(3, obis.size());
 		OverlappingBlockIdIssue obi0 = obis.get(0);
 		assertEquals(GtfsBlockId.fromValue("B1"), obi0.getBlockId());
+	}
+
+	@Test
+	public void testTimeTravels() {
+		TestBundle tb = loadAndValidate("timetravels");
+		List<TimeTravelAtStopError> ttas = tb.report
+				.getReportIssues(TimeTravelAtStopError.class);
+		assertEquals(2, ttas.size());
+		TimeTravelAtStopError tta0 = ttas.get(0);
+		assertEquals(GtfsStop.id("STAGECOACH"), tta0.getStopTime().getStopId());
+		assertEquals(GtfsTripStopSequence.fromSequence(0),
+				tta0.getStopTime().getStopSequence());
 	}
 
 	@Test

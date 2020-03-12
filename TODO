@@ -46,7 +46,7 @@ Trips
 First and last stop time should be set
 Too many consecutive stop time with same time
 No pickup/dropoff and no timepoint (useless timepoint)
-Timetravels
+Timetravels between different stop times
 
 Frequencies
 -----------

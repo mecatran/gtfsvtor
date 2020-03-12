@@ -9,6 +9,7 @@ import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
+import com.mecatran.gtfsvtor.reporting.issues.TimeTravelAtStopError;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
@@ -48,6 +49,14 @@ public class StopTimeStreamingValidator
 				&& stopTime.getArrivalTime() == null) {
 			reportSink.report(new MissingMandatoryValueError(
 					context.getSourceInfo(), "arrival_time"));
+		}
+		// Departure should be after arrival
+		if (stopTime.getDepartureTime() != null
+				&& stopTime.getArrivalTime() != null
+				&& stopTime.getDepartureTime()
+						.compareTo(stopTime.getArrivalTime()) < 0) {
+			reportSink.report(new TimeTravelAtStopError(stopTime,
+					context.getSourceInfo()));
 		}
 	}
 }
