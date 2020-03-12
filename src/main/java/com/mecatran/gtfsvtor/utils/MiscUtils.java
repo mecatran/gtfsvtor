@@ -12,7 +12,8 @@ public class MiscUtils {
 			if (cmp != 0)
 				return cmp;
 		}
-		return 0;
+		// Ran out of comparable elements, break tie: smaller list first
+		return Integer.compare(o1.size(), o2.size());
 	}
 
 	public static <T extends Comparable<T>> Comparator<List<T>> listComparator() {
