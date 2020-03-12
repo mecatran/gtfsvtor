@@ -60,9 +60,10 @@ public class HtmlReportFormatter implements ReportFormatter {
 		}
 		html.end(); // h2;
 
-		if (category.getCategoryCounters().size() >= 2) {
+		List<CategoryCounter> ccList = category.getCategoryCountersToDisplay();
+		if (!ccList.isEmpty()) {
 			html.ul();
-			for (CategoryCounter cc : category.getCategoryCounters()) {
+			for (CategoryCounter cc : ccList) {
 				html.li();
 				html.text("" + cc.getTotalCount());
 				html.span()

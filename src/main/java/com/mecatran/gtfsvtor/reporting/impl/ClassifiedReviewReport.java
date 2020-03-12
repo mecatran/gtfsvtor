@@ -63,6 +63,15 @@ public class ClassifiedReviewReport {
 			}
 		}
 
+		private Object getCategoryKey() {
+			return getCategoryKey(severity, categoryName);
+		}
+
+		private static Object getCategoryKey(ReportIssueSeverity severity,
+				String categoryName) {
+			return Arrays.asList(severity, categoryName);
+		}
+
 		public String getCategoryName() {
 			return categoryName;
 		}
@@ -155,7 +164,7 @@ public class ClassifiedReviewReport {
 		private String categoryName;
 		private int maxIssues;
 		private Map<List<DataObjectSourceInfo>, IssuesSubCategory> subCatMap = new HashMap<>();
-		private Map<String, CategoryCounter> categoryCounters = new HashMap<>();
+		private Map<Object, CategoryCounter> categoryCounters = new HashMap<>();
 		private Map<ReportIssueSeverity, CategoryCounter> severityCounters = new HashMap<>();
 		private List<IssuesSubCategory> subCategories;
 
@@ -171,12 +180,13 @@ public class ClassifiedReviewReport {
 		public void addIssue(ReportIssue issue) {
 			ReportIssueSeverity severity = issue.getSeverity();
 			severityCounters.computeIfAbsent(severity,
-					name -> new CategoryCounter(severity.toString(), severity,
+					key -> new CategoryCounter(severity.toString(), severity,
 							Integer.MAX_VALUE))
 					.inc();
 			String categoryName = issue.getCategoryName();
-			boolean overflow = categoryCounters.computeIfAbsent(categoryName,
-					name -> new CategoryCounter(name, severity, maxIssues))
+			Object key = CategoryCounter.getCategoryKey(severity, categoryName);
+			boolean overflow = categoryCounters.computeIfAbsent(key,
+					k -> new CategoryCounter(categoryName, severity, maxIssues))
 					.inc();
 			if (overflow)
 				return;
@@ -206,6 +216,12 @@ public class ClassifiedReviewReport {
 		public List<CategoryCounter> getCategoryCounters() {
 			return categoryCounters.values().stream().sorted()
 					.collect(Collectors.toList());
+		}
+
+		public List<CategoryCounter> getCategoryCountersToDisplay() {
+			return categoryCounters.values().stream()
+					.filter(cc -> !cc.getCategoryName().equals(categoryName))
+					.sorted().collect(Collectors.toList());
 		}
 
 		@Override
@@ -260,8 +276,8 @@ public class ClassifiedReviewReport {
 		return categories.stream()
 				// Merge lists
 				.flatMap(cat -> func.apply(cat).stream())
-				// Collect and merge by category name
-				.collect(Collectors.toMap(c -> c.getCategoryName(), c -> c,
+				// Collect and merge by category key
+				.collect(Collectors.toMap(c -> c.getCategoryKey(), c -> c,
 						(c1, c2) -> CategoryCounter.merge(c1, c2)))
 				// Sort
 				.values().stream().sorted().collect(Collectors.toList());
