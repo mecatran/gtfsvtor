@@ -17,6 +17,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelError;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
+import com.mecatran.gtfsvtor.reporting.issues.TooManyStopWithSameTimeIssue;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.ValidatorConfig;
@@ -25,6 +26,10 @@ public class TooFastTravelValidator implements DaoValidator {
 
 	@ConfigurableOption
 	private double errorSpeedMultiplier = 3.;
+
+	// TODO Check default value
+	@ConfigurableOption
+	private int maxStopsWithSameTime = 5;
 
 	@Override
 	public void validate(DaoValidator.Context context) {
@@ -51,6 +56,7 @@ public class TooFastTravelValidator implements DaoValidator {
 			int slackSec = hasExactSeconds ? 0 : 60;
 			GtfsStopTime lastValidStopTime = null;
 			ProjectedPoint lastValidProjectedPoint = null;
+			int sameTimeCounter = 1;
 			for (GtfsStopTime stopTime : stopTimes) {
 				ProjectedPoint projectedPoint = lgi.getProjectedPoint(stopTime);
 				GtfsLogicalTime arrivalTime = stopTime
@@ -71,6 +77,17 @@ public class TooFastTravelValidator implements DaoValidator {
 									lastValidStopTime, stop1, stopTime, stop2));
 						} else {
 							// Forward-time
+							if (t == 0) {
+								sameTimeCounter++;
+							} else {
+								if (sameTimeCounter > maxStopsWithSameTime) {
+									reportSink.report(
+											new TooManyStopWithSameTimeIssue(
+													route, trip, arrivalTime,
+													sameTimeCounter));
+								}
+								sameTimeCounter = 1;
+							}
 							double speedMps = d / (t + slackSec);
 							if (speedMps > maxSpeedMps) {
 								// Too fast travel
@@ -90,6 +107,10 @@ public class TooFastTravelValidator implements DaoValidator {
 					lastValidStopTime = stopTime;
 					lastValidProjectedPoint = projectedPoint;
 				}
+			}
+			if (sameTimeCounter > maxStopsWithSameTime) {
+				reportSink.report(new TooManyStopWithSameTimeIssue(route, trip,
+						lastValidStopTime.getArrivalTime(), sameTimeCounter));
 			}
 		}
 	}

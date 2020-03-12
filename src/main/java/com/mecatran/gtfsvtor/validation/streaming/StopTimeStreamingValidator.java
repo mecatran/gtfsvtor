@@ -5,6 +5,7 @@ import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.che
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
+import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
@@ -30,6 +31,13 @@ public class StopTimeStreamingValidator
 					"positive integer"));
 
 		ReadOnlyDao dao = context.getPartialDao();
+		// stoptime->trip reference
+		if (stopTime.getTripId() != null
+				&& dao.getTrip(stopTime.getTripId()) == null) {
+			reportSink.report(new InvalidReferenceError(context.getSourceInfo(),
+					"trip_id", stopTime.getTripId().getInternalId(),
+					GtfsTrip.TABLE_NAME, "trip_id"));
+		}
 		// stoptime->stop reference
 		if (stopTime.getStopId() != null
 				&& dao.getStop(stopTime.getStopId()) == null) {

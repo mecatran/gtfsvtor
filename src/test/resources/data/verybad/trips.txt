@@ -5,6 +5,7 @@ AB,WE,AB3,to Airport,1,2,SHAPE3
 STBA,FULLW,STBA,Shuttle,,,
 CITY,FULLW,CITY1,,0,,
 CITY,FULLW,CITY2,,1,,
+CITY,FULLW,CITY3,,1,,
 BFC,FULLW,BFC1,to Furnace Creek Resort,0,1,
 BFC,FULLW,BFC2,to Bullfrog,1,2,
 AAMV,WE,AAMV1,to Amargosa Valley,0,,
