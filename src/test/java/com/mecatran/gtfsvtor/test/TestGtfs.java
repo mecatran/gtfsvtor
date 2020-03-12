@@ -65,6 +65,7 @@ import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromShapeIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelAtStopError;
+import com.mecatran.gtfsvtor.reporting.issues.TimeTravelError;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
@@ -834,6 +835,12 @@ public class TestGtfs {
 		assertEquals(GtfsStop.id("STAGECOACH"), tta0.getStopTime().getStopId());
 		assertEquals(GtfsTripStopSequence.fromSequence(0),
 				tta0.getStopTime().getStopSequence());
+		List<TimeTravelError> tts = tb.report
+				.getReportIssues(TimeTravelError.class);
+		assertEquals(1, tts.size());
+		TimeTravelError tt0 = tts.get(0);
+		assertEquals(GtfsStop.id("DADAN"), tt0.getStop1().getId());
+		assertEquals(GtfsStop.id("NADAV"), tt0.getStop2().getId());
 	}
 
 	@Test
