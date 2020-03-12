@@ -62,6 +62,7 @@ import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
+import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromShapeIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
@@ -520,8 +521,9 @@ public class TestGtfs {
 		LinearGeometryIndex lgi = tb.dao.getLinearGeometryIndex();
 		GtfsTrip city1 = tb.dao.getTrip(GtfsTrip.id("CITY1"));
 		List<GtfsStopTime> stopTimes = tb.dao.getStopTimesOfTrip(city1.getId());
-		assertEquals((double) 0.0, lgi.getProjectedPoint(stopTimes.get(0))
-				.getLinearDistanceMeters(), 1e-10);
+		assertEquals((double) 0.0,
+				lgi.getProjectedPoint(stopTimes.get(0)).getArcLengthMeters(),
+				1e-10);
 		GtfsStop stop0 = tb.dao.getStop(stopTimes.get(0).getStopId());
 		GtfsStop stop1 = tb.dao.getStop(stopTimes.get(1).getStopId());
 		GtfsStop stop2 = tb.dao.getStop(stopTimes.get(2).getStopId());
@@ -533,14 +535,17 @@ public class TestGtfs {
 		double l12 = lgi.getLinearDistance(stopTimes.get(1), stopTimes.get(2));
 		double l02 = lgi.getLinearDistance(stopTimes.get(0), stopTimes.get(2));
 		assertEquals(l02, l01 + l12, 1e-10);
-		assertEquals((double) 0.0, lgi.getProjectedPoint(stopTimes.get(0))
-				.getLinearDistanceMeters(), 1e-10);
+		assertEquals((double) 0.0,
+				lgi.getProjectedPoint(stopTimes.get(0)).getArcLengthMeters(),
+				1e-10);
 		assertTrue(d01 <= l01);
 		assertTrue(d12 <= l12);
-		assertEquals((double) 1601.2931, lgi.getProjectedPoint(stopTimes.get(1))
-				.getLinearDistanceMeters(), 1e-4);
-		assertEquals((double) 2204.3906, lgi.getProjectedPoint(stopTimes.get(2))
-				.getLinearDistanceMeters(), 1e-4);
+		assertEquals((double) 1601.2931,
+				lgi.getProjectedPoint(stopTimes.get(1)).getArcLengthMeters(),
+				1e-4);
+		assertEquals((double) 2204.3906,
+				lgi.getProjectedPoint(stopTimes.get(2)).getArcLengthMeters(),
+				1e-4);
 
 		// Test spatial indexing
 		DaoSpatialIndex dsi = tb.dao.getSpatialIndex();
@@ -685,9 +690,9 @@ public class TestGtfs {
 		ProjectedPoint pp0 = lgi.getProjectedPoint(st0);
 		ProjectedPoint pp1 = lgi.getProjectedPoint(st1);
 		ProjectedPoint pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(0.0, pp0.getLinearDistanceMeters(), 1e-4);
-		assertEquals(d01, pp1.getLinearDistanceMeters(), 1e-4);
-		assertEquals(d01 + d12, pp2.getLinearDistanceMeters(), 1e-4);
+		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-4);
+		assertEquals(d01, pp1.getArcLengthMeters(), 1e-4);
+		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-4);
 		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
 		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
 		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
@@ -703,9 +708,9 @@ public class TestGtfs {
 		pp0 = lgi.getProjectedPoint(st0);
 		pp1 = lgi.getProjectedPoint(st1);
 		pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(d01 + d12, pp0.getLinearDistanceMeters(), 1e-4);
-		assertEquals(d01 + d12, pp1.getLinearDistanceMeters(), 1e-4);
-		assertEquals(d01 + d12, pp2.getLinearDistanceMeters(), 1e-4);
+		assertEquals(d01 + d12, pp0.getArcLengthMeters(), 1e-4);
+		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-4);
+		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-4);
 		assertEquals(0, pp0.getDistanceToShapeMeters(), 1e-4);
 		assertEquals(d01, pp1.getDistanceToShapeMeters(), 1e-4);
 		assertEquals(d01 + d12, pp2.getDistanceToShapeMeters(), 1e-4);
@@ -727,9 +732,9 @@ public class TestGtfs {
 		pp0 = lgi.getProjectedPoint(st0);
 		pp1 = lgi.getProjectedPoint(st1);
 		pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(0.0, pp0.getLinearDistanceMeters(), 1e-4);
-		assertEquals(d01 + d12, pp1.getLinearDistanceMeters(), 1e-4);
-		assertEquals(d01 + d12 + d12, pp2.getLinearDistanceMeters(), 1e-4);
+		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-4);
+		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-4);
+		assertEquals(d01 + d12 + d12, pp2.getArcLengthMeters(), 1e-4);
 		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
 		assertEquals(0.0, pp1.getDistanceToShapeMeters(), 0.2);
 		assertEquals(0.0, pp2.getDistanceToShapeMeters(), 0.4);
@@ -828,8 +833,8 @@ public class TestGtfs {
 					pp.getProjectedPoint());
 			assertEquals(pp.getDistanceToShapeMeters(), d, 1e-4);
 			if (prevStopTime != null) {
-				double ld = pp.getLinearDistanceMeters()
-						- prevPp.getLinearDistanceMeters();
+				double ld = pp.getArcLengthMeters()
+						- prevPp.getArcLengthMeters();
 				double sd = Geodesics.fastDistanceMeters(
 						prevStop.getCoordinates(), stop.getCoordinates());
 				// Add 10m to take into account cases where stops are very close
@@ -867,10 +872,24 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("aachener_73069683");
 		assertEquals(0,
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.WARNING));
-		assertEquals(0,
+		// One error: stop too far from projected shape.
+		assertEquals(1,
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
 		assertEquals(0,
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
+
+		List<StopTooFarFromShapeIssue> stfs = tb.report
+				.getReportIssues(StopTooFarFromShapeIssue.class);
+		assertEquals(1, stfs.size());
+		StopTooFarFromShapeIssue stf0 = stfs.get(0);
+		assertEquals(GtfsStop.id("000000003934"), stf0.getStop().getId());
+		assertEquals(GtfsTripStopSequence.fromSequence(26),
+				stf0.getStopSequence());
+		double d = Geodesics.fastDistanceMeters(
+				new GeoCoordinates(51.055061, 6.226201),
+				stf0.getProjectedPoint());
+		assertTrue(d < 1.0);
+		assertEquals(209.12, stf0.getDistanceMeters(), 1e-2);
 	}
 
 	@Test

@@ -1,19 +1,45 @@
 package com.mecatran.gtfsvtor.dao;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
+import com.mecatran.gtfsvtor.model.GtfsShape;
+import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
+import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 
 public interface LinearGeometryIndex {
+
+	public interface ProjectedShapePattern {
+
+		/**
+		 * @return The list of point projection for this pattern.
+		 */
+		public List<? extends ProjectedPoint> getProjectedPoints();
+
+		/**
+		 * @return The list of all trip IDs for this pattern projection.
+		 */
+		public Collection<GtfsTrip.Id> getTripIds();
+
+		/**
+		 * @return The shape ID associated to this projection, if any.
+		 */
+		public Optional<GtfsShape.Id> getShapeId();
+	}
 
 	public interface ProjectedPoint {
 
 		/**
-		 * @return A linear distance on shape, in meters, from the first trip
-		 *         stop point, up to this projected point on shape. The value
-		 *         itself is useless, it is only useful to make the delta
-		 *         between two values (linear distance from point to point).
+		 * @return The arc-length coordinate on shape, in meters, from the first
+		 *         trip stop point, up to this projected point on shape. The
+		 *         value itself is useless, it is only useful to make the delta
+		 *         between two values (arc-length distance from point to point).
 		 */
-		public double getLinearDistanceMeters();
+		public double getArcLengthMeters();
 
 		/**
 		 * @return Distance from the stop to the projected point on shape used
@@ -33,13 +59,21 @@ public interface LinearGeometryIndex {
 		public GeoCoordinates getProjectedPoint();
 
 		/**
-		 * @return True if a shape is associated to the trip, false otherwise.
+		 * @return The stop ID which is projected.
 		 */
-		public boolean hasShape();
+		public GtfsStop.Id getStopId();
+
+		/**
+		 * @return The stop sequence of the stop time in the trip pattern which
+		 *         is projected.
+		 */
+		public GtfsTripStopSequence getStopSequence();
 	}
 
 	public ProjectedPoint getProjectedPoint(GtfsStopTime stopTime);
 
 	public Double getLinearDistance(GtfsStopTime stopTime1,
 			GtfsStopTime stopTime2);
+
+	public Collection<? extends ProjectedShapePattern> getProjectedPatterns();
 }

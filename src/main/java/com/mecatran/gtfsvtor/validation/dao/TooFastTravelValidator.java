@@ -53,9 +53,8 @@ public class TooFastTravelValidator implements DaoValidator {
 						.getArrivalOrDepartureTime();
 				if (projectedPoint != null && arrivalTime != null) {
 					if (lastValidStopTime != null) {
-						double d = projectedPoint.getLinearDistanceMeters()
-								- lastValidProjectedPoint
-										.getLinearDistanceMeters();
+						double d = projectedPoint.getArcLengthMeters()
+								- lastValidProjectedPoint.getArcLengthMeters();
 						int t = arrivalTime.getSecondSinceMidnight()
 								- lastValidStopTime.getDepartureOrArrivalTime()
 										.getSecondSinceMidnight();

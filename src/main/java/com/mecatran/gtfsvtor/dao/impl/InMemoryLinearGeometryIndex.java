@@ -2,10 +2,17 @@ package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
@@ -27,23 +34,28 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 
 	private static class ProjectedPointImpl implements ProjectedPoint {
 
-		private double linearDistanceMeters;
+		private double arcLengthMeters;
 		private double distanceToShapeMeters;
 		private GeoCoordinates projectedPoint;
 		private boolean hasShape;
+		private GtfsStop.Id stopId;
+		private GtfsTripStopSequence stopSequence;
 
-		private ProjectedPointImpl(double linarDistanceMeters,
+		private ProjectedPointImpl(double arcLengthMeters,
 				double distanceToShapeMeters, GeoCoordinates projectedPoint,
-				boolean hasShape) {
+				boolean hasShape, GtfsStop.Id stopId,
+				GtfsTripStopSequence stopSequence) {
 			this.distanceToShapeMeters = distanceToShapeMeters;
-			this.linearDistanceMeters = linarDistanceMeters;
+			this.arcLengthMeters = arcLengthMeters;
 			this.projectedPoint = projectedPoint;
 			this.hasShape = hasShape;
+			this.stopId = stopId;
+			this.stopSequence = stopSequence;
 		}
 
 		@Override
-		public double getLinearDistanceMeters() {
-			return linearDistanceMeters;
+		public double getArcLengthMeters() {
+			return arcLengthMeters;
 		}
 
 		@Override
@@ -57,38 +69,68 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		}
 
 		@Override
-		public boolean hasShape() {
-			return hasShape;
+		public GtfsStop.Id getStopId() {
+			return stopId;
+		}
+
+		@Override
+		public GtfsTripStopSequence getStopSequence() {
+			return stopSequence;
 		}
 
 		@Override
 		public String toString() {
 			return String.format("ProjectedPoint{t=%.2fm,d=%.2fm,pp=%s,s=%b}",
-					linearDistanceMeters, distanceToShapeMeters, projectedPoint,
+					arcLengthMeters, distanceToShapeMeters, projectedPoint,
 					hasShape);
 		}
 	}
 
-	private static class PatternLinearIndex {
-		private Map<GtfsTripStopSequence, ProjectedPointImpl> projections = new HashMap<>();
+	private static class ProjectedShapePatternImpl
+			implements ProjectedShapePattern {
 		private GtfsShape.Id shapeId;
+		private SortedMap<GtfsTripStopSequence, ProjectedPointImpl> projections = new TreeMap<>();
+		private Set<GtfsTrip.Id> tripIds = new HashSet<>();
+
+		private ProjectedShapePatternImpl(GtfsShape.Id shapeId) {
+			this.shapeId = shapeId;
+		}
+
+		@Override
+		public List<? extends ProjectedPoint> getProjectedPoints() {
+			return new ArrayList<>(projections.values());
+		}
+
+		@Override
+		public Collection<GtfsTrip.Id> getTripIds() {
+			return Collections.unmodifiableCollection(tripIds);
+		}
+
+		@Override
+		public Optional<GtfsShape.Id> getShapeId() {
+			return Optional.ofNullable(shapeId);
+		}
 	}
 
-	private Map<GtfsTrip.Id, PatternLinearIndex> patternIndexByTrips = new HashMap<>();
+	private Map<GtfsTrip.Id, ProjectedShapePatternImpl> patternIndexByTrips = new HashMap<>();
+	private List<ProjectedShapePatternImpl> patternIndexes = new ArrayList<>();
 	private int nPatterns = 0;
 
 	public InMemoryLinearGeometryIndex(IndexedReadOnlyDao dao) {
-		Map<Object, PatternLinearIndex> patternIndexes = new HashMap<>();
+		Map<Object, ProjectedShapePatternImpl> patternIndexesByPattern = new HashMap<>();
 		for (GtfsTrip trip : dao.getTrips()) {
 			List<GtfsStopTime> stopTimes = dao.getStopTimesOfTrip(trip.getId());
 			Object tripKey = computeTripKey(trip, stopTimes);
-			PatternLinearIndex patternIndex = patternIndexes.get(tripKey);
+			ProjectedShapePatternImpl patternIndex = patternIndexesByPattern
+					.get(tripKey);
 			if (patternIndex == null) {
 				patternIndex = computePatternIndex(trip, stopTimes, dao);
-				patternIndexes.put(tripKey, patternIndex);
+				patternIndexesByPattern.put(tripKey, patternIndex);
+				patternIndexes.add(patternIndex);
 				nPatterns++;
 			}
 			patternIndexByTrips.put(trip.getId(), patternIndex);
+			patternIndex.tripIds.add(trip.getId());
 		}
 	}
 
@@ -98,7 +140,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 
 	@Override
 	public ProjectedPoint getProjectedPoint(GtfsStopTime stopTime) {
-		PatternLinearIndex linearIndex = patternIndexByTrips
+		ProjectedShapePatternImpl linearIndex = patternIndexByTrips
 				.get(stopTime.getTripId());
 		if (linearIndex == null)
 			return null;
@@ -115,7 +157,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 					"Cannot get linear distance between stop times of different trips! Trip IDs: "
 							+ stopTime1.getTripId() + " vs "
 							+ stopTime2.getTripId());
-		PatternLinearIndex linearIndex = patternIndexByTrips
+		ProjectedShapePatternImpl linearIndex = patternIndexByTrips
 				.get(stopTime1.getTripId());
 		if (linearIndex == null)
 			return null;
@@ -125,11 +167,16 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 				.get(stopTime2.getStopSequence());
 		if (ppos1 == null || ppos2 == null)
 			return null;
-		Double d1 = ppos1.linearDistanceMeters;
-		Double d2 = ppos2.linearDistanceMeters;
+		Double d1 = ppos1.arcLengthMeters;
+		Double d2 = ppos2.arcLengthMeters;
 		if (d1 == null || d2 == null)
 			return null;
 		return d2 - d1;
+	}
+
+	@Override
+	public Collection<? extends ProjectedShapePattern> getProjectedPatterns() {
+		return Collections.unmodifiableCollection(patternIndexes);
 	}
 
 	/*
@@ -152,14 +199,15 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		return tripKey;
 	}
 
-	private PatternLinearIndex computePatternIndex(GtfsTrip trip,
+	private ProjectedShapePatternImpl computePatternIndex(GtfsTrip trip,
 			List<GtfsStopTime> stopTimes, IndexedReadOnlyDao dao) {
 		List<GtfsShapePoint> shapePoints = dao
 				.getPointsOfShape(trip.getShapeId());
 
+		ProjectedShapePatternImpl ret;
 		if (trip.getShapeId() == null || shapePoints.size() < 2) {
 			// No shape, linear index on inter-stop distance
-			return computeShapelessPatternIndex(trip, stopTimes, dao);
+			ret = computeShapelessPatternIndex(trip, stopTimes, dao);
 		} else {
 			// A shape is present, check shape_dist_traveled
 			boolean shapeDistTraveled = true;
@@ -179,20 +227,27 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			}
 			if (shapeDistTraveled) {
 				// shape_dist_traveled is present for both shape and stop times
-				return computeShapedWithDistPatternIndex(trip, stopTimes,
+				ret = computeShapedWithDistPatternIndex(trip, stopTimes,
 						shapePoints, dao);
 			} else {
 				// shape_dist_traveled is not present
-				return computeShapedWithoutDistPatternIndex(trip, stopTimes,
+				ret = computeShapedWithoutDistPatternIndex(trip, stopTimes,
 						shapePoints, dao);
 			}
 		}
+		if (ret == null) {
+			// Can happen in case shape is bogus (no coordinates)
+			// Fallback on simple case
+			ret = computeShapelessPatternIndex(trip, stopTimes, dao);
+		}
+		return ret;
 	}
 
-	private PatternLinearIndex computeShapelessPatternIndex(GtfsTrip trip,
-			List<GtfsStopTime> stopTimes, IndexedReadOnlyDao dao) {
-		PatternLinearIndex patternIndex = new PatternLinearIndex();
-		patternIndex.shapeId = null;
+	private ProjectedShapePatternImpl computeShapelessPatternIndex(
+			GtfsTrip trip, List<GtfsStopTime> stopTimes,
+			IndexedReadOnlyDao dao) {
+		ProjectedShapePatternImpl patternIndex = new ProjectedShapePatternImpl(
+				null);
 		GeoCoordinates lastGeocodedPoint = null;
 		double totalDistance = 0.0;
 		for (GtfsStopTime stopTime : stopTimes) {
@@ -212,18 +267,18 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			 * projected point is the stop itself.
 			 */
 			patternIndex.projections.put(stopTime.getStopSequence(),
-					new ProjectedPointImpl(totalDistance, 0.0, p, false));
+					new ProjectedPointImpl(totalDistance, 0.0, p, false,
+							stopTime.getStopId(), stopTime.getStopSequence()));
 			lastGeocodedPoint = p;
 		}
 		return patternIndex;
 	}
 
-	private PatternLinearIndex computeShapedWithDistPatternIndex(GtfsTrip trip,
-			List<GtfsStopTime> stopTimes, List<GtfsShapePoint> shapePoints,
-			IndexedReadOnlyDao dao) {
-		PatternLinearIndex patternIndex = new PatternLinearIndex();
-		patternIndex.shapeId = shapePoints.isEmpty() ? null
-				: shapePoints.get(0).getShapeId();
+	private ProjectedShapePatternImpl computeShapedWithDistPatternIndex(
+			GtfsTrip trip, List<GtfsStopTime> stopTimes,
+			List<GtfsShapePoint> shapePoints, IndexedReadOnlyDao dao) {
+		ProjectedShapePatternImpl patternIndex = new ProjectedShapePatternImpl(
+				shapePoints.isEmpty() ? null : shapePoints.get(0).getShapeId());
 
 		int stopIndex = 0;
 		int segmentIndex = 0;
@@ -251,7 +306,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 								a.getCoordinates());
 				patternIndex.projections.put(st.getStopSequence(),
 						new ProjectedPointImpl(distance, dap,
-								a.getCoordinates(), true));
+								a.getCoordinates(), true, st.getStopId(),
+								st.getStopSequence()));
 				stopIndex++;
 			} else if (kp <= kb) {
 				// Stop is within the segment [a-b], interpolate
@@ -267,7 +323,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 				double dpp = stop == null ? 0.0
 						: Geodesics.distanceMeters(stop.getCoordinates(), pp);
 				patternIndex.projections.put(st.getStopSequence(),
-						new ProjectedPointImpl(distance + dap, dpp, pp, true));
+						new ProjectedPointImpl(distance + dap, dpp, pp, true,
+								st.getStopId(), st.getStopSequence()));
 				stopIndex++;
 			} else {
 				// Go to next segment
@@ -288,7 +345,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 							pb.getCoordinates());
 			patternIndex.projections.put(st.getStopSequence(),
 					new ProjectedPointImpl(distance, dbp, pb.getCoordinates(),
-							true));
+							true, st.getStopId(), st.getStopSequence()));
 		}
 
 		return patternIndex;
@@ -330,7 +387,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 
 	private boolean _debug = false;
 
-	private PatternLinearIndex computeShapedWithoutDistPatternIndex(
+	private ProjectedShapePatternImpl computeShapedWithoutDistPatternIndex(
 			GtfsTrip trip, List<GtfsStopTime> stopTimes,
 			List<GtfsShapePoint> shapePoints, IndexedReadOnlyDao dao) {
 
@@ -434,9 +491,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 									+ (stopTimes.size() + 2)));
 		}
 
-		PatternLinearIndex pattern = new PatternLinearIndex();
-		pattern.shapeId = shapePoints.isEmpty() ? null
-				: shapePoints.get(0).getShapeId();
+		ProjectedShapePatternImpl pattern = new ProjectedShapePatternImpl(
+				shapePoints.isEmpty() ? null : shapePoints.get(0).getShapeId());
 
 		for (int i = 0; i < stopTimes.size(); i++) {
 			GtfsStopTime stopTime = stopTimes.get(i);
@@ -448,7 +504,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			pattern.projections.put(stopTime.getStopSequence(),
 					new ProjectedPointImpl(segDst + segLen * min.kSegment,
 							min.distanceToProjectedPointMeters,
-							min.projectedPoint, true));
+							min.projectedPoint, true, stopTime.getStopId(),
+							stopTime.getStopSequence()));
 		}
 		return pattern;
 	}
@@ -513,5 +570,4 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 				.filter(lm -> lm.distanceToProjectedPointMeters < threshold)
 				.collect(Collectors.toList());
 	}
-
 }
