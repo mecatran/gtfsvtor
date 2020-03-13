@@ -9,7 +9,7 @@ public class CmdLineArgs {
 	private boolean help = false;
 
 	@Parameter(names = {
-			"--listValidators" }, description = "List validators and their parameters")
+			"--listValidators" }, description = "List validators and their parameters, and exit")
 	private boolean listValidators = false;
 
 	@Parameter(names = { "-v",

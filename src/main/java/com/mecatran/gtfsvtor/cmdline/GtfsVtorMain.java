@@ -28,10 +28,6 @@ public class GtfsVtorMain {
 				.build();
 		jcmd.setProgramName("GTFSVTOR");
 		jcmd.parse(args);
-		if (cmdLineArgs.isHelp() || cmdLineArgs.getGtfsFile() == null) {
-			jcmd.usage();
-			System.exit(1);
-		}
 
 		if (cmdLineArgs.isListValidators()) {
 			System.out.println(
@@ -46,6 +42,12 @@ public class GtfsVtorMain {
 					AgencyStreamingValidator.class.getPackage(), System.out);
 			System.out.println(
 					"========================================================");
+			System.exit(1);
+		}
+
+		if (cmdLineArgs.isHelp() || cmdLineArgs.getGtfsFile() == null) {
+			jcmd.usage();
+			System.exit(1);
 		}
 
 		long start = System.currentTimeMillis();
