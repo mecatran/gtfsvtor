@@ -33,8 +33,8 @@ public class CmdLineArgs {
 	private int maxIssuesPerCategoryLimit = 100;
 
 	@Parameter(names = {
-			"--parallelizingFactor" }, description = "Number of threads for running DAO validators in parallel")
-	private int parallelizingFactor = 1;
+			"--numThreads" }, description = "Number of threads for running DAO validators in parallel")
+	private int numThreads = 1;
 
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
@@ -67,8 +67,8 @@ public class CmdLineArgs {
 		return maxIssuesPerCategoryLimit;
 	}
 
-	public int getParallelizingFactor() {
-		return parallelizingFactor;
+	public int getNumThreads() {
+		return numThreads;
 	}
 
 	public String getGtfsFile() {

@@ -73,7 +73,7 @@ public class GtfsVtor {
 					report, config);
 			DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
 					.withVerbose(args.isVerbose())
-					.withParallelizingFactor(args.getParallelizingFactor());
+					.withNumThreads(args.getNumThreads());
 			daoValidator.validate(context);
 		}
 

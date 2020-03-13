@@ -20,8 +20,8 @@ public class DefaultDaoValidator implements DaoValidator {
 		return this;
 	}
 
-	public DefaultDaoValidator withParallelizingFactor(int factor) {
-		this.compound.withParallelizingFactor(factor);
+	public DefaultDaoValidator withNumThreads(int numThreads) {
+		this.compound.withNumThreads(numThreads);
 		return this;
 	}
 

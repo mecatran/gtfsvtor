@@ -12,7 +12,7 @@ public class CompoundDaoValidator implements DaoValidator {
 
 	private List<? extends DaoValidator> validators;
 	private boolean verbose = false;
-	private int parallelizingFactor = 1;
+	private int numThreads = 1;
 
 	public CompoundDaoValidator(List<? extends DaoValidator> validators) {
 		this.validators = new ArrayList<>(validators);
@@ -23,17 +23,16 @@ public class CompoundDaoValidator implements DaoValidator {
 		return this;
 	}
 
-	public CompoundDaoValidator withParallelizingFactor(int factor) {
-		this.parallelizingFactor = factor;
+	public CompoundDaoValidator withNumThreads(int numThreads) {
+		this.numThreads = numThreads;
 		return this;
 	}
 
 	public void validate(DaoValidator.Context context) {
-		ExecutorService exec = Executors
-				.newFixedThreadPool(parallelizingFactor);
-		if (verbose) {
+		ExecutorService exec = Executors.newFixedThreadPool(numThreads);
+		if (verbose && numThreads > 1) {
 			System.out
-					.println("Parallelizing factor is " + parallelizingFactor);
+					.println("Parallelizing with " + numThreads + " threads.");
 		}
 		try {
 			List<Callable<Boolean>> callables = new ArrayList<>();
