@@ -22,7 +22,9 @@ public class CsvDataSource implements NamedTabularDataSource {
 		if (inputStreamSource == null)
 			throw new IOException("Missing input");
 		InputStream in = inputStreamSource.getInputStream(tableName);
-		return new CsvDataTable(tableName, in);
+		// TODO Make this configurable
+		// return new ApacheCommonsCsvDataTable(tableName, in);
+		return new UnivocityCsvDataTable(tableName, in);
 	}
 
 	@Override
