@@ -30,14 +30,15 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 
 	@Override
 	public void report(ReportIssue issue) {
-		if (printIssues) {
-			System.out.println(issue.getSeverity() + ": "
-					+ PlainTextIssueFormatter.format(issue));
+		synchronized (reportItems) {
+			if (printIssues) {
+				System.out.println(issue.getSeverity() + ": "
+						+ PlainTextIssueFormatter.format(issue));
+			}
+			reportItems.add(issue);
+			reportIssuesByType.put(issue.getClass(), issue);
+			reportIssuesBySeverity.put(issue.getSeverity(), issue);
 		}
-		reportItems.add(issue);
-		reportIssuesByType.put(issue.getClass(), issue);
-		reportIssuesBySeverity.put(issue.getSeverity(), issue);
-
 	}
 
 	@Override

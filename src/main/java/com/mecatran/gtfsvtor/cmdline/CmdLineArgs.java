@@ -32,6 +32,10 @@ public class CmdLineArgs {
 			"--limit" }, description = "Limit number of issues per category")
 	private int maxIssuesPerCategoryLimit = 100;
 
+	@Parameter(names = {
+			"--parallelizingFactor" }, description = "Number of threads for running DAO validators in parallel")
+	private int parallelizingFactor = 1;
+
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
 
@@ -59,11 +63,15 @@ public class CmdLineArgs {
 		return outputReportFile;
 	}
 
-	public String getGtfsFile() {
-		return gtfsFile;
-	}
-
 	public int getMaxIssuesPerCategoryLimit() {
 		return maxIssuesPerCategoryLimit;
+	}
+
+	public int getParallelizingFactor() {
+		return parallelizingFactor;
+	}
+
+	public String getGtfsFile() {
+		return gtfsFile;
 	}
 }

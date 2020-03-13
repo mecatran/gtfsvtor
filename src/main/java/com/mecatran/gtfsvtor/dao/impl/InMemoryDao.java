@@ -212,7 +212,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public CalendarIndex getCalendarIndex() {
+	public synchronized CalendarIndex getCalendarIndex() {
 		// Lazy create the calendar index
 		if (calendarIndex == null) {
 			long start = System.currentTimeMillis();
@@ -228,7 +228,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public DaoSpatialIndex getSpatialIndex() {
+	public synchronized DaoSpatialIndex getSpatialIndex() {
 		// Lazy create the spatial index
 		if (spatialIndex == null) {
 			long start = System.currentTimeMillis();
@@ -243,7 +243,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public LinearGeometryIndex getLinearGeometryIndex() {
+	public synchronized LinearGeometryIndex getLinearGeometryIndex() {
 		// Lazy create the index
 		if (linearGeometryIndex == null) {
 			long start = System.currentTimeMillis();
