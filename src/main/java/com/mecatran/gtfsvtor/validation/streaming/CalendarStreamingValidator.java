@@ -53,8 +53,9 @@ public class CalendarStreamingValidator
 
 		// Calendar is not active any day of the week
 		if (!calendar.isMonday() && !calendar.isTuesday()
-				&& !calendar.isWednesday() && !calendar.isFriday()
-				&& !calendar.isSaturday() && !calendar.isSunday()) {
+				&& !calendar.isWednesday() && !calendar.isThursday()
+				&& !calendar.isFriday() && !calendar.isSaturday()
+				&& !calendar.isSunday()) {
 			reportSink
 					.report(new InvalidFieldValueError(calendar.getSourceInfo(),
 							"", "calendar is not active any day of the week",
