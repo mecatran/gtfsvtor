@@ -1,0 +1,3 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,shape_dist_traveled
+STBA,6:00:00,6:00:00,STAGECOACH,0,to airport,1,0,0.212
+STBA,6:20:00,6:20:00,BEATTY_AIRPORT_STATION,2,,0,0,1.043

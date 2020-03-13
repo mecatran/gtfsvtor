@@ -71,6 +71,7 @@ import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
+import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
 public class TestGtfs {
@@ -855,6 +856,18 @@ public class TestGtfs {
 				.contains("monday"));
 		assertTrue(ifv0.getSourceInfos().get(0).getFieldNames()
 				.contains("sunday"));
+	}
+
+	@Test
+	public void testInvalidStopTimeType() {
+		TestBundle tb = loadAndValidate("invalid_stoptime_type");
+		List<WrongStopTimeStopTypeError> wsts = tb.report
+				.getReportIssues(WrongStopTimeStopTypeError.class);
+		assertEquals(1, wsts.size());
+		WrongStopTimeStopTypeError wst0 = wsts.get(0);
+		assertEquals(GtfsStop.id("BEATTY_AIRPORT_STATION"),
+				wst0.getStop().getId());
+		assertEquals(GtfsStopType.STATION, wst0.getStop().getType());
 	}
 
 	@Test
