@@ -48,10 +48,14 @@ public interface ValidatorConfig {
 		}
 	}
 
+	public default String getKey(Object validator) {
+		return getKey(validator, null);
+	}
+
 	public default String getKey(Object validator, String keySuffix) {
 		// TODO Make sure this is sane
 		// TODO Does this method belongs here?
-		return "validator." + validator.getClass().getSimpleName() + "."
-				+ keySuffix;
+		return "validator." + validator.getClass().getSimpleName()
+				+ (keySuffix == null ? "" : ("." + keySuffix));
 	}
 }

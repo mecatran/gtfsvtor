@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.validation.impl;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,34 +14,60 @@ import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DefaultDisabledValidator;
 import com.mecatran.gtfsvtor.validation.ValidatorConfig;
 
+/*
+ * TODO Replace static method by a configurable injector instance.
+ */
 public class ValidatorInjector {
+
+	public static <T> void listValidatorOptions(Class<T> validatorClass,
+			ClassLoader classLoader, Package pckge, PrintStream pw) {
+		for (T validator : listValidatorOfPackage(validatorClass, classLoader,
+				pckge)) {
+			@SuppressWarnings("unchecked")
+			Class<? extends T> clazz = (Class<? extends T>) validator
+					.getClass();
+			boolean defDisabled = clazz
+					.isAnnotationPresent(DefaultDisabledValidator.class);
+			pw.println(" • " + validator.getClass().getSimpleName()
+					+ (defDisabled ? " (disabled by default)" : ""));
+			for (Field field : clazz.getDeclaredFields()) {
+				if (field.isAnnotationPresent(ConfigurableOption.class)) {
+					ConfigurableOption confOpt = field
+							.getAnnotation(ConfigurableOption.class);
+					String fieldName = confOpt.name().isEmpty()
+							? field.getName()
+							: confOpt.name();
+					String fieldDesc = confOpt.description().isEmpty() ? null
+							: confOpt.description();
+					Object defOptVal = null;
+					try {
+						field.setAccessible(true);
+						defOptVal = field.get(validator);
+					} catch (Exception e) {
+						System.err.println(e);
+					}
+					pw.println("    - " + fieldName + " ("
+							+ field.getType().getSimpleName() + ") = "
+							+ (defOptVal == null ? "?" : defOptVal.toString()));
+					if (fieldDesc != null) {
+						pw.println("      " + fieldDesc);
+					}
+				}
+			}
+		}
+	}
 
 	public static <T> List<? extends T> scanPackageAndInject(
 			Class<T> validatorClass, ClassLoader classLoader, Package pckge,
 			ValidatorConfig config) {
 		List<T> validators = new ArrayList<>();
-		try {
-			ClassPath cp = ClassPath.from(classLoader);
-			for (ClassInfo classInfo : cp.getTopLevelClasses(pckge.getName())) {
-				Class<?> clazz = classInfo.load();
-				if (validatorClass.isAssignableFrom(clazz)) {
-					try {
-						@SuppressWarnings("unchecked")
-						T validator = (T) clazz.getConstructor().newInstance();
-						if (isValidatorEnabled(validator, config)) {
-							// Inject configuration using annotations
-							configureValidator(validator, config);
-							validators.add(validator);
-						}
-					} catch (Exception e) {
-						// TODO Log
-						System.err.println("Cannot instantiate Validator "
-								+ clazz + ": " + e);
-					}
-				}
+		for (T validator : listValidatorOfPackage(validatorClass, classLoader,
+				pckge)) {
+			if (isValidatorEnabled(validator, config)) {
+				// Inject configuration using annotations
+				configureValidator(validator, config);
+				validators.add(validator);
 			}
-		} catch (IOException e) {
-			System.err.println("Cannot scan package " + pckge);
 		}
 		// TODO How to sort validators?
 		// Order by class name for now to make list stable
@@ -52,6 +79,38 @@ public class ValidatorInjector {
 			}
 		});
 		return validators;
+	}
+
+	private static <T> List<? extends T> listValidatorOfPackage(
+			Class<T> validatorClass, ClassLoader classLoader, Package pckge) {
+		List<T> ret = new ArrayList<>();
+		try {
+			ClassPath cp = ClassPath.from(classLoader);
+			for (ClassInfo classInfo : cp.getTopLevelClasses(pckge.getName())) {
+				Class<?> clazz = classInfo.load();
+				if (validatorClass.isAssignableFrom(clazz)) {
+					try {
+						@SuppressWarnings("unchecked")
+						T validator = (T) clazz.getConstructor().newInstance();
+						ret.add(validator);
+					} catch (Exception e) {
+						// TODO Log
+						System.err.println("Cannot instantiate Validator "
+								+ clazz + ": " + e);
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.err.println("Cannot scan package " + pckge);
+		}
+		Collections.sort(ret, new Comparator<T>() {
+			@Override
+			public int compare(T t1, T t2) {
+				return t1.getClass().getSimpleName()
+						.compareTo(t2.getClass().getSimpleName());
+			}
+		});
+		return ret;
 	}
 
 	private static <T> boolean isValidatorEnabled(T validator,

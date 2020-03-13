@@ -16,11 +16,11 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
  */
 public class StopTooFarFromParentStationValidator implements DaoValidator {
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Distance between stop and station above which a warning is generated")
 	private double maxWarningDistanceMeters = 100;
 
 	/* -1 will disable errors */
-	@ConfigurableOption
+	@ConfigurableOption(description = "Distance between stop and station above which a error is generated")
 	private double maxErrorDistanceMeters = 1000;
 
 	@Override

@@ -13,10 +13,10 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class StopTooFarFromShapeValidator implements DaoValidator {
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Distance from stop to projected point on shape, above which a warning is generated")
 	private double maxWarningDistanceMeters = 50.0;
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Distance from stop to projected point on shape, above which an error is generated")
 	private double maxErrorDistanceMeters = 100.0;
 
 	@Override

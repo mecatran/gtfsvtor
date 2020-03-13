@@ -17,14 +17,14 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 // @DefaultDisabledValidator
 public class StopTooCloseValidator implements DaoValidator {
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Minimum distance between stops below which an info is generated")
 	private double minDistanceMeters = 5.0;
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Minimum distance for a warning")
 	private double minWarningDistanceMeters = 1.0;
 
 	/* -1 will disable errors */
-	@ConfigurableOption
+	@ConfigurableOption(description = "Minimum distance for an error")
 	private double minErrorDistanceMeters = -1.0;
 
 	@Override

@@ -8,6 +8,10 @@ public class CmdLineArgs {
 			"--help" }, description = "Display this help and exit")
 	private boolean help = false;
 
+	@Parameter(names = {
+			"--listValidators" }, description = "List validators and their parameters")
+	private boolean listValidators = false;
+
 	@Parameter(names = { "-v",
 			"--verbose" }, description = "Enable verbose mode")
 	private boolean verbose = false;
@@ -33,6 +37,10 @@ public class CmdLineArgs {
 
 	public boolean isHelp() {
 		return help;
+	}
+
+	public boolean isListValidators() {
+		return listValidators;
 	}
 
 	public boolean isVerbose() {

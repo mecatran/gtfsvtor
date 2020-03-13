@@ -24,7 +24,9 @@ import com.mecatran.gtfsvtor.validation.ValidatorConfig;
 
 public class TooFastTravelValidator implements DaoValidator {
 
-	@ConfigurableOption
+	// TODO Configurable speed are not described right now
+
+	@ConfigurableOption(description = "Speed multiplier factor above which an error is generated")
 	private double errorSpeedMultiplier = 3.;
 
 	// TODO Check default value

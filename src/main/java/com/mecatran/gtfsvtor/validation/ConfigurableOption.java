@@ -11,4 +11,5 @@ public @interface ConfigurableOption {
 
 	String name() default "";
 
+	String description() default "";
 }

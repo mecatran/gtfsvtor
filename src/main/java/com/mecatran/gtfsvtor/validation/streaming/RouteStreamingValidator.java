@@ -16,7 +16,7 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 @StreamingValidateType(GtfsRoute.class)
 public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Maximum route short name above which an error is generated")
 	public int maxShortNameLen = 6;
 
 	@Override

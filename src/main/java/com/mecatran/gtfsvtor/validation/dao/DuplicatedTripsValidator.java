@@ -19,16 +19,16 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class DuplicatedTripsValidator implements DaoValidator {
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Include direction ID in duplication check")
 	private boolean includeDirection = false;
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Include headsign in duplication check")
 	private boolean includeHeadsign = false;
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Include short name in duplication check")
 	private boolean includeTripShortName = false;
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Include block ID in duplication check")
 	private boolean includeBlockId = false;
 
 	@Override

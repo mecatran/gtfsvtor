@@ -35,6 +35,21 @@ public class GtfsVtor {
 		// TODO Properly configure all this
 		// TODO Use the lib in the unit-tests
 
+		DefaultValidatorConfig config = new DefaultValidatorConfig();
+		if (args.getConfigFile() != null) {
+			File propFile = new File(args.getConfigFile());
+			if (propFile.exists() && propFile.canRead()) {
+				if (args.isVerbose()) {
+					System.out.println(
+							"Loading config from " + propFile.getName());
+				}
+				config.loadProperties(propFile);
+			} else {
+				System.err.println("Cannot load " + propFile.getName());
+			}
+		}
+		// TODO Add remaining cmd line args to config
+
 		report = new InMemoryReportLog().withPrintIssues(args.isPrintIssues());
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
 				.autoGuess(args.getGtfsFile(), report);
@@ -42,7 +57,6 @@ public class GtfsVtor {
 			NamedTabularDataSource dataSource = new CsvDataSource(
 					inputStreamSource);
 			InMemoryDao dao = new InMemoryDao().withVerbose(args.isVerbose());
-			DefaultValidatorConfig config = new DefaultValidatorConfig();
 
 			DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
 					config);
@@ -54,20 +68,6 @@ public class GtfsVtor {
 			long end = System.currentTimeMillis();
 			System.out.println("Loaded '" + args.getGtfsFile() + "' in "
 					+ (end - start) + "ms");
-
-			if (args.getConfigFile() != null) {
-				File propFile = new File(args.getConfigFile());
-				if (propFile.exists() && propFile.canRead()) {
-					if (args.isVerbose()) {
-						System.out.println(
-								"Loading config from " + propFile.getName());
-					}
-					config.loadProperties(propFile);
-				} else {
-					System.err.println("Cannot load " + propFile.getName());
-				}
-			}
-			// TODO Add remaining cmd line args to config
 
 			DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
 					report, config);

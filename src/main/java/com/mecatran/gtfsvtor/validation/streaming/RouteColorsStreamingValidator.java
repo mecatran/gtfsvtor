@@ -13,11 +13,11 @@ public class RouteColorsStreamingValidator
 		implements StreamingValidator<GtfsRoute> {
 
 	// Default value taken from legacy FeedValidator, rounded a bit
-	@ConfigurableOption
+	@ConfigurableOption(description = "Color brightness perceived contrast threshold for warning, ranging [0-1]")
 	public double minWarningBrightnessDelta = 0.2846;
 
 	// Errors are disabled by default
-	@ConfigurableOption
+	@ConfigurableOption(description = "Color brightness perceived contrast threshold for error, ranging [0-1]")
 	public double minErrorBrightnessDelta = -1.0;
 
 	@Override

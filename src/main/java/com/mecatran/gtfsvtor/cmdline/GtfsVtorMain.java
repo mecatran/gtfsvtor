@@ -4,6 +4,13 @@ import com.beust.jcommander.JCommander;
 import com.mecatran.gtfsvtor.lib.GtfsVtor;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.validation.DaoValidator;
+import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
+import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
+import com.mecatran.gtfsvtor.validation.StreamingValidator;
+import com.mecatran.gtfsvtor.validation.dao.ReferencesValidator;
+import com.mecatran.gtfsvtor.validation.impl.ValidatorInjector;
+import com.mecatran.gtfsvtor.validation.streaming.AgencyStreamingValidator;
 
 public class GtfsVtorMain {
 
@@ -24,6 +31,21 @@ public class GtfsVtorMain {
 		if (cmdLineArgs.isHelp() || cmdLineArgs.getGtfsFile() == null) {
 			jcmd.usage();
 			System.exit(1);
+		}
+
+		if (cmdLineArgs.isListValidators()) {
+			System.out.println(
+					"==================== DAO validators ====================");
+			ValidatorInjector.listValidatorOptions(DaoValidator.class,
+					DefaultDaoValidator.class.getClassLoader(),
+					ReferencesValidator.class.getPackage(), System.out);
+			System.out.println(
+					"================= Streaming validators =================");
+			ValidatorInjector.listValidatorOptions(StreamingValidator.class,
+					DefaultStreamingValidator.class.getClassLoader(),
+					AgencyStreamingValidator.class.getPackage(), System.out);
+			System.out.println(
+					"========================================================");
 		}
 
 		long start = System.currentTimeMillis();

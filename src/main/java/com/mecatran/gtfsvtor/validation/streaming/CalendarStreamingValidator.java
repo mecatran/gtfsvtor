@@ -13,10 +13,10 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 public class CalendarStreamingValidator
 		implements StreamingValidator<GtfsCalendar> {
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Year in the past before which an error is generated")
 	private int minYearInThePast = 1980;
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Year in the future after which an error is generated")
 	private int maxYearInTheFuture = 2100;
 
 	@Override

@@ -15,8 +15,8 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class CalendarValidator implements DaoValidator {
 
-	@ConfigurableOption
-	private Boolean checkEmptyCalendars = true;
+	@ConfigurableOption(description = "Check for calendars not applicable on any date")
+	private boolean checkEmptyCalendars = true;
 
 	@Override
 	public void validate(DaoValidator.Context context) {

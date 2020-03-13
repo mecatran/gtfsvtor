@@ -12,8 +12,8 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class RouteSimilarColorsValidator implements DaoValidator {
 
-	@ConfigurableOption
-	private double minColorDistance = 0.005; // 0.5%
+	@ConfigurableOption(description = "Color perceived distance threshold, in %")
+	private double minColorDistancePercent = 0.5; // 0.5%
 
 	@Override
 	public void validate(DaoValidator.Context context) {
@@ -33,13 +33,13 @@ public class RouteSimilarColorsValidator implements DaoValidator {
 				GtfsRoute route2 = routes.get(j);
 				double dc = route1.getNonNullColor()
 						.getDistance(route2.getNonNullColor());
-				if (dc < minColorDistance && dc != 0.0) {
+				if (dc < minColorDistancePercent / 100.0 && dc != 0.0) {
 					reportSink.report(new SimilarRouteColorWarning(route1,
 							route2, dc, true));
 				}
 				double dt = route1.getNonNullTextColor()
 						.getDistance(route2.getNonNullTextColor());
-				if (dt < minColorDistance && dt != 0.0) {
+				if (dt < minColorDistancePercent / 100.0 && dt != 0.0) {
 					reportSink.report(new SimilarRouteColorWarning(route1,
 							route2, dt, false));
 				}

@@ -20,6 +20,8 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class UnusedObjectsValidator implements DaoValidator {
 
+	// TODO Add options to enable/disable unused by type
+
 	@Override
 	public void validate(DaoValidator.Context context) {
 		IndexedReadOnlyDao dao = context.getDao();
