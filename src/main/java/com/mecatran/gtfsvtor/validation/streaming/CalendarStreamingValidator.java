@@ -28,9 +28,9 @@ public class CalendarStreamingValidator
 				&& calendar.getStartDate()
 						.compareTo(calendar.getEndDate()) > 0) {
 			reportSink.report(new InvalidFieldValueError(
-					calendar.getSourceInfo(), "end_date",
-					calendar.getEndDate().toString(),
-					"end date should be greater or equal than start date"));
+					calendar.getSourceInfo(), calendar.getEndDate().toString(),
+					"end date should be greater or equal than start date",
+					"end_date"));
 		}
 
 		// Check date range
@@ -50,5 +50,16 @@ public class CalendarStreamingValidator
 				date -> date != null && date.getYear() > maxYearInTheFuture,
 				calendar.getEndDate(), "end_date", context,
 				"end date too far in the future");
+
+		// Calendar is not active any day of the week
+		if (!calendar.isMonday() && !calendar.isTuesday()
+				&& !calendar.isWednesday() && !calendar.isFriday()
+				&& !calendar.isSaturday() && !calendar.isSunday()) {
+			reportSink
+					.report(new InvalidFieldValueError(calendar.getSourceInfo(),
+							"", "calendar is not active any day of the week",
+							"monday", "tuesday", "wednesday", "thursday",
+							"friday", "saturday", "sunday"));
+		}
 	}
 }

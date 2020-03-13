@@ -164,8 +164,8 @@ public class HtmlReportFormatter implements ReportFormatter {
 			html.td().classAttr("severity " + severity.toString())
 					.text(severity.toString()).end();
 			List<String> fieldNames = issue.getSourceInfos().stream()
-					.flatMap(si -> si.getFieldNames().stream()).distinct()
-					.sorted().collect(Collectors.toList());
+					.flatMap(si -> si.getFieldNames().stream()).sorted()
+					.distinct().collect(Collectors.toList());
 			html.td().classAttr("fieldname").text(String.join(", ", fieldNames))
 					.end();
 			html.td().classAttr("issue").raw(HtmlIssueFormatter.format(issue))

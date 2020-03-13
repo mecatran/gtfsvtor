@@ -10,18 +10,19 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 
+// TODO Make the severity configurable
 @ReportIssuePolicy(severity = ReportIssueSeverity.ERROR)
 public class InvalidFieldValueError implements ReportIssue {
 
 	private SourceInfoWithFields sourceInfo;
-	private String fieldName;
+	private String[] fieldNames;
 	private String value;
 	private String errorMessage;
 
-	public InvalidFieldValueError(DataObjectSourceInfo sourceInfo,
-			String fieldName, String value, String errorMessage) {
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldName);
-		this.fieldName = fieldName;
+	public InvalidFieldValueError(DataObjectSourceInfo sourceInfo, String value,
+			String errorMessage, String... fieldNames) {
+		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldNames);
+		this.fieldNames = fieldNames;
 		this.value = value;
 		this.errorMessage = errorMessage;
 	}
@@ -33,7 +34,7 @@ public class InvalidFieldValueError implements ReportIssue {
 
 	@Override
 	public String getCategoryName() {
-		return "Invalid " + fieldName + " value";
+		return "Invalid " + String.join("/", fieldNames) + " value";
 	}
 
 	public String getValue() {

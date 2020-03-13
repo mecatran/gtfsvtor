@@ -54,6 +54,7 @@ import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
@@ -841,6 +842,19 @@ public class TestGtfs {
 		TimeTravelError tt0 = tts.get(0);
 		assertEquals(GtfsStop.id("DADAN"), tt0.getStop1().getId());
 		assertEquals(GtfsStop.id("NADAV"), tt0.getStop2().getId());
+	}
+
+	@Test
+	public void testBogusCalendars() {
+		TestBundle tb = loadAndValidate("bogus_calendars");
+		List<InvalidFieldValueError> ifvs = tb.report
+				.getReportIssues(InvalidFieldValueError.class);
+		assertEquals(1, ifvs.size());
+		InvalidFieldValueError ifv0 = ifvs.get(0);
+		assertTrue(ifv0.getSourceInfos().get(0).getFieldNames()
+				.contains("monday"));
+		assertTrue(ifv0.getSourceInfos().get(0).getFieldNames()
+				.contains("sunday"));
 	}
 
 	@Test

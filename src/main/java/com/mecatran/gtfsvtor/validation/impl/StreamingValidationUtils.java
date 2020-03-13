@@ -27,7 +27,7 @@ public class StreamingValidationUtils {
 		if (predicate.test(t)) {
 			context.getReportSink()
 					.report(new InvalidFieldValueError(context.getSourceInfo(),
-							fieldName, t.toString(), errorMessage));
+							t.toString(), errorMessage, fieldName));
 		}
 	}
 }
