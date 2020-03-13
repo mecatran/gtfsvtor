@@ -1,0 +1,4267 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<title>GTFS validation report
+		</title>
+		<style type="text/css">body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+hr {
+	border: 1px solid #212f3d;
+}
+
+.INFO {
+	background-color: #a9cce3;
+}
+
+.WARNING {
+	background-color: #f7dc6f;
+}
+
+.ERROR {
+	background-color: #f5b7b1;
+}
+
+.CRITICAL {
+	background-color: #c0392b;
+}
+
+.badge {
+	font-weight: bold;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+	margin-left: 0.2em;
+	margin-right: 0.2em;
+	border-radius: 0.4em;
+}
+
+.smaller {
+	font-size: 80%;
+}
+
+.xsmaller {
+	font-size: 60%;
+}
+
+.comments {
+	color: #888888;
+}
+
+span.tablename {
+	font-family: monospace;
+	border-radius: 0.2em;
+	background-color: #eaecee;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+}
+
+div.subcategory {
+	border-top: dashed 1px;
+	padding-top: 0.4em;
+	margin-bottom: 1em;
+}
+
+table.sourceinfo {
+	border-collapse: collapse;
+	border: none;
+	font-family: monospace;
+	background-color: #eaecee;
+	margin-bottom: 0.6em;
+}
+
+table.sourceinfo caption {
+	text-align: left;
+	font-weight: bold;
+}
+
+table.sourceinfo thead tr {
+	background-color: #abb2b9;
+	font-weight: bold;
+}
+
+table.sourceinfo td {
+	border-left: solid 1px #566573;
+	border-top: solid 1px #566573;
+	padding-left : 0.4em;
+	padding-right: 0.4em;
+}
+
+table.sourceinfo td.linenr {
+	border-left: none;
+	background-color: #ffffff;
+	color: #273746;
+}
+
+table.issuelist {
+	border-collapse: collapse;
+	border: none;
+}
+
+table.issuelist tr  {
+	border-bottom: solid 1px #566573;
+}
+
+table.issuelist tr:last-child {
+	border-bottom: none;
+}
+
+table.issuelist td {
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+}
+
+table.issuelist td.severity {
+	font-weight: bold;
+	font-size: 80%;
+}
+
+table.issuelist td.fieldname {
+	font-family: monospace;
+	font-weight: bold;
+}
+
+table.issuelist td.issue {
+}
+
+span.id {
+	font-family: monospace;
+	font-weight: bold;
+	color: #4a235a;
+	background-color: #f4ecf7;
+	padding-left: 0.2em; 
+	padding-right: 0.2em;
+	border-radius: 0.4em;
+}
+
+span.pre {
+	font-family: monospace;
+	background-color: #eaecee;
+	padding-left: 0.2em; 
+	padding-right: 0.2em;
+	border-radius: 0.4em;
+}
+
+span.var {
+	color: #21618c;
+}
+
+		</style>
+		<h1>GTFS validation report
+			<span class="xsmaller"> • 7 
+				<span class="badge INFO">INFO
+				</span>
+			</span>
+			<span class="xsmaller"> • 35 
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="xsmaller"> • 47 
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h1>
+		<ul>
+			<li>1 
+				<span class="smaller badge INFO">INFO
+				</span>Statistics
+			</li>
+			<li>4 
+				<span class="smaller badge INFO">INFO
+				</span>Unknown file
+			</li>
+			<li>1 
+				<span class="smaller badge INFO">INFO
+				</span>Unrecognized column extra_field
+			</li>
+			<li>1 
+				<span class="smaller badge INFO">INFO
+				</span>Unrecognized column fancy_extra_field
+			</li>
+			<li>3 
+				<span class="smaller badge WARNING">WARNING
+				</span>Color contrast
+			</li>
+			<li>3 
+				<span class="smaller badge WARNING">WARNING
+				</span>Empty calendar
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Overlapping trip in block
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Similar colors
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Stop too far from shape
+			</li>
+			<li>2 
+				<span class="smaller badge WARNING">WARNING
+				</span>Stops too close
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Too fast travel
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused agency
+			</li>
+			<li>4 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused calendar
+			</li>
+			<li>5 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused calendar date
+			</li>
+			<li>2 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused route
+			</li>
+			<li>2 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused shape
+			</li>
+			<li>3 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused station
+			</li>
+			<li>6 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused stop
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID route_id
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID stop_id
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID trip_id
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated column agency_url
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_id reference
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_timezone format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid date format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid date value
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid direction_id format
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid end_date value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid location_type format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid monday/tuesday/wednesday/thursday/friday/saturday/sunday value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid parent_station reference
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_id reference
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_long_name format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_short_name format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_text_color format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid service_id reference
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid start_date value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid station parent type
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_timezone value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid trip_id reference
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory agency_name column
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory agency_name value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory arrival_time value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory departure_time value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory service_id value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory stop_lat value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory stop_lon value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing object ID
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Stop too far from shape
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Time travel
+			</li>
+			<li>3 
+				<span class="smaller badge ERROR">ERROR
+				</span>Time travel at stop
+			</li>
+			<li>5 
+				<span class="smaller badge ERROR">ERROR
+				</span>Too fast travel
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Too many stops with identical time
+			</li>
+		</ul>
+		<h2>Statistics
+			<span class="smaller"> • 1
+				<span class="badge INFO">INFO
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity INFO">INFO
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Loaded 2 agencies, 7 routes, 18 stops, 6 calendars, 6 calendar dates, 14 trips, 37 stop times
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Time travel
+			<span class="smaller"> • 1
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Time-travel between <span class='id'>NANAA</span> @6:51:00 and <span class='id'>STAGECOACH</span> @6:58:00, in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>, arrival before departure.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Too fast travel
+			<span class="smaller"> • 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 5
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Too fast travel between <span class='id'>NADAV</span> @10:00:00 and <span class='id'>NANAA</span> @10:00:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1078,34</span> > <span class='var'>16,67</span> m/s
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Too fast travel between <span class='id'>NANAA</span> @10:00:00 and <span class='id'>STAGECOACH</span> @10:00:00 (distance <span class='var'>63410,16</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1056,84</span> > <span class='var'>16,67</span> m/s
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Too fast travel between <span class='id'>NANAA</span> @6:07:00 and <span class='id'>NADAV</span> @6:14:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>215,67</span> > <span class='var'>16,67</span> m/s
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Too fast travel between <span class='id'>STAGECOACH</span> @6:00:00 and <span class='id'>NANAA</span> @6:07:00 (distance <span class='var'>63410,16</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>211,37</span> > <span class='var'>16,67</span> m/s
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Too fast travel between <span class='id'>NADAV</span> @6:44:00 and <span class='id'>NANAA</span> @6:51:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>179,72</span> > <span class='var'>16,67</span> m/s
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Too fast travel between <span class='id'>STAGECOACH</span> @10:00:00 and <span class='id'>EMSI</span> @10:00:00 (distance <span class='var'>1450,76</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>24,18</span> > <span class='var'>16,67</span> m/s
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Too many stops with identical time
+			<span class="smaller"> • 1
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Too many stops with identical time: <span class='var'>6</span> × 10:00:00, in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Unknown file
+			<span class="smaller"> • 4
+				<span class="badge INFO">INFO
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity INFO">INFO
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Unknown file <span class='pre'>fare_attributes.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity INFO">INFO
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Unknown file <span class='pre'>fare_rules.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity INFO">INFO
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Unknown file <span class='pre'>frequencies.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity INFO">INFO
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Unknown file <span class='pre'>transfers.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Unused shape
+			<span class="smaller"> • 2
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Unused <span class='var'>shape</span> ID <span class='id'>SHAPE2</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Unused <span class='var'>shape</span> ID <span class='id'>UNUSED_SHAPE</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>agency.txt
+			<span class="smaller"> • 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 5
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused agency
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated column agency_url
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_timezone format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory agency_name column
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory agency_name value
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">L1
+						</td>
+						<td>agency_id
+						</td>
+						<td class="ERROR">agency_url
+						</td>
+						<td class="ERROR">agency_url
+						</td>
+						<td>agency_timezone
+						</td>
+						<td>agency_phone
+						</td>
+					</tr>
+				</thead>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_url
+					</td>
+					<td class="issue">Duplicated column
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_name
+					</td>
+					<td class="issue">Missing mandatory column: <span class='pre'>agency_name</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>agency_id
+						</td>
+						<td>agency_url
+						</td>
+						<td>agency_url
+						</td>
+						<td>agency_timezone
+						</td>
+						<td>agency_phone
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td>DTA
+					</td>
+					<td>http://google.com
+					</td>
+					<td>http://google.com
+					</td>
+					<td>America/Los_Angeles
+					</td>
+					<td>123 12314
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_name
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>agency_id
+						</td>
+						<td>agency_url
+						</td>
+						<td>agency_url
+						</td>
+						<td>agency_timezone
+						</td>
+						<td>agency_phone
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td class="WARNING">DTA_UNUSED
+					</td>
+					<td>badurl.com
+					</td>
+					<td>badurl.com
+					</td>
+					<td class="ERROR">Mars/Pluto
+					</td>
+					<td>Unknown phone
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_name
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_timezone
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>Mars/Pluto</span>, expected: IANA timezone
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">agency_id
+					</td>
+					<td class="issue">Unused <span class='var'>agency</span> ID <span class='id'>DTA_UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>calendar.txt
+			<span class="smaller"> • 6
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 4
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>2
+				<span class="smaller badge WARNING">WARNING
+				</span>Empty calendar
+			</li>
+			<li>4
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused calendar
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid end_date value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid monday/tuesday/wednesday/thursday/friday/saturday/sunday value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid start_date value
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>monday
+						</td>
+						<td>tuesday
+						</td>
+						<td>wednesday
+						</td>
+						<td>thursday
+						</td>
+						<td>friday
+						</td>
+						<td>saturday
+						</td>
+						<td>sunday
+						</td>
+						<td>start_date
+						</td>
+						<td>end_date
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td>MONDAY
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>20070101
+					</td>
+					<td>20070107
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>MONDAY</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>monday
+						</td>
+						<td>tuesday
+						</td>
+						<td>wednesday
+						</td>
+						<td>thursday
+						</td>
+						<td>friday
+						</td>
+						<td>saturday
+						</td>
+						<td>sunday
+						</td>
+						<td>start_date
+						</td>
+						<td>end_date
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td>MONDAY
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>0
+					</td>
+					<td>20070101
+					</td>
+					<td>20070107
+					</td>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>calendar_dates.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>MONDAY
+					</td>
+					<td>20070101
+					</td>
+					<td>2
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Calendar <span class='id'>MONDAY</span> is not active on any day
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>monday
+						</td>
+						<td>tuesday
+						</td>
+						<td>wednesday
+						</td>
+						<td>thursday
+						</td>
+						<td>friday
+						</td>
+						<td>saturday
+						</td>
+						<td>sunday
+						</td>
+						<td>start_date
+						</td>
+						<td>end_date
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L5
+					</td>
+					<td>UNUSED
+					</td>
+					<td>0
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td>20070101
+					</td>
+					<td>20111231
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>monday
+						</td>
+						<td>tuesday
+						</td>
+						<td>wednesday
+						</td>
+						<td>thursday
+						</td>
+						<td>friday
+						</td>
+						<td>saturday
+						</td>
+						<td>sunday
+						</td>
+						<td>start_date
+						</td>
+						<td>end_date
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L6
+					</td>
+					<td>INVERTED
+					</td>
+					<td>0
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td>1
+					</td>
+					<td>0
+					</td>
+					<td class="ERROR">22120101
+					</td>
+					<td class="ERROR">19001231
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">end_date
+					</td>
+					<td class="issue">Invalid value <span class='var'>1900-12-31</span>: end date should be greater or equal than start date
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">end_date
+					</td>
+					<td class="issue">Invalid value <span class='var'>1900-12-31</span>: end date too far in the past
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">start_date
+					</td>
+					<td class="issue">Invalid value <span class='var'>2212-01-01</span>: start date too far in the future
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>INVERTED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>monday
+						</td>
+						<td>tuesday
+						</td>
+						<td>wednesday
+						</td>
+						<td>thursday
+						</td>
+						<td>friday
+						</td>
+						<td>saturday
+						</td>
+						<td>sunday
+						</td>
+						<td>start_date
+						</td>
+						<td>end_date
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td>NODOW
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td>20070101
+					</td>
+					<td>20070101
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">friday, monday, saturday, sunday, thursday, tuesday, wednesday
+					</td>
+					<td class="issue">Invalid value <span class='var'></span>: calendar is not active any day of the week
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Calendar <span class='id'>NODOW</span> is not active on any day
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>NODOW</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>calendar_dates.txt
+			<span class="smaller"> • 6
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 2
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Empty calendar
+			</li>
+			<li>5
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused calendar date
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid date format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid date value
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>MONDAY
+					</td>
+					<td>20070101
+					</td>
+					<td>2
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>MONDAY</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td>MONDAY2
+					</td>
+					<td>20070101
+					</td>
+					<td>2
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Calendar <span class='id'>MONDAY2</span> is not active on any day
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>MONDAY2</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L5
+					</td>
+					<td>INVERTED
+					</td>
+					<td class="ERROR">20073108
+					</td>
+					<td>1
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">date
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>20073108</span>, expected: date (YYYYMMDD) - Invalid date: 2007-31-08 (did you mean 2009-07-08 ?)
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>INVERTED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L6
+					</td>
+					<td>UNUSED
+					</td>
+					<td>20070831
+					</td>
+					<td>1
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td>INVERTED
+					</td>
+					<td class="ERROR">19000101
+					</td>
+					<td>1
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">date
+					</td>
+					<td class="issue">Invalid value <span class='var'>1900-01-01</span>: date too far in the past
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">calendar_id
+					</td>
+					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>INVERTED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>routes.txt
+			<span class="smaller"> • 1
+				<span class="badge INFO">INFO
+				</span>
+			</span>
+			<span class="smaller"> • 6
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 6
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge INFO">INFO
+				</span>Unrecognized column extra_field
+			</li>
+			<li>3
+				<span class="smaller badge WARNING">WARNING
+				</span>Color contrast
+			</li>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Similar colors
+			</li>
+			<li>2
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused route
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID route_id
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_id reference
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_long_name format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_short_name format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_text_color format
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">L1
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td class="INFO">extra_field
+						</td>
+					</tr>
+				</thead>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity INFO">INFO
+					</td>
+					<td class="fieldname">extra_field
+					</td>
+					<td class="issue">Unrecognized column
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="ERROR">AB
+					</td>
+					<td>DTA
+					</td>
+					<td>
+					</td>
+					<td>Airport ⇒ Bullfrog
+					</td>
+					<td>
+					</td>
+					<td>3
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td class="ERROR">AB
+					</td>
+					<td>FOO
+					</td>
+					<td>THIS ROUTE NAME IS TOO LONG
+					</td>
+					<td>THIS ROUTE NAME IS TOO LONG
+					</td>
+					<td>
+					</td>
+					<td>99
+					</td>
+					<td>000000
+					</td>
+					<td>000000
+					</td>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>AB</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>AB
+					</td>
+					<td class="ERROR">FOO
+					</td>
+					<td class="ERROR">THIS ROUTE NAME IS TOO LONG
+					</td>
+					<td class="ERROR">THIS ROUTE NAME IS TOO LONG
+					</td>
+					<td>
+					</td>
+					<td>99
+					</td>
+					<td>000000
+					</td>
+					<td class="WARNING">000000
+					</td>
+					<td class="WARNING"/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">route_color, route_text_color
+					</td>
+					<td class="issue">Route colors not contrasted enough: <span style='display:inline-block; padding-left:0.4em; padding-right:0.4em; color:#000000; background-color:#000000'>TEXT</span>, delta is <span class='var'>0,0</span>%
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>FOO</span>, it should reference an existing <span class='pre'>agency_id</span> in table <span class='pre'>agency.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_short_name
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>THIS ROUTE NAME IS TOO LONG</span>, expected: Max 6 chars long
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_long_name
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>THIS ROUTE NAME IS TOO LONG</span>, expected: Long name should not start or be equals with short name
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L6
+					</td>
+					<td>CITY
+					</td>
+					<td>DTA
+					</td>
+					<td>Ō
+					</td>
+					<td>Bar Circle
+					</td>
+					<td>Route with ĸool unicode shortname
+					</td>
+					<td>3
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">FE0000
+					</td>
+					<td class="WARNING">FF5555
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">route_color, route_text_color
+					</td>
+					<td class="issue">Route colors not contrasted enough: <span style='display:inline-block; padding-left:0.4em; padding-right:0.4em; color:#FF5555; background-color:#FE0000'>TEXT</span>, delta is <span class='var'>23,5</span>%
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L6
+					</td>
+					<td>CITY
+					</td>
+					<td>DTA
+					</td>
+					<td>Ō
+					</td>
+					<td>Bar Circle
+					</td>
+					<td>Route with ĸool unicode shortname
+					</td>
+					<td>3
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">FE0000
+					</td>
+					<td>FF5555
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td>AAMV
+					</td>
+					<td>DTA
+					</td>
+					<td>
+					</td>
+					<td>Airport ⇒ Amargosa Valley
+					</td>
+					<td>
+					</td>
+					<td>3
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">FF0000
+					</td>
+					<td>FF5555
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">route_color
+					</td>
+					<td class="issue">Route background colors are very similar but not identical: <span style='display:inline-block; padding-left:0.4em; padding-right:0.4em; color:#FF5555; background-color:#FE0000'>TEXT</span> vs <span style='display:inline-block; padding-left:0.4em; padding-right:0.4em; color:#FF5555; background-color:#FF0000'>TEXT</span>, distance is <span class='var'>0,226</span>%
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td>AAMV
+					</td>
+					<td>DTA
+					</td>
+					<td>
+					</td>
+					<td>Airport ⇒ Amargosa Valley
+					</td>
+					<td>
+					</td>
+					<td>3
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">FF0000
+					</td>
+					<td class="WARNING">FF5555
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">route_color, route_text_color
+					</td>
+					<td class="issue">Route colors not contrasted enough: <span style='display:inline-block; padding-left:0.4em; padding-right:0.4em; color:#FF5555; background-color:#FF0000'>TEXT</span>, delta is <span class='var'>23,4</span>%
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L8
+					</td>
+					<td class="WARNING">AZ
+					</td>
+					<td class="ERROR">FOO
+					</td>
+					<td>AAZZ
+					</td>
+					<td>Airport Zanzibar
+					</td>
+					<td>
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>00AA00
+					</td>
+					<td class="ERROR">FFF
+					</td>
+					<td>Extra unused data
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_text_color
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>FFF</span>, expected: hexadecimal RGB color triplet (6 characters)
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>FOO</span>, it should reference an existing <span class='pre'>agency_id</span> in table <span class='pre'>agency.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">route_id
+					</td>
+					<td class="issue">Unused <span class='var'>route</span> ID <span class='id'>AZ</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L9
+					</td>
+					<td class="WARNING">UNUSED
+					</td>
+					<td>DTA
+					</td>
+					<td>
+					</td>
+					<td>Unused route
+					</td>
+					<td>
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>000000
+					</td>
+					<td>FFFFFF
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">route_id
+					</td>
+					<td class="issue">Unused <span class='var'>route</span> ID <span class='id'>UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>stop_times.txt
+			<span class="smaller"> • 6
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid trip_id reference
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory arrival_time value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory departure_time value
+			</li>
+			<li>3
+				<span class="smaller badge ERROR">ERROR
+				</span>Time travel at stop
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td>CITY1
+					</td>
+					<td class="ERROR">6:00:20
+					</td>
+					<td class="ERROR">6:00:00
+					</td>
+					<td>STAGECOACH
+					</td>
+					<td>0
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">arrival_time, departure_time
+					</td>
+					<td class="issue">Departure time cannot be before arrival time
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L10
+					</td>
+					<td>CITY2
+					</td>
+					<td>6:35:00
+					</td>
+					<td class="ERROR">
+					</td>
+					<td>DADAN
+					</td>
+					<td>200
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">departure_time
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td>CITY2
+					</td>
+					<td class="ERROR">
+					</td>
+					<td>6:44:00
+					</td>
+					<td>NADAV
+					</td>
+					<td>300
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">arrival_time
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L20
+					</td>
+					<td class="ERROR">CITYX
+					</td>
+					<td>11:00:00
+					</td>
+					<td>11:00:00
+					</td>
+					<td>EMSI
+					</td>
+					<td>100
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">trip_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>CITYX</span>, it should reference an existing <span class='pre'>trip_id</span> in table <span class='pre'>trips.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L21
+					</td>
+					<td>AB1
+					</td>
+					<td class="ERROR">8:01:00
+					</td>
+					<td class="ERROR">8:00:00
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">arrival_time, departure_time
+					</td>
+					<td class="issue">Departure time cannot be before arrival time
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L22
+					</td>
+					<td>AB1
+					</td>
+					<td class="ERROR">8:17:00
+					</td>
+					<td class="ERROR">8:15:00
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>2
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">arrival_time, departure_time
+					</td>
+					<td class="issue">Departure time cannot be before arrival time
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>stops.txt
+			<span class="smaller"> • 1
+				<span class="badge INFO">INFO
+				</span>
+			</span>
+			<span class="smaller"> • 12
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 9
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge INFO">INFO
+				</span>Unrecognized column fancy_extra_field
+			</li>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Stop too far from shape
+			</li>
+			<li>2
+				<span class="smaller badge WARNING">WARNING
+				</span>Stops too close
+			</li>
+			<li>3
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused station
+			</li>
+			<li>6
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused stop
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID stop_id
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid location_type format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid parent_station reference
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid station parent type
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_timezone value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory stop_lat value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory stop_lon value
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Stop too far from shape
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">L1
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td class="INFO">fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity INFO">INFO
+					</td>
+					<td class="fieldname">fancy_extra_field
+					</td>
+					<td class="issue">Unrecognized column
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="ERROR">FUR_CREEK_RES
+					</td>
+					<td>Furnace Creek Resort (Demo)
+					</td>
+					<td>
+					</td>
+					<td>36.425288
+					</td>
+					<td>-117.133162
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td class="ERROR">FUR_CREEK_RES
+					</td>
+					<td>Furnace Creek Resort (duplicated entity)
+					</td>
+					<td>
+					</td>
+					<td>36.425288
+					</td>
+					<td>-117.133162
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>FUR_CREEK_RES</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td>FUR_CREEK_RES
+					</td>
+					<td>Furnace Creek Resort (Demo)
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">36.425288
+					</td>
+					<td class="WARNING">-117.133162
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td>UNUSED
+					</td>
+					<td>Unused stop
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">36.425288
+					</td>
+					<td class="WARNING">-117.133162
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td>0
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_lat, stop_lon
+					</td>
+					<td class="issue">Stops too close, they are <span class='var'>0,00</span>m away
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>Nye County Airport (Demo)
+					</td>
+					<td>
+					</td>
+					<td class="ERROR">36.868446
+					</td>
+					<td class="ERROR">-116.784582
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1235
+					</td>
+					<td>0
+					</td>
+					<td>BEATTY_AIRPORT_STATION
+					</td>
+					<td class="ERROR">America/Phoenix
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_timezone
+					</td>
+					<td class="issue">Invalid value <span class='var'>America/Phoenix</span>: stop having a parent should not define a timezone
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_lat, stop_lon
+					</td>
+					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070,29</span>m): <span class='var'>175732,33</span>m away
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L5
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>Bullfrog (Demo)
+					</td>
+					<td>
+					</td>
+					<td class="ERROR">36.88108
+					</td>
+					<td class="ERROR">-116.81797
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_lat, stop_lon
+					</td>
+					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB1</span> is too far from computed projection point <span class='var'>(36.881000,-116.817000)</span> on shape <span class='id'>SHAPE1</span> (at arc-length <span class='var'>3272,00</span>m): <span class='var'>86,73</span>m away
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_lat, stop_lon
+					</td>
+					<td class="issue">Stop at sequence <span class='var'>1</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070,29</span>m): <span class='var'>178119,67</span>m away
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td>NADAV
+					</td>
+					<td>North Ave / D Ave N (Demo)
+					</td>
+					<td>
+					</td>
+					<td>36.914893
+					</td>
+					<td>-116.76821
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1237
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L19
+					</td>
+					<td>INVALIDSTATION
+					</td>
+					<td>Stop with invalid parent station type
+					</td>
+					<td>
+					</td>
+					<td>36.914876
+					</td>
+					<td>-116.76828
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1237
+					</td>
+					<td class="ERROR">0
+					</td>
+					<td class="ERROR">NADAV
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">location_type, parent_station
+					</td>
+					<td class="issue">Invalid type <span class='pre'>STOP</span> for parent ID <span class='id'>NADAV</span>, a child of type <span class='pre'>STOP</span> should have a parent type <span class='pre'>STATION</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L8
+					</td>
+					<td class="WARNING">NANAA
+					</td>
+					<td>North Ave / N A Ave (Demo)
+					</td>
+					<td>
+					</td>
+					<td>36.6666
+					</td>
+					<td>-116.1111
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1238
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>station</span> ID <span class='id'>NANAA</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td class="WARNING">UNUSED
+					</td>
+					<td>Unused stop
+					</td>
+					<td>
+					</td>
+					<td>36.425288
+					</td>
+					<td>-117.133162
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td>0
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>stop</span> ID <span class='id'>UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L14
+					</td>
+					<td class="WARNING">UNUSED_STATION
+					</td>
+					<td>Unused station
+					</td>
+					<td>
+					</td>
+					<td>36.425288
+					</td>
+					<td>-117.133162
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>station</span> ID <span class='id'>UNUSED_STATION</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L15
+					</td>
+					<td class="WARNING">WRONGTYPE
+					</td>
+					<td>Stop with wrong type
+					</td>
+					<td>
+					</td>
+					<td>36.428
+					</td>
+					<td>-117.133
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td class="ERROR">99
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">location_type
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>99</span>, expected: stop type (0, 1, 2, 3 or 4)
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>stop</span> ID <span class='id'>WRONGTYPE</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L16
+					</td>
+					<td class="WARNING">NOLOC
+					</td>
+					<td>Stop with no location
+					</td>
+					<td>
+					</td>
+					<td class="ERROR">
+					</td>
+					<td class="ERROR">
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1234
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_lat
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_lon
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>stop</span> ID <span class='id'>NOLOC</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L17
+					</td>
+					<td class="WARNING">ZEROZERO
+					</td>
+					<td>Stop with (0,0) coordinates
+					</td>
+					<td>
+					</td>
+					<td>0.0
+					</td>
+					<td>0
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>stop</span> ID <span class='id'>ZEROZERO</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L18
+					</td>
+					<td class="WARNING">NOSTATION
+					</td>
+					<td>Stop with unknown parent station
+					</td>
+					<td>
+					</td>
+					<td>36.914876
+					</td>
+					<td>-116.76828
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1237
+					</td>
+					<td>0
+					</td>
+					<td class="ERROR">BOGUS
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">parent_station
+					</td>
+					<td class="issue">Invalid ID <span class='id'>BOGUS</span>, it should reference an existing <span class='pre'>stop_id</span> in table <span class='pre'>stops.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>stop</span> ID <span class='id'>NOSTATION</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L18
+					</td>
+					<td>NOSTATION
+					</td>
+					<td>Stop with unknown parent station
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">36.914876
+					</td>
+					<td class="WARNING">-116.76828
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1237
+					</td>
+					<td>0
+					</td>
+					<td>BOGUS
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L19
+					</td>
+					<td>INVALIDSTATION
+					</td>
+					<td>Stop with invalid parent station type
+					</td>
+					<td>
+					</td>
+					<td class="WARNING">36.914876
+					</td>
+					<td class="WARNING">-116.76828
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1237
+					</td>
+					<td>0
+					</td>
+					<td>NADAV
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_lat, stop_lon
+					</td>
+					<td class="issue">Stops too close, they are <span class='var'>0,00</span>m away
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L19
+					</td>
+					<td class="WARNING">INVALIDSTATION
+					</td>
+					<td>Stop with invalid parent station type
+					</td>
+					<td>
+					</td>
+					<td>36.914876
+					</td>
+					<td>-116.76828
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1237
+					</td>
+					<td>0
+					</td>
+					<td>NADAV
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>stop</span> ID <span class='id'>INVALIDSTATION</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L20
+					</td>
+					<td class="WARNING">NANAA2
+					</td>
+					<td>North Ave / N A Ave (too close)
+					</td>
+					<td>
+					</td>
+					<td>36.90001
+					</td>
+					<td>-116.7
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>1238
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Unused <span class='var'>station</span> ID <span class='id'>NANAA2</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>trips.txt
+			<span class="smaller"> • 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 8
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Overlapping trip in block
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID trip_id
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid direction_id format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_id reference
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid service_id reference
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory service_id value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing object ID
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>AB
+					</td>
+					<td>FULLW
+					</td>
+					<td class="WARNING">AB2
+					</td>
+					<td>to Airport
+					</td>
+					<td>1
+					</td>
+					<td class="WARNING">2
+					</td>
+					<td>SHAPE3
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td>AB
+					</td>
+					<td>WE
+					</td>
+					<td class="WARNING">AB3
+					</td>
+					<td>to Airport
+					</td>
+					<td>1
+					</td>
+					<td class="WARNING">2
+					</td>
+					<td>SHAPE3
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">block_id, trip_id
+					</td>
+					<td class="issue">Overlapping trips on same block ID <span class='id'>2</span>: <span class='id'>AB3</span> (12:00:00→12:07:00) and <span class='id'>AB2</span> (12:05:00→12:15:00). Overlap on <span class='var'>521</span> days, from <span class='var'>2007/01/06</span> to <span class='var'>2011/12/31</span>.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td>AAMV
+					</td>
+					<td>WE
+					</td>
+					<td>AAMV2
+					</td>
+					<td>to Airport
+					</td>
+					<td class="ERROR">2
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">direction_id
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>2</span>, expected: direction ID (0 or 1)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td>AAMV
+					</td>
+					<td>WE
+					</td>
+					<td>AAMV3
+					</td>
+					<td>to Amargosa Valley
+					</td>
+					<td class="ERROR">3
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">direction_id
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>3</span>, expected: direction ID (0 or 1)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L14
+					</td>
+					<td>AAMV
+					</td>
+					<td>WE
+					</td>
+					<td class="ERROR">AAMV4
+					</td>
+					<td>to Airport
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L15
+					</td>
+					<td>AAMV
+					</td>
+					<td>WE
+					</td>
+					<td class="ERROR">AAMV4
+					</td>
+					<td>to Airport (dup)
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">trip_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>AAMV4</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L16
+					</td>
+					<td class="ERROR">BOGUS
+					</td>
+					<td class="ERROR">
+					</td>
+					<td>AAMV5
+					</td>
+					<td>Unknown route and no service
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">service_id
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>BOGUS</span>, it should reference an existing <span class='pre'>route_id</span> in table <span class='pre'>routes.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L16
+					</td>
+					<td>BOGUS
+					</td>
+					<td>
+					</td>
+					<td class="ERROR">AAMV5
+					</td>
+					<td>Unknown route and no service
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L17
+					</td>
+					<td>AAMV
+					</td>
+					<td>BOGUS
+					</td>
+					<td class="ERROR">AAMV5
+					</td>
+					<td>Unknown service
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">trip_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>AAMV5</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L17
+					</td>
+					<td>AAMV
+					</td>
+					<td class="ERROR">BOGUS
+					</td>
+					<td>AAMV5
+					</td>
+					<td>Unknown service
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">service_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>BOGUS</span>, it should reference an existing <span class='pre'>service_id</span> in table <span class='pre'>calendar.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L18
+					</td>
+					<td>AAMV
+					</td>
+					<td>WE
+					</td>
+					<td class="ERROR">
+					</td>
+					<td>Trip w/o ID
+					</td>
+					<td>1
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">trip_id
+					</td>
+					<td class="issue">Missing mandatory object ID
+					</td>
+				</tr>
+			</table>
+		</div>
+		<hr/>
+		<p class="comments">Validation done at Fri Mar 13 10:58:07 CET 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
+		</p>
+	</head>

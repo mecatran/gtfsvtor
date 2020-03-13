@@ -1,6 +1,5 @@
 build
 bin
-validation-report.html
 .classpath
 .gradle
 .project
