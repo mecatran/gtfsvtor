@@ -20,7 +20,7 @@ Only the following tables are loaded:
 Not all validation rules of the legacy feedvalidator.py are implemented, however.
 See the [TODO](TODO) file to check what rules are missing.
 
-You can browse this [example report](validation-report.html) to see the validation result of the "verybad" dataset.
+You can browse this [example report](docs/validation-report.html) to see the validation result of the "verybad" dataset.
 
 For now, as there are no released bundle, you must compile the validator yourself:
 
