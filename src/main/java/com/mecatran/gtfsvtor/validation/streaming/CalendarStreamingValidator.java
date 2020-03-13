@@ -2,6 +2,8 @@ package com.mecatran.gtfsvtor.validation.streaming;
 
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkFieldValue;
 
+import java.util.stream.IntStream;
+
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueError;
@@ -52,10 +54,8 @@ public class CalendarStreamingValidator
 				"end date too far in the future");
 
 		// Calendar is not active any day of the week
-		if (!calendar.isMonday() && !calendar.isTuesday()
-				&& !calendar.isWednesday() && !calendar.isThursday()
-				&& !calendar.isFriday() && !calendar.isSaturday()
-				&& !calendar.isSunday()) {
+		if (IntStream.range(0, 7)
+				.allMatch(dow -> !calendar.isActiveOnDow(dow))) {
 			reportSink
 					.report(new InvalidFieldValueError(calendar.getSourceInfo(),
 							"", "calendar is not active any day of the week",
