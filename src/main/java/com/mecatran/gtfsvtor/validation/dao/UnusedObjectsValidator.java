@@ -60,13 +60,13 @@ public class UnusedObjectsValidator implements DaoValidator {
 			if (calendar != null) {
 				reportSink.report(
 						new UnusedObjectWarning("calendar", unusedCalendarId,
-								calendar.getSourceInfo(), "calendar_id"));
+								calendar.getSourceInfo(), "service_id"));
 			}
 			for (GtfsCalendarDate calendarDate : dao
 					.getCalendarDates(unusedCalendarId)) {
 				reportSink.report(new UnusedObjectWarning("calendar date",
 						unusedCalendarId, calendarDate.getSourceInfo(),
-						"calendar_id"));
+						"service_id"));
 			}
 		}
 		for (GtfsStop.Id unusedStopId : unusedStopsIds) {
