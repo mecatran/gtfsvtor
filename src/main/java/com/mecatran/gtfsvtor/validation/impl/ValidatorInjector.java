@@ -10,19 +10,47 @@ import java.util.List;
 
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
+import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
+import com.mecatran.gtfsvtor.validation.DaoValidator;
+import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDisabledValidator;
+import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
+import com.mecatran.gtfsvtor.validation.StreamingValidator;
 import com.mecatran.gtfsvtor.validation.ValidatorConfig;
+import com.mecatran.gtfsvtor.validation.dao.ReferencesValidator;
+import com.mecatran.gtfsvtor.validation.streaming.AgencyStreamingValidator;
 
-/*
- * TODO Replace static method by a configurable injector instance.
- */
-public class ValidatorInjector {
+public class ValidatorInjector<T> {
 
-	public static <T> void listValidatorOptions(Class<T> validatorClass,
-			ClassLoader classLoader, Package pckge, PrintStream pw) {
-		for (T validator : listValidatorOfPackage(validatorClass, classLoader,
-				pckge)) {
+	private Class<T> validatorClass;
+	private ClassLoader classLoader;
+	private Package pckge;
+
+	private ValidatorInjector(Class<T> validatorClass, ClassLoader classLoader,
+			Package pckge) {
+		this.validatorClass = validatorClass;
+		this.classLoader = classLoader;
+		this.pckge = pckge;
+	}
+
+	public static ValidatorInjector<DaoValidator> getDaoValidatorInjector() {
+		return new ValidatorInjector<>(DaoValidator.class,
+				DefaultDaoValidator.class.getClassLoader(),
+				ReferencesValidator.class.getPackage());
+	}
+
+	public static ValidatorInjector<StreamingValidator<? extends GtfsObject<?>>> getStreamingValidatorInjector() {
+		@SuppressWarnings("unchecked")
+		ValidatorInjector<StreamingValidator<? extends GtfsObject<?>>> ret = new ValidatorInjector<>(
+				(Class<StreamingValidator<? extends GtfsObject<?>>>) (Class<?>) StreamingValidator.class,
+				DefaultStreamingValidator.class.getClassLoader(),
+				AgencyStreamingValidator.class.getPackage());
+		return ret;
+	}
+
+	public void listValidatorOptions(PrintStream pw) {
+		for (T validator : listAndInstantiateValidators()) {
 			@SuppressWarnings("unchecked")
 			Class<? extends T> clazz = (Class<? extends T>) validator
 					.getClass();
@@ -57,12 +85,9 @@ public class ValidatorInjector {
 		}
 	}
 
-	public static <T> List<? extends T> scanPackageAndInject(
-			Class<T> validatorClass, ClassLoader classLoader, Package pckge,
-			ValidatorConfig config) {
+	public List<? extends T> scanPackageAndInject(ValidatorConfig config) {
 		List<T> validators = new ArrayList<>();
-		for (T validator : listValidatorOfPackage(validatorClass, classLoader,
-				pckge)) {
+		for (T validator : listAndInstantiateValidators()) {
 			if (isValidatorEnabled(validator, config)) {
 				// Inject configuration using annotations
 				configureValidator(validator, config);
@@ -81,8 +106,7 @@ public class ValidatorInjector {
 		return validators;
 	}
 
-	private static <T> List<? extends T> listValidatorOfPackage(
-			Class<T> validatorClass, ClassLoader classLoader, Package pckge) {
+	private List<? extends T> listAndInstantiateValidators() {
 		List<T> ret = new ArrayList<>();
 		try {
 			ClassPath cp = ClassPath.from(classLoader);
@@ -113,8 +137,7 @@ public class ValidatorInjector {
 		return ret;
 	}
 
-	private static <T> boolean isValidatorEnabled(T validator,
-			ValidatorConfig config) {
+	private boolean isValidatorEnabled(T validator, ValidatorConfig config) {
 		@SuppressWarnings("unchecked")
 		Class<? extends T> clazz = (Class<? extends T>) validator.getClass();
 		boolean defEnabled = !clazz
@@ -129,8 +152,7 @@ public class ValidatorInjector {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> void configureValidator(T validator,
-			ValidatorConfig config) {
+	private void configureValidator(T validator, ValidatorConfig config) {
 		Class<? extends T> clazz = (Class<? extends T>) validator.getClass();
 		for (Field field : clazz.getDeclaredFields()) {
 			if (field.isAnnotationPresent(ConfigurableOption.class)) {

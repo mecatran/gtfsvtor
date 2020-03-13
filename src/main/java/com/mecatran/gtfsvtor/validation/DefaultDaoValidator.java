@@ -12,9 +12,7 @@ public class DefaultDaoValidator implements DaoValidator {
 
 	public DefaultDaoValidator(ValidatorConfig config) {
 		List<? extends DaoValidator> validators = ValidatorInjector
-				.scanPackageAndInject(DaoValidator.class,
-						this.getClass().getClassLoader(),
-						ReferencesValidator.class.getPackage(), config);
+				.getDaoValidatorInjector().scanPackageAndInject(config);
 		compound = new CompoundDaoValidator(validators);
 	}
 

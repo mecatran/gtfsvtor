@@ -5,7 +5,6 @@ import java.util.List;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.validation.impl.CompoundStreamingValidator;
 import com.mecatran.gtfsvtor.validation.impl.ValidatorInjector;
-import com.mecatran.gtfsvtor.validation.streaming.AgencyStreamingValidator;
 
 public class DefaultStreamingValidator
 		implements StreamingValidator<GtfsObject<?>> {
@@ -15,9 +14,7 @@ public class DefaultStreamingValidator
 	public DefaultStreamingValidator(ValidatorConfig config) {
 		@SuppressWarnings("unchecked")
 		List<? extends StreamingValidator<GtfsObject<?>>> validators = (List<? extends StreamingValidator<GtfsObject<?>>>) ValidatorInjector
-				.scanPackageAndInject(StreamingValidator.class,
-						this.getClass().getClassLoader(),
-						AgencyStreamingValidator.class.getPackage(), config);
+				.getStreamingValidatorInjector().scanPackageAndInject(config);
 		compound = new CompoundStreamingValidator(validators);
 	}
 
