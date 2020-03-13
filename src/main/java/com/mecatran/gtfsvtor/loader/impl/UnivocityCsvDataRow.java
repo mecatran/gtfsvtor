@@ -3,28 +3,26 @@ package com.mecatran.gtfsvtor.loader.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.csv.CSVRecord;
-
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.loader.DataRow;
 
-public class CsvDataRow implements DataRow {
+public class UnivocityCsvDataRow implements DataRow {
 
-	private CSVRecord record;
-	private CsvDataTable csvDataTable;
+	private String[] record;
+	private UnivocityCsvDataTable csvDataTable;
 
-	public CsvDataRow(CsvDataTable csvDataTable, CSVRecord record) {
+	public UnivocityCsvDataRow(UnivocityCsvDataTable csvDataTable,
+			String[] record) {
 		this.csvDataTable = csvDataTable;
 		this.record = record;
 	}
 
 	@Override
 	public String getString(String field) {
-		if (record.getRecordNumber() == 1)
-			csvDataTable.recordReadField(field);
-		if (!record.isSet(field))
+		int index = csvDataTable.fieldIndex(field);
+		if (index < 0 || index >= record.length)
 			return null;
-		String ret = record.get(field);
+		String ret = record[index];
 		if (ret == null)
 			return null;
 		if (ret.isEmpty())
@@ -34,14 +32,10 @@ public class CsvDataRow implements DataRow {
 
 	@Override
 	public DataObjectSourceInfo getSourceInfo() {
-		List<String> headerColumns = csvDataTable.getHeaderColumns();
+		List<String> headerColumns = csvDataTable.getColumnHeaders();
 		List<String> fields = new ArrayList<>(headerColumns.size());
-		for (String column : headerColumns) {
-			try {
-				fields.add(record.get(column));
-			} catch (IllegalArgumentException e) {
-				fields.add(null);
-			}
+		for (String field : record) {
+			fields.add(field);
 		}
 		return new DataObjectSourceInfoImpl(csvDataTable.getTableSourceInfo(),
 				fields, csvDataTable.getCurrentLineNumber());

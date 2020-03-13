@@ -37,6 +37,7 @@ jar {
 dependencies {
   compile 'com.google.guava:guava:21.0'
   compile 'org.apache.commons:commons-csv:1.7'
+  compile 'com.univocity:univocity-parsers:2.8.4'
   compile 'commons-io:commons-io:2.6'
   compile 'org.locationtech.jts:jts-core:1.16.1'
   compile 'com.googlecode.jatl:jatl:0.2.3'

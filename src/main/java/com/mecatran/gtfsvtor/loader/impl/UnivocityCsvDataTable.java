@@ -10,33 +10,36 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.input.BOMInputStream;
 
 import com.mecatran.gtfsvtor.loader.DataRow;
 import com.mecatran.gtfsvtor.loader.DataTable;
 import com.mecatran.gtfsvtor.loader.TableSourceInfo;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
 
-public class CsvDataTable implements DataTable {
+public class UnivocityCsvDataTable implements DataTable {
 
 	private String tableName;
-	private CSVParser csvParser;
-	private Iterator<CSVRecord> csvIterator;
+	private CsvParser csvParser;
 	private Set<String> readFields = new HashSet<>();
 	private Charset charset;
-
+	private Map<String, Integer> headerIndex = new HashMap<>();
+	private int headerSize = 0;
+	// TODO Enable this option
 	private boolean checkRecordConsistent = false;
+	private boolean emptyFile = false;
 
-	public CsvDataTable(String tableName, InputStream inputStream)
+	public UnivocityCsvDataTable(String tableName, InputStream inputStream)
 			throws IOException {
 		this.tableName = tableName;
 
@@ -69,33 +72,54 @@ public class CsvDataTable implements DataTable {
 				.onMalformedInput(CodingErrorAction.REPLACE);
 		final BufferedReader br = new BufferedReader(
 				new InputStreamReader(bomIn, decoder));
-		CSVFormat format = CSVFormat.DEFAULT.withDelimiter(',').withHeader()
-				.withNullString(null).withIgnoreSurroundingSpaces(true);
-		csvParser = new CSVParser(br, format);
-		csvIterator = csvParser.iterator();
+
+		CsvParserSettings settings = new CsvParserSettings();
+		settings.getFormat().setLineSeparator("\n");
+		settings.getFormat().setDelimiter(',');
+		settings.setHeaderExtractionEnabled(true);
+		settings.setNullValue(null);
+		settings.setIgnoreLeadingWhitespaces(true);
+		settings.setIgnoreTrailingWhitespaces(true);
+		csvParser = new CsvParser(settings);
+
+		csvParser.beginParsing(br);
+
+		String[] headers = csvParser.getContext().parsedHeaders();
+		if (headers == null) {
+			emptyFile = true;
+		} else {
+			emptyFile = false;
+			headerSize = headers.length;
+			for (int i = 0; i < headers.length; i++) {
+				headerIndex.put(headers[i], i);
+			}
+		}
 	}
 
 	@Override
 	public Iterator<DataRow> iterator() {
 		return new Iterator<DataRow>() {
 
+			private String[] record;
+
 			@Override
 			public boolean hasNext() {
-				return csvIterator.hasNext();
+				record = csvParser.parseNext();
+				return record != null;
 			}
 
 			@Override
 			public DataRow next() {
-				CSVRecord record = csvIterator.next();
-				if (checkRecordConsistent && !record.isConsistent()) {
+				if (record == null)
+					throw new NoSuchElementException();
+				if (checkRecordConsistent && record.length != headerSize) {
 					throw new IllegalArgumentException(String.format(
 							"Invalid line column count L%d (%s): %d vs %d columns in header.",
-							csvParser.getCurrentLineNumber(),
-							Arrays.toString(record.toMap().values().toArray()),
-							record.toMap().size(),
-							csvParser.getHeaderMap().size()));
+							getCurrentLineNumber(), Arrays.toString(record),
+							record.length, headerSize));
 				}
-				return new CsvDataRow(CsvDataTable.this, record);
+				return new UnivocityCsvDataRow(UnivocityCsvDataTable.this,
+						record);
 			}
 
 			@Override
@@ -105,28 +129,30 @@ public class CsvDataTable implements DataTable {
 		};
 	}
 
-	void recordReadField(String fieldName) {
-		readFields.add(fieldName);
+	int fieldIndex(String fieldName) {
+		if (getCurrentLineNumber() <= 2)
+			readFields.add(fieldName);
+		return headerIndex.getOrDefault(fieldName, -1);
 	}
 
 	@Override
 	public long getCurrentLineNumber() {
-		return csvParser.getCurrentLineNumber();
+		return csvParser.getContext().currentLine();
 	}
 
 	@Override
 	public void close() throws IOException {
-		csvParser.close();
+		// No-op, auto-close enabled
 	}
 
 	@Override
 	public TableSourceInfo getTableSourceInfo() {
-		return new TableSourceInfoImpl(tableName, getHeaderColumns());
+		return new TableSourceInfoImpl(tableName, getColumnHeaders());
 	}
 
 	@Override
 	public List<String> getUnreadColumnHeaders() {
-		List<String> ret = new ArrayList<>(csvParser.getHeaderNames());
+		List<String> ret = new ArrayList<>(getColumnHeaders());
 		for (String readField : readFields) {
 			// This is O(n), but number of CSV headers is probably low
 			while (ret.remove(readField)) {
@@ -137,7 +163,14 @@ public class CsvDataTable implements DataTable {
 
 	@Override
 	public List<String> getColumnHeaders() {
-		return Collections.unmodifiableList(csvParser.getHeaderNames());
+		List<String> ret = new ArrayList<>();
+		String[] headers = csvParser.getContext().headers();
+		if (headers != null) {
+			for (String header : headers) {
+				ret.add(header);
+			}
+		}
+		return ret;
 	}
 
 	@Override
@@ -147,11 +180,6 @@ public class CsvDataTable implements DataTable {
 
 	@Override
 	public boolean isEmpty() {
-		return csvParser.getHeaderNames().isEmpty()
-				&& csvParser.getCurrentLineNumber() == 0;
-	}
-
-	public List<String> getHeaderColumns() {
-		return csvParser.getHeaderNames();
+		return emptyFile;
 	}
 }
