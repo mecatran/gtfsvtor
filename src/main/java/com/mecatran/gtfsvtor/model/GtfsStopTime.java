@@ -87,7 +87,7 @@ public interface GtfsStopTime extends GtfsObject<String> {
 			int seq1 = time1.getStopSequence() == null ? Integer.MIN_VALUE
 					: time1.getStopSequence().getSequence();
 			int seq2 = time2.getStopSequence() == null ? Integer.MIN_VALUE
-					: time1.getStopSequence().getSequence();
+					: time2.getStopSequence().getSequence();
 			return Integer.compare(seq1, seq2);
 		}
 	};
