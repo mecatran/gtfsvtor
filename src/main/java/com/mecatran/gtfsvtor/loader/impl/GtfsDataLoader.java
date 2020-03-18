@@ -306,6 +306,7 @@ public class GtfsDataLoader implements DataLoader {
 	}
 
 	private void loadStopTimes(DataLoader.Context context) {
+		long start = System.currentTimeMillis();
 		DataTable table = getDataTable(GtfsStopTime.TABLE_NAME, true,
 				context.getReportSink());
 		if (table == null)
@@ -343,8 +344,10 @@ public class GtfsDataLoader implements DataLoader {
 				System.out.print("\r" + nStopTimes);
 			}
 		}
+		long end = System.currentTimeMillis();
 		if (nStopTimes > 100000)
-			System.out.println("\rLoaded " + nStopTimes + " stop times.");
+			System.out.println("\rLoaded " + nStopTimes + " stop times in "
+					+ (end - start) + "ms");
 		closeTable(table, context.getReportSink());
 	}
 
