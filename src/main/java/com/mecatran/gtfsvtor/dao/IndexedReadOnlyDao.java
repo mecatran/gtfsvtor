@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
+import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
@@ -41,6 +42,8 @@ public interface IndexedReadOnlyDao extends ReadOnlyDao {
 	public Collection<GtfsTrip> getTripsOfRoute(GtfsRoute.Id routeId);
 
 	public Collection<GtfsTrip> getTripsOfCalendar(GtfsCalendar.Id calendarId);
+
+	public Collection<GtfsFrequency> getFrequenciesOfTrip(GtfsTrip.Id tripId);
 
 	public CalendarIndex getCalendarIndex();
 

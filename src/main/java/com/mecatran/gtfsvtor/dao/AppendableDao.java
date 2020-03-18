@@ -4,6 +4,7 @@ import com.mecatran.gtfsvtor.loader.DataLoader.SourceContext;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -28,6 +29,8 @@ public interface AppendableDao {
 	public void addTrip(GtfsTrip trip, SourceContext info);
 
 	public void addStopTime(GtfsStopTime stopTime, SourceContext info);
+
+	public void addFrequency(GtfsFrequency frequency, SourceContext info);
 
 	public void close();
 }

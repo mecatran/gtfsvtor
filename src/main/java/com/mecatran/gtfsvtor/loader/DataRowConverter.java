@@ -11,6 +11,7 @@ import com.mecatran.gtfsvtor.model.GtfsBlockId;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
+import com.mecatran.gtfsvtor.model.GtfsExactTime;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -370,6 +371,19 @@ public class DataRowConverter {
 		} catch (IllegalArgumentException e) {
 			reportSink.report(
 					fieldFormatError(field, str, "bike access (0, 1, 2)"));
+			return null;
+		}
+	}
+
+	public GtfsExactTime getExactTimes(String field) {
+		String str = getString(field);
+		if (str == null || str.isEmpty())
+			return null;
+		try {
+			return GtfsExactTime.fromValue(Integer.parseInt(str));
+		} catch (IllegalArgumentException e) {
+			reportSink
+					.report(fieldFormatError(field, str, "Exact times (0, 1)"));
 			return null;
 		}
 	}

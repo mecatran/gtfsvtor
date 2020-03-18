@@ -15,6 +15,7 @@ import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsRouteType;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -69,6 +70,8 @@ public class GtfsDataLoader implements DataLoader {
 		loadTrips(context);
 		// Stop times references trips, stops
 		loadStopTimes(context);
+		// Frequencies references trips
+		loadFrequencies(context);
 		reportUnreadTables(context.getReportSink());
 		context.getDao().close();
 	}
@@ -348,6 +351,34 @@ public class GtfsDataLoader implements DataLoader {
 		if (nStopTimes > 100000)
 			System.out.println("\rLoaded " + nStopTimes + " stop times in "
 					+ (end - start) + "ms");
+		closeTable(table, context.getReportSink());
+	}
+
+	private void loadFrequencies(DataLoader.Context context) {
+		DataTable table = getDataTable(GtfsFrequency.TABLE_NAME, false,
+				context.getReportSink());
+		if (table == null)
+			return;
+		checkMandatoryColumns(context.getReportSink(), table, "trip_id",
+				"start_time", "end_time", "headway_secs");
+		DataTableContext sourceContext = new DataTableContext(table,
+				context.getReportSink(), context.getReadOnlyDao());
+		for (DataRow row : table) {
+			DataRowConverter erow = new DataRowConverter(row,
+					context.getReportSink());
+			GtfsFrequency.Builder builder = new GtfsFrequency.Builder();
+			builder.withSourceInfo(row.getSourceInfo())
+					.withTripId(GtfsTrip.id(erow.getString("trip_id")))
+					.withStartTime(erow.getLogicalTime("start_time"))
+					.withEndTime(erow.getLogicalTime("end_time"))
+					.withHeadwaySeconds(erow.getInteger("headway_secs", true))
+					.withExactTimes(erow.getExactTimes("exact_times"));
+			GtfsFrequency frequency = builder.build();
+			sourceContext.setRow(row);
+			context.getStreamingValidator().validate(GtfsFrequency.class,
+					frequency, sourceContext);
+			context.getDao().addFrequency(frequency, sourceContext);
+		}
 		closeTable(table, context.getReportSink());
 	}
 

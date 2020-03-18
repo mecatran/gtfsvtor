@@ -31,6 +31,8 @@ import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
+import com.mecatran.gtfsvtor.model.GtfsExactTime;
+import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
@@ -209,6 +211,19 @@ public class TestGtfs {
 		List<GtfsStopTime> unknownStopTimes = dao
 				.getStopTimesOfTrip(GtfsTrip.id("FOOBAR"));
 		assertTrue(unknownStopTimes.isEmpty());
+
+		Collection<GtfsFrequency> frequencies = dao.getFrequencies();
+		assertEquals(11, frequencies.size());
+		frequencies = dao.getFrequenciesOfTrip(GtfsTrip.id("STBA"));
+		assertEquals(1, frequencies.size());
+		GtfsFrequency frequency = frequencies.iterator().next();
+		assertEquals(GtfsTrip.id("STBA"), frequency.getTripId());
+		assertEquals(GtfsLogicalTime.getTime(6, 0, 0),
+				frequency.getStartTime());
+		assertEquals(GtfsLogicalTime.getTime(22, 0, 0), frequency.getEndTime());
+		assertEquals(new Integer(1800), frequency.getHeadwaySeconds());
+		assertEquals(GtfsExactTime.FREQUENCY_BASED,
+				frequency.getNonNullExactTime());
 	}
 
 	@Test

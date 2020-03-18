@@ -20,6 +20,7 @@ import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
@@ -40,6 +41,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private ListMultimap<GtfsTrip.Id, GtfsStopTime> stopTimes = ArrayListMultimap
 			.create();
 	private ListMultimap<GtfsShape.Id, GtfsShapePoint> shapePoints = ArrayListMultimap
+			.create();
+	private ListMultimap<GtfsTrip.Id, GtfsFrequency> frequencies = ArrayListMultimap
 			.create();
 	private Multimap<GtfsCalendar.Id, GtfsCalendarDate> calendarDates = ArrayListMultimap
 			.create();
@@ -151,6 +154,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
+	public Collection<GtfsFrequency> getFrequencies() {
+		return Collections.unmodifiableCollection(frequencies.values());
+	}
+
+	@Override
 	public int getStopTimesCount() {
 		return stopTimes.size();
 	}
@@ -199,6 +207,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public Collection<GtfsTrip> getTripsOfCalendar(GtfsCalendar.Id calendarId) {
 		return Collections
 				.unmodifiableCollection(tripsPerCalendar.get(calendarId));
+	}
+
+	@Override
+	public Collection<GtfsFrequency> getFrequenciesOfTrip(GtfsTrip.Id tripId) {
+		return Collections.unmodifiableCollection(frequencies.get(tripId));
 	}
 
 	@Override
@@ -414,6 +427,18 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		// But we add times w/o stops
 		stopTimes.put(stopTime.getTripId(), stopTime);
 		// TODO: Add index stop->trip, stop->route?
+	}
+
+	@Override
+	public void addFrequency(GtfsFrequency frequency,
+			DataLoader.SourceContext sourceContext) {
+		// Do not add frequency w/o trip ID
+		if (frequency.getTripId() == null) {
+			sourceContext.getReportSink().report(new MissingObjectIdError(
+					sourceContext.getSourceInfo(), "trip_id"));
+			return;
+		}
+		frequencies.put(frequency.getTripId(), frequency);
 	}
 
 	@Override

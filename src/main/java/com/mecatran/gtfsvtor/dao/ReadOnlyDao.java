@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -47,6 +48,8 @@ public interface ReadOnlyDao {
 	public Collection<GtfsTrip> getTrips();
 
 	public GtfsTrip getTrip(GtfsTrip.Id tripId);
+
+	public Collection<GtfsFrequency> getFrequencies();
 
 	public int getStopTimesCount();
 
