@@ -1,3 +1,3 @@
-agency_id,agency_url,agency_url,agency_timezone,agency_phone
-DTA,Autorité de passage de démonstration,http://google.com,America/Los_Angeles,123 12314
-DTA_UNUSED,,badurl.com,Mars/Pluto,Unknown phone
+agency_id,agency_lang,agency_url,agency_url,agency_timezone,agency_phone,agency_email
+DTA,en,Autorité de passage de démonstration,http://google.com,America/Los_Angeles,123 12314,
+DTA_UNUSED,ZZ,,badurl.com,Mars/Pluto,Unknown phone,@bogusmail

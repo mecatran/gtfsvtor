@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.validation.streaming;
 
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkNonNull;
+import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkUrl;
 
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
@@ -25,6 +26,7 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 		ReportSink reportSink = context.getReportSink();
 		ReadOnlyDao dao = context.getPartialDao();
 		checkNonNull(route::getAgencyId, "agency_id", context);
+		checkUrl(route::getUrl, "route_url", context);
 		// Check route->agency reference
 		if (route.getAgencyId() != null
 				&& dao.getAgency(route.getAgencyId()) == null) {

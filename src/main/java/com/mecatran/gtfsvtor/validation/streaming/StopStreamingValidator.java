@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.validation.streaming;
 
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkNonNull;
+import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkUrl;
 
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
@@ -24,6 +25,7 @@ public class StopStreamingValidator implements StreamingValidator<GtfsStop> {
 			checkNonNull(stop::getLat, "stop_lat", context);
 			checkNonNull(stop::getLon, "stop_lon", context);
 		}
+		checkUrl(stop::getUrl, "stop_url", context);
 		if (stop.getParentId() != null && stop.getTimezone() != null) {
 			reportSink.report(new InvalidFieldValueError(
 					context.getSourceInfo(), stop.getTimezone().getID(),

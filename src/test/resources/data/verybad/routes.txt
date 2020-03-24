@@ -5,5 +5,5 @@ BFC,DTA,,Bullfrog ⇒ Furnace Creek Resort,,3,,,
 STBA,DTA,,Stagecoach ⇒ Airport Shuttle,,3,,,
 CITY,DTA,Ō,Bar Circle,Route with ĸool unicode shortname,3,,FE0000,FF5555,
 AAMV,DTA,,Airport ⇒ Amargosa Valley,,3,,FF0000,FF5555,
-AZ,FOO,AAZZ,Airport Zanzibar,,1,,00AA00,FFF,Extra unused data
+AZ,FOO,AAZZ,Airport Zanzibar,,1,somebadurl,00AA00,FFF,Extra unused data
 UNUSED,DTA,,Unused route,,1,,000000,FFFFFF,
