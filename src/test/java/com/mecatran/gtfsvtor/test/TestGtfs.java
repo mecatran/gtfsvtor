@@ -886,6 +886,20 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testBogusFrequencies() {
+		TestBundle tb = loadAndValidate("bogus_frequencies");
+		List<InvalidFieldValueError> ifvs = tb.report
+				.getReportIssues(InvalidFieldValueError.class);
+		assertEquals(1, ifvs.size());
+		List<InvalidFieldFormatError> iffs = tb.report
+				.getReportIssues(InvalidFieldFormatError.class);
+		assertEquals(1, iffs.size());
+		List<MissingMandatoryValueError> mmvs = tb.report
+				.getReportIssues(MissingMandatoryValueError.class);
+		assertEquals(5, mmvs.size());
+	}
+
+	@Test
 	public void testMBTA42951766() {
 		TestBundle tb = loadAndValidate("MBTA_42951766");
 		IndexedReadOnlyDao dao = tb.dao;
