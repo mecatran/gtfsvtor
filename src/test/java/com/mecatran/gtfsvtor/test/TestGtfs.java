@@ -71,6 +71,7 @@ import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromShapeIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelAtStopError;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelError;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
+import com.mecatran.gtfsvtor.reporting.issues.TooManyDaysWithoutServiceIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
@@ -901,6 +902,18 @@ public class TestGtfs {
 		List<MissingMandatoryValueError> mmvs = tb.report
 				.getReportIssues(MissingMandatoryValueError.class);
 		assertEquals(5, mmvs.size());
+	}
+
+	@Test
+	public void testTooManyDaysWoService() {
+		TestBundle tb = loadAndValidate("toomanydayswoservice");
+		List<TooManyDaysWithoutServiceIssue> tmws = tb.report
+				.getReportIssues(TooManyDaysWithoutServiceIssue.class);
+		assertEquals(1, tmws.size());
+		TooManyDaysWithoutServiceIssue tmw0 = tmws.get(0);
+		assertEquals(8, tmw0.getNumberOfDays());
+		assertEquals(GtfsLogicalDate.getDate(2007, 6, 4), tmw0.getFromDate());
+		assertEquals(GtfsLogicalDate.getDate(2007, 6, 11), tmw0.getToDate());
 	}
 
 	@Test
