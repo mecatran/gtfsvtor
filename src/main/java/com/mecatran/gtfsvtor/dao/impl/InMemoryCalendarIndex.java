@@ -10,12 +10,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.mecatran.gtfsvtor.dao.CalendarIndex;
-import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
+import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
@@ -28,9 +29,11 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	private Map<GtfsCalendar.Id, SortedSet<GtfsLogicalDate>> datesPerCalendar = new HashMap<>();
 	private SetMultimap<GtfsLogicalDate, GtfsCalendar.Id> calendarsPerDate = HashMultimap
 			.create();
+	private Map<GtfsLogicalDate, AtomicInteger> tripCountPerDate = new HashMap<>();
 	private Map<List<GtfsCalendar.Id>, OverlappingCalendarInfo> calendarOverlapCache = new HashMap<>();
+	private List<GtfsLogicalDate> allDatesSorted;
 
-	protected InMemoryCalendarIndex(ReadOnlyDao dao) {
+	protected InMemoryCalendarIndex(IndexedReadOnlyDao dao) {
 		/*
 		 * Here we do not validate any fields for mandatory values. If not
 		 * provided, we just ignore them or assume sane default values (null is
@@ -87,14 +90,25 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 				break;
 			}
 		}
-		/* Build the reversed index: calendar IDs for each date */
+		/*
+		 * Build the reversed indexes: 1) calendar IDs for each date, 2) number
+		 * of active trips for each date
+		 */
 		for (Map.Entry<GtfsCalendar.Id, SortedSet<GtfsLogicalDate>> kv : datesPerCalendar
 				.entrySet()) {
 			GtfsCalendar.Id calendarId = kv.getKey();
+			int tripCountForCalendar = dao.getTripsOfCalendar(calendarId)
+					.size();
 			for (GtfsLogicalDate date : kv.getValue()) {
 				calendarsPerDate.put(date, calendarId);
+				tripCountPerDate
+						.computeIfAbsent(date, d -> new AtomicInteger(0))
+						.addAndGet(tripCountForCalendar);
 			}
 		}
+		/* Build the sorted list of all calendar dates */
+		allDatesSorted = calendarsPerDate.asMap().keySet().stream().sorted()
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -115,6 +129,17 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	public Collection<GtfsCalendar.Id> getCalendarIdsOnDate(
 			GtfsLogicalDate date) {
 		return Collections.unmodifiableCollection(calendarsPerDate.get(date));
+	}
+
+	@Override
+	public int getTripCountOnDate(GtfsLogicalDate date) {
+		AtomicInteger ret = tripCountPerDate.get(date);
+		return ret == null ? 0 : ret.get();
+	}
+
+	@Override
+	public List<GtfsLogicalDate> getSortedDates() {
+		return Collections.unmodifiableList(allDatesSorted);
 	}
 
 	@Override

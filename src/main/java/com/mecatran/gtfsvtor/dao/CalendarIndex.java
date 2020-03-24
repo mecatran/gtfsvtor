@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.dao;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.SortedSet;
 
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
@@ -39,6 +40,19 @@ public interface CalendarIndex {
 
 	public Collection<GtfsCalendar.Id> getCalendarIdsOnDate(
 			GtfsLogicalDate date);
+
+	/**
+	 * @param date
+	 * @return The number of trips running on that date. Note: do not take into
+	 *         account frequencies.
+	 */
+	public int getTripCountOnDate(GtfsLogicalDate date);
+
+	/**
+	 * @return A sorted list of all distinct dates where at least one calendar
+	 *         is applicable.
+	 */
+	public List<GtfsLogicalDate> getSortedDates();
 
 	/**
 	 * @return The overlapping calendar info (number of overlapping days,
