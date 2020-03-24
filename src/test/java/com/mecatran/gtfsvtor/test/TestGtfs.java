@@ -62,6 +62,7 @@ import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
+import com.mecatran.gtfsvtor.reporting.issues.NonIncreasingShapeDistTraveledError;
 import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
@@ -698,6 +699,9 @@ public class TestGtfs {
 		assertEquals(1, ires.size());
 		InvalidReferenceError ire = ires.get(0);
 		assertEquals("INEXISTING_SHAPE", ire.getValue());
+		List<NonIncreasingShapeDistTraveledError> nisd = tb.report
+				.getReportIssues(NonIncreasingShapeDistTraveledError.class);
+		assertEquals(2, nisd.size());
 	}
 
 	@Test
