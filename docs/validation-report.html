@@ -149,7 +149,7 @@ span.var {
 
 		</style>
 		<h1>GTFS validation report
-			<span class="xsmaller"> • 7 
+			<span class="xsmaller"> • 6 
 				<span class="badge INFO">INFO
 				</span>
 			</span>
@@ -157,7 +157,7 @@ span.var {
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="xsmaller"> • 51 
+			<span class="xsmaller"> • 61 
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -167,7 +167,7 @@ span.var {
 				<span class="smaller badge INFO">INFO
 				</span>Statistics
 			</li>
-			<li>4 
+			<li>3 
 				<span class="smaller badge INFO">INFO
 				</span>Unknown file
 			</li>
@@ -277,6 +277,14 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid end_time format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid end_time value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid location_type format
 			</li>
 			<li>1 
@@ -313,6 +321,10 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid start_time format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid station parent type
 			</li>
 			<li>1 
@@ -339,9 +351,21 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory departure_time value
 			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory end_time value
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory headway_secs value
+			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory service_id value
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory start_time value
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -351,7 +375,7 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory stop_lon value
 			</li>
-			<li>1 
+			<li>2 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing object ID
 			</li>
@@ -411,7 +435,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Time-travel between <span class='id'>NANAA</span> @6:51:00 and <span class='id'>STAGECOACH</span> @6:58:00, in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>, arrival before departure.
+					<td class="issue">Time-travel between stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @6:51:00 and stop <span class='id'>STAGECOACH</span> seq <span class='id'>500</span> @6:58:00, in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>, arrival before departure.
 					</td>
 				</tr>
 			</table>
@@ -433,7 +457,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between <span class='id'>NADAV</span> @10:00:00 and <span class='id'>NANAA</span> @10:00:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1078,34</span> > <span class='var'>16,67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NADAV</span> seq <span class='id'>300</span> @10:00:00 and stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @10:00:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1078,34</span> > <span class='var'>16,67</span> m/s
 					</td>
 				</tr>
 				<tr>
@@ -441,7 +465,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between <span class='id'>NANAA</span> @10:00:00 and <span class='id'>STAGECOACH</span> @10:00:00 (distance <span class='var'>63410,16</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1056,84</span> > <span class='var'>16,67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @10:00:00 and stop <span class='id'>STAGECOACH</span> seq <span class='id'>500</span> @10:00:00 (distance <span class='var'>63410,16</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1056,84</span> > <span class='var'>16,67</span> m/s
 					</td>
 				</tr>
 				<tr>
@@ -449,7 +473,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between <span class='id'>NANAA</span> @6:07:00 and <span class='id'>NADAV</span> @6:14:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>215,67</span> > <span class='var'>16,67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NANAA</span> seq <span class='id'>5</span> @6:07:00 and stop <span class='id'>NADAV</span> seq <span class='id'>10</span> @6:14:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>215,67</span> > <span class='var'>16,67</span> m/s
 					</td>
 				</tr>
 				<tr>
@@ -457,7 +481,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between <span class='id'>STAGECOACH</span> @6:00:00 and <span class='id'>NANAA</span> @6:07:00 (distance <span class='var'>63410,16</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>211,37</span> > <span class='var'>16,67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>STAGECOACH</span> seq <span class='id'>0</span> @6:00:00 and stop <span class='id'>NANAA</span> seq <span class='id'>5</span> @6:07:00 (distance <span class='var'>63410,16</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>211,37</span> > <span class='var'>16,67</span> m/s
 					</td>
 				</tr>
 				<tr>
@@ -465,7 +489,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between <span class='id'>NADAV</span> @6:44:00 and <span class='id'>NANAA</span> @6:51:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>179,72</span> > <span class='var'>16,67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NADAV</span> seq <span class='id'>300</span> @6:44:00 and stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @6:51:00 (distance <span class='var'>64700,49</span>m), in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>179,72</span> > <span class='var'>16,67</span> m/s
 					</td>
 				</tr>
 				<tr>
@@ -473,7 +497,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between <span class='id'>STAGECOACH</span> @10:00:00 and <span class='id'>EMSI</span> @10:00:00 (distance <span class='var'>1450,76</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>24,18</span> > <span class='var'>16,67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>STAGECOACH</span> seq <span class='id'>500</span> @10:00:00 and stop <span class='id'>EMSI</span> seq <span class='id'>600</span> @10:00:00 (distance <span class='var'>1450,76</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>24,18</span> > <span class='var'>16,67</span> m/s
 					</td>
 				</tr>
 			</table>
@@ -497,7 +521,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Unknown file
-			<span class="smaller"> • 4
+			<span class="smaller"> • 3
 				<span class="badge INFO">INFO
 				</span>
 			</span>
@@ -518,14 +542,6 @@ span.var {
 					<td class="fieldname">
 					</td>
 					<td class="issue">Unknown file <span class='pre'>fare_rules.txt</span>
-					</td>
-				</tr>
-				<tr>
-					<td class="severity INFO">INFO
-					</td>
-					<td class="fieldname">
-					</td>
-					<td class="issue">Unknown file <span class='pre'>frequencies.txt</span>
 					</td>
 				</tr>
 				<tr>
@@ -699,7 +715,7 @@ span.var {
 					</td>
 					<td>DTA
 					</td>
-					<td>http://google.com
+					<td>Autorité de passage de démonstration
 					</td>
 					<td>http://google.com
 					</td>
@@ -743,8 +759,7 @@ span.var {
 					</td>
 					<td class="WARNING">DTA_UNUSED
 					</td>
-					<td>badurl.com
-					</td>
+					<td/>
 					<td>badurl.com
 					</td>
 					<td class="ERROR">Mars/Pluto
@@ -843,7 +858,7 @@ span.var {
 				<tr>
 					<td class="linenr">L4
 					</td>
-					<td>MONDAY
+					<td class="WARNING">MONDAY
 					</td>
 					<td>1
 					</td>
@@ -869,7 +884,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>MONDAY</span>
 					</td>
@@ -997,7 +1012,7 @@ span.var {
 				<tr>
 					<td class="linenr">L5
 					</td>
-					<td>UNUSED
+					<td class="WARNING">UNUSED
 					</td>
 					<td>0
 					</td>
@@ -1023,7 +1038,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>UNUSED</span>
 					</td>
@@ -1061,7 +1076,7 @@ span.var {
 				<tr>
 					<td class="linenr">L6
 					</td>
-					<td>INVERTED
+					<td class="WARNING">INVERTED
 					</td>
 					<td>0
 					</td>
@@ -1111,7 +1126,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>INVERTED</span>
 					</td>
@@ -1149,7 +1164,7 @@ span.var {
 				<tr>
 					<td class="linenr">L7
 					</td>
-					<td>NODOW
+					<td class="WARNING">NODOW
 					</td>
 					<td class="ERROR">0
 					</td>
@@ -1191,7 +1206,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar</span> ID <span class='id'>NODOW</span>
 					</td>
@@ -1243,7 +1258,7 @@ span.var {
 				<tr>
 					<td class="linenr">L3
 					</td>
-					<td>MONDAY
+					<td class="WARNING">MONDAY
 					</td>
 					<td>20070101
 					</td>
@@ -1255,7 +1270,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>MONDAY</span>
 					</td>
@@ -1279,7 +1294,7 @@ span.var {
 				<tr>
 					<td class="linenr">L4
 					</td>
-					<td>MONDAY2
+					<td class="WARNING">MONDAY2
 					</td>
 					<td>20070101
 					</td>
@@ -1299,7 +1314,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>MONDAY2</span>
 					</td>
@@ -1323,7 +1338,7 @@ span.var {
 				<tr>
 					<td class="linenr">L5
 					</td>
-					<td>INVERTED
+					<td class="WARNING">INVERTED
 					</td>
 					<td class="ERROR">20073108
 					</td>
@@ -1343,7 +1358,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>INVERTED</span>
 					</td>
@@ -1367,7 +1382,7 @@ span.var {
 				<tr>
 					<td class="linenr">L6
 					</td>
-					<td>UNUSED
+					<td class="WARNING">UNUSED
 					</td>
 					<td>20070831
 					</td>
@@ -1379,7 +1394,7 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>UNUSED</span>
 					</td>
@@ -1403,7 +1418,7 @@ span.var {
 				<tr>
 					<td class="linenr">L7
 					</td>
-					<td>INVERTED
+					<td class="WARNING">INVERTED
 					</td>
 					<td class="ERROR">19000101
 					</td>
@@ -1423,9 +1438,281 @@ span.var {
 				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">calendar_id
+					<td class="fieldname">service_id
 					</td>
 					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>INVERTED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>frequencies.txt
+			<span class="smaller"> • 10
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid end_time format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid end_time value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid start_time format
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory end_time value
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory headway_secs value
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory start_time value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing object ID
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>start_time
+						</td>
+						<td>end_time
+						</td>
+						<td>headway_secs
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L9
+					</td>
+					<td>CITY1
+					</td>
+					<td>19:00:00
+					</td>
+					<td class="ERROR">18:59:59
+					</td>
+					<td>-600
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">end_time
+					</td>
+					<td class="issue">Invalid value <span class='var'>18:59:59</span>: end time should be greater or equal than start time
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>start_time
+						</td>
+						<td>end_time
+						</td>
+						<td>headway_secs
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L10
+					</td>
+					<td>CITY2
+					</td>
+					<td>16:00:00
+					</td>
+					<td>18:59:59
+					</td>
+					<td class="ERROR"/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">headway_secs
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">headway_secs
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>start_time
+						</td>
+						<td>end_time
+						</td>
+						<td>headway_secs
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td>CITY2
+					</td>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td>600
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">start_time
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">end_time
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>start_time
+						</td>
+						<td>end_time
+						</td>
+						<td>headway_secs
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td>CITY1
+					</td>
+					<td class="ERROR">19:00
+					</td>
+					<td class="ERROR">22:00
+					</td>
+					<td>1800
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">start_time
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>19:00</span>, expected: time (HH:MM:SS) Invalid time format, should be hh:mm:ss. Found: 19:00
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">end_time
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>22:00</span>, expected: time (HH:MM:SS) Invalid time format, should be hh:mm:ss. Found: 22:00
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">start_time
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">end_time
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>start_time
+						</td>
+						<td>end_time
+						</td>
+						<td>headway_secs
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td class="ERROR"/>
+					<td>19:00:00
+					</td>
+					<td>22:00:00
+					</td>
+					<td>1800
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">trip_id
+					</td>
+					<td class="issue">Missing mandatory object ID
 					</td>
 				</tr>
 			</table>
@@ -1557,20 +1844,14 @@ span.var {
 					</td>
 					<td>DTA
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>Airport ⇒ Bullfrog
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>3
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td/>
 				</tr>
 				<tr>
@@ -1584,16 +1865,13 @@ span.var {
 					</td>
 					<td>THIS ROUTE NAME IS TOO LONG
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>99
 					</td>
 					<td>000000
 					</td>
 					<td>000000
 					</td>
-					<td/>
-					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -1646,16 +1924,13 @@ span.var {
 					</td>
 					<td class="ERROR">THIS ROUTE NAME IS TOO LONG
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>99
 					</td>
 					<td>000000
 					</td>
 					<td class="WARNING">000000
 					</td>
-					<td class="WARNING"/>
-					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -1736,14 +2011,12 @@ span.var {
 					</td>
 					<td>3
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">FE0000
 					</td>
 					<td class="WARNING">FF5555
 					</td>
-					<td>
-					</td>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -1800,14 +2073,12 @@ span.var {
 					</td>
 					<td>3
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">FE0000
 					</td>
 					<td>FF5555
 					</td>
-					<td>
-					</td>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L7
@@ -1816,22 +2087,18 @@ span.var {
 					</td>
 					<td>DTA
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>Airport ⇒ Amargosa Valley
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>3
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">FF0000
 					</td>
 					<td>FF5555
 					</td>
-					<td>
-					</td>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -1880,22 +2147,18 @@ span.var {
 					</td>
 					<td>DTA
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>Airport ⇒ Amargosa Valley
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>3
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">FF0000
 					</td>
 					<td class="WARNING">FF5555
 					</td>
-					<td>
-					</td>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -1948,12 +2211,10 @@ span.var {
 					</td>
 					<td>Airport Zanzibar
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>1
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>00AA00
 					</td>
 					<td class="ERROR">FFF
@@ -2024,22 +2285,18 @@ span.var {
 					</td>
 					<td>DTA
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>Unused route
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>1
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>000000
 					</td>
 					<td>FFFFFF
 					</td>
-					<td>
-					</td>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2116,14 +2373,10 @@ span.var {
 					</td>
 					<td>0
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2170,20 +2423,15 @@ span.var {
 					</td>
 					<td>6:35:00
 					</td>
-					<td class="ERROR">
-					</td>
+					<td class="ERROR"/>
 					<td>DADAN
 					</td>
 					<td>200
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2228,22 +2476,17 @@ span.var {
 					</td>
 					<td>CITY2
 					</td>
-					<td class="ERROR">
-					</td>
+					<td class="ERROR"/>
 					<td>6:44:00
 					</td>
 					<td>NADAV
 					</td>
 					<td>300
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2296,14 +2539,10 @@ span.var {
 					</td>
 					<td>100
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2356,14 +2595,10 @@ span.var {
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2416,14 +2651,10 @@ span.var {
 					</td>
 					<td>2
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2588,26 +2819,19 @@ span.var {
 					</td>
 					<td>Furnace Creek Resort (Demo)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.425288
 					</td>
 					<td>-117.133162
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L12
@@ -2616,26 +2840,19 @@ span.var {
 					</td>
 					<td>Furnace Creek Resort (duplicated entity)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.425288
 					</td>
 					<td>-117.133162
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2688,26 +2905,19 @@ span.var {
 					</td>
 					<td>Furnace Creek Resort (Demo)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">36.425288
 					</td>
 					<td class="WARNING">-117.133162
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L13
@@ -2716,26 +2926,20 @@ span.var {
 					</td>
 					<td>Unused stop
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">36.425288
 					</td>
 					<td class="WARNING">-117.133162
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
 					<td>0
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2788,16 +2992,13 @@ span.var {
 					</td>
 					<td>Nye County Airport (Demo)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="ERROR">36.868446
 					</td>
 					<td class="ERROR">-116.784582
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1235
 					</td>
 					<td>0
@@ -2806,8 +3007,7 @@ span.var {
 					</td>
 					<td class="ERROR">America/Phoenix
 					</td>
-					<td>
-					</td>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2868,26 +3068,18 @@ span.var {
 					</td>
 					<td>Bullfrog (Demo)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="ERROR">36.88108
 					</td>
 					<td class="ERROR">-116.81797
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -2948,26 +3140,20 @@ span.var {
 					</td>
 					<td>North Ave / D Ave N (Demo)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.914893
 					</td>
 					<td>-116.76821
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1237
 					</td>
 					<td class="ERROR">0
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L19
@@ -2976,26 +3162,21 @@ span.var {
 					</td>
 					<td>Stop with invalid parent station type
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.914876
 					</td>
 					<td>-116.76828
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1237
 					</td>
 					<td class="ERROR">0
 					</td>
 					<td class="ERROR">NADAV
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3048,26 +3229,20 @@ span.var {
 					</td>
 					<td>North Ave / N A Ave (Demo)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.6666
 					</td>
 					<td>-116.1111
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1238
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3120,26 +3295,20 @@ span.var {
 					</td>
 					<td>Unused stop
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.425288
 					</td>
 					<td>-117.133162
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
 					<td>0
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3192,26 +3361,20 @@ span.var {
 					</td>
 					<td>Unused station
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.425288
 					</td>
 					<td>-117.133162
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3264,26 +3427,20 @@ span.var {
 					</td>
 					<td>Stop with wrong type
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.428
 					</td>
 					<td>-117.133
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
 					<td class="ERROR">99
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3344,26 +3501,17 @@ span.var {
 					</td>
 					<td>Stop with no location
 					</td>
-					<td>
-					</td>
-					<td class="ERROR">
-					</td>
-					<td class="ERROR">
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td/>
+					<td/>
 					<td>1234
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3432,26 +3580,18 @@ span.var {
 					</td>
 					<td>Stop with (0,0) coordinates
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>0.0
 					</td>
 					<td>0
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3504,26 +3644,21 @@ span.var {
 					</td>
 					<td>Stop with unknown parent station
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.914876
 					</td>
 					<td>-116.76828
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1237
 					</td>
 					<td>0
 					</td>
 					<td class="ERROR">BOGUS
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3584,26 +3719,21 @@ span.var {
 					</td>
 					<td>Stop with unknown parent station
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">36.914876
 					</td>
 					<td class="WARNING">-116.76828
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1237
 					</td>
 					<td>0
 					</td>
 					<td>BOGUS
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L19
@@ -3612,26 +3742,21 @@ span.var {
 					</td>
 					<td>Stop with invalid parent station type
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="WARNING">36.914876
 					</td>
 					<td class="WARNING">-116.76828
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1237
 					</td>
 					<td>0
 					</td>
 					<td>NADAV
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3684,26 +3809,21 @@ span.var {
 					</td>
 					<td>Stop with invalid parent station type
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.914876
 					</td>
 					<td>-116.76828
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1237
 					</td>
 					<td>0
 					</td>
 					<td>NADAV
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3756,26 +3876,20 @@ span.var {
 					</td>
 					<td>North Ave / N A Ave (too close)
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td>36.90001
 					</td>
 					<td>-116.7
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 					<td>1238
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3934,10 +4048,8 @@ span.var {
 					</td>
 					<td class="ERROR">2
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -3986,10 +4098,8 @@ span.var {
 					</td>
 					<td class="ERROR">3
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4038,10 +4148,8 @@ span.var {
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L15
@@ -4056,10 +4164,8 @@ span.var {
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4100,18 +4206,15 @@ span.var {
 					</td>
 					<td class="ERROR">BOGUS
 					</td>
-					<td class="ERROR">
-					</td>
+					<td class="ERROR"/>
 					<td>AAMV5
 					</td>
 					<td>Unknown route and no service
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4160,18 +4263,15 @@ span.var {
 					</td>
 					<td>BOGUS
 					</td>
-					<td>
-					</td>
+					<td/>
 					<td class="ERROR">AAMV5
 					</td>
 					<td>Unknown route and no service
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L17
@@ -4186,10 +4286,8 @@ span.var {
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4238,10 +4336,8 @@ span.var {
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4284,16 +4380,13 @@ span.var {
 					</td>
 					<td>WE
 					</td>
-					<td class="ERROR">
-					</td>
+					<td class="ERROR"/>
 					<td>Trip w/o ID
 					</td>
 					<td>1
 					</td>
-					<td>
-					</td>
-					<td>
-					</td>
+					<td/>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4308,6 +4401,6 @@ span.var {
 			</table>
 		</div>
 		<hr/>
-		<p class="comments">Validation done at Fri Mar 13 15:24:57 CET 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
+		<p class="comments">Validation done at Tue Mar 24 15:08:21 CET 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
 		</p>
 	</head>

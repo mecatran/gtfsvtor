@@ -44,7 +44,7 @@ No pickup/dropoff and no timepoint (useless timepoint)
 
 Frequencies
 -----------
-Start time greater than end time
+Handle frequencies in block ID overlap
 
 Shapes
 ------
