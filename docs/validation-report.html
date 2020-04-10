@@ -153,11 +153,11 @@ span.var {
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="xsmaller"> • 35 
+			<span class="xsmaller"> • 39 
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="xsmaller"> • 61 
+			<span class="xsmaller"> • 71 
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -189,6 +189,14 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
+				</span>Expired feed
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Future feed
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
 				</span>Overlapping trip in block
 			</li>
 			<li>1 
@@ -206,6 +214,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
 				</span>Too fast travel
+			</li>
+			<li>2 
+				<span class="smaller badge WARNING">WARNING
+				</span>Too many days w/o service
 			</li>
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
@@ -251,13 +263,25 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Duplicated column agency_url
 			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_email format
+			</li>
 			<li>2 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid agency_id reference
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_lang format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid agency_timezone format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_url format
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -297,6 +321,10 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_desc format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid route_id reference
 			</li>
 			<li>1 
@@ -310,6 +338,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid route_text_color format
+			</li>
+			<li>3 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_url format
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -330,6 +362,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid stop_timezone value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_url format
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -361,6 +397,10 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory route_type value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory service_id value
 			</li>
 			<li>2 
@@ -378,6 +418,10 @@ span.var {
 			<li>2 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing object ID
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Non increasing shape dist traveled
 			</li>
 			<li>2 
 				<span class="smaller badge ERROR">ERROR
@@ -404,6 +448,60 @@ span.var {
 				</span>Wrong time stop type
 			</li>
 		</ul>
+		<h2>Expired feed
+			<span class="smaller"> • 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Feed ending too soon or expired. Last date with service is 2011/12/31 < 2020/01/01
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Future feed
+			<span class="smaller"> • 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Feed starting too late or in the future. First date with service is 1900/01/01 > 1899/01/01
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Non increasing shape dist traveled
+			<span class="smaller"> • 1
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Non-increasing shape dist traveled for shape ID <span class='id'>SHAPE3</span> between seq <span class='id'>2</span> and <span class='id'>3</span>: <span class='var'>1,77</span> > <span class='var'>1,67</span>.
+					</td>
+				</tr>
+			</table>
+		</div>
 		<h2>Statistics
 			<span class="smaller"> • 1
 				<span class="badge INFO">INFO
@@ -417,7 +515,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Loaded 2 agencies, 7 routes, 18 stops, 6 calendars, 6 calendar dates, 14 trips, 37 stop times
+					<td class="issue">Loaded 2 agencies, 7 routes, 18 stops, 6 calendars, 15 calendar dates, 14 trips, 37 stop times
 					</td>
 				</tr>
 			</table>
@@ -498,6 +596,32 @@ span.var {
 					<td class="fieldname">
 					</td>
 					<td class="issue">Too fast travel between stop <span class='id'>STAGECOACH</span> seq <span class='id'>500</span> @10:00:00 and stop <span class='id'>EMSI</span> seq <span class='id'>600</span> @10:00:00 (distance <span class='var'>1450,76</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>24,18</span> > <span class='var'>16,67</span> m/s
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>Too many days w/o service
+			<span class="smaller"> • 2
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+		</h2>
+		<div class="subcategory">
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">39 081 consecutive days without any service, from 1900/01/01 to 2006/12/31
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">8 consecutive days without any service, from 2007/06/04 to 2007/06/11
 					</td>
 				</tr>
 			</table>
@@ -627,7 +751,7 @@ span.var {
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 5
+			<span class="smaller"> • 8
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -643,7 +767,19 @@ span.var {
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_email format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_lang format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid agency_timezone format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid agency_url format
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
@@ -662,6 +798,8 @@ span.var {
 						</td>
 						<td>agency_id
 						</td>
+						<td>agency_lang
+						</td>
 						<td class="ERROR">agency_url
 						</td>
 						<td class="ERROR">agency_url
@@ -669,6 +807,8 @@ span.var {
 						<td>agency_timezone
 						</td>
 						<td>agency_phone
+						</td>
+						<td>agency_email
 						</td>
 					</tr>
 				</thead>
@@ -700,6 +840,8 @@ span.var {
 						</td>
 						<td>agency_id
 						</td>
+						<td>agency_lang
+						</td>
 						<td>agency_url
 						</td>
 						<td>agency_url
@@ -708,12 +850,16 @@ span.var {
 						</td>
 						<td>agency_phone
 						</td>
+						<td>agency_email
+						</td>
 					</tr>
 				</thead>
 				<tr>
 					<td class="linenr">L2
 					</td>
 					<td>DTA
+					</td>
+					<td>en
 					</td>
 					<td>Autorité de passage de démonstration
 					</td>
@@ -723,6 +869,7 @@ span.var {
 					</td>
 					<td>123 12314
 					</td>
+					<td/>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -744,6 +891,8 @@ span.var {
 						</td>
 						<td>agency_id
 						</td>
+						<td>agency_lang
+						</td>
 						<td>agency_url
 						</td>
 						<td>agency_url
@@ -752,6 +901,8 @@ span.var {
 						</td>
 						<td>agency_phone
 						</td>
+						<td>agency_email
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -759,12 +910,16 @@ span.var {
 					</td>
 					<td class="WARNING">DTA_UNUSED
 					</td>
-					<td/>
-					<td>badurl.com
+					<td class="ERROR">ZZ
+					</td>
+					<td class="ERROR"/>
+					<td class="ERROR">badurl.com
 					</td>
 					<td class="ERROR">Mars/Pluto
 					</td>
 					<td>Unknown phone
+					</td>
+					<td class="ERROR">@bogusmail
 					</td>
 				</tr>
 			</table>
@@ -783,6 +938,30 @@ span.var {
 					<td class="fieldname">agency_timezone
 					</td>
 					<td class="issue">Invalid format for value <span class='var'>Mars/Pluto</span>, expected: IANA timezone
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_url
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>badurl.com</span>, expected: RFC 1738 URL
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_email
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>@bogusmail</span>, expected: RFC 2822 Email
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">agency_lang
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>zz</span>, expected: ISO 639-1 language
 					</td>
 				</tr>
 				<tr>
@@ -960,7 +1139,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L3
+					<td class="linenr">L12
 					</td>
 					<td>MONDAY
 					</td>
@@ -1256,7 +1435,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L3
+					<td class="linenr">L12
 					</td>
 					<td class="WARNING">MONDAY
 					</td>
@@ -1292,7 +1471,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L4
+					<td class="linenr">L13
 					</td>
 					<td class="WARNING">MONDAY2
 					</td>
@@ -1336,7 +1515,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L5
+					<td class="linenr">L14
 					</td>
 					<td class="WARNING">INVERTED
 					</td>
@@ -1380,7 +1559,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L6
+					<td class="linenr">L15
 					</td>
 					<td class="WARNING">UNUSED
 					</td>
@@ -1416,7 +1595,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L7
+					<td class="linenr">L16
 					</td>
 					<td class="WARNING">INVERTED
 					</td>
@@ -1726,7 +1905,7 @@ span.var {
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 6
+			<span class="smaller"> • 11
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -1758,6 +1937,10 @@ span.var {
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_desc format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid route_long_name format
 			</li>
 			<li>1
@@ -1767,6 +1950,14 @@ span.var {
 			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid route_text_color format
+			</li>
+			<li>3
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid route_url format
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory route_type value
 			</li>
 		</ul>
 		<div class="subcategory">
@@ -1840,11 +2031,88 @@ span.var {
 				<tr>
 					<td class="linenr">L2
 					</td>
+					<td>AB
+					</td>
+					<td>DTA
+					</td>
+					<td/>
+					<td>Airport ⇒ Bullfrog
+					</td>
+					<td class="ERROR">Airport ⇒ Bullfrog
+					</td>
+					<td class="ERROR"/>
+					<td class="ERROR">3
+					</td>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_type
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_url
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>3</span>, expected: RFC 1738 URL
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_desc
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>Airport ⇒ Bullfrog</span>, expected: Description should not be the same as long name
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>agency_id
+						</td>
+						<td>route_short_name
+						</td>
+						<td>route_long_name
+						</td>
+						<td>route_desc
+						</td>
+						<td>route_type
+						</td>
+						<td>route_url
+						</td>
+						<td>route_color
+						</td>
+						<td>route_text_color
+						</td>
+						<td>extra_field
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
 					<td class="ERROR">AB
 					</td>
 					<td>DTA
 					</td>
 					<td/>
+					<td>Airport ⇒ Bullfrog
+					</td>
 					<td>Airport ⇒ Bullfrog
 					</td>
 					<td/>
@@ -1927,7 +2195,7 @@ span.var {
 					<td/>
 					<td>99
 					</td>
-					<td>000000
+					<td class="ERROR">000000
 					</td>
 					<td class="WARNING">000000
 					</td>
@@ -1940,6 +2208,14 @@ span.var {
 					<td class="fieldname">route_color, route_text_color
 					</td>
 					<td class="issue">Route colors not contrasted enough: <span style='display:inline-block; padding-left:0.4em; padding-right:0.4em; color:#000000; background-color:#000000'>TEXT</span>, delta is <span class='var'>0,0</span>%
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_url
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>000000</span>, expected: RFC 1738 URL
 					</td>
 				</tr>
 				<tr>
@@ -2214,7 +2490,8 @@ span.var {
 					<td/>
 					<td>1
 					</td>
-					<td/>
+					<td class="ERROR">somebadurl
+					</td>
 					<td>00AA00
 					</td>
 					<td class="ERROR">FFF
@@ -2230,6 +2507,14 @@ span.var {
 					<td class="fieldname">route_text_color
 					</td>
 					<td class="issue">Invalid format for value <span class='var'>FFF</span>, expected: hexadecimal RGB color triplet (6 characters)
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">route_url
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>somebadurl</span>, expected: RFC 1738 URL
 					</td>
 				</tr>
 				<tr>
@@ -2677,7 +2962,7 @@ span.var {
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 9
+			<span class="smaller"> • 10
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -2722,6 +3007,10 @@ span.var {
 			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid stop_timezone value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_url format
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
@@ -3505,7 +3794,8 @@ span.var {
 					<td class="ERROR"/>
 					<td class="ERROR"/>
 					<td/>
-					<td/>
+					<td class="ERROR">badurl
+					</td>
 					<td>1234
 					</td>
 					<td/>
@@ -3529,6 +3819,14 @@ span.var {
 					<td class="fieldname">stop_lon
 					</td>
 					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_url
+					</td>
+					<td class="issue">Invalid format for value <span class='var'>badurl</span>, expected: RFC 1738 URL
 					</td>
 				</tr>
 				<tr>
@@ -4008,7 +4306,7 @@ span.var {
 					</td>
 					<td class="fieldname">block_id, trip_id
 					</td>
-					<td class="issue">Overlapping trips on same block ID <span class='id'>2</span>: <span class='id'>AB3</span> (12:00:00→12:07:00) and <span class='id'>AB2</span> (12:05:00→12:15:00). Overlap on <span class='var'>521</span> days, from <span class='var'>2007/01/06</span> to <span class='var'>2011/12/31</span>.
+					<td class="issue">Overlapping trips on same block ID <span class='id'>2</span>: <span class='id'>AB3</span> (12:00:00→12:07:00) and <span class='id'>AB2</span> (12:05:00→12:15:00). Overlap on <span class='var'>519</span> days, from <span class='var'>2007/01/06</span> to <span class='var'>2011/12/31</span>.
 					</td>
 				</tr>
 			</table>
@@ -4401,6 +4699,6 @@ span.var {
 			</table>
 		</div>
 		<hr/>
-		<p class="comments">Validation done at Tue Mar 24 15:08:21 CET 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
+		<p class="comments">Validation done at Fri Apr 10 14:24:16 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
 		</p>
 	</head>
