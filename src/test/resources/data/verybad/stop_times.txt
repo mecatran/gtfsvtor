@@ -1,4 +1,4 @@
-trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,shape_dist_traveled
+trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,shape_dist_traveled,timepoint
 STBA,6:00:00,6:00:00,STAGECOACH,0,to airport,1,0,0.212
 STBA,6:20:00,6:20:00,BEATTY_AIRPORT,2,,0,0,1.043
 CITY1,6:00:20,6:00:00,STAGECOACH,0,,,,
@@ -14,8 +14,8 @@ CITY2,6:46:00,6:58:00,STAGECOACH,500,,,,
 CITY3,10:00:00,10:00:00,EMSI,100,,,,
 CITY3,10:00:00,10:00:00,DADAN,200,,,,
 CITY3,10:00:00,10:00:00,NADAV,300,,,,
-CITY3,10:00:00,10:00:00,NANAA,400,,,,
-CITY3,10:00:00,10:00:00,STAGECOACH,500,,,,
+CITY3,10:00:00,10:00:00,NANAA,400,,1,1,,0
+CITY3,10:00:00,10:00:00,STAGECOACH,500,,1,1,,0
 CITY3,10:00:00,10:00:00,EMSI,600,,,,
 CITYX,11:00:00,11:00:00,EMSI,100,,,,
 AB1,8:01:00,8:00:00,BEATTY_AIRPORT,1,,,,
