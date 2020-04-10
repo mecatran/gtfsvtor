@@ -19,10 +19,6 @@ Stop with multiple route types (bus and metro)
 Quay too far from stop
 Entrance too far from station
 
-Trips
------
-First and last stop time should be set
-
 Frequencies
 -----------
 Handle frequencies in block ID overlap
