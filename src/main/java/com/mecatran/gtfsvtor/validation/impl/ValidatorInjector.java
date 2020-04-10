@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
+import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
@@ -187,6 +188,8 @@ public class ValidatorInjector<T> {
 					value = config.getBoolean(configKey, null);
 					if (value != null)
 						value = new Boolean((boolean) value);
+				} else if (fieldType.equals(GtfsLogicalDate.class)) {
+					value = config.getLogicalDate(configKey, null);
 				} else {
 					System.err.println("Cannot configure validator "
 							+ validator.getClass().getSimpleName()

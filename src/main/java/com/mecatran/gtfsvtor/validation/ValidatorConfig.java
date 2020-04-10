@@ -1,5 +1,14 @@
 package com.mecatran.gtfsvtor.validation;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
+import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
+
 public interface ValidatorConfig {
 
 	public String getString(String key);
@@ -44,6 +53,25 @@ public interface ValidatorConfig {
 		try {
 			return Double.parseDouble(str);
 		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
+	public default GtfsLogicalDate getLogicalDate(String key,
+			GtfsLogicalDate defaultValue) {
+		String str = this.getString(key);
+		if (str == null || str.isEmpty())
+			return defaultValue;
+		DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+		// We do not care about the timezone
+		TimeZone tz = TimeZone.getDefault();
+		df.setTimeZone(tz);
+		try {
+			Calendar cal = GregorianCalendar.getInstance(tz);
+			cal.setTime(df.parse(str));
+			return GtfsLogicalDate.getDate(cal.get(Calendar.YEAR),
+					cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
+		} catch (ParseException e) {
 			return defaultValue;
 		}
 	}
