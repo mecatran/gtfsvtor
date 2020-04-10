@@ -62,6 +62,7 @@ import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
+import com.mecatran.gtfsvtor.reporting.issues.NoServiceError;
 import com.mecatran.gtfsvtor.reporting.issues.NonIncreasingShapeDistTraveledError;
 import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
@@ -914,6 +915,14 @@ public class TestGtfs {
 		assertEquals(8, tmw0.getNumberOfDays());
 		assertEquals(GtfsLogicalDate.getDate(2007, 6, 4), tmw0.getFromDate());
 		assertEquals(GtfsLogicalDate.getDate(2007, 6, 11), tmw0.getToDate());
+	}
+
+	@Test
+	public void testNoService() {
+		TestBundle tb = loadAndValidate("noservice");
+		List<NoServiceError> nses = tb.report
+				.getReportIssues(NoServiceError.class);
+		assertEquals(1, nses.size());
 	}
 
 	@Test
