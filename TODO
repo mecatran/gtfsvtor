@@ -11,7 +11,6 @@ Invalid float value (comma instead of point, exponent notation)
 
 Stops
 -----
-Stop too close to origin (0,0)
 Stop description not the same as stop name
 Unused node, quay, entrance
 Different station too close (station is close to stop but not parent)

@@ -7,6 +7,7 @@ import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueError;
+import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseToOriginError;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
@@ -24,6 +25,11 @@ public class StopStreamingValidator implements StreamingValidator<GtfsStop> {
 		if (namePosMandatory) {
 			checkNonNull(stop::getLat, "stop_lat", context);
 			checkNonNull(stop::getLon, "stop_lon", context);
+		}
+		if (stop.getLat() != null && stop.getLon() != null
+				&& Math.abs(stop.getLat()) < 1e-3
+				&& Math.abs(stop.getLon()) < 1e-3) {
+			reportSink.report(new StopTooCloseToOriginError(stop));
 		}
 		checkUrl(stop::getUrl, "stop_url", context);
 		if (stop.getParentId() != null && stop.getTimezone() != null) {
