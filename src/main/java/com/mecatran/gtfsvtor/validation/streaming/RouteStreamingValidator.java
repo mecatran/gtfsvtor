@@ -8,6 +8,7 @@ import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
@@ -58,11 +59,12 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 					"Long name should not start or be equals with short name"));
 		}
 		if (route.getLongName() != null && route.getDescription() != null
-				&& route.getLongName().equalsIgnoreCase(route.getDescription())) {
-			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceInfo(), "route_desc",
-					route.getDescription(),
-					"Description should not be the same as long name"));
+				&& route.getLongName()
+						.equalsIgnoreCase(route.getDescription())) {
+			reportSink.report(new InvalidFieldValueError(
+					context.getSourceInfo(), route.getDescription(),
+					"Description should not be the same as long name",
+					"route_desc", "route_long_name"));
 		}
 	}
 }
