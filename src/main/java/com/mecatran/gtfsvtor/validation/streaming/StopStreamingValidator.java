@@ -38,6 +38,13 @@ public class StopStreamingValidator implements StreamingValidator<GtfsStop> {
 					"stop having a parent should not define a timezone",
 					"stop_timezone"));
 		}
+		if (stop.getName() != null && stop.getDescription() != null
+				&& stop.getName().equalsIgnoreCase(stop.getDescription())) {
+			reportSink.report(new InvalidFieldValueError(
+					context.getSourceInfo(), stop.getDescription(),
+					"Description should not be the same as name", "stop_desc",
+					"stop_name"));
+		}
 		// Note: Parent station validity is checked in the reference validator
 	}
 }

@@ -11,7 +11,6 @@ Invalid float value (comma instead of point, exponent notation)
 
 Stops
 -----
-Stop description not the same as stop name
 Unused node, quay, entrance
 Different station too close (station is close to stop but not parent)
 Stop with multiple route types (bus and metro)
