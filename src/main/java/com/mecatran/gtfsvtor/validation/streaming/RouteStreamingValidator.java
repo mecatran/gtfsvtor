@@ -57,5 +57,12 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 					route.getShortName(),
 					"Long name should not start or be equals with short name"));
 		}
+		if (route.getLongName() != null && route.getDescription() != null
+				&& route.getLongName().equalsIgnoreCase(route.getDescription())) {
+			reportSink.report(new InvalidFieldFormatError(
+					context.getSourceInfo(), "route_desc",
+					route.getDescription(),
+					"Description should not be the same as long name"));
+		}
 	}
 }

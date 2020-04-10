@@ -1,5 +1,5 @@
 route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,extra_field
-AB,DTA,,Airport ⇒ Bullfrog,,3,,,
+AB,DTA,,Airport ⇒ Bullfrog,Airport ⇒ Bullfrog,,3,,,
 AB,FOO,THIS ROUTE NAME IS TOO LONG,THIS ROUTE NAME IS TOO LONG,,99,000000,000000
 BFC,DTA,,Bullfrog ⇒ Furnace Creek Resort,,3,,,
 STBA,DTA,,Stagecoach ⇒ Airport Shuttle,,3,,,
