@@ -1,3 +1,8 @@
+Code
+====
+
+Intern IDs
+
 Validations
 ===========
 
@@ -27,7 +32,6 @@ Wrong shape projection
 
 Transfers
 ---------
-Valid from/to stops
 Transfer distance too large
 Transfer walking speed too fast
 Time set with invalid type
