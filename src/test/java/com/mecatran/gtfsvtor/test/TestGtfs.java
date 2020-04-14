@@ -929,7 +929,7 @@ public class TestGtfs {
 	public void testBogusTransfers() {
 		TestBundle tb = loadAndValidate("bogus_transfers");
 		int nIssues = tb.report.getReportIssues().size();
-		assertEquals(7, nIssues);
+		assertEquals(9, nIssues);
 	}
 
 	@Test
