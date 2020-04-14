@@ -18,6 +18,7 @@ import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTimepoint;
+import com.mecatran.gtfsvtor.model.GtfsTransferType;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.model.GtfsWheelchairAccess;
@@ -383,7 +384,20 @@ public class DataRowConverter {
 			return GtfsExactTime.fromValue(Integer.parseInt(str));
 		} catch (IllegalArgumentException e) {
 			reportSink
-					.report(fieldFormatError(field, str, "Exact times (0, 1)"));
+					.report(fieldFormatError(field, str, "exact times (0, 1)"));
+			return null;
+		}
+	}
+
+	public GtfsTransferType getTransferType(String field) {
+		String str = getString(field);
+		if (str == null || str.isEmpty())
+			return null;
+		try {
+			return GtfsTransferType.fromValue(Integer.parseInt(str));
+		} catch (IllegalArgumentException e) {
+			reportSink.report(
+					fieldFormatError(field, str, "transfer type (0, 1, 2, 3)"));
 			return null;
 		}
 	}
