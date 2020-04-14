@@ -926,6 +926,13 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testBogusTransfers() {
+		TestBundle tb = loadAndValidate("bogus_transfers");
+		int nIssues = tb.report.getReportIssues().size();
+		assertEquals(7, nIssues);
+	}
+
+	@Test
 	public void testMBTA42951766() {
 		TestBundle tb = loadAndValidate("MBTA_42951766");
 		IndexedReadOnlyDao dao = tb.dao;
