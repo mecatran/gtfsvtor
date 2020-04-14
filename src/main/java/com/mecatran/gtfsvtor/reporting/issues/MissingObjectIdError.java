@@ -16,8 +16,8 @@ public class MissingObjectIdError implements ReportIssue {
 	private SourceInfoWithFields sourceInfo;
 
 	public MissingObjectIdError(DataObjectSourceInfo sourceInfo,
-			String fieldName) {
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldName);
+			String... fieldNames) {
+		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldNames);
 	}
 
 	@Override
