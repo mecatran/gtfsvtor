@@ -27,9 +27,11 @@ import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
+import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
+import com.mecatran.gtfsvtor.utils.Pair;
 
 public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
@@ -62,6 +64,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			.create();
 	private Multimap<GtfsStop.Id, GtfsStop> boardingAreasPerStop = ArrayListMultimap
 			.create();
+	private Map<Pair<GtfsStop.Id, GtfsStop.Id>, GtfsTransfer> transfers = new HashMap<>();
 
 	private CalendarIndex calendarIndex = null;
 	private DaoSpatialIndex spatialIndex = null;
@@ -166,6 +169,17 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public int getShapePointsCount() {
 		return shapePoints.size();
+	}
+
+	@Override
+	public Collection<GtfsTransfer> getTransfers() {
+		return Collections.unmodifiableCollection(transfers.values());
+	}
+
+	@Override
+	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
+			GtfsStop.Id toStopId) {
+		return transfers.get(new Pair<>(fromStopId, toStopId));
 	}
 
 	@Override
@@ -278,7 +292,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		GtfsAgency existingAgency = getAgency(agency.getId());
 		if (existingAgency != null) {
 			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
-					existingAgency, agency, agency.getId(), "agency_id"));
+					existingAgency.getSourceInfo(), agency.getSourceInfo(),
+					agency.getId(), "agency_id"));
 			return;
 		}
 		agencies.put(agency.getId(), agency);
@@ -294,8 +309,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		}
 		GtfsRoute existingRoute = getRoute(route.getId());
 		if (existingRoute != null) {
-			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
-					existingRoute, route, route.getId(), "route_id"));
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							existingRoute.getSourceInfo(),
+							route.getSourceInfo(), route.getId(), "route_id"));
 			return;
 		}
 		routes.put(route.getId(), route);
@@ -312,8 +329,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		}
 		GtfsStop existingStop = getStop(stop.getId());
 		if (existingStop != null) {
-			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
-					existingStop, stop, stop.getId(), "stop_id"));
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							existingStop.getSourceInfo(), stop.getSourceInfo(),
+							stop.getId(), "stop_id"));
 			return;
 		}
 		stops.put(stop.getId(), stop);
@@ -350,9 +369,9 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		}
 		GtfsCalendar existingCalendar = getCalendar(calendar.getId());
 		if (existingCalendar != null) {
-			sourceContext.getReportSink()
-					.report(new DuplicatedObjectIdError(existingCalendar,
-							calendar, calendar.getId(), "service_id"));
+			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
+					existingCalendar.getSourceInfo(), calendar.getSourceInfo(),
+					calendar.getId(), "service_id"));
 			return;
 		}
 		calendars.put(calendar.getId(), calendar);
@@ -397,8 +416,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		}
 		GtfsTrip existingTrip = getTrip(trip.getId());
 		if (existingTrip != null) {
-			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
-					existingTrip, trip, trip.getId(), "trip_id"));
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							existingTrip.getSourceInfo(), trip.getSourceInfo(),
+							trip.getId(), "trip_id"));
 			return;
 		}
 		trips.put(trip.getId(), trip);
@@ -439,6 +460,31 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		frequencies.put(frequency.getTripId(), frequency);
+	}
+
+	@Override
+	public void addTransfer(GtfsTransfer transfer,
+			DataLoader.SourceContext sourceContext) {
+		// Do not add frequency w/o from/to stop ID
+		if (transfer.getFromStopId() == null
+				|| transfer.getToStopId() == null) {
+			sourceContext.getReportSink()
+					.report(new MissingObjectIdError(
+							sourceContext.getSourceInfo(), "from_stop_id",
+							"to_stop_id"));
+			return;
+		}
+		GtfsTransfer existingTransfer = getTransfer(transfer.getFromStopId(),
+				transfer.getToStopId());
+		if (existingTransfer != null) {
+			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
+					sourceContext.getSourceInfo(), existingTransfer.getId(),
+					"from_stop_id", "to_stop_id"));
+			return;
+		}
+		Pair<GtfsStop.Id, GtfsStop.Id> id = new Pair<>(transfer.getFromStopId(),
+				transfer.getToStopId());
+		transfers.put(id, transfer);
 	}
 
 	@Override

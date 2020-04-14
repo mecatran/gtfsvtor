@@ -9,6 +9,7 @@ import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
+import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 
 /**
@@ -54,4 +55,9 @@ public interface ReadOnlyDao {
 	public int getStopTimesCount();
 
 	public int getShapePointsCount();
+
+	public Collection<GtfsTransfer> getTransfers();
+
+	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
+			GtfsStop.Id toStopId);
 }

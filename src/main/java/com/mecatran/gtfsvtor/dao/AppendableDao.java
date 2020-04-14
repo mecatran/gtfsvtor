@@ -9,6 +9,7 @@ import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
+import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 
 public interface AppendableDao {
@@ -31,6 +32,8 @@ public interface AppendableDao {
 	public void addStopTime(GtfsStopTime stopTime, SourceContext info);
 
 	public void addFrequency(GtfsFrequency frequency, SourceContext info);
+
+	public void addTransfer(GtfsTransfer transfer, SourceContext info);
 
 	public void close();
 }

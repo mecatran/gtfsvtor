@@ -22,6 +22,7 @@ import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
+import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsZone;
 import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime;
@@ -72,6 +73,8 @@ public class GtfsDataLoader implements DataLoader {
 		loadStopTimes(context);
 		// Frequencies references trips
 		loadFrequencies(context);
+		// Transfers references stops
+		loadTransfers(context);
 		reportUnreadTables(context.getReportSink());
 		context.getDao().close();
 	}
@@ -378,6 +381,32 @@ public class GtfsDataLoader implements DataLoader {
 			context.getStreamingValidator().validate(GtfsFrequency.class,
 					frequency, sourceContext);
 			context.getDao().addFrequency(frequency, sourceContext);
+		}
+		closeTable(table, context.getReportSink());
+	}
+
+	private void loadTransfers(DataLoader.Context context) {
+		DataTable table = getDataTable(GtfsTransfer.TABLE_NAME, false,
+				context.getReportSink());
+		if (table == null)
+			return;
+		checkMandatoryColumns(context.getReportSink(), table, "from_stop_id",
+				"to_stop_id", "transfer_type");
+		DataTableContext sourceContext = new DataTableContext(table,
+				context.getReportSink(), context.getReadOnlyDao());
+		for (DataRow row : table) {
+			DataRowConverter erow = new DataRowConverter(row,
+					context.getReportSink());
+			GtfsTransfer.Builder builder = new GtfsTransfer.Builder();
+			builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
+					.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
+					.withTransferType(erow.getTransferType("transfer_type"))
+					.withMinTransferTime(erow.getInteger("min_transfer_time"));
+			GtfsTransfer transfer = builder.build();
+			sourceContext.setRow(row);
+			context.getStreamingValidator().validate(GtfsTransfer.class,
+					transfer, sourceContext);
+			context.getDao().addTransfer(transfer, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
 	}
