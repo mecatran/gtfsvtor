@@ -28,7 +28,8 @@ public class ExpiredFeedWarning implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		fmt.text("Feed ending too soon or expired. Last date with service is {0} < {1}",
+		fmt.text(
+				"Feed ending too soon or expired. Last date with service is {0} < {1}",
 				fmt.date(lastDate), fmt.date(cutoffDate));
 	}
 }
