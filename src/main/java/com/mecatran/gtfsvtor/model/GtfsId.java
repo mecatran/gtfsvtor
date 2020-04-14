@@ -7,15 +7,18 @@ import java.util.Comparator;
  * @param <V> The class of the object this ID is related to (for example:
  *        GtfsAgency).
  */
-public interface GtfsId<U extends Comparable<U>, V extends GtfsObject<U>>
-		extends Comparable<GtfsId<U, V>> {
+public interface GtfsId<U, V extends GtfsObject<U>> {
 
 	public U getInternalId();
 
-	@Override
-	public default int compareTo(GtfsId<U, V> other) {
-		return Comparator.nullsFirst(U::compareTo).compare(this.getInternalId(),
-				other.getInternalId());
+	public static <U extends Comparable<U>, V extends GtfsObject<U>> Comparator<GtfsId<U, V>> makeComparator() {
+		return new Comparator<GtfsId<U, V>>() {
+			@Override
+			public int compare(GtfsId<U, V> o1, GtfsId<U, V> o2) {
+				U u1 = o1.getInternalId();
+				U u2 = o2.getInternalId();
+				return u1.compareTo(u2);
+			}
+		};
 	}
-
 }

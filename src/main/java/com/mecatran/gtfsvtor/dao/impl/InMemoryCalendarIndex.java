@@ -1,6 +1,6 @@
 package com.mecatran.gtfsvtor.dao.impl;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,6 +21,7 @@ import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
+import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 
 public class InMemoryCalendarIndex implements CalendarIndex {
@@ -146,9 +147,10 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	public OverlappingCalendarInfo calendarOverlap(GtfsCalendar.Id calendarId1,
 			GtfsCalendar.Id calendarId2) {
 		// Note: this function works too if calendarId1 = calendarId2
-		List<GtfsCalendar.Id> key = calendarId1.compareTo(calendarId2) < 0
-				? Arrays.asList(calendarId1, calendarId2)
-				: Arrays.asList(calendarId2, calendarId1);
+		List<GtfsCalendar.Id> key = new ArrayList<>();
+		key.add(calendarId1);
+		key.add(calendarId2);
+		Collections.sort(key, GtfsId.makeComparator());
 		/*
 		 * TODO Make this caching optional, as for certain pathological GTFS
 		 * this may lead to a rather large cache size.

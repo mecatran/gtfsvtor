@@ -2,11 +2,14 @@ package com.mecatran.gtfsvtor.model;
 
 import java.util.Objects;
 
-public abstract class GtfsAbstractId<U extends Comparable<U>, V extends GtfsObject<U>>
+public abstract class GtfsAbstractId<U, V extends GtfsObject<U>>
 		implements GtfsId<U, V> {
 
 	private U id;
 
+	/**
+	 * TODO Implement internal ID interning (caching)
+	 */
 	protected GtfsAbstractId(U id) {
 		if (id == null) {
 			// Should we do that?
