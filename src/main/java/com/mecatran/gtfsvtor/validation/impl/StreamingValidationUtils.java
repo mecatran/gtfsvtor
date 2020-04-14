@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -25,6 +26,14 @@ public class StreamingValidationUtils {
 	public static <T> void checkNonNull(FieldGetter<T> getter, String fieldName,
 			StreamingValidator.Context context) {
 		if (getter.get() == null) {
+			context.getReportSink().report(new MissingMandatoryValueError(
+					context.getSourceInfo(), fieldName));
+		}
+	}
+
+	public static <T> void checkOptionalPresent(FieldGetter<Optional<T>> getter,
+			String fieldName, StreamingValidator.Context context) {
+		if (!getter.get().isPresent()) {
 			context.getReportSink().report(new MissingMandatoryValueError(
 					context.getSourceInfo(), fieldName));
 		}
