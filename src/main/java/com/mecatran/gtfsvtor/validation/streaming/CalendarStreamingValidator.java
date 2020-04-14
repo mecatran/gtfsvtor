@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
-import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueError;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
@@ -29,7 +29,7 @@ public class CalendarStreamingValidator
 		if (calendar.getStartDate() != null && calendar.getEndDate() != null
 				&& calendar.getStartDate()
 						.compareTo(calendar.getEndDate()) > 0) {
-			reportSink.report(new InvalidFieldValueError(
+			reportSink.report(new InvalidFieldValueIssue(
 					calendar.getSourceInfo(), calendar.getEndDate().toString(),
 					"end date should be greater or equal than start date",
 					"end_date"));
@@ -57,7 +57,7 @@ public class CalendarStreamingValidator
 		if (IntStream.range(0, 7)
 				.allMatch(dow -> !calendar.isActiveOnDow(dow))) {
 			reportSink
-					.report(new InvalidFieldValueError(calendar.getSourceInfo(),
+					.report(new InvalidFieldValueIssue(calendar.getSourceInfo(),
 							"", "calendar is not active any day of the week",
 							"monday", "tuesday", "wednesday", "thursday",
 							"friday", "saturday", "sunday"));

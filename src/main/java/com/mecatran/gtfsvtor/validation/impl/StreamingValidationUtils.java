@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
-import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueError;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
@@ -44,7 +44,7 @@ public class StreamingValidationUtils {
 			String errorMessage) {
 		if (predicate.test(t)) {
 			context.getReportSink()
-					.report(new InvalidFieldValueError(context.getSourceInfo(),
+					.report(new InvalidFieldValueIssue(context.getSourceInfo(),
 							t.toString(), errorMessage, fieldName));
 		}
 	}

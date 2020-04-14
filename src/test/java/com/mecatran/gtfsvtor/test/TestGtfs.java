@@ -56,7 +56,7 @@ import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
-import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueError;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
@@ -869,10 +869,10 @@ public class TestGtfs {
 	@Test
 	public void testBogusCalendars() {
 		TestBundle tb = loadAndValidate("bogus_calendars");
-		List<InvalidFieldValueError> ifvs = tb.report
-				.getReportIssues(InvalidFieldValueError.class);
+		List<InvalidFieldValueIssue> ifvs = tb.report
+				.getReportIssues(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
-		InvalidFieldValueError ifv0 = ifvs.get(0);
+		InvalidFieldValueIssue ifv0 = ifvs.get(0);
 		assertTrue(ifv0.getSourceInfos().get(0).getFieldNames()
 				.contains("monday"));
 		assertTrue(ifv0.getSourceInfos().get(0).getFieldNames()
@@ -894,8 +894,8 @@ public class TestGtfs {
 	@Test
 	public void testBogusFrequencies() {
 		TestBundle tb = loadAndValidate("bogus_frequencies");
-		List<InvalidFieldValueError> ifvs = tb.report
-				.getReportIssues(InvalidFieldValueError.class);
+		List<InvalidFieldValueIssue> ifvs = tb.report
+				.getReportIssues(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
 		List<InvalidFieldFormatError> iffs = tb.report
 				.getReportIssues(InvalidFieldFormatError.class);
