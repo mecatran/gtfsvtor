@@ -28,10 +28,10 @@ public class TransferStreamingValidator
 	private int maxTransferTimeSecError = 24 * 60 * 60;
 
 	@ConfigurableOption(description = "Maximum distance between stops, in meters, above which a warning is generated")
-	private double maxDistanceMetersWarning = 1000; // TODO Check default value
+	private double maxDistanceMetersWarning = 2000;
 
 	@ConfigurableOption(description = "Maximum distance between stops, in meters, above which an error is generated")
-	private double maxDistanceMetersError = 10000; // TODO Check default value
+	private double maxDistanceMetersError = 10000;
 
 	@Override
 	public void validate(Class<? extends GtfsTransfer> clazz,
