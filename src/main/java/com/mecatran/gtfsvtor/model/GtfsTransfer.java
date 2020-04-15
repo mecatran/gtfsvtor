@@ -42,7 +42,7 @@ public class GtfsTransfer implements GtfsObject<Pair<String, String>> {
 
 	@Override
 	public String toString() {
-		return "Transfer{from=" + fromStopId + ",to=" + toString() + ",type="
+		return "Transfer{from=" + fromStopId + ",to=" + toStopId + ",type="
 				+ transferType + "}";
 	}
 
