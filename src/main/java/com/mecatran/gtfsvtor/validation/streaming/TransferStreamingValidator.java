@@ -12,6 +12,7 @@ import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
+import com.mecatran.gtfsvtor.reporting.issues.TooFastTransferWalkingSpeed;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
@@ -32,6 +33,12 @@ public class TransferStreamingValidator
 
 	@ConfigurableOption(description = "Maximum distance between stops, in meters, above which an error is generated")
 	private double maxDistanceMetersError = 10000;
+
+	@ConfigurableOption(description = "Fast walking speed, in meters/seconds, for a too fast transfer. Default to 2 m/s.")
+	private double fastWalkingSpeedMps = 2.0;
+
+	@ConfigurableOption(description = "Fast walking speed slack time, in seconds. Default to 120 sec.")
+	private int walkingTimeSlackSec = 120;
 
 	@Override
 	public void validate(Class<? extends GtfsTransfer> clazz,
@@ -88,29 +95,39 @@ public class TransferStreamingValidator
 			}
 		}
 
-		// Check from-to stop distance
+		// Check from-to stop distance and walk speed
 		if (fromStop != null && toStop != null) {
 			GeoCoordinates p1 = fromStop.getCoordinates();
 			GeoCoordinates p2 = toStop.getCoordinates();
 			if (p1 != null && p2 != null) {
 				double d = Geodesics.fastDistanceMeters(p1, p2);
+				ReportIssueSeverity severity = null;
 				if (maxDistanceMetersError > 0 && d > maxDistanceMetersError) {
-					// TODO Make a specific error class?
-					reportSink.report(new InvalidFieldValueIssue(
-							context.getSourceInfo(),
-							String.format("%.2f meters", d),
-							"Suspiciously large transfer distance between stops",
-							"from_stop_id", "to_stop_id")
-									.withSeverity(ReportIssueSeverity.ERROR));
+					severity = ReportIssueSeverity.ERROR;
 				} else if (maxDistanceMetersWarning > 0
 						&& d > maxDistanceMetersWarning) {
+					severity = ReportIssueSeverity.WARNING;
+				}
+				if (severity != null) {
 					// TODO Make a specific error class?
 					reportSink.report(new InvalidFieldValueIssue(
 							context.getSourceInfo(),
 							String.format("%.2f meters", d),
 							"Suspiciously large transfer distance between stops",
 							"from_stop_id", "to_stop_id")
-									.withSeverity(ReportIssueSeverity.WARNING));
+									.withSeverity(severity));
+				}
+
+				if (transfer.getMinTransferTime() != null
+						&& transfer.getMinTransferTime() > 0) {
+					double speedMps = d / (transfer.getMinTransferTime()
+							+ walkingTimeSlackSec);
+					if (speedMps > fastWalkingSpeedMps) {
+						reportSink.report(new TooFastTransferWalkingSpeed(
+								context.getSourceInfo(), transfer, fromStop,
+								toStop, d, speedMps, fastWalkingSpeedMps,
+								ReportIssueSeverity.WARNING));
+					}
 				}
 			}
 		}
