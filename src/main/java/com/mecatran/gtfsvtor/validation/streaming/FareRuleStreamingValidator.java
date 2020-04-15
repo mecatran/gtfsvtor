@@ -41,6 +41,8 @@ public class FareRuleStreamingValidator
 		checkZoneReference(context, fareRule.getOriginId(), "origin_id");
 		checkZoneReference(context, fareRule.getOriginId(), "destination_id");
 		checkZoneReference(context, fareRule.getOriginId(), "contains_id");
+
+		// Check at least one ID is set?
 	}
 
 	private void checkZoneReference(StreamingValidator.Context context,
