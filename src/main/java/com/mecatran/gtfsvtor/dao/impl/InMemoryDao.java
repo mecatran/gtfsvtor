@@ -3,8 +3,10 @@ package com.mecatran.gtfsvtor.dao.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -32,6 +34,7 @@ import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsZone;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
 import com.mecatran.gtfsvtor.utils.Pair;
@@ -41,6 +44,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Map<GtfsAgency.Id, GtfsAgency> agencies = new HashMap<>();
 	private Map<GtfsRoute.Id, GtfsRoute> routes = new HashMap<>();
 	private Map<GtfsStop.Id, GtfsStop> stops = new HashMap<>();
+	private Set<GtfsZone.Id> zoneIds = new HashSet<>();
 	private Map<GtfsCalendar.Id, GtfsCalendar> calendars = new HashMap<>();
 	private Map<GtfsTrip.Id, GtfsTrip> trips = new HashMap<>();
 	private ListMultimap<GtfsTrip.Id, GtfsStopTime> stopTimes = ArrayListMultimap
@@ -119,6 +123,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public GtfsStop getStop(GtfsStop.Id stopId) {
 		return stops.get(stopId);
+	}
+
+	@Override
+	public boolean hasZoneId(GtfsZone.Id zoneId) {
+		return zoneIds.contains(zoneId);
 	}
 
 	@Override
@@ -344,6 +353,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void addStop(GtfsStop stop, DataLoader.SourceContext sourceContext) {
+		if (stop.getZoneId() != null) {
+			// Should we really condider an ID-less stop zone valid?
+			zoneIds.add(stop.getZoneId());
+		}
 		if (stop.getId() == null) {
 			sourceContext.getReportSink().report(new MissingObjectIdError(
 					sourceContext.getSourceInfo(), "stop_id"));

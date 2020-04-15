@@ -13,6 +13,7 @@ import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsZone;
 
 /**
  * A read-only DAO for GTFS data.
@@ -36,6 +37,8 @@ public interface ReadOnlyDao {
 	public Collection<GtfsStop> getStops();
 
 	public GtfsStop getStop(GtfsStop.Id stopId);
+
+	public boolean hasZoneId(GtfsZone.Id zoneId);
 
 	public Collection<GtfsCalendar> getCalendars();
 
