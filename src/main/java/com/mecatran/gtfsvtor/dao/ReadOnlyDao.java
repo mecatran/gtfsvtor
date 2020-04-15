@@ -74,4 +74,6 @@ public interface ReadOnlyDao {
 
 	public int getShapePointsCount();
 
+	public int getFareRulesCount();
+
 }

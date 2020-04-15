@@ -187,6 +187,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
+	public int getFareRulesCount() {
+		return fareRules.size();
+	}
+
+	@Override
 	public Collection<GtfsTransfer> getTransfers() {
 		return Collections.unmodifiableCollection(transfers.values());
 	}
