@@ -50,3 +50,24 @@ Fares
 Duplicated rule
 Fare w/o rule
 Currency is within ISO-4217 spec
+
+Translations
+------------
+record_id/record_sub_id present or not
+field_value does exists
+Correct table_name, field_name, language
+
+Feed info
+_________
+Required if having translations
+End date greater than start date
+Lang format
+Email format
+URLs format
+
+Attributions
+------------
+Email format
+URLs format
+One is_xxx defined
+Element ID reference
