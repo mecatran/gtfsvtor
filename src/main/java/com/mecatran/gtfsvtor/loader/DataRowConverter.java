@@ -1,7 +1,6 @@
 package com.mecatran.gtfsvtor.loader;
 
 import java.text.ParseException;
-import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -64,33 +63,12 @@ public class DataRowConverter {
 	}
 
 	public Integer getInteger(String field) {
-		return this.getInteger(field, null, false);
+		return this.getInteger(field, false);
 	}
 
 	public Integer getInteger(String field, boolean mandatory) {
-		return this.getInteger(field, null, mandatory);
-	}
-
-	public Integer getInteger(String field, Integer defaultValue,
-			boolean mandatory) {
-		String value = getString(field);
-		if (value == null || value.isEmpty()) {
-			if (mandatory) {
-				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
-			}
-			return defaultValue;
-		}
-		try {
-			return Integer.parseInt(value);
-		} catch (NumberFormatException e) {
-			reportSink.report(fieldFormatError(field, value, "integer"));
-			return defaultValue;
-		}
-	}
-
-	public Double getDouble(String field) {
-		return this.getDouble(field, null, null, false);
+		return getTypeFromString(Integer.class, field, mandatory, "integer",
+				Integer::parseInt);
 	}
 
 	public Double getDouble(String field, boolean mandatory) {
@@ -117,27 +95,19 @@ public class DataRowConverter {
 	}
 
 	public Boolean getBoolean(String field) {
-		return this.getBoolean(field, null, false);
+		return this.getBoolean(field, false);
 	}
 
-	public Boolean getBoolean(String field, Boolean defaultValue,
-			boolean mandatory) {
-		String value = getString(field);
-		if (value == null || value.isEmpty()) {
-			if (mandatory) {
-				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
-			}
-			return defaultValue;
-		} else if (value.equals("0")) {
-			return false;
-		} else if (value.equals("1")) {
-			return true;
-		} else {
-			reportSink
-					.report(fieldFormatError(field, value, "boolean (0 or 1)"));
-			return defaultValue;
-		}
+	public Boolean getBoolean(String field, boolean mandatory) {
+		return getTypeFromString(Boolean.class, field, mandatory,
+				"boolean (0 or 1)", str -> {
+					if (str.equals("0"))
+						return false;
+					else if (str.equals("1"))
+						return true;
+					else
+						throw new ParseException(str, 0);
+				});
 	}
 
 	public TimeZone getTimeZone(String field) {
@@ -145,111 +115,35 @@ public class DataRowConverter {
 	}
 
 	public TimeZone getTimeZone(String field, boolean mandatory) {
-		String tz = getString(field);
-		if (tz == null || tz.isEmpty()) {
-			if (mandatory) {
-				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
-			}
-			return null;
-		}
-		try {
-			ZoneId zoneId = ZoneId.of(tz);
-			return TimeZone.getTimeZone(zoneId);
-		} catch (DateTimeException e) {
-			reportSink.report(fieldFormatError(field, tz, "IANA timezone"));
-			return null;
-		}
+		return getTypeFromString(TimeZone.class, field, mandatory,
+				"IANA timezone", tz -> TimeZone.getTimeZone(ZoneId.of(tz)));
 	}
 
 	public Locale getLocale(String field) {
-		String lang = getString(field);
-		if (lang == null || lang.isEmpty())
-			return null;
-		try {
-			return Locale.forLanguageTag(lang);
-		} catch (Exception e) {
-			// TODO Validate correct lang
-			reportSink.report(fieldFormatError(field, lang, "lang code"));
-			return null;
-		}
-	}
-
-	public GtfsLogicalDate getLogicalDate(String field) {
-		return this.getLogicalDate(field, null, false);
+		return getTypeFromString(Locale.class, field, false,
+				"ISO 639-1 language code", Locale::forLanguageTag);
 	}
 
 	public GtfsLogicalDate getLogicalDate(String field, boolean mandatory) {
-		return this.getLogicalDate(field, null, mandatory);
-	}
-
-	public GtfsLogicalDate getLogicalDate(String field,
-			GtfsLogicalDate defaultValue, boolean mandatory) {
-		String value = getString(field);
-		if (value == null || value.isEmpty()) {
-			if (mandatory) {
-				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
-			}
-			return defaultValue;
-		} else {
-			try {
-				GtfsLogicalDate ret = GtfsLogicalDate.parseFromYYYYMMDD(value);
-				return ret;
-			} catch (ParseException e) {
-				reportSink.report(fieldFormatError(field, value,
-						"date (YYYYMMDD)", e.getMessage()));
-				return defaultValue;
-			}
-		}
+		return getTypeFromString(GtfsLogicalDate.class, field, mandatory,
+				"time (HH:MM:SS)", GtfsLogicalDate::parseFromYYYYMMDD);
 	}
 
 	public GtfsLogicalTime getLogicalTime(String field) {
-		String value = getString(field);
-		if (value == null || value.isEmpty()) {
-			// Logical time is not mandatory!
-			return null;
-		} else {
-			try {
-				GtfsLogicalTime ret = GtfsLogicalTime.parseFromHH_MM_SS(value);
-				return ret;
-			} catch (ParseException e) {
-				reportSink.report(fieldFormatError(field, value,
-						"time (HH:MM:SS) " + e.getLocalizedMessage()));
-				return null;
-			}
-		}
+		return getTypeFromString(GtfsLogicalTime.class, field, false,
+				"time (HH:MM:SS)", GtfsLogicalTime::parseFromHH_MM_SS);
 	}
 
 	public GtfsCalendarDateExceptionType getCalendarDateExceptionType(
 			String field) {
-		String str = getString(field);
-		try {
-			if (str == null || str.isEmpty()) {
-				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
-				return null;
-			}
-			return GtfsCalendarDateExceptionType
-					.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(
-					fieldFormatError(field, str, "exception type (1 or 2)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsCalendarDateExceptionType.class, field,
+				true, "exception type (1 or 2)",
+				GtfsCalendarDateExceptionType::fromValue);
 	}
 
 	public GtfsStopType getStopType(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty())
-			return null;
-		try {
-			return GtfsStopType.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(fieldFormatError(field, str,
-					"stop type (0, 1, 2, 3 or 4)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsStopType.class, field, false,
+				"stop type (0, 1, 2, 3 or 4)", GtfsStopType::fromValue);
 	}
 
 	public GtfsBlockId getBlockId(String field) {
@@ -257,147 +151,89 @@ public class DataRowConverter {
 	}
 
 	public GtfsTripDirectionId getDirectionId(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty()) {
-			return null;
-		}
-		try {
-			return GtfsTripDirectionId.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(
-					fieldFormatError(field, str, "direction ID (0 or 1)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsTripDirectionId.class, field, false,
+				"direction ID (0 or 1)", GtfsTripDirectionId::fromValue);
 	}
 
 	public GtfsTripStopSequence getTripStopSequence(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty()) {
-			// No need to report a missing value error, this is considered an ID
-			return null;
-		}
-		try {
-			return GtfsTripStopSequence.fromSequence(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(
-					fieldFormatError(field, str, "stop sequence (integer)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsTripStopSequence.class, field, false,
+				"stop sequence (integer)", GtfsTripStopSequence::fromSequence);
 	}
 
 	public GtfsShapePointSequence getShapePointSequence(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty()) {
-			// No need to report a missing value error, this is considered an ID
-			return null;
-		}
-		try {
-			return GtfsShapePointSequence.fromSequence(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(
-					fieldFormatError(field, str, "point sequence (integer)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsShapePointSequence.class, field, false,
+				"point sequence (integer)",
+				GtfsShapePointSequence::fromSequence);
 	}
 
 	public GtfsPickupType getPickupType(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty())
-			return null;
-		try {
-			return GtfsPickupType.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(
-					fieldFormatError(field, str, "pickup type (0, 1, 2 or 3)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsPickupType.class, field, false,
+				"pickup type (0, 1, 2 or 3)", GtfsPickupType::fromValue);
 	}
 
 	public GtfsDropoffType getDropoffType(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty())
-			return null;
-		try {
-			return GtfsDropoffType.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(fieldFormatError(field, str,
-					"drop-off type (0, 1, 2 or 3)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsDropoffType.class, field, false,
+				"drop-off type (0, 1, 2 or 3)", GtfsDropoffType::fromValue);
 	}
 
 	public GtfsTimepoint getTimepoint(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty())
-			return null;
-		try {
-			return GtfsTimepoint.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink
-					.report(fieldFormatError(field, str, "timepoint (0 or 1)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsTimepoint.class, field, false,
+				"timepoint (0 or 1)", GtfsTimepoint::fromValue);
 	}
 
 	public GtfsColor getColor(String field) {
-		String str = getString(field);
-		try {
-			return GtfsColor.parseHexTriplet(str);
-		} catch (ParseException e) {
-			reportSink.report(fieldFormatError(field, str,
-					"hexadecimal RGB color triplet (6 characters)"));
-			return null;
-		}
+		return getTypeFromString(GtfsColor.class, field, false,
+				"hexadecimal RGB color triplet (6 characters)",
+				GtfsColor::parseHexTriplet);
 	}
 
 	public GtfsWheelchairAccess getWheelchairAccess(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty())
-			return null;
-		try {
-			return GtfsWheelchairAccess.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(fieldFormatError(field, str,
-					"wheelchair access (0, 1, 2)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsWheelchairAccess.class, field, false,
+				"wheelchair access (0, 1, 2)", GtfsWheelchairAccess::fromValue);
 	}
 
 	public GtfsBikeAccess getBikeAccess(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty())
-			return null;
-		try {
-			return GtfsBikeAccess.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(
-					fieldFormatError(field, str, "bike access (0, 1, 2)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsBikeAccess.class, field, false,
+				"bike access (0, 1, 2)", GtfsBikeAccess::fromValue);
 	}
 
 	public GtfsExactTime getExactTimes(String field) {
-		String str = getString(field);
-		if (str == null || str.isEmpty())
-			return null;
-		try {
-			return GtfsExactTime.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink
-					.report(fieldFormatError(field, str, "exact times (0, 1)"));
-			return null;
-		}
+		return getTypeFromInteger(GtfsExactTime.class, field, false,
+				"exact times (0, 1)", GtfsExactTime::fromValue);
 	}
 
 	public GtfsTransferType getTransferType(String field) {
+		return getTypeFromInteger(GtfsTransferType.class, field, false,
+				"transfer type (0, 1, 2, 3)", GtfsTransferType::fromValue);
+	}
+
+	@FunctionalInterface
+	public interface DataConverter<T, R> {
+		R convert(T t) throws Exception;
+	}
+
+	private <T> T getTypeFromInteger(Class<T> clazz, String field,
+			boolean mandatory, String expectedFormat,
+			DataConverter<Integer, T> func) {
+		return getTypeFromString(clazz, field, mandatory, expectedFormat,
+				str -> func.convert(Integer.parseInt(str)));
+	}
+
+	private <T> T getTypeFromString(Class<T> clazz, String field,
+			boolean mandatory, String expectedFormat,
+			DataConverter<String, T> func) {
 		String str = getString(field);
-		if (str == null || str.isEmpty())
+		if (str == null || str.isEmpty()) {
+			if (mandatory) {
+				reportSink.report(new MissingMandatoryValueError(
+						row.getSourceInfo(), field));
+			}
 			return null;
+		}
 		try {
-			return GtfsTransferType.fromValue(Integer.parseInt(str));
-		} catch (IllegalArgumentException e) {
-			reportSink.report(
-					fieldFormatError(field, str, "transfer type (0, 1, 2, 3)"));
+			return func.convert(str);
+		} catch (Exception e) {
+			reportSink.report(fieldFormatError(field, str, expectedFormat));
 			return null;
 		}
 	}

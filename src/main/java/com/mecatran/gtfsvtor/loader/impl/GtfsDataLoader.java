@@ -201,13 +201,13 @@ public class GtfsDataLoader implements DataLoader {
 			GtfsCalendar.Builder builder = new GtfsCalendar.Builder(
 					erow.getString("service_id"));
 			builder.withSourceInfo(row.getSourceInfo())
-					.withDow(erow.getBoolean("monday", null, true),
-							erow.getBoolean("tuesday", null, true),
-							erow.getBoolean("wednesday", null, true),
-							erow.getBoolean("thursday", null, true),
-							erow.getBoolean("friday", null, true),
-							erow.getBoolean("saturday", null, true),
-							erow.getBoolean("sunday", null, true))
+					.withDow(erow.getBoolean("monday", true),
+							erow.getBoolean("tuesday", true),
+							erow.getBoolean("wednesday", true),
+							erow.getBoolean("thursday", true),
+							erow.getBoolean("friday", true),
+							erow.getBoolean("saturday", true),
+							erow.getBoolean("sunday", true))
 					.withStartDate(erow.getLogicalDate("start_date", true))
 					.withEndDate(erow.getLogicalDate("end_date", true));
 			GtfsCalendar calendar = builder.build();
@@ -266,7 +266,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withPointSequence(
 							erow.getShapePointSequence("shape_pt_sequence"))
 					.withShapeDistTraveled(
-							erow.getDouble("shape_dist_traveled"));
+							erow.getDouble("shape_dist_traveled", false));
 			GtfsShapePoint shapePoint = builder.build();
 			sourceContext.setRow(row);
 			context.getStreamingValidator().validate(GtfsShapePoint.class,
@@ -337,7 +337,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withPickupType(erow.getPickupType("pickup_type"))
 					.withDropoffType(erow.getDropoffType("drop_off_type"))
 					.withShapeDistTraveled(
-							erow.getDouble("shape_dist_traveled"))
+							erow.getDouble("shape_dist_traveled", false))
 					.withTimepoint(erow.getTimepoint("timepoint"));
 			GtfsStopTime stopTime = builder.build();
 			sourceContext.setRow(row);

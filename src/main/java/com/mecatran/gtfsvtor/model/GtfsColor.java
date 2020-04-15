@@ -17,8 +17,8 @@ public class GtfsColor {
 
 	public static GtfsColor parseHexTriplet(String hexColor)
 			throws ParseException {
-		if (hexColor == null || hexColor.isEmpty())
-			return null;
+		if (hexColor == null)
+			throw new NullPointerException("hexColor");
 		if (hexColor.length() != 6)
 			throw new ParseException("Invalid hex color: " + hexColor, 0);
 		try {
