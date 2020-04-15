@@ -77,11 +77,13 @@ import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromShapeIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelAtStopError;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelError;
+import com.mecatran.gtfsvtor.reporting.issues.TooFastTransferWalkingSpeed;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TooManyDaysWithoutServiceIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
+import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
 import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
@@ -956,8 +958,25 @@ public class TestGtfs {
 	@Test
 	public void testBogusTransfers() {
 		TestBundle tb = loadAndValidate("bogus_transfers");
-		int nIssues = tb.report.getReportIssues().size();
-		assertEquals(11, nIssues);
+		assertEquals(2, tb.report
+				.getReportIssues(TooFastTransferWalkingSpeed.class).size());
+		assertEquals(3,
+				tb.report.getReportIssues(InvalidFieldValueIssue.class).size());
+		assertEquals(2,
+				tb.report.getReportIssues(UselessValueWarning.class).size());
+		assertEquals(1,
+				tb.report.getReportIssues(InvalidReferenceError.class).size());
+	}
+
+	@Test
+	public void testBogusFares() {
+		TestBundle tb = loadAndValidate("bogus_fares");
+		assertEquals(5, tb.report.getReportIssues(InvalidFieldFormatError.class)
+				.size());
+		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
+				.size());
+		assertEquals(1,
+				tb.report.getReportIssues(InvalidReferenceError.class).size());
 	}
 
 	@Test
