@@ -42,6 +42,8 @@ import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
+import com.mecatran.gtfsvtor.model.GtfsTransfer;
+import com.mecatran.gtfsvtor.model.GtfsTransferType;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
@@ -227,6 +229,16 @@ public class TestGtfs {
 		assertEquals(new Integer(1800), frequency.getHeadwaySeconds());
 		assertEquals(GtfsExactTime.FREQUENCY_BASED,
 				frequency.getNonNullExactTime());
+
+		Collection<GtfsTransfer> transfers = dao.getTransfers();
+		assertEquals(2, transfers.size());
+		GtfsTransfer t1 = dao.getTransfer(GtfsStop.id("NADAV"),
+				GtfsStop.id("NANAA"));
+		assertEquals(GtfsTransferType.NONE, t1.getNonNullType());
+		GtfsTransfer t2 = dao.getTransfer(GtfsStop.id("EMSI"),
+				GtfsStop.id("NANAA"));
+		assertEquals(GtfsTransferType.TIMED, t2.getNonNullType());
+		assertEquals(Integer.valueOf(1200), t2.getMinTransferTime());
 	}
 
 	@Test
