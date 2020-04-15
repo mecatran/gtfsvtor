@@ -30,10 +30,6 @@ Shapes
 ------
 Wrong shape projection
 
-Transfers
----------
-Transfer walking speed too fast
-
 Levels
 ------
 Unused level
@@ -47,8 +43,7 @@ Duplicated pathway (optional)
 
 Fares
 -----
-Duplicated rule
-Fare w/o rule
+Fare w/o rule?
 Max transfer time?
 
 Translations
