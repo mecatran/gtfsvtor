@@ -5,6 +5,8 @@ import java.util.Collection;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
+import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -18,6 +20,8 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
  * Only objects with valid primary IDs (non-null, and not duplicated), are
  * stored and thus returned by the DAO. For duplicated IDs, the first one is
  * stored only.
+ *
+ * TODO - Use iterable for the return signature of collection of elements.
  */
 public interface ReadOnlyDao {
 
@@ -52,12 +56,19 @@ public interface ReadOnlyDao {
 
 	public Collection<GtfsFrequency> getFrequencies();
 
-	public int getStopTimesCount();
-
-	public int getShapePointsCount();
-
 	public Collection<GtfsTransfer> getTransfers();
 
 	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
 			GtfsStop.Id toStopId);
+
+	public Collection<GtfsFareAttribute> getFareAttributes();
+
+	public GtfsFareAttribute getFareAttribute(GtfsFareAttribute.Id fareId);
+
+	public Collection<GtfsFareRule> getRulesOfFare(GtfsFareAttribute.Id fareId);
+
+	public int getStopTimesCount();
+
+	public int getShapePointsCount();
+
 }

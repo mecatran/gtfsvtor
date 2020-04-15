@@ -16,10 +16,13 @@ import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.loader.DataLoader;
+import com.mecatran.gtfsvtor.loader.DataLoader.SourceContext;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
+import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -48,6 +51,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			.create();
 	private Multimap<GtfsCalendar.Id, GtfsCalendarDate> calendarDates = ArrayListMultimap
 			.create();
+	private Map<Pair<GtfsStop.Id, GtfsStop.Id>, GtfsTransfer> transfers = new HashMap<>();
+	private Map<GtfsFareAttribute.Id, GtfsFareAttribute> fareAttributes = new HashMap<>();
+	private ListMultimap<GtfsFareAttribute.Id, GtfsFareRule> fareRules = ArrayListMultimap
+			.create();
 	private Multimap<GtfsAgency.Id, GtfsRoute> routesPerAgency = ArrayListMultimap
 			.create();
 	private Multimap<GtfsRoute.Id, GtfsTrip> tripsPerRoute = ArrayListMultimap
@@ -64,7 +71,6 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			.create();
 	private Multimap<GtfsStop.Id, GtfsStop> boardingAreasPerStop = ArrayListMultimap
 			.create();
-	private Map<Pair<GtfsStop.Id, GtfsStop.Id>, GtfsTransfer> transfers = new HashMap<>();
 
 	private CalendarIndex calendarIndex = null;
 	private DaoSpatialIndex spatialIndex = null;
@@ -180,6 +186,22 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
 			GtfsStop.Id toStopId) {
 		return transfers.get(new Pair<>(fromStopId, toStopId));
+	}
+
+	@Override
+	public Collection<GtfsFareAttribute> getFareAttributes() {
+		return Collections.unmodifiableCollection(fareAttributes.values());
+	}
+
+	@Override
+	public GtfsFareAttribute getFareAttribute(GtfsFareAttribute.Id fareId) {
+		return fareAttributes.get(fareId);
+	}
+
+	@Override
+	public Collection<GtfsFareRule> getRulesOfFare(
+			GtfsFareAttribute.Id fareId) {
+		return Collections.unmodifiableCollection(fareRules.get(fareId));
 	}
 
 	@Override
@@ -485,6 +507,37 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		Pair<GtfsStop.Id, GtfsStop.Id> id = new Pair<>(transfer.getFromStopId(),
 				transfer.getToStopId());
 		transfers.put(id, transfer);
+	}
+
+	@Override
+	public void addFareAttribute(GtfsFareAttribute fareAttribute,
+			SourceContext sourceContext) {
+		if (fareAttribute.getId() == null) {
+			sourceContext.getReportSink().report(new MissingObjectIdError(
+					sourceContext.getSourceInfo(), "fare_id"));
+			return;
+		}
+		GtfsFareAttribute existingFare = getFareAttribute(
+				fareAttribute.getId());
+		if (existingFare != null) {
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							sourceContext.getSourceInfo(), existingFare.getId(),
+							"fare_id"));
+			return;
+		}
+		fareAttributes.put(fareAttribute.getId(), fareAttribute);
+	}
+
+	@Override
+	public void addFareRule(GtfsFareRule fareRule,
+			SourceContext sourceContext) {
+		if (fareRule.getFareId() == null) {
+			sourceContext.getReportSink().report(new MissingObjectIdError(
+					sourceContext.getSourceInfo(), "fare_id"));
+			return;
+		}
+		fareRules.put(fareRule.getFareId(), fareRule);
 	}
 
 	@Override

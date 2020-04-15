@@ -15,6 +15,8 @@ import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
+import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsRouteType;
@@ -75,6 +77,10 @@ public class GtfsDataLoader implements DataLoader {
 		loadFrequencies(context);
 		// Transfers references stops
 		loadTransfers(context);
+		// Fare attributes references agencies
+		loadFareAttributes(context);
+		// Fare rule references fare attributes, routes, zones
+		loadFareRules(context);
 		reportUnreadTables(context.getReportSink());
 		context.getDao().close();
 	}
@@ -407,6 +413,63 @@ public class GtfsDataLoader implements DataLoader {
 			context.getStreamingValidator().validate(GtfsTransfer.class,
 					transfer, sourceContext);
 			context.getDao().addTransfer(transfer, sourceContext);
+		}
+		closeTable(table, context.getReportSink());
+	}
+
+	private void loadFareAttributes(DataLoader.Context context) {
+		DataTable table = getDataTable(GtfsFareAttribute.TABLE_NAME, false,
+				context.getReportSink());
+		if (table == null)
+			return;
+		checkMandatoryColumns(context.getReportSink(), table, "fare_id",
+				"price", "currency_type", "payment_method", "transfers");
+		DataTableContext sourceContext = new DataTableContext(table,
+				context.getReportSink(), context.getReadOnlyDao());
+		for (DataRow row : table) {
+			DataRowConverter erow = new DataRowConverter(row,
+					context.getReportSink());
+			GtfsFareAttribute.Builder builder = new GtfsFareAttribute.Builder(
+					erow.getString("fare_id"));
+			builder.withPrice(erow.getDouble("price", true))
+					.withCurrencyType(erow.getCurrency("currency_type"))
+					.withSourceInfo(row.getSourceInfo())
+					.withPaymentMethod(erow.getPaymentMethod("payment_method"))
+					.withTransfers(erow.getNumTransfers("transfers"))
+					.withAgencyId(GtfsAgency.id(erow.getString("agency_id")))
+					.withTransferDuration(erow.getInteger("transfer_duration"));
+			GtfsFareAttribute fareAttribute = builder.build();
+			sourceContext.setRow(row);
+			context.getStreamingValidator().validate(GtfsFareAttribute.class,
+					fareAttribute, sourceContext);
+			context.getDao().addFareAttribute(fareAttribute, sourceContext);
+		}
+		closeTable(table, context.getReportSink());
+	}
+
+	private void loadFareRules(DataLoader.Context context) {
+		DataTable table = getDataTable(GtfsFareRule.TABLE_NAME, false,
+				context.getReportSink());
+		if (table == null)
+			return;
+		checkMandatoryColumns(context.getReportSink(), table, "fare_id");
+		DataTableContext sourceContext = new DataTableContext(table,
+				context.getReportSink(), context.getReadOnlyDao());
+		for (DataRow row : table) {
+			DataRowConverter erow = new DataRowConverter(row,
+					context.getReportSink());
+			GtfsFareRule.Builder builder = new GtfsFareRule.Builder();
+			builder.withFareId(GtfsFareAttribute.id(erow.getString("fare_id")))
+					.withRouteId(GtfsRoute.id(erow.getString("route_id")))
+					.withOriginId(GtfsZone.id(erow.getString("origin_id")))
+					.withDestinationId(
+							GtfsZone.id(erow.getString("destination_id")))
+					.withContainsId(GtfsZone.id(erow.getString("contains_id")));
+			GtfsFareRule fareRule = builder.build();
+			sourceContext.setRow(row);
+			context.getStreamingValidator().validate(GtfsFareRule.class,
+					fareRule, sourceContext);
+			context.getDao().addFareRule(fareRule, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
 	}

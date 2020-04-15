@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.loader;
 
 import java.text.ParseException;
 import java.time.ZoneId;
+import java.util.Currency;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -13,6 +14,8 @@ import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsExactTime;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
+import com.mecatran.gtfsvtor.model.GtfsNumTransfers;
+import com.mecatran.gtfsvtor.model.GtfsPaymentMethod;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
@@ -202,9 +205,31 @@ public class DataRowConverter {
 				"exact times (0, 1)", GtfsExactTime::fromValue);
 	}
 
+	public GtfsPaymentMethod getPaymentMethod(String field) {
+		return getTypeFromInteger(GtfsPaymentMethod.class, field, true,
+				"payment method (0, 1)", GtfsPaymentMethod::fromValue);
+	}
+
+	public GtfsNumTransfers getNumTransfers(String field) {
+		/*
+		 * This field is specified as "mandatory", but with an empty (ie
+		 * missing) value "allowed" (meaning unlimited). So this is not really
+		 * mandatory after all, it is optional with a default value if missing.
+		 * Here we return null if empty (unlimited): this is up to the holding
+		 * class to return a default value.
+		 */
+		return getTypeFromInteger(GtfsNumTransfers.class, field, false,
+				"num transfers (0, 1, 2, empty)", GtfsNumTransfers::fromValue);
+	}
+
 	public GtfsTransferType getTransferType(String field) {
-		return getTypeFromInteger(GtfsTransferType.class, field, false,
+		return getTypeFromInteger(GtfsTransferType.class, field, true,
 				"transfer type (0, 1, 2, 3)", GtfsTransferType::fromValue);
+	}
+
+	public Currency getCurrency(String field) {
+		return getTypeFromString(Currency.class, field, true,
+				"ISO 4217 currency", Currency::getInstance);
 	}
 
 	@FunctionalInterface
