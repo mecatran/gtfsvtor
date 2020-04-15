@@ -18,6 +18,8 @@ public class FareAttributeStreamingValidator
 			GtfsFareAttribute fareAttribute,
 			StreamingValidator.Context context) {
 		ReportSink reportSink = context.getReportSink();
+
+		// Check transfer duration is not negative
 		if (fareAttribute.getTransferDuration() != null
 				&& fareAttribute.getTransferDuration() < 0) {
 			reportSink.report(new InvalidFieldFormatError(
@@ -25,6 +27,15 @@ public class FareAttributeStreamingValidator
 					Integer.toString(fareAttribute.getTransferDuration()),
 					"positive integer"));
 		}
+
+		// Check price is not negative
+		if (fareAttribute.getPrice() != null && fareAttribute.getPrice() < 0.) {
+			reportSink
+					.report(new InvalidFieldFormatError(context.getSourceInfo(),
+							"price", Double.toString(fareAttribute.getPrice()),
+							"non-negative float"));
+		}
+
 		ReadOnlyDao dao = context.getPartialDao();
 
 		// Check agency reference
