@@ -16,7 +16,7 @@ How to use GTFSVTOR
 
 GTFSVTOR is still beta, but should be usable as-is.
 Only the following tables are loaded:
-`agency.txt, routes.txt, calendar.txt, calendar_dates.txt, trips.txt, stop_times.txt, shapes.txt`.
+`agency.txt, routes.txt, calendar.txt, calendar_dates.txt, trips.txt, stop_times.txt, shapes.txt, transfers.txt, fare_attributes.txt, fare_rules.txt`.
 Not all validation rules of the legacy feedvalidator.py are implemented, however.
 See the [TODO](TODO) file to check what rules are missing.
 
@@ -52,11 +52,10 @@ Performance tests are done using:
   | IDFM Paris      |   1870 | 63471 | 467457 | 10564k |       - | 57m50s        | 50s           |
   | OV Netherlands  |   2703 | 63995 | 787736 | 16103k |   3384k | ?             | 2m27s         |
 
-**Note**: Performances comparisons are not 100% accurate as GTFSVTOR do not have all validators implemented,
-some of them can be a bit slow (block ID overlap...)
+**Note**: Performances comparisons are not 100% accurate as GTFSVTOR do not have all validators implemented.
 However most of the CPU-intensive work is implemented in GTFSVOR as the time of writing
 (loading and conversion of stops, trips, times, shapes, calendars; shape linear indexing; calendar indexing;
-stop spatial indexing; too fast travel checks, trip duplication detection...)
+stop spatial indexing; too fast travel checks, trip duplication detection, block ID overlap...)
 
 Developer guide
 ---------------
@@ -64,5 +63,6 @@ Developer guide
 **TODO**
 
 - Code documentation
+- Configuration
 - Adding new validation rules
 - Using GTFSVTOR as a library
