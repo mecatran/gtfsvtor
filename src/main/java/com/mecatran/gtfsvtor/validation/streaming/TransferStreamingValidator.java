@@ -75,7 +75,7 @@ public class TransferStreamingValidator
 				reportSink.report(new InvalidReferenceError(
 						context.getSourceInfo(), "from_stop_id",
 						transfer.getFromStopId().getInternalId(),
-						GtfsTransfer.TABLE_NAME, "from_stop_id"));
+						GtfsStop.TABLE_NAME, "stop_id"));
 			}
 		}
 		if (transfer.getToStopId() != null) {
@@ -84,7 +84,7 @@ public class TransferStreamingValidator
 				reportSink.report(new InvalidReferenceError(
 						context.getSourceInfo(), "to_stop_id",
 						transfer.getToStopId().getInternalId(),
-						GtfsTransfer.TABLE_NAME, "to_stop_id"));
+						GtfsStop.TABLE_NAME, "stop_id"));
 			}
 		}
 
