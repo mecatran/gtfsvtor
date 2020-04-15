@@ -11,6 +11,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Currency;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -32,10 +33,13 @@ import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsExactTime;
+import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
+import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
+import com.mecatran.gtfsvtor.model.GtfsPaymentMethod;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -239,6 +243,18 @@ public class TestGtfs {
 				GtfsStop.id("NANAA"));
 		assertEquals(GtfsTransferType.TIMED, t2.getNonNullType());
 		assertEquals(Integer.valueOf(1200), t2.getMinTransferTime());
+
+		assertEquals(2, dao.getFareAttributes().size());
+		GtfsFareAttribute p = dao.getFareAttribute(GtfsFareAttribute.id("p"));
+		assertEquals(Currency.getInstance("USD"), p.getCurrencyType());
+		assertEquals(GtfsPaymentMethod.ON_BOARD, p.getPaymentMethod());
+		assertEquals(1.25f, p.getPrice(), 0.0f);
+		assertNull(p.getAgencyId());
+		Collection<GtfsFareRule> prules = dao.getRulesOfFare(p.getId());
+		assertEquals(3, prules.size());
+		for (GtfsFareRule prule : prules) {
+			assertNotNull(prule.getRouteId());
+		}
 	}
 
 	@Test

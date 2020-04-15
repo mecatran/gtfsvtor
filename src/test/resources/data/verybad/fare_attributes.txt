@@ -1,3 +1,5 @@
-fare_id,price,currency_type,payment_method,transfers,transfer_duration
-p,1.25,USD,0,0,
-a,5.25,USD,0,0,
+fare_id,price,currency_type,payment_method,transfers,transfer_duration,agency_id
+p,1.25,USD,0,0,,
+a,5.25,USD,0,0,,
+d,€2,Euros,3,,,
+d,,,,,-10,INEXISTANT_AGENCY
