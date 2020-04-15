@@ -460,6 +460,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsFareRule.Builder builder = new GtfsFareRule.Builder();
 			builder.withFareId(GtfsFareAttribute.id(erow.getString("fare_id")))
+					.withSourceInfo(row.getSourceInfo())
 					.withRouteId(GtfsRoute.id(erow.getString("route_id")))
 					.withOriginId(GtfsZone.id(erow.getString("origin_id")))
 					.withDestinationId(
