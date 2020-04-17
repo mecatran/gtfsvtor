@@ -25,6 +25,7 @@ import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
+import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -37,10 +38,12 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsZone;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
+import com.mecatran.gtfsvtor.reporting.issues.MultipleFeedInfoError;
 import com.mecatran.gtfsvtor.utils.Pair;
 
 public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
+	private GtfsFeedInfo feedInfo;
 	private Map<GtfsAgency.Id, GtfsAgency> agencies = new HashMap<>();
 	private Map<GtfsRoute.Id, GtfsRoute> routes = new HashMap<>();
 	private Map<GtfsStop.Id, GtfsStop> stops = new HashMap<>();
@@ -87,6 +90,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public InMemoryDao withVerbose(boolean verbose) {
 		this.verbose = verbose;
 		return this;
+	}
+
+	@Override
+	public GtfsFeedInfo getFeedInfo() {
+		return feedInfo;
 	}
 
 	@Override
@@ -320,6 +328,17 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			}
 		}
 		return linearGeometryIndex;
+	}
+
+	@Override
+	public void setFeedInfo(GtfsFeedInfo feedInfo,
+			SourceContext sourceContext) {
+		if (this.feedInfo != null) {
+			sourceContext.getReportSink()
+					.report(new MultipleFeedInfoError(this.feedInfo, feedInfo));
+			return;
+		}
+		this.feedInfo = feedInfo;
 	}
 
 	@Override

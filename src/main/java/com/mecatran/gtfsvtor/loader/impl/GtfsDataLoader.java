@@ -17,6 +17,7 @@ import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
+import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsRouteType;
@@ -61,6 +62,7 @@ public class GtfsDataLoader implements DataLoader {
 		 * For exemple when loading a trip we check if the calendar or shape ID
 		 * exists, if defined. Etc...
 		 */
+		loadFeedInfo(context);
 		loadAgencies(context);
 		// Routes references agencies
 		loadRoutes(context);
@@ -85,6 +87,41 @@ public class GtfsDataLoader implements DataLoader {
 		context.getDao().close();
 	}
 
+	private void loadFeedInfo(DataLoader.Context context) {
+		DataTable table = getDataTable(GtfsFeedInfo.TABLE_NAME, false,
+				context.getReportSink());
+		if (table == null)
+			return;
+		checkMandatoryColumns(context.getReportSink(), table,
+				"feed_publisher_name", "feed_publisher_url", "feed_lang");
+		DataTableContext sourceContext = new DataTableContext(table,
+				context.getReportSink(), context.getReadOnlyDao());
+		for (DataRow row : table) {
+			DataRowConverter erow = new DataRowConverter(row,
+					context.getReportSink());
+			GtfsFeedInfo.Builder builder = new GtfsFeedInfo.Builder();
+			builder.withSourceInfo(row.getSourceInfo())
+					.withFeedPublisherName(
+							erow.getString("feed_publisher_name"))
+					.withFeedPublisherUrl(erow.getString("feed_publisher_url"))
+					.withFeedLang(erow.getLocale("feed_lang", true))
+					.withDefaultLang(erow.getLocale("default_lang", false))
+					.withFeedStartDate(
+							erow.getLogicalDate("feed_start_date", false))
+					.withFeedEndDate(
+							erow.getLogicalDate("feed_end_date", false))
+					.withFeedVersion(erow.getString("feed_version"))
+					.withFeedContactEmail(erow.getString("feed_contact_email"))
+					.withFeedContactUrl(erow.getString("feed_contact_url"));
+			GtfsFeedInfo feedInfo = builder.build();
+			sourceContext.setRow(row);
+			context.getStreamingValidator().validate(GtfsFeedInfo.class,
+					feedInfo, sourceContext);
+			context.getDao().setFeedInfo(feedInfo, sourceContext);
+		}
+		closeTable(table, context.getReportSink());
+	}
+
 	private void loadAgencies(DataLoader.Context context) {
 		DataTable table = getDataTable(GtfsAgency.TABLE_NAME, true,
 				context.getReportSink());
@@ -103,7 +140,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withName(erow.getString("agency_name", true))
 					.withUrl(erow.getString("agency_url", true))
 					.withTimezone(erow.getTimeZone("agency_timezone", true))
-					.withLang(erow.getLocale("agency_lang"))
+					.withLang(erow.getLocale("agency_lang", false))
 					.withPhone(erow.getString("agency_phone"))
 					.withFareUrl(erow.getString("agency_fare_url"))
 					.withEmail(erow.getString("agency_email"));

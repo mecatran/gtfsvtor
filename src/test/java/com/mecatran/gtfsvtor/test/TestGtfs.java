@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsExactTime;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
+import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
@@ -90,6 +92,18 @@ import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 public class TestGtfs {
 
 	private void testGoodDao(IndexedReadOnlyDao dao) {
+
+		GtfsFeedInfo feedInfo = dao.getFeedInfo();
+		assertNotNull(feedInfo);
+		assertEquals("Autorité de passage de démonstration",
+				feedInfo.getFeedPublisherName());
+		assertEquals("http://google.com", feedInfo.getFeedPublisherUrl());
+		assertEquals(new Locale("en"), feedInfo.getFeedLang());
+		assertEquals(GtfsLogicalDate.getDate(2007, 1, 1),
+				feedInfo.getFeedStartDate());
+		assertEquals(GtfsLogicalDate.getDate(2011, 12, 31),
+				feedInfo.getFeedEndDate());
+
 		assertEquals(1, dao.getAgencies().size());
 		GtfsAgency dta = dao.getAgency(GtfsAgency.id("DTA"));
 		assertNotNull(dta);

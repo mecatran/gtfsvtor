@@ -53,12 +53,8 @@ field_value does exists
 Correct table_name, field_name, language
 
 Feed info
-_________
+---------
 Required if having translations
-End date greater than start date
-Lang format
-Email format
-URLs format
 
 Attributions
 ------------

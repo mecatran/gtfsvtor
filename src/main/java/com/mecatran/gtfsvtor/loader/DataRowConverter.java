@@ -122,8 +122,8 @@ public class DataRowConverter {
 				"IANA timezone", tz -> TimeZone.getTimeZone(ZoneId.of(tz)));
 	}
 
-	public Locale getLocale(String field) {
-		return getTypeFromString(Locale.class, field, false,
+	public Locale getLocale(String field, boolean mandatory) {
+		return getTypeFromString(Locale.class, field, mandatory,
 				"ISO 639-1 language code", Locale::forLanguageTag);
 	}
 

@@ -1,0 +1,3 @@
+feed_publisher_name,feed_publisher_url,feed_lang,default_lang,feed_version,feed_start_date,feed_end_date,feed_contact_name,feed_contact_url
+Mecatran,https://www.mecatran.com/,en,en,V1,20070101,20111231,Joe Smith,
+Foobar,ftp:abc,,ZZ,V2,20200101,20111231,,

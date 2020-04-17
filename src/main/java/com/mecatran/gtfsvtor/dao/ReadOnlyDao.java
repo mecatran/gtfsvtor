@@ -7,6 +7,7 @@ import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
+import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -25,6 +26,8 @@ import com.mecatran.gtfsvtor.model.GtfsZone;
  * TODO - Use iterable for the return signature of collection of elements.
  */
 public interface ReadOnlyDao {
+
+	public GtfsFeedInfo getFeedInfo();
 
 	public Collection<GtfsAgency> getAgencies();
 

@@ -36,7 +36,6 @@ public class TestUtils {
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
 				.autoGuess(base + gtfsFileOrDirectory, report);
 		if (inputStreamSource == null) {
-
 			return ret;
 		}
 		NamedTabularDataSource dataSource = new CsvDataSource(
