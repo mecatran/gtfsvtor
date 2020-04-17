@@ -86,8 +86,8 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 
 	public Optional<GtfsTimepoint> getTimepoint() {
 		int tp = getData(TIMEPOINT_MASK, TIMEPOINT_SHIFT);
-		return tp == NULL_TIMEPOINT ? null
-				: Optional.ofNullable(GtfsTimepoint.fromValue(tp));
+		return tp == NULL_TIMEPOINT ? Optional.empty()
+				: Optional.of(GtfsTimepoint.fromValue(tp));
 	}
 
 	@Override
