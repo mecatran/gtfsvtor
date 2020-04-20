@@ -34,4 +34,9 @@ public enum GtfsStopType {
 	public int getValue() {
 		return value;
 	}
+
+	@Override
+	public String toString() {
+		return name() + "(" + value + ")";
+	}
 }
