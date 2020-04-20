@@ -1,0 +1,5 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,shape_dist_traveled
+AB1,8:00:00,8:00:00,BEATTY_AIRPORT,1,,,,
+AB1,8:10:00,8:15:00,BULLFROG,2,,,,
+AB2,12:05:00,12:05:00,BULLFROG,1,,,,
+AB2,12:15:00,12:15:00,BEATTY_AIRPORT,2,,,,

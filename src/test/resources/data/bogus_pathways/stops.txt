@@ -1,0 +1,6 @@
+stop_id,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,stop_code,location_type,parent_station
+BEATTY_AIRPORT,Nye County Airport (Demo),,36.868446,-116.784582,,,1235,0,BEATTY_AIRPORT_STATION
+BEATTY_AIRPORT_STATION,Nye County Airport (Demo),,36.868446,-116.784582,,,1235,1,
+BEATTY_AIRPORT_ENTRANCE_SOUTH,Nye County Airport (Entrance South),,36.868777,-116.784582,,,1236,2,BEATTY_AIRPORT_STATION
+BEATTY_AIRPORT_ENTRANCE_NORTH,Nye County Airport (Entrance North),,36.869336,-116.784582,,,1237,2,BEATTY_AIRPORT_STATION
+BULLFROG,Bullfrog (Demo),,36.88108,-116.81797,,,,,

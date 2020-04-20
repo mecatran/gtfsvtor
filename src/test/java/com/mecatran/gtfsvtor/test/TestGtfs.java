@@ -86,6 +86,7 @@ import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
+import com.mecatran.gtfsvtor.reporting.issues.WrongPathwayStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
@@ -983,6 +984,23 @@ public class TestGtfs {
 				tb.report.getReportIssues(InvalidReferenceError.class).size());
 		assertEquals(1, tb.report
 				.getReportIssues(WrongTransferStopTypeError.class).size());
+	}
+
+	@Test
+	public void testBogusPathways() {
+		TestBundle tb = loadAndValidate("bogus_pathways");
+		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
+				.size());
+		assertEquals(1, tb.report
+				.getReportIssues(MissingMandatoryColumnError.class).size());
+		assertEquals(1, tb.report
+				.getReportIssues(WrongPathwayStopTypeError.class).size());
+		assertEquals(2, tb.report.getReportIssues(InvalidFieldFormatError.class)
+				.size());
+		assertEquals(2,
+				tb.report.getReportIssues(InvalidReferenceError.class).size());
+		assertEquals(8, tb.report
+				.getReportIssues(MissingMandatoryValueError.class).size());
 	}
 
 	@Test
