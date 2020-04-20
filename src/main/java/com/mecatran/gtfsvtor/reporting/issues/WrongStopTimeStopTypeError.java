@@ -6,6 +6,7 @@ import java.util.List;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
+import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
@@ -41,8 +42,8 @@ public class WrongStopTimeStopTypeError implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		fmt.text("Wrong type {0} for stop {1} {2}, should be type STOP (0)",
+		fmt.text("Wrong type {0} for stop {1} {2}, should be type {3}",
 				fmt.pre(stop.getType().toString()), fmt.id(stop.getId()),
-				fmt.var(stop.getName()));
+				fmt.var(stop.getName()), fmt.pre(GtfsStopType.STOP));
 	}
 }
