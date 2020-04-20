@@ -87,6 +87,7 @@ import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
 import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
+import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
 public class TestGtfs {
@@ -980,6 +981,8 @@ public class TestGtfs {
 				tb.report.getReportIssues(UselessValueWarning.class).size());
 		assertEquals(1,
 				tb.report.getReportIssues(InvalidReferenceError.class).size());
+		assertEquals(1, tb.report
+				.getReportIssues(WrongTransferStopTypeError.class).size());
 	}
 
 	@Test
