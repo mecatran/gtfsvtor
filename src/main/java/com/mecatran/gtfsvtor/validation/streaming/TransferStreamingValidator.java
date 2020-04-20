@@ -4,6 +4,7 @@ import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
 import com.mecatran.gtfsvtor.model.GtfsStop;
+import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTransferType;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
@@ -14,6 +15,7 @@ import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTransferWalkingSpeed;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
+import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
@@ -83,6 +85,13 @@ public class TransferStreamingValidator
 						context.getSourceInfo(), "from_stop_id",
 						transfer.getFromStopId().getInternalId(),
 						GtfsStop.TABLE_NAME, "stop_id"));
+			} else {
+				if (fromStop.getType() != GtfsStopType.STOP
+						&& fromStop.getType() != GtfsStopType.STATION) {
+					reportSink.report(new WrongTransferStopTypeError(
+							context.getSourceInfo(), transfer, fromStop,
+							"from_stop_id"));
+				}
 			}
 		}
 		if (transfer.getToStopId() != null) {
@@ -92,6 +101,13 @@ public class TransferStreamingValidator
 						context.getSourceInfo(), "to_stop_id",
 						transfer.getToStopId().getInternalId(),
 						GtfsStop.TABLE_NAME, "stop_id"));
+			} else {
+				if (toStop.getType() != GtfsStopType.STOP
+						&& toStop.getType() != GtfsStopType.STATION) {
+					reportSink.report(new WrongTransferStopTypeError(
+							context.getSourceInfo(), transfer, toStop,
+							"to_stop_id"));
+				}
 			}
 		}
 
