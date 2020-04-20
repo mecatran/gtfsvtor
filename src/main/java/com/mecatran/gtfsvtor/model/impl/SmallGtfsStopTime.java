@@ -119,7 +119,7 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 		@Override
 		public Builder withTripId(GtfsTrip.Id tripId) {
 			// Interning the trip ID string make sure we do
-			// waste space on many duplicates
+			// not waste space on many duplicates
 			stopTime.tripId = tripId == null ? null
 					: tripId.getInternalId().intern();
 			return this;
