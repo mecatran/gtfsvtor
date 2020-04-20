@@ -2,6 +2,7 @@ Code
 ====
 
 Intern IDs
+Use iterables for DAO method returning collections
 
 Validations
 ===========
@@ -36,7 +37,6 @@ Unused level
 
 Pathways
 --------
-Walking speed too fast
 Complete station coverage
 Blind node
 Duplicated pathway (optional)
