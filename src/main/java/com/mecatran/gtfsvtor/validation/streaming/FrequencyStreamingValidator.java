@@ -20,9 +20,6 @@ public class FrequencyStreamingValidator
 			GtfsFrequency frequency, Context context) {
 		ReportSink reportSink = context.getReportSink();
 		ReadOnlyDao dao = context.getPartialDao();
-		checkNonNull(frequency::getStartTime, "start_time", context);
-		checkNonNull(frequency::getEndTime, "end_time", context);
-		checkNonNull(frequency::getHeadwaySeconds, "headway_secs", context);
 		// Check frequency->trip reference
 		if (frequency.getTripId() != null
 				&& dao.getTrip(frequency.getTripId()) == null) {
