@@ -8,6 +8,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -17,33 +18,37 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 
 public interface AppendableDao {
 
-	public void setFeedInfo(GtfsFeedInfo feedInfo, SourceContext info);
+	public void setFeedInfo(GtfsFeedInfo feedInfo, SourceContext sourceContext);
 
-	public void addAgency(GtfsAgency agency, SourceContext info);
+	public void addAgency(GtfsAgency agency, SourceContext sourceContext);
 
-	public void addRoute(GtfsRoute route, SourceContext info);
+	public void addRoute(GtfsRoute route, SourceContext sourceContext);
 
-	public void addStop(GtfsStop stop, SourceContext info);
+	public void addStop(GtfsStop stop, SourceContext sourceContext);
 
-	public void addCalendar(GtfsCalendar calendar, SourceContext info);
+	public void addCalendar(GtfsCalendar calendar, SourceContext sourceContext);
 
 	public void addCalendarDate(GtfsCalendarDate calendarDate,
-			SourceContext info);
+			SourceContext sourceContext);
 
-	public void addShapePoint(GtfsShapePoint shapePoint, SourceContext info);
+	public void addShapePoint(GtfsShapePoint shapePoint,
+			SourceContext sourceContext);
 
-	public void addTrip(GtfsTrip trip, SourceContext info);
+	public void addTrip(GtfsTrip trip, SourceContext sourceContext);
 
-	public void addStopTime(GtfsStopTime stopTime, SourceContext info);
+	public void addStopTime(GtfsStopTime stopTime, SourceContext sourceContext);
 
-	public void addFrequency(GtfsFrequency frequency, SourceContext info);
+	public void addFrequency(GtfsFrequency frequency,
+			SourceContext sourceContext);
 
-	public void addTransfer(GtfsTransfer transfer, SourceContext info);
+	public void addTransfer(GtfsTransfer transfer, SourceContext sourceContext);
+
+	public void addPathway(GtfsPathway pathway, SourceContext sourceContext);
 
 	public void addFareAttribute(GtfsFareAttribute fareAttribute,
-			SourceContext info);
+			SourceContext sourceContext);
 
-	public void addFareRule(GtfsFareRule fareRule, SourceContext info);
+	public void addFareRule(GtfsFareRule fareRule, SourceContext sourceContext);
 
 	public void close();
 }

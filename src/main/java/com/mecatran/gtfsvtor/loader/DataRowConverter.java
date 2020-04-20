@@ -10,11 +10,13 @@ import com.mecatran.gtfsvtor.model.GtfsBikeAccess;
 import com.mecatran.gtfsvtor.model.GtfsBlockId;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsColor;
+import com.mecatran.gtfsvtor.model.GtfsDirectionality;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsExactTime;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsNumTransfers;
+import com.mecatran.gtfsvtor.model.GtfsPathwayMode;
 import com.mecatran.gtfsvtor.model.GtfsPaymentMethod;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
@@ -63,10 +65,6 @@ public class DataRowConverter {
 			return defaultValue;
 		}
 		return ret;
-	}
-
-	public Integer getInteger(String field) {
-		return this.getInteger(field, false);
 	}
 
 	public Integer getInteger(String field, boolean mandatory) {
@@ -132,8 +130,8 @@ public class DataRowConverter {
 				"time (HH:MM:SS)", GtfsLogicalDate::parseFromYYYYMMDD);
 	}
 
-	public GtfsLogicalTime getLogicalTime(String field) {
-		return getTypeFromString(GtfsLogicalTime.class, field, false,
+	public GtfsLogicalTime getLogicalTime(String field, boolean mandatory) {
+		return getTypeFromString(GtfsLogicalTime.class, field, mandatory,
 				"time (HH:MM:SS)", GtfsLogicalTime::parseFromHH_MM_SS);
 	}
 
@@ -230,6 +228,16 @@ public class DataRowConverter {
 	public Currency getCurrency(String field) {
 		return getTypeFromString(Currency.class, field, true,
 				"ISO 4217 currency", Currency::getInstance);
+	}
+
+	public GtfsPathwayMode getPathwayMode(String field) {
+		return getTypeFromInteger(GtfsPathwayMode.class, field, true,
+				"pathway mode (1-7)", GtfsPathwayMode::fromValue);
+	}
+
+	public GtfsDirectionality getDirectionality(String field) {
+		return getTypeFromInteger(GtfsDirectionality.class, field, true,
+				"directionality (0, 1)", GtfsDirectionality::fromValue);
 	}
 
 	@FunctionalInterface

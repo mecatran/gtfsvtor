@@ -27,6 +27,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
@@ -59,6 +60,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Multimap<GtfsCalendar.Id, GtfsCalendarDate> calendarDates = ArrayListMultimap
 			.create();
 	private Map<Pair<GtfsStop.Id, GtfsStop.Id>, GtfsTransfer> transfers = new HashMap<>();
+	private Map<GtfsPathway.Id, GtfsPathway> pathways = new HashMap<>();
 	private Map<GtfsFareAttribute.Id, GtfsFareAttribute> fareAttributes = new HashMap<>();
 	private ListMultimap<GtfsFareAttribute.Id, GtfsFareRule> fareRules = ArrayListMultimap
 			.create();
@@ -208,6 +210,16 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
 			GtfsStop.Id toStopId) {
 		return transfers.get(new Pair<>(fromStopId, toStopId));
+	}
+
+	@Override
+	public Collection<GtfsPathway> getPathways() {
+		return Collections.unmodifiableCollection(pathways.values());
+	}
+
+	@Override
+	public GtfsPathway getPathway(GtfsPathway.Id pathwayId) {
+		return pathways.get(pathwayId);
 	}
 
 	@Override
@@ -524,7 +536,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public void addTransfer(GtfsTransfer transfer,
 			DataLoader.SourceContext sourceContext) {
-		// Do not add frequency w/o from/to stop ID
+		// Do not add transfer w/o from/to stop ID
 		if (transfer.getFromStopId() == null
 				|| transfer.getToStopId() == null) {
 			sourceContext.getReportSink()
@@ -544,6 +556,28 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		Pair<GtfsStop.Id, GtfsStop.Id> id = new Pair<>(transfer.getFromStopId(),
 				transfer.getToStopId());
 		transfers.put(id, transfer);
+		// TODO Should we index on from/to stop IDs?
+	}
+
+	@Override
+	public void addPathway(GtfsPathway pathway,
+			DataLoader.SourceContext sourceContext) {
+		// Do not add pathway w/o ID
+		if (pathway.getId() == null) {
+			sourceContext.getReportSink().report(new MissingObjectIdError(
+					sourceContext.getSourceInfo(), "pathway_id"));
+			return;
+		}
+		GtfsPathway existingPathway = getPathway(pathway.getId());
+		if (existingPathway != null) {
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							sourceContext.getSourceInfo(),
+							existingPathway.getId(), "pathway_id"));
+			return;
+		}
+		pathways.put(pathway.getId(), pathway);
+		// TODO Should we index on from/to stop IDs?
 	}
 
 	@Override

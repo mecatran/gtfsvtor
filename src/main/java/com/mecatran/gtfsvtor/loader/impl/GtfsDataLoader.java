@@ -19,6 +19,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsRouteType;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -79,6 +80,8 @@ public class GtfsDataLoader implements DataLoader {
 		loadFrequencies(context);
 		// Transfers references stops
 		loadTransfers(context);
+		// Pathways references stops
+		loadPathways(context);
 		// Fare attributes references agencies
 		loadFareAttributes(context);
 		// Fare rule references fare attributes, routes, zones
@@ -178,7 +181,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withUrl(erow.getString("route_url"))
 					.withColor(erow.getColor("route_color"))
 					.withTextColor(erow.getColor("route_text_color"))
-					.withSortOrder(erow.getInteger("route_sort_order"));
+					.withSortOrder(erow.getInteger("route_sort_order", false));
 			GtfsRoute route = builder.build();
 			sourceContext.setRow(row);
 			context.getStreamingValidator().validate(GtfsRoute.class, route,
@@ -372,8 +375,9 @@ public class GtfsDataLoader implements DataLoader {
 					? new SmallGtfsStopTime.Builder()
 					: new SimpleGtfsStopTime.Builder();
 			builder.withTripId(GtfsTrip.id(erow.getString("trip_id")))
-					.withArrivalTime(erow.getLogicalTime("arrival_time"))
-					.withDepartureTime(erow.getLogicalTime("departure_time"))
+					.withArrivalTime(erow.getLogicalTime("arrival_time", false))
+					.withDepartureTime(
+							erow.getLogicalTime("departure_time", false))
 					.withStopId(GtfsStop.id(erow.getString("stop_id")))
 					.withStopSequence(erow.getTripStopSequence("stop_sequence"))
 					.withStopHeadsign(erow.getString("stop_headsign"))
@@ -415,8 +419,8 @@ public class GtfsDataLoader implements DataLoader {
 			GtfsFrequency.Builder builder = new GtfsFrequency.Builder();
 			builder.withSourceInfo(row.getSourceInfo())
 					.withTripId(GtfsTrip.id(erow.getString("trip_id")))
-					.withStartTime(erow.getLogicalTime("start_time"))
-					.withEndTime(erow.getLogicalTime("end_time"))
+					.withStartTime(erow.getLogicalTime("start_time", true))
+					.withEndTime(erow.getLogicalTime("end_time", true))
 					.withHeadwaySeconds(erow.getInteger("headway_secs", true))
 					.withExactTimes(erow.getExactTimes("exact_times"));
 			GtfsFrequency frequency = builder.build();
@@ -444,12 +448,50 @@ public class GtfsDataLoader implements DataLoader {
 			builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
 					.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
 					.withTransferType(erow.getTransferType("transfer_type"))
-					.withMinTransferTime(erow.getInteger("min_transfer_time"));
+					.withMinTransferTime(
+							erow.getInteger("min_transfer_time", false));
 			GtfsTransfer transfer = builder.build();
 			sourceContext.setRow(row);
 			context.getStreamingValidator().validate(GtfsTransfer.class,
 					transfer, sourceContext);
 			context.getDao().addTransfer(transfer, sourceContext);
+		}
+		closeTable(table, context.getReportSink());
+	}
+
+	private void loadPathways(DataLoader.Context context) {
+		DataTable table = getDataTable(GtfsPathway.TABLE_NAME, false,
+				context.getReportSink());
+		if (table == null)
+			return;
+		checkMandatoryColumns(context.getReportSink(), table, "pathway_id",
+				"from_stop_id", "to_stop_id", "pathway_mode",
+				"is_bidirectional");
+		DataTableContext sourceContext = new DataTableContext(table,
+				context.getReportSink(), context.getReadOnlyDao());
+		for (DataRow row : table) {
+			DataRowConverter erow = new DataRowConverter(row,
+					context.getReportSink());
+			GtfsPathway.Builder builder = new GtfsPathway.Builder(
+					GtfsPathway.id(erow.getString("pathway_id")));
+			builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
+					.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
+					.withPathwayMode(erow.getPathwayMode("pathway_mode"))
+					.withBidirectional(
+							erow.getDirectionality("is_bidirectional"))
+					.withLength(erow.getDouble("length", false))
+					.withTraversalTime(erow.getInteger("traversal_time", false))
+					.withStairCount(erow.getInteger("stair_count", false))
+					.withMaxSlope(erow.getDouble("max_slope", false))
+					.withMinWitdth(erow.getDouble("min_width", false))
+					.withSignpostedAs(erow.getString("signposted_as"))
+					.withReversedSignpostedAs(
+							erow.getString("reversed_signposted_as"));
+			GtfsPathway pathway = builder.build();
+			sourceContext.setRow(row);
+			context.getStreamingValidator().validate(GtfsPathway.class, pathway,
+					sourceContext);
+			context.getDao().addPathway(pathway, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
 	}
@@ -474,7 +516,8 @@ public class GtfsDataLoader implements DataLoader {
 					.withPaymentMethod(erow.getPaymentMethod("payment_method"))
 					.withTransfers(erow.getNumTransfers("transfers"))
 					.withAgencyId(GtfsAgency.id(erow.getString("agency_id")))
-					.withTransferDuration(erow.getInteger("transfer_duration"));
+					.withTransferDuration(
+							erow.getInteger("transfer_duration", false));
 			GtfsFareAttribute fareAttribute = builder.build();
 			sourceContext.setRow(row);
 			context.getStreamingValidator().validate(GtfsFareAttribute.class,

@@ -9,6 +9,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -66,6 +67,10 @@ public interface ReadOnlyDao {
 
 	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
 			GtfsStop.Id toStopId);
+
+	public Collection<GtfsPathway> getPathways();
+
+	public GtfsPathway getPathway(GtfsPathway.Id pathwayId);
 
 	public Collection<GtfsFareAttribute> getFareAttributes();
 
