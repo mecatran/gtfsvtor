@@ -79,15 +79,16 @@ public class StreamingValidationUtils {
 				"ISO 639-1 language");
 	}
 
-	private static void checkFormat(FieldGetter<String> getter,
-			String fieldName, StreamingValidator.Context context,
-			Predicate<String> predicate, String expectedFormat) {
-		String value = getter.get();
+	public static <T> void checkFormat(FieldGetter<T> getter, String fieldName,
+			StreamingValidator.Context context, Predicate<T> predicate,
+			String expectedFormat) {
+		T value = getter.get();
 		if (value == null)
 			return;
 		if (!predicate.test(value)) {
-			context.getReportSink().report(new InvalidFieldFormatError(
-					context.getSourceInfo(), fieldName, value, expectedFormat));
+			context.getReportSink()
+					.report(new InvalidFieldFormatError(context.getSourceInfo(),
+							fieldName, value.toString(), expectedFormat));
 		}
 	}
 }

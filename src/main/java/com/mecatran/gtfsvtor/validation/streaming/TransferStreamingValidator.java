@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.validation.streaming;
 
+import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkFormat;
+
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
@@ -9,11 +11,10 @@ import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTransferType;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
-import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidReferenceError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
-import com.mecatran.gtfsvtor.reporting.issues.TooFastTransferWalkingSpeed;
+import com.mecatran.gtfsvtor.reporting.issues.TooFastWalkingSpeed;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
 import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
@@ -48,12 +49,8 @@ public class TransferStreamingValidator
 		ReportSink reportSink = context.getReportSink();
 		// stop from / to ID is primary key and tested by DAO
 		if (transfer.getMinTransferTime() != null) {
-			if (transfer.getMinTransferTime() < 0) {
-				reportSink.report(new InvalidFieldFormatError(
-						context.getSourceInfo(), "min_transfer_time",
-						Integer.toString(transfer.getMinTransferTime()),
-						"positive integer"));
-			}
+			checkFormat(transfer::getMinTransferTime, "min_transfer_time",
+					context, t -> t >= 0, "positive integer");
 			if (transfer.getNonNullType() == GtfsTransferType.TIMED) {
 				if (maxTransferTimeSecError > 0 && transfer
 						.getMinTransferTime() > maxTransferTimeSecError) {
@@ -139,9 +136,9 @@ public class TransferStreamingValidator
 					double speedMps = d / (transfer.getMinTransferTime()
 							+ walkingTimeSlackSec);
 					if (speedMps > fastWalkingSpeedMps) {
-						reportSink.report(new TooFastTransferWalkingSpeed(
-								context.getSourceInfo(), transfer, fromStop,
-								toStop, d, speedMps, fastWalkingSpeedMps,
+						reportSink.report(new TooFastWalkingSpeed(
+								context.getSourceInfo(), fromStop, toStop, d,
+								speedMps, fastWalkingSpeedMps,
 								ReportIssueSeverity.WARNING));
 					}
 				}
