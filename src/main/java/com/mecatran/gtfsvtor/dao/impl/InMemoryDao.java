@@ -27,6 +27,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -64,6 +65,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Map<GtfsFareAttribute.Id, GtfsFareAttribute> fareAttributes = new HashMap<>();
 	private ListMultimap<GtfsFareAttribute.Id, GtfsFareRule> fareRules = ArrayListMultimap
 			.create();
+	private Map<GtfsLevel.Id, GtfsLevel> levels = new HashMap<>();
 	private Multimap<GtfsAgency.Id, GtfsRoute> routesPerAgency = ArrayListMultimap
 			.create();
 	private Multimap<GtfsRoute.Id, GtfsTrip> tripsPerRoute = ArrayListMultimap
@@ -236,6 +238,16 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public Collection<GtfsFareRule> getRulesOfFare(
 			GtfsFareAttribute.Id fareId) {
 		return Collections.unmodifiableCollection(fareRules.get(fareId));
+	}
+
+	@Override
+	public Collection<GtfsLevel> getLevels() {
+		return Collections.unmodifiableCollection(levels.values());
+	}
+
+	@Override
+	public GtfsLevel getLevel(GtfsLevel.Id levelId) {
+		return levels.get(levelId);
 	}
 
 	@Override
@@ -609,6 +621,25 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		fareRules.put(fareRule.getFareId(), fareRule);
+	}
+
+	@Override
+	public void addLevel(GtfsLevel level, SourceContext sourceContext) {
+		// Do not add levels w/o ID
+		if (level.getId() == null) {
+			sourceContext.getReportSink().report(new MissingObjectIdError(
+					sourceContext.getSourceInfo(), "level_id"));
+			return;
+		}
+		GtfsLevel existingLevel = getLevel(level.getId());
+		if (existingLevel != null) {
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							sourceContext.getSourceInfo(),
+							existingLevel.getId(), "level_id"));
+			return;
+		}
+		levels.put(level.getId(), level);
 	}
 
 	@Override

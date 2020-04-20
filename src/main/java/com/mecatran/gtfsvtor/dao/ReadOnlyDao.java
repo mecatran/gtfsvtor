@@ -9,6 +9,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -77,6 +78,10 @@ public interface ReadOnlyDao {
 	public GtfsFareAttribute getFareAttribute(GtfsFareAttribute.Id fareId);
 
 	public Collection<GtfsFareRule> getRulesOfFare(GtfsFareAttribute.Id fareId);
+
+	public Collection<GtfsLevel> getLevels();
+
+	public GtfsLevel getLevel(GtfsLevel.Id levelId);
 
 	public int getStopTimesCount();
 

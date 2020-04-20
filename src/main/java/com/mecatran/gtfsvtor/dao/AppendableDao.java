@@ -8,6 +8,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
@@ -49,6 +50,8 @@ public interface AppendableDao {
 			SourceContext sourceContext);
 
 	public void addFareRule(GtfsFareRule fareRule, SourceContext sourceContext);
+
+	public void addLevel(GtfsLevel level, SourceContext sourceContext);
 
 	public void close();
 }

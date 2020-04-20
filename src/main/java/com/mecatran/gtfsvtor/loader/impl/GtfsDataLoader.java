@@ -19,6 +19,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsRouteType;
@@ -67,6 +68,7 @@ public class GtfsDataLoader implements DataLoader {
 		loadAgencies(context);
 		// Routes references agencies
 		loadRoutes(context);
+		loadLevels(context);
 		// Stops references levels
 		loadStops(context);
 		loadCalendars(context);
@@ -187,6 +189,32 @@ public class GtfsDataLoader implements DataLoader {
 			context.getStreamingValidator().validate(GtfsRoute.class, route,
 					sourceContext);
 			context.getDao().addRoute(route, sourceContext);
+		}
+		closeTable(table, context.getReportSink());
+	}
+
+	private void loadLevels(DataLoader.Context context) {
+		DataTable table = getDataTable(GtfsLevel.TABLE_NAME, false,
+				context.getReportSink());
+		if (table == null)
+			return;
+		checkMandatoryColumns(context.getReportSink(), table, "level_id",
+				"level_index");
+		DataTableContext sourceContext = new DataTableContext(table,
+				context.getReportSink(), context.getReadOnlyDao());
+		for (DataRow row : table) {
+			DataRowConverter erow = new DataRowConverter(row,
+					context.getReportSink());
+			GtfsLevel.Builder builder = new GtfsLevel.Builder(
+					erow.getString("level_id"));
+			builder.withSourceInfo(row.getSourceInfo())
+					.withIndex(erow.getDouble("level_index", true))
+					.withName(erow.getString("level_name"));
+			GtfsLevel level = builder.build();
+			sourceContext.setRow(row);
+			context.getStreamingValidator().validate(GtfsLevel.class, level,
+					sourceContext);
+			context.getDao().addLevel(level, sourceContext);
 		}
 		closeTable(table, context.getReportSink());
 	}
@@ -473,7 +501,7 @@ public class GtfsDataLoader implements DataLoader {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
 			GtfsPathway.Builder builder = new GtfsPathway.Builder(
-					GtfsPathway.id(erow.getString("pathway_id")));
+					erow.getString("pathway_id"));
 			builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
 					.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
 					.withPathwayMode(erow.getPathwayMode("pathway_mode"))

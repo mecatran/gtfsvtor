@@ -4,8 +4,6 @@ public class GtfsPathway implements GtfsObject<String> {
 
 	public static final String TABLE_NAME = "pathways.txt";
 
-	// Note: we do not store internal ID here,
-	// as it can be rebuilt from the from/to stop ID pair.
 	private GtfsPathway.Id id;
 	private GtfsStop.Id fromStopId;
 	private GtfsStop.Id toStopId;
@@ -92,9 +90,9 @@ public class GtfsPathway implements GtfsObject<String> {
 	public static class Builder {
 		private GtfsPathway pathway;
 
-		public Builder(GtfsPathway.Id id) {
+		public Builder(String id) {
 			pathway = new GtfsPathway();
-			pathway.id = id;
+			pathway.id = id(id);
 		}
 
 		public Builder withFromStopId(GtfsStop.Id fromStopId) {
