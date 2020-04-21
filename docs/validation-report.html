@@ -153,11 +153,11 @@ span.var {
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="xsmaller"> • 45 
+			<span class="xsmaller"> • 46 
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="xsmaller"> • 123 
+			<span class="xsmaller"> • 124 
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -242,6 +242,10 @@ span.var {
 			<li>5 
 				<span class="smaller badge WARNING">WARNING
 				</span>Unused calendar date
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused level
 			</li>
 			<li>2 
 				<span class="smaller badge WARNING">WARNING
@@ -522,6 +526,10 @@ span.var {
 			<li>4 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory is_bidirectional value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory level_index value
 			</li>
 			<li>2 
 				<span class="smaller badge ERROR">ERROR
@@ -2623,6 +2631,68 @@ span.var {
 				</tr>
 			</table>
 		</div>
+		<h2>levels.txt
+			<span class="smaller"> • 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> • 1
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused level
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory level_index value
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>level_id
+						</td>
+						<td>level_index
+						</td>
+						<td>level_name
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td class="WARNING">level_99
+					</td>
+					<td class="ERROR"/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">level_index
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">level_id
+					</td>
+					<td class="issue">Unused <span class='var'>level</span> ID <span class='id'>level_99</span>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<h2>pathways.txt
 			<span class="smaller"> • 12
 				<span class="badge ERROR">ERROR
@@ -4495,6 +4565,8 @@ span.var {
 						</td>
 						<td class="INFO">fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 			</table>
@@ -4539,6 +4611,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -4561,6 +4635,7 @@ span.var {
 					<td/>
 					<td/>
 					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L14
@@ -4578,6 +4653,7 @@ span.var {
 					<td/>
 					<td>1234
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -4625,6 +4701,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -4643,6 +4721,7 @@ span.var {
 					<td/>
 					<td>1234
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -4666,6 +4745,7 @@ span.var {
 					</td>
 					<td>0
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -4712,6 +4792,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -4737,6 +4819,8 @@ span.var {
 					<td class="ERROR">America/Phoenix
 					</td>
 					<td/>
+					<td>ground_level
+					</td>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4788,6 +4872,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -4811,6 +4897,8 @@ span.var {
 					<td class="ERROR"/>
 					<td/>
 					<td/>
+					<td>level_0
+					</td>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4853,6 +4941,8 @@ span.var {
 						<td>stop_timezone
 						</td>
 						<td>fancy_extra_field
+						</td>
+						<td>level_id
 						</td>
 					</tr>
 				</thead>
@@ -4877,6 +4967,8 @@ span.var {
 					<td class="ERROR"/>
 					<td/>
 					<td/>
+					<td>level_1
+					</td>
 				</tr>
 			</table>
 			<table class="issuelist">
@@ -4920,6 +5012,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -4934,6 +5028,7 @@ span.var {
 					</td>
 					<td class="ERROR">-116.81797
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -4992,6 +5087,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5012,6 +5109,7 @@ span.var {
 					</td>
 					<td class="ERROR">0
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5036,6 +5134,7 @@ span.var {
 					</td>
 					<td class="ERROR">NADAV
 					</td>
+					<td/>
 					<td/>
 					<td/>
 				</tr>
@@ -5081,6 +5180,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5101,6 +5202,7 @@ span.var {
 					</td>
 					<td>1
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5147,6 +5249,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5162,6 +5266,7 @@ span.var {
 					</td>
 					<td>-116.40094
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5212,6 +5317,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5232,6 +5339,7 @@ span.var {
 					</td>
 					<td>0
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5278,6 +5386,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5298,6 +5408,7 @@ span.var {
 					</td>
 					<td>1
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5344,6 +5455,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5364,6 +5477,7 @@ span.var {
 					</td>
 					<td class="ERROR">99
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5418,6 +5532,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5435,6 +5551,7 @@ span.var {
 					</td>
 					<td>1234
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5506,6 +5623,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5520,6 +5639,7 @@ span.var {
 					</td>
 					<td class="ERROR">0
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -5578,6 +5698,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5600,6 +5722,7 @@ span.var {
 					</td>
 					<td class="ERROR">BOGUS
 					</td>
+					<td/>
 					<td/>
 					<td/>
 				</tr>
@@ -5653,6 +5776,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5677,6 +5802,7 @@ span.var {
 					</td>
 					<td/>
 					<td/>
+					<td/>
 				</tr>
 				<tr>
 					<td class="linenr">L21
@@ -5698,6 +5824,7 @@ span.var {
 					</td>
 					<td>NADAV
 					</td>
+					<td/>
 					<td/>
 					<td/>
 				</tr>
@@ -5743,6 +5870,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5765,6 +5894,7 @@ span.var {
 					</td>
 					<td>NADAV
 					</td>
+					<td/>
 					<td/>
 					<td/>
 				</tr>
@@ -5810,6 +5940,8 @@ span.var {
 						</td>
 						<td>fancy_extra_field
 						</td>
+						<td>level_id
+						</td>
 					</tr>
 				</thead>
 				<tr>
@@ -5830,6 +5962,7 @@ span.var {
 					</td>
 					<td>1
 					</td>
+					<td/>
 					<td/>
 					<td/>
 					<td/>
@@ -6820,6 +6953,6 @@ span.var {
 			</table>
 		</div>
 		<hr/>
-		<p class="comments">Validation done at Mon Apr 20 15:42:41 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
+		<p class="comments">Validation done at Tue Apr 21 12:16:25 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
 		</p>
 	</head>
