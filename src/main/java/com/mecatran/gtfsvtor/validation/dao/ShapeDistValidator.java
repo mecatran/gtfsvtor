@@ -3,8 +3,6 @@ package com.mecatran.gtfsvtor.validation.dao;
 import java.util.List;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
-import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
-import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.NonIncreasingShapeDistTraveledError;
@@ -15,10 +13,9 @@ public class ShapeDistValidator implements DaoValidator {
 	@Override
 	public void validate(DaoValidator.Context context) {
 		IndexedReadOnlyDao dao = context.getDao();
-		LinearGeometryIndex lgi = dao.getLinearGeometryIndex();
 		ReportSink reportSink = context.getReportSink();
 
-		for (GtfsShape.Id shapeId : dao.getShapeIds()) {
+		dao.getShapeIds().forEach(shapeId -> {
 			List<GtfsShapePoint> shapePoints = dao.getPointsOfShape(shapeId);
 			GtfsShapePoint lastShapePoint = null;
 			for (GtfsShapePoint shapePoint : shapePoints) {
@@ -35,6 +32,6 @@ public class ShapeDistValidator implements DaoValidator {
 				}
 				lastShapePoint = shapePoint;
 			}
-		}
+		});
 	}
 }

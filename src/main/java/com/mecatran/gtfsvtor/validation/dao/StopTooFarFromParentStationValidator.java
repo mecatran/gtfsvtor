@@ -28,23 +28,23 @@ public class StopTooFarFromParentStationValidator implements DaoValidator {
 		ReadOnlyDao dao = context.getDao();
 		ReportSink reportSink = context.getReportSink();
 
-		for (GtfsStop stop : dao.getStops()) {
+		dao.getStops().forEach(stop -> {
 			if (stop.getType() != GtfsStopType.STOP)
-				continue;
+				return;
 			if (stop.getParentId() == null)
-				continue;
+				return;
 			GeoCoordinates pStop = stop.getCoordinates();
 			if (pStop == null)
-				continue;
+				return;
 			GtfsStop station = dao.getStop(stop.getParentId());
 			if (station == null)
-				continue;
+				return;
 			// Do not test distance if data is bogus
 			if (station.getType() != GtfsStopType.STATION)
-				continue;
+				return;
 			GeoCoordinates pStation = station.getCoordinates();
 			if (pStation == null)
-				continue;
+				return;
 			double distance = Geodesics.distanceMeters(pStop, pStation);
 			if (distance >= maxWarningDistanceMeters
 					|| distance >= maxErrorDistanceMeters) {
@@ -56,6 +56,6 @@ public class StopTooFarFromParentStationValidator implements DaoValidator {
 										? ReportIssueSeverity.WARNING
 										: ReportIssueSeverity.INFO));
 			}
-		}
+		});
 	}
 }

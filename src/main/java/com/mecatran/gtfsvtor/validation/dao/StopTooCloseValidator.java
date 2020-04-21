@@ -33,10 +33,10 @@ public class StopTooCloseValidator implements DaoValidator {
 		ReportSink reportSink = context.getReportSink();
 		DaoSpatialIndex dsi = dao.getSpatialIndex();
 
-		for (GtfsStop stop1 : dao.getStops()) {
+		dao.getStops().forEach(stop1 -> {
 			GeoCoordinates p = stop1.getCoordinates();
 			if (p == null)
-				continue;
+				return;
 			/*
 			 * We filter stops2: different from stop1, same type, and ID greater
 			 * than stop1 (to prevent duplicated warnings: A-B and B-A).
@@ -58,6 +58,6 @@ public class StopTooCloseValidator implements DaoValidator {
 										? ReportIssueSeverity.WARNING
 										: ReportIssueSeverity.INFO));
 			}
-		}
+		});
 	}
 }

@@ -12,7 +12,6 @@ import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsRouteType;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
-import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelError;
@@ -38,7 +37,7 @@ public class TooFastTravelValidator implements DaoValidator {
 		IndexedReadOnlyDao dao = context.getDao();
 		LinearGeometryIndex lgi = dao.getLinearGeometryIndex();
 		ReportSink reportSink = context.getReportSink();
-		for (GtfsTrip trip : dao.getTrips()) {
+		dao.getTrips().forEach(trip -> {
 			GtfsRoute route = dao.getRoute(trip.getRouteId());
 			List<GtfsStopTime> stopTimes = dao.getStopTimesOfTrip(trip.getId());
 			double maxSpeedMps = getMaxSpeedMps(route, context.getConfig());
@@ -114,7 +113,7 @@ public class TooFastTravelValidator implements DaoValidator {
 				reportSink.report(new TooManyStopWithSameTimeIssue(route, trip,
 						lastValidStopTime.getArrivalTime(), sameTimeCounter));
 			}
-		}
+		});
 	}
 
 	private ReportIssueSeverity getSeverity(double speedMps,

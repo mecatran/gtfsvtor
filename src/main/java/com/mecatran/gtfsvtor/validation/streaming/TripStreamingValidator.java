@@ -32,7 +32,7 @@ public class TripStreamingValidator implements StreamingValidator<GtfsTrip> {
 		// Check trip->calendar reference
 		if (trip.getServiceId() != null
 				&& dao.getCalendar(trip.getServiceId()) == null
-				&& dao.getCalendarDates(trip.getServiceId()).isEmpty()) {
+				&& dao.getCalendarDates(trip.getServiceId()).count() == 0) {
 			reportSink.report(new InvalidReferenceError(trip.getSourceInfo(),
 					"service_id",
 					trip.getServiceId() == null ? null

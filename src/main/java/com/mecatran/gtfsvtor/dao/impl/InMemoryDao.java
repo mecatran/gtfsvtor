@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -102,8 +103,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsAgency> getAgencies() {
-		return Collections.unmodifiableCollection(agencies.values());
+	public Stream<GtfsAgency> getAgencies() {
+		return agencies.values().stream();
 	}
 
 	@Override
@@ -112,8 +113,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsRoute> getRoutes() {
-		return Collections.unmodifiableCollection(routes.values());
+	public Stream<GtfsRoute> getRoutes() {
+		return routes.values().stream();
 	}
 
 	@Override
@@ -128,8 +129,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsStop> getStops() {
-		return Collections.unmodifiableCollection(stops.values());
+	public Stream<GtfsStop> getStops() {
+		return stops.values().stream();
 	}
 
 	@Override
@@ -143,8 +144,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsCalendar> getCalendars() {
-		return Collections.unmodifiableCollection(calendars.values());
+	public Stream<GtfsCalendar> getCalendars() {
+		return calendars.values().stream();
 	}
 
 	@Override
@@ -153,14 +154,13 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsCalendarDate> getCalendarDates() {
-		return Collections.unmodifiableCollection(calendarDates.values());
+	public Stream<GtfsCalendarDate> getCalendarDates() {
+		return calendarDates.values().stream();
 	}
 
 	@Override
-	public Collection<GtfsCalendarDate> getCalendarDates(Id calendarId) {
-		return Collections
-				.unmodifiableCollection(calendarDates.get(calendarId));
+	public Stream<GtfsCalendarDate> getCalendarDates(Id calendarId) {
+		return calendarDates.get(calendarId).stream();
 	}
 
 	@Override
@@ -169,13 +169,13 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsShape.Id> getShapeIds() {
-		return Collections.unmodifiableCollection(shapePoints.keySet());
+	public Stream<GtfsShape.Id> getShapeIds() {
+		return shapePoints.keySet().stream();
 	}
 
 	@Override
-	public Collection<GtfsTrip> getTrips() {
-		return Collections.unmodifiableCollection(trips.values());
+	public Stream<GtfsTrip> getTrips() {
+		return trips.values().stream();
 	}
 
 	@Override
@@ -184,8 +184,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsFrequency> getFrequencies() {
-		return Collections.unmodifiableCollection(frequencies.values());
+	public Stream<GtfsFrequency> getFrequencies() {
+		return frequencies.values().stream();
 	}
 
 	@Override
@@ -204,8 +204,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsTransfer> getTransfers() {
-		return Collections.unmodifiableCollection(transfers.values());
+	public Stream<GtfsTransfer> getTransfers() {
+		return transfers.values().stream();
 	}
 
 	@Override
@@ -215,8 +215,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsPathway> getPathways() {
-		return Collections.unmodifiableCollection(pathways.values());
+	public Stream<GtfsPathway> getPathways() {
+		return pathways.values().stream();
 	}
 
 	@Override
@@ -225,8 +225,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsFareAttribute> getFareAttributes() {
-		return Collections.unmodifiableCollection(fareAttributes.values());
+	public Stream<GtfsFareAttribute> getFareAttributes() {
+		return fareAttributes.values().stream();
 	}
 
 	@Override
@@ -235,14 +235,13 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsFareRule> getRulesOfFare(
-			GtfsFareAttribute.Id fareId) {
-		return Collections.unmodifiableCollection(fareRules.get(fareId));
+	public Stream<GtfsFareRule> getRulesOfFare(GtfsFareAttribute.Id fareId) {
+		return fareRules.get(fareId).stream();
 	}
 
 	@Override
-	public Collection<GtfsLevel> getLevels() {
-		return Collections.unmodifiableCollection(levels.values());
+	public Stream<GtfsLevel> getLevels() {
+		return levels.values().stream();
 	}
 
 	@Override

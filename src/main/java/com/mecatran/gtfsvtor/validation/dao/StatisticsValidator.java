@@ -18,11 +18,11 @@ public class StatisticsValidator implements DaoValidator {
 
 		reportSink.report(new StatisticsInfo(String.format(
 				"Loaded %d feed-info, %d agencies, %d routes, %d stops, %d calendars, %d calendar dates, %d trips, %d stop times, %d transfers, %d pathways, %d fare attributes, %d fare rules",
-				dao.getFeedInfo() == null ? 0 : 1, dao.getAgencies().size(),
-				dao.getRoutes().size(), dao.getStops().size(),
-				dao.getCalendars().size(), dao.getCalendarDates().size(),
-				dao.getTrips().size(), dao.getStopTimesCount(),
-				dao.getTransfers().size(), dao.getPathways().size(),
-				dao.getFareAttributes().size(), dao.getFareRulesCount())));
+				dao.getFeedInfo() == null ? 0 : 1, dao.getAgencies().count(),
+				dao.getRoutes().count(), dao.getStops().count(),
+				dao.getCalendars().count(), dao.getCalendarDates().count(),
+				dao.getTrips().count(), dao.getStopTimesCount(),
+				dao.getTransfers().count(), dao.getPathways().count(),
+				dao.getFareAttributes().count(), dao.getFareRulesCount())));
 	}
 }

@@ -35,11 +35,8 @@ public class OverlappingBlockIdValidator implements DaoValidator {
 		// Index trips per block ID
 		ListMultimap<GtfsBlockId, GtfsTrip> tripsPerBlockId = ArrayListMultimap
 				.create();
-		for (GtfsTrip trip : dao.getTrips()) {
-			if (trip.getBlockId() != null) {
-				tripsPerBlockId.put(trip.getBlockId(), trip);
-			}
-		}
+		dao.getTrips().filter(trip -> trip.getBlockId() != null)
+				.forEach(trip -> tripsPerBlockId.put(trip.getBlockId(), trip));
 
 		// Process all trips for each block ID
 		for (GtfsBlockId blockId : tripsPerBlockId.asMap().keySet()) {

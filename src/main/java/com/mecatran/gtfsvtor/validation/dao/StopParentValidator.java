@@ -16,7 +16,7 @@ public class StopParentValidator implements DaoValidator {
 		ReadOnlyDao dao = context.getDao();
 		ReportSink reportSink = context.getReportSink();
 
-		for (GtfsStop stop : dao.getStops()) {
+		dao.getStops().forEach(stop -> {
 			GtfsStop parent = null;
 			if (stop.getParentId() != null) {
 				parent = dao.getStop(stop.getParentId());
@@ -65,6 +65,6 @@ public class StopParentValidator implements DaoValidator {
 					}
 				}
 			}
-		}
+		});
 	}
 }

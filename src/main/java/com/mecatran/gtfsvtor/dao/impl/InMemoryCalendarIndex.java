@@ -19,7 +19,6 @@ import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
-import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
@@ -40,12 +39,12 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 		 * provided, we just ignore them or assume sane default values (null is
 		 * empty or invalid day of the week assumed as not active for example).
 		 */
-		for (GtfsCalendar calendar : dao.getCalendars()) {
+		dao.getCalendars().forEach(calendar -> {
 			allCalendarIds.add(calendar.getId());
 			if (calendar.getStartDate() == null
 					|| calendar.getEndDate() == null) {
 				// Ignore incomplete calendar
-				continue;
+				return;
 			}
 			GtfsLogicalDate date = calendar.getStartDate();
 			while (date.compareTo(calendar.getEndDate()) <= 0) {
@@ -62,14 +61,14 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 				}
 				date = date.next();
 			}
-		}
+		});
 		/* Handle exceptions */
-		for (GtfsCalendarDate calDate : dao.getCalendarDates()) {
+		dao.getCalendarDates().forEach(calDate -> {
 			allCalendarIds.add(calDate.getCalendarId());
 			if (calDate.getDate() == null
 					|| calDate.getExceptionType() == null) {
 				// Ignore incomplete calendar date
-				continue;
+				return;
 			}
 			SortedSet<GtfsLogicalDate> datesForId = datesPerCalendar
 					.get(calDate.getCalendarId());
@@ -77,7 +76,7 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 				if (calDate
 						.getExceptionType() == GtfsCalendarDateExceptionType.REMOVED) {
 					// No action needed, no-op removal
-					continue;
+					return;
 				}
 				datesForId = new TreeSet<>();
 				datesPerCalendar.put(calDate.getCalendarId(), datesForId);
@@ -90,7 +89,7 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 				datesForId.remove(calDate.getDate());
 				break;
 			}
-		}
+		});
 		/*
 		 * Build the reversed indexes: 1) calendar IDs for each date, 2) number
 		 * of active trips for each date

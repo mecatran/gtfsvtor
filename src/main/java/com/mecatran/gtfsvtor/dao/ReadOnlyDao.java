@@ -1,6 +1,6 @@
 package com.mecatran.gtfsvtor.dao;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
@@ -31,55 +31,55 @@ public interface ReadOnlyDao {
 
 	public GtfsFeedInfo getFeedInfo();
 
-	public Collection<GtfsAgency> getAgencies();
+	public Stream<GtfsAgency> getAgencies();
 
 	public GtfsAgency getAgency(GtfsAgency.Id agencyId);
 
-	public Collection<GtfsRoute> getRoutes();
+	public Stream<GtfsRoute> getRoutes();
 
 	public GtfsRoute getRoute(GtfsRoute.Id routeId);
 
-	public Collection<GtfsStop> getStops();
+	public Stream<GtfsStop> getStops();
 
 	public GtfsStop getStop(GtfsStop.Id stopId);
 
 	public boolean hasZoneId(GtfsZone.Id zoneId);
 
-	public Collection<GtfsCalendar> getCalendars();
+	public Stream<GtfsCalendar> getCalendars();
 
 	public GtfsCalendar getCalendar(GtfsCalendar.Id calendarId);
 
-	public Collection<GtfsCalendarDate> getCalendarDates();
+	public Stream<GtfsCalendarDate> getCalendarDates();
 
-	public Collection<GtfsCalendarDate> getCalendarDates(
+	public Stream<GtfsCalendarDate> getCalendarDates(
 			GtfsCalendar.Id calendarId);
 
 	public boolean hasShape(GtfsShape.Id shapeId);
 
-	public Collection<GtfsShape.Id> getShapeIds();
+	public Stream<GtfsShape.Id> getShapeIds();
 
-	public Collection<GtfsTrip> getTrips();
+	public Stream<GtfsTrip> getTrips();
 
 	public GtfsTrip getTrip(GtfsTrip.Id tripId);
 
-	public Collection<GtfsFrequency> getFrequencies();
+	public Stream<GtfsFrequency> getFrequencies();
 
-	public Collection<GtfsTransfer> getTransfers();
+	public Stream<GtfsTransfer> getTransfers();
 
 	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
 			GtfsStop.Id toStopId);
 
-	public Collection<GtfsPathway> getPathways();
+	public Stream<GtfsPathway> getPathways();
 
 	public GtfsPathway getPathway(GtfsPathway.Id pathwayId);
 
-	public Collection<GtfsFareAttribute> getFareAttributes();
+	public Stream<GtfsFareAttribute> getFareAttributes();
 
 	public GtfsFareAttribute getFareAttribute(GtfsFareAttribute.Id fareId);
 
-	public Collection<GtfsFareRule> getRulesOfFare(GtfsFareAttribute.Id fareId);
+	public Stream<GtfsFareRule> getRulesOfFare(GtfsFareAttribute.Id fareId);
 
-	public Collection<GtfsLevel> getLevels();
+	public Stream<GtfsLevel> getLevels();
 
 	public GtfsLevel getLevel(GtfsLevel.Id levelId);
 

@@ -9,7 +9,6 @@ import com.google.common.collect.Multimaps;
 import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.CalendarIndex.OverlappingCalendarInfo;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
-import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
@@ -38,7 +37,7 @@ public class DuplicatedTripsValidator implements DaoValidator {
 		ReportSink reportSink = context.getReportSink();
 
 		// Process trips route by route to reduce memory usage
-		for (GtfsRoute route : dao.getRoutes()) {
+		dao.getRoutes().forEach(route -> {
 			ListMultimap<Object, GtfsTrip.Id> tripsPerKey = ArrayListMultimap
 					.create();
 			for (GtfsTrip trip : dao.getTripsOfRoute(route.getId())) {
@@ -69,7 +68,7 @@ public class DuplicatedTripsValidator implements DaoValidator {
 					}
 				}
 			}
-		}
+		});
 	}
 
 	private Object computeTripKey(GtfsTrip trip, List<GtfsStopTime> stopTimes) {

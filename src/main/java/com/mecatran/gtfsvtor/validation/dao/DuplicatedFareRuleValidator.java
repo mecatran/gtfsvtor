@@ -7,7 +7,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
-import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedFareRuleWarning;
@@ -20,16 +19,15 @@ public class DuplicatedFareRuleValidator implements DaoValidator {
 		IndexedReadOnlyDao dao = context.getDao();
 		ReportSink reportSink = context.getReportSink();
 
-		for (GtfsFareAttribute fareAttribute : dao.getFareAttributes()) {
+		dao.getFareAttributes().forEach(fareAttribute -> {
 			ListMultimap<List<Object>, GtfsFareRule> rulesPerIds = ArrayListMultimap
 					.create();
-			for (GtfsFareRule fareRule : dao
-					.getRulesOfFare(fareAttribute.getId())) {
+			dao.getRulesOfFare(fareAttribute.getId()).forEach(fareRule -> {
 				List<Object> key = Arrays.asList(fareRule.getRouteId(),
 						fareRule.getOriginId(), fareRule.getDestinationId(),
 						fareRule.getContainsId());
 				rulesPerIds.put(key, fareRule);
-			}
+			});
 			for (List<GtfsFareRule> fareRules : Multimaps.asMap(rulesPerIds)
 					.values()) {
 				if (fareRules.size() == 1)
@@ -37,6 +35,6 @@ public class DuplicatedFareRuleValidator implements DaoValidator {
 				reportSink.report(new DuplicatedFareRuleWarning(fareAttribute,
 						fareRules));
 			}
-		}
+		});
 	}
 }

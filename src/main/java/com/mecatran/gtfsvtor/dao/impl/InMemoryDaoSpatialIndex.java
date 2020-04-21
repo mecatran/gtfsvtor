@@ -25,13 +25,14 @@ public class InMemoryDaoSpatialIndex implements DaoSpatialIndex {
 		 * a stop too close validator on MBTA GTFS, vs 100 ms with STRtree).
 		 */
 		spatialIndex = new STRtree();
-		for (GtfsStop stop : dao.getStops()) {
+		dao.getStops().forEach(stop -> {
 			GeoCoordinates p = stop.getCoordinates();
-			if (p == null)
-				continue;
-			Envelope env = new Envelope(new Coordinate(p.getLon(), p.getLat()));
-			spatialIndex.insert(env, stop);
-		}
+			if (p != null) {
+				Envelope env = new Envelope(
+						new Coordinate(p.getLon(), p.getLat()));
+				spatialIndex.insert(env, stop);
+			}
+		});
 	}
 
 	@Override

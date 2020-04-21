@@ -109,18 +109,18 @@ public class TestGtfs {
 		assertEquals(GtfsLogicalDate.getDate(2011, 12, 31),
 				feedInfo.getFeedEndDate());
 
-		assertEquals(1, dao.getAgencies().size());
+		assertEquals(1, dao.getAgencies().count());
 		GtfsAgency dta = dao.getAgency(GtfsAgency.id("DTA"));
 		assertNotNull(dta);
 		assertEquals("Autorité de passage de démonstration", dta.getName());
 
-		assertEquals(5, dao.getRoutes().size());
+		assertEquals(5, dao.getRoutes().count());
 		GtfsRoute city = dao.getRoute(GtfsRoute.id("CITY"));
 		assertNotNull(city);
 		assertEquals("Ō", city.getShortName());
 		assertEquals("Bar Circle", city.getLongName());
 
-		assertEquals(12, dao.getStops().size());
+		assertEquals(12, dao.getStops().count());
 		GtfsStop nadav = dao.getStop(GtfsStop.id("NADAV"));
 		assertNotNull(nadav);
 		assertEquals(GtfsStopType.STOP, nadav.getType());
@@ -148,7 +148,8 @@ public class TestGtfs {
 		assertTrue(cal.isSunday());
 
 		Collection<GtfsCalendarDate> datesEx = dao
-				.getCalendarDates(GtfsCalendar.id("FULLW"));
+				.getCalendarDates(GtfsCalendar.id("FULLW"))
+				.collect(Collectors.toList());
 		assertEquals(1, datesEx.size());
 		GtfsCalendarDate dateEx = datesEx.iterator().next();
 		assertEquals(GtfsLogicalDate.getDate(2007, 6, 4), dateEx.getDate());
@@ -194,7 +195,8 @@ public class TestGtfs {
 				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2012, 1, 1));
 		assertEquals(0, calIds.size());
 
-		Collection<GtfsTrip> trips = dao.getTrips();
+		Collection<GtfsTrip> trips = dao.getTrips()
+				.collect(Collectors.toList());
 		assertEquals(11, trips.size());
 		GtfsTrip ab1 = dao.getTrip(GtfsTrip.id("AB1"));
 		assertNotNull(ab1);
@@ -248,7 +250,8 @@ public class TestGtfs {
 				.getStopTimesOfTrip(GtfsTrip.id("FOOBAR"));
 		assertTrue(unknownStopTimes.isEmpty());
 
-		Collection<GtfsFrequency> frequencies = dao.getFrequencies();
+		Collection<GtfsFrequency> frequencies = dao.getFrequencies()
+				.collect(Collectors.toList());
 		assertEquals(11, frequencies.size());
 		frequencies = dao.getFrequenciesOfTrip(GtfsTrip.id("STBA"));
 		assertEquals(1, frequencies.size());
@@ -261,7 +264,8 @@ public class TestGtfs {
 		assertEquals(GtfsExactTime.FREQUENCY_BASED,
 				frequency.getNonNullExactTime());
 
-		Collection<GtfsTransfer> transfers = dao.getTransfers();
+		Collection<GtfsTransfer> transfers = dao.getTransfers()
+				.collect(Collectors.toList());
 		assertEquals(2, transfers.size());
 		GtfsTransfer t1 = dao.getTransfer(GtfsStop.id("NADAV"),
 				GtfsStop.id("NANAA"));
@@ -271,20 +275,21 @@ public class TestGtfs {
 		assertEquals(GtfsTransferType.TIMED, t2.getNonNullType());
 		assertEquals(Integer.valueOf(1200), t2.getMinTransferTime());
 
-		assertEquals(2, dao.getPathways().size());
+		assertEquals(2, dao.getPathways().count());
 		GtfsPathway p1 = dao.getPathway(GtfsPathway.id("p1"));
 		assertEquals(GtfsStop.id("BEATTY_AIRPORT_ENTRANCE_SOUTH"),
 				p1.getFromStopId());
 		assertEquals(GtfsStop.id("BEATTY_AIRPORT"), p1.getToStopId());
 		assertEquals(GtfsPathwayMode.WALKWAY, p1.getPathwayMode());
 
-		assertEquals(2, dao.getFareAttributes().size());
+		assertEquals(2, dao.getFareAttributes().count());
 		GtfsFareAttribute p = dao.getFareAttribute(GtfsFareAttribute.id("p"));
 		assertEquals(Currency.getInstance("USD"), p.getCurrencyType());
 		assertEquals(GtfsPaymentMethod.ON_BOARD, p.getPaymentMethod());
 		assertEquals(1.25f, p.getPrice(), 0.0f);
 		assertNull(p.getAgencyId());
-		Collection<GtfsFareRule> prules = dao.getRulesOfFare(p.getId());
+		Collection<GtfsFareRule> prules = dao.getRulesOfFare(p.getId())
+				.collect(Collectors.toList());
 		assertEquals(3, prules.size());
 		for (GtfsFareRule prule : prules) {
 			assertNotNull(prule.getRouteId());
@@ -392,7 +397,7 @@ public class TestGtfs {
 		assertEquals(1, etes.size());
 		EmptyTableError ete = etes.iterator().next();
 		assertEquals(GtfsAgency.TABLE_NAME, ete.getTableName());
-		assertTrue(tb.dao.getAgencies().isEmpty());
+		assertTrue(tb.dao.getAgencies().count() == 0);
 	}
 
 	@Test
@@ -441,7 +446,7 @@ public class TestGtfs {
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsAgency.TABLE_NAME, mmt.getTableName());
-		assertTrue(tb.dao.getAgencies().isEmpty());
+		assertTrue(tb.dao.getAgencies().count() == 0);
 		Collection<InvalidReferenceError> ires = tb.report
 				.getReportIssues(InvalidReferenceError.class);
 		assertEquals(5, ires.size());
@@ -455,7 +460,7 @@ public class TestGtfs {
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.iterator().next();
 		assertEquals(GtfsStop.TABLE_NAME, mmt.getTableName());
-		assertTrue(tb.dao.getStops().isEmpty());
+		assertTrue(tb.dao.getStops().count() == 0);
 		List<InvalidReferenceError> ires = tb.report
 				.getReportIssues(InvalidReferenceError.class);
 		assertEquals(28, ires.size());
@@ -479,7 +484,7 @@ public class TestGtfs {
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.iterator().next();
 		assertEquals(GtfsRoute.TABLE_NAME, mmt.getTableName());
-		assertTrue(tb.dao.getRoutes().isEmpty());
+		assertTrue(tb.dao.getRoutes().count() == 0);
 	}
 
 	@Test
@@ -490,7 +495,7 @@ public class TestGtfs {
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.iterator().next();
 		assertEquals(GtfsTrip.TABLE_NAME, mmt.getTableName());
-		assertTrue(tb.dao.getTrips().isEmpty());
+		assertTrue(tb.dao.getTrips().count() == 0);
 	}
 
 	@Test
@@ -501,9 +506,8 @@ public class TestGtfs {
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsStopTime.TABLE_NAME, mmt.getTableName());
-		for (GtfsTrip trip : tb.dao.getTrips()) {
-			assertTrue(tb.dao.getStopTimesOfTrip(trip.getId()).isEmpty());
-		}
+		tb.dao.getTrips().forEach(trip -> assertTrue(
+				tb.dao.getStopTimesOfTrip(trip.getId()).isEmpty()));
 	}
 
 	@Test
@@ -532,8 +536,8 @@ public class TestGtfs {
 		 */
 		MissingMandatoryTableError mmt = mmts.iterator().next();
 		assertEquals(GtfsCalendarDate.TABLE_NAME, mmt.getTableName());
-		assertTrue(tb.dao.getCalendars().isEmpty());
-		assertTrue(tb.dao.getCalendarDates().isEmpty());
+		assertTrue(tb.dao.getCalendars().count() == 0);
+		assertTrue(tb.dao.getCalendarDates().count() == 0);
 	}
 
 	@Test
@@ -665,10 +669,10 @@ public class TestGtfs {
 				furCreek.getCoordinates());
 		stops = dsi.getStopsAround(beattyAirport.getCoordinates(), dMax - 1,
 				true);
-		assertEquals(tb.dao.getStops().size() - 1, stops.size());
+		assertEquals(tb.dao.getStops().count() - 1, stops.size());
 		stops = dsi.getStopsAround(beattyAirport.getCoordinates(), dMax + 1,
 				true);
-		assertEquals(tb.dao.getStops().size(), stops.size());
+		assertEquals(tb.dao.getStops().count(), stops.size());
 	}
 
 	@Test

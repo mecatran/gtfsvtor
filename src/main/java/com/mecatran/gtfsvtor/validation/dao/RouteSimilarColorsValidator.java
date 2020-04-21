@@ -1,7 +1,7 @@
 package com.mecatran.gtfsvtor.validation.dao;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
@@ -26,7 +26,7 @@ public class RouteSimilarColorsValidator implements DaoValidator {
 		 * color 3D spatial index would probably be slower than this, and
 		 * certainly more complex.
 		 */
-		List<GtfsRoute> routes = new ArrayList<>(dao.getRoutes());
+		List<GtfsRoute> routes = dao.getRoutes().collect(Collectors.toList());
 		for (int i = 0; i < routes.size(); i++) {
 			for (int j = i + 1; j < routes.size(); j++) {
 				GtfsRoute route1 = routes.get(i);

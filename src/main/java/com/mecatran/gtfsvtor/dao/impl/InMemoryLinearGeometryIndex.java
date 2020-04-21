@@ -118,7 +118,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 
 	public InMemoryLinearGeometryIndex(IndexedReadOnlyDao dao) {
 		Map<Object, ProjectedShapePatternImpl> patternIndexesByPattern = new HashMap<>();
-		for (GtfsTrip trip : dao.getTrips()) {
+		dao.getTrips().forEach(trip -> {
 			List<GtfsStopTime> stopTimes = dao.getStopTimesOfTrip(trip.getId());
 			Object tripKey = computeTripKey(trip, stopTimes);
 			ProjectedShapePatternImpl patternIndex = patternIndexesByPattern
@@ -131,7 +131,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			}
 			patternIndexByTrips.put(trip.getId(), patternIndex);
 			patternIndex.tripIds.add(trip.getId());
-		}
+		});
 	}
 
 	int getPatternCount() {

@@ -8,7 +8,6 @@ import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
-import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
@@ -53,9 +52,9 @@ public class CalendarValidator implements DaoValidator {
 					if (calendar != null) {
 						sourceInfos.add(calendar.getSourceInfo());
 					}
-					for (GtfsCalendarDate date : dao.getCalendarDates(calId)) {
-						sourceInfos.add(date.getSourceInfo());
-					}
+					dao.getCalendarDates(calId)
+							.map(date -> date.getSourceInfo())
+							.forEach(sourceInfos::add);
 					reportSink.report(
 							new EmptyCalendarWarning(calId, sourceInfos));
 				}
