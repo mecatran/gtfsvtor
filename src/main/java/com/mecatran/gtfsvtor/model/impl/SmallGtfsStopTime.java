@@ -12,7 +12,10 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 
 /**
- * Optimized GtfsStopTime for size.
+ * Optimized GtfsStopTime for size. Store only two pointers (trip ID, shared
+ * stop ID/seq/headsign/shapedist) and a long (times, flags), thus only three
+ * 64bits values on most machines (or maybe even 32bits for both pointers with
+ * compressed OOP trick, if the heap is less than 32G), plus object overhead.
  */
 public class SmallGtfsStopTime implements GtfsStopTime {
 
@@ -36,14 +39,14 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 	private static final int TIMEPOINT_SHIFT = 56;
 	private static final int NULL_TIMEPOINT = 0x3;
 
-	// Interned value, denormalized, often reused
-	private String tripId;
+	// Trip ID will be interned by the builder
+	private GtfsTrip.Id tripId;
 	// Often reused
 	private StopIdSeqAndHeadsign stopIdSeqAndHeadsign;
 	private long data; // times and flags
 
 	public GtfsTrip.Id getTripId() {
-		return GtfsTrip.id(tripId);
+		return tripId;
 	}
 
 	public GtfsLogicalTime getDepartureTime() {
@@ -118,10 +121,7 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 
 		@Override
 		public Builder withTripId(GtfsTrip.Id tripId) {
-			// Interning the trip ID string make sure we do
-			// not waste space on many duplicates
-			stopTime.tripId = tripId == null ? null
-					: tripId.getInternalId().intern();
+			stopTime.tripId = tripId;
 			return this;
 		}
 

@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
@@ -82,13 +84,19 @@ public class GtfsTrip implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 	}
 
 	public static Id id(String id) {
-		return id == null || id.isEmpty() ? null : new Id(id);
+		return id == null || id.isEmpty() ? null : Id.build(id);
 	}
 
 	public static class Id extends GtfsAbstractId<String, GtfsTrip> {
 
 		private Id(String id) {
 			super(id);
+		}
+
+		private static Map<String, Id> CACHE = new HashMap<>();
+
+		private static synchronized Id build(String id) {
+			return CACHE.computeIfAbsent(id, Id::new);
 		}
 
 		@Override

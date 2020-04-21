@@ -1,6 +1,8 @@
 package com.mecatran.gtfsvtor.model;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
@@ -70,13 +72,19 @@ public class GtfsAgency
 		 * (undefined ID), this is allowed. Note that this is different than a
 		 * null Agency.Id, which means no or a missing ID.
 		 */
-		return id == null ? null : new Id(id);
+		return id == null ? null : Id.build(id);
 	}
 
 	public static class Id extends GtfsAbstractId<String, GtfsAgency> {
 
 		private Id(String id) {
 			super(id);
+		}
+
+		private static Map<String, Id> CACHE = new HashMap<>();
+
+		private static synchronized Id build(String id) {
+			return CACHE.computeIfAbsent(id, Id::new);
 		}
 
 		@Override

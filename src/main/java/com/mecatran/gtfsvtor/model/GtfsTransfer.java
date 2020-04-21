@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import com.mecatran.gtfsvtor.utils.Pair;
@@ -48,15 +50,22 @@ public class GtfsTransfer implements GtfsObject<Pair<String, String>> {
 
 	public static Id id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId) {
 		return fromStopId == null || toStopId == null ? null
-				: new Id(fromStopId, toStopId);
+				: Id.build(fromStopId, toStopId);
 	}
 
 	public static class Id
 			extends GtfsAbstractId<Pair<String, String>, GtfsTransfer> {
 
-		private Id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId) {
-			super(new Pair<>(fromStopId.getInternalId(),
-					toStopId.getInternalId()));
+		private Id(Pair<String, String> id) {
+			super(id);
+		}
+
+		private static Map<Pair<String, String>, Id> CACHE = new HashMap<>();
+
+		private static synchronized Id build(GtfsStop.Id fromStopId,
+				GtfsStop.Id toStopId) {
+			return CACHE.computeIfAbsent(new Pair<>(fromStopId.getInternalId(),
+					toStopId.getInternalId()), Id::new);
 		}
 
 		@Override

@@ -7,9 +7,6 @@ public abstract class GtfsAbstractId<U, V extends GtfsObject<U>>
 
 	private U id;
 
-	/**
-	 * TODO Implement internal ID interning (caching)
-	 */
 	protected GtfsAbstractId(U id) {
 		if (id == null) {
 			// Should we do that?

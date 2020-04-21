@@ -1,6 +1,8 @@
 package com.mecatran.gtfsvtor.model;
 
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 
@@ -60,13 +62,19 @@ public class GtfsFareAttribute
 	}
 
 	public static Id id(String id) {
-		return id == null || id.isEmpty() ? null : new Id(id);
+		return id == null || id.isEmpty() ? null : Id.build(id);
 	}
 
 	public static class Id extends GtfsAbstractId<String, GtfsFareAttribute> {
 
 		private Id(String id) {
 			super(id);
+		}
+
+		private static Map<String, Id> CACHE = new HashMap<>();
+
+		private static synchronized Id build(String id) {
+			return CACHE.computeIfAbsent(id, Id::new);
 		}
 
 		@Override
