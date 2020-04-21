@@ -39,8 +39,11 @@ import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsId;
+import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
+import com.mecatran.gtfsvtor.model.GtfsPathway;
+import com.mecatran.gtfsvtor.model.GtfsPathwayMode;
 import com.mecatran.gtfsvtor.model.GtfsPaymentMethod;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
@@ -117,7 +120,7 @@ public class TestGtfs {
 		assertEquals("Ō", city.getShortName());
 		assertEquals("Bar Circle", city.getLongName());
 
-		assertEquals(10, dao.getStops().size());
+		assertEquals(12, dao.getStops().size());
 		GtfsStop nadav = dao.getStop(GtfsStop.id("NADAV"));
 		assertNotNull(nadav);
 		assertEquals(GtfsStopType.STOP, nadav.getType());
@@ -125,6 +128,12 @@ public class TestGtfs {
 
 		GtfsStop inexistant = dao.getStop(GtfsStop.id("FOOBAR"));
 		assertNull(inexistant);
+
+		GtfsStop beattyEntranceNorth = dao
+				.getStop(GtfsStop.id("BEATTY_AIRPORT_ENTRANCE_NORTH"));
+		assertNotNull(beattyEntranceNorth);
+		assertEquals(GtfsStopType.ENTRANCE, beattyEntranceNorth.getType());
+		assertEquals(GtfsLevel.id("level_1"), beattyEntranceNorth.getLevelId());
 
 		GtfsCalendar cal = dao.getCalendar(GtfsCalendar.id("FULLW"));
 		assertNotNull(cal);
@@ -261,6 +270,13 @@ public class TestGtfs {
 				GtfsStop.id("NANAA"));
 		assertEquals(GtfsTransferType.TIMED, t2.getNonNullType());
 		assertEquals(Integer.valueOf(1200), t2.getMinTransferTime());
+
+		assertEquals(2, dao.getPathways().size());
+		GtfsPathway p1 = dao.getPathway(GtfsPathway.id("p1"));
+		assertEquals(GtfsStop.id("BEATTY_AIRPORT_ENTRANCE_SOUTH"),
+				p1.getFromStopId());
+		assertEquals(GtfsStop.id("BEATTY_AIRPORT"), p1.getToStopId());
+		assertEquals(GtfsPathwayMode.WALKWAY, p1.getPathwayMode());
 
 		assertEquals(2, dao.getFareAttributes().size());
 		GtfsFareAttribute p = dao.getFareAttribute(GtfsFareAttribute.id("p"));

@@ -1,0 +1,3 @@
+pathway_id,from_stop_id,to_stop_id,pathway_mode,is_bidirectional,traversal_time,stair_count
+p1,BEATTY_AIRPORT_ENTRANCE_SOUTH,BEATTY_AIRPORT,1,1,60,
+p2,BEATTY_AIRPORT_ENTRANCE_NORTH,BEATTY_AIRPORT,1,1,60,
