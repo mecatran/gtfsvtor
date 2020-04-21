@@ -8,6 +8,7 @@ import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
+import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -99,6 +100,19 @@ public class UnusedObjectsValidator implements DaoValidator {
 		for (GtfsShape.Id unusedShapeId : unusedShapeIds) {
 			reportSink.report(new UnusedObjectWarning("shape", unusedShapeId,
 					null, "shape_id"));
+		}
+
+		/* Look for unused levels */
+		Set<GtfsLevel.Id> unusedLevelIds = dao.getLevels().stream()
+				.map(GtfsLevel::getId).collect(Collectors.toSet());
+		dao.getStops().stream().forEach(stop -> {
+			if (stop.getLevelId() != null)
+				unusedLevelIds.remove(stop.getLevelId());
+		});
+		for (GtfsLevel.Id unusedLevelId : unusedLevelIds) {
+			GtfsLevel level = dao.getLevel(unusedLevelId);
+			reportSink.report(new UnusedObjectWarning("level", unusedLevelId,
+					level.getSourceInfo(), "level_id"));
 		}
 
 		/* Empty (or single stop) trips do have a special validator */

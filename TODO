@@ -31,14 +31,10 @@ Shapes
 ------
 Wrong shape projection
 
-Levels
-------
-Unused level
-
 Pathways
 --------
 Complete station coverage
-Blind node
+Blind node, island w/o entrance or stop/platform
 Duplicated pathway (optional)
 
 Fares
