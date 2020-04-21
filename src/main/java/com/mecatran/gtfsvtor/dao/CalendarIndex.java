@@ -46,7 +46,7 @@ public interface CalendarIndex {
 	 * @return The number of trips running on that date. Note: do not take into
 	 *         account frequencies.
 	 */
-	public int getTripCountOnDate(GtfsLogicalDate date);
+	public long getTripCountOnDate(GtfsLogicalDate date);
 
 	/**
 	 * @return A sorted list of all distinct dates where at least one calendar

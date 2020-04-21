@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.HashMultimap;
@@ -29,7 +29,7 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	private Map<GtfsCalendar.Id, SortedSet<GtfsLogicalDate>> datesPerCalendar = new HashMap<>();
 	private SetMultimap<GtfsLogicalDate, GtfsCalendar.Id> calendarsPerDate = HashMultimap
 			.create();
-	private Map<GtfsLogicalDate, AtomicInteger> tripCountPerDate = new HashMap<>();
+	private Map<GtfsLogicalDate, AtomicLong> tripCountPerDate = new HashMap<>();
 	private Map<List<GtfsCalendar.Id>, OverlappingCalendarInfo> calendarOverlapCache = new HashMap<>();
 	private List<GtfsLogicalDate> allDatesSorted;
 
@@ -97,12 +97,11 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 		for (Map.Entry<GtfsCalendar.Id, SortedSet<GtfsLogicalDate>> kv : datesPerCalendar
 				.entrySet()) {
 			GtfsCalendar.Id calendarId = kv.getKey();
-			int tripCountForCalendar = dao.getTripsOfCalendar(calendarId)
-					.size();
+			long tripCountForCalendar = dao.getTripsOfCalendar(calendarId)
+					.count();
 			for (GtfsLogicalDate date : kv.getValue()) {
 				calendarsPerDate.put(date, calendarId);
-				tripCountPerDate
-						.computeIfAbsent(date, d -> new AtomicInteger(0))
+				tripCountPerDate.computeIfAbsent(date, d -> new AtomicLong(0))
 						.addAndGet(tripCountForCalendar);
 			}
 		}
@@ -132,8 +131,8 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	}
 
 	@Override
-	public int getTripCountOnDate(GtfsLogicalDate date) {
-		AtomicInteger ret = tripCountPerDate.get(date);
+	public long getTripCountOnDate(GtfsLogicalDate date) {
+		AtomicLong ret = tripCountPerDate.get(date);
 		return ret == null ? 0 : ret.get();
 	}
 

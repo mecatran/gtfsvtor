@@ -1,6 +1,5 @@
 package com.mecatran.gtfsvtor.dao.impl;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -120,12 +119,6 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public GtfsRoute getRoute(GtfsRoute.Id routeId) {
 		return routes.get(routeId);
-	}
-
-	@Override
-	public Collection<GtfsRoute> getRoutesOfAgency(GtfsAgency.Id agencyId) {
-		return Collections
-				.unmodifiableCollection(routesPerAgency.get(agencyId));
 	}
 
 	@Override
@@ -250,49 +243,48 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public Collection<GtfsStop> getStopsOfType(GtfsStopType stopType) {
-		return Collections.unmodifiableCollection(stopsPerType.get(stopType));
+	public Stream<GtfsRoute> getRoutesOfAgency(GtfsAgency.Id agencyId) {
+		return routesPerAgency.get(agencyId).stream();
 	}
 
 	@Override
-	public Collection<GtfsStop> getStopsOfStation(GtfsStop.Id station) {
-		return Collections.unmodifiableCollection(stopsPerStation.get(station));
+	public Stream<GtfsStop> getStopsOfType(GtfsStopType stopType) {
+		return stopsPerType.get(stopType).stream();
 	}
 
 	@Override
-	public Collection<GtfsStop> getEntrancesOfStation(
-			com.mecatran.gtfsvtor.model.GtfsStop.Id station) {
-		return Collections
-				.unmodifiableCollection(entrancesPerStation.get(station));
+	public Stream<GtfsStop> getStopsOfStation(GtfsStop.Id station) {
+		return stopsPerStation.get(station).stream();
 	}
 
 	@Override
-	public Collection<GtfsStop> getNodesOfStation(
-			com.mecatran.gtfsvtor.model.GtfsStop.Id station) {
-		return Collections.unmodifiableCollection(nodesPerStation.get(station));
+	public Stream<GtfsStop> getEntrancesOfStation(GtfsStop.Id station) {
+		return entrancesPerStation.get(station).stream();
 	}
 
 	@Override
-	public Collection<GtfsStop> getBoardingAreasOfStop(
-			com.mecatran.gtfsvtor.model.GtfsStop.Id stop) {
-		return Collections
-				.unmodifiableCollection(boardingAreasPerStop.get(stop));
+	public Stream<GtfsStop> getNodesOfStation(GtfsStop.Id station) {
+		return nodesPerStation.get(station).stream();
 	}
 
 	@Override
-	public Collection<GtfsTrip> getTripsOfRoute(GtfsRoute.Id routeId) {
-		return Collections.unmodifiableCollection(tripsPerRoute.get(routeId));
+	public Stream<GtfsStop> getBoardingAreasOfStop(GtfsStop.Id stop) {
+		return boardingAreasPerStop.get(stop).stream();
 	}
 
 	@Override
-	public Collection<GtfsTrip> getTripsOfCalendar(GtfsCalendar.Id calendarId) {
-		return Collections
-				.unmodifiableCollection(tripsPerCalendar.get(calendarId));
+	public Stream<GtfsTrip> getTripsOfRoute(GtfsRoute.Id routeId) {
+		return tripsPerRoute.get(routeId).stream();
 	}
 
 	@Override
-	public Collection<GtfsFrequency> getFrequenciesOfTrip(GtfsTrip.Id tripId) {
-		return Collections.unmodifiableCollection(frequencies.get(tripId));
+	public Stream<GtfsTrip> getTripsOfCalendar(GtfsCalendar.Id calendarId) {
+		return tripsPerCalendar.get(calendarId).stream();
+	}
+
+	@Override
+	public Stream<GtfsFrequency> getFrequenciesOfTrip(GtfsTrip.Id tripId) {
+		return frequencies.get(tripId).stream();
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public class CalendarValidator implements DaoValidator {
 			int daysWoServiceCounter = 0;
 			GtfsLogicalDate firstDayWoService = null;
 			while (date.compareTo(lastDate) <= 0) {
-				int nTripCount = calIndex.getTripCountOnDate(date);
+				long nTripCount = calIndex.getTripCountOnDate(date);
 				if (nTripCount == 0) {
 					if (firstDayWoService == null)
 						firstDayWoService = date;

@@ -2,8 +2,6 @@ package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
@@ -102,8 +101,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		}
 
 		@Override
-		public Collection<GtfsTrip.Id> getTripIds() {
-			return Collections.unmodifiableCollection(tripIds);
+		public Stream<GtfsTrip.Id> getTripIds() {
+			return tripIds.stream();
 		}
 
 		@Override
@@ -175,8 +174,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 	}
 
 	@Override
-	public Collection<? extends ProjectedShapePattern> getProjectedPatterns() {
-		return Collections.unmodifiableCollection(patternIndexes);
+	public Stream<? extends ProjectedShapePattern> getProjectedPatterns() {
+		return patternIndexes.stream();
 	}
 
 	/*

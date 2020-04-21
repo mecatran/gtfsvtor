@@ -1,8 +1,7 @@
 package com.mecatran.gtfsvtor.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
@@ -35,8 +34,9 @@ public class InMemoryDaoSpatialIndex implements DaoSpatialIndex {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<GtfsStop> getStopsAround(GeoCoordinates position,
+	public Stream<GtfsStop> getStopsAround(GeoCoordinates position,
 			double distanceMeters, boolean exact) {
 		// TODO Handle +/-180° wrap-around
 		double dLat = Geodesics.deltaLat(distanceMeters);
@@ -45,19 +45,8 @@ public class InMemoryDaoSpatialIndex implements DaoSpatialIndex {
 		Envelope env = new Envelope(position.getLon() - dLon,
 				position.getLon() + dLon, position.getLat() - dLat,
 				position.getLat() + dLat);
-		@SuppressWarnings("unchecked")
-		List<GtfsStop> stops = (List<GtfsStop>) spatialIndex.query(env);
-		List<GtfsStop> filteredStops = new ArrayList<>(stops.size());
-		for (GtfsStop stop : stops) {
-			if (exact) {
-				double d = Geodesics.distanceMeters(stop.getCoordinates(),
-						position);
-				if (d <= distanceMeters)
-					filteredStops.add(stop);
-			} else {
-				filteredStops.add(stop);
-			}
-		}
-		return filteredStops;
+		return ((List<GtfsStop>) spatialIndex.query(env)).stream().filter(
+				stop -> exact ? Geodesics.distanceMeters(stop.getCoordinates(),
+						position) <= distanceMeters : true);
 	}
 }

@@ -26,7 +26,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 
 		/* Look for unused agencies */
 		dao.getAgencies().forEach(agency -> {
-			if (dao.getRoutesOfAgency(agency.getId()).isEmpty()) {
+			if (dao.getRoutesOfAgency(agency.getId()).count() == 0) {
 				reportSink.report(new UnusedObjectWarning("agency",
 						agency.getId(), agency.getSourceInfo(), "agency_id"));
 			}
@@ -34,7 +34,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 
 		/* Look for unused (empty) routes */
 		dao.getRoutes().forEach(route -> {
-			if (dao.getTripsOfRoute(route.getId()).isEmpty()) {
+			if (dao.getTripsOfRoute(route.getId()).count() == 0) {
 				reportSink.report(new UnusedObjectWarning("route",
 						route.getId(), route.getSourceInfo(), "route_id"));
 			}
@@ -72,18 +72,20 @@ public class UnusedObjectsValidator implements DaoValidator {
 		}
 
 		/* Look for unused stations */
-		for (GtfsStop station : dao.getStopsOfType(GtfsStopType.STATION)) {
+		dao.getStopsOfType(GtfsStopType.STATION).forEach(station -> {
 			// TODO - shouldn't we warn of station w/o stops?
 			// A station with only entrances and nodes would be suspicious
-			boolean noStops = dao.getStopsOfStation(station.getId()).isEmpty();
+			boolean noStops = dao.getStopsOfStation(station.getId())
+					.count() == 0;
 			boolean noEntrances = dao.getEntrancesOfStation(station.getId())
-					.isEmpty();
-			boolean noNodes = dao.getNodesOfStation(station.getId()).isEmpty();
+					.count() == 0;
+			boolean noNodes = dao.getNodesOfStation(station.getId())
+					.count() == 0;
 			if (noStops && noEntrances && noNodes) {
 				reportSink.report(new UnusedObjectWarning("station",
 						station.getId(), station.getSourceInfo(), "stop_id"));
 			}
-		}
+		});
 
 		/* Look for unused shapes */
 		Set<GtfsShape.Id> unusedShapeIds = dao.getShapeIds()

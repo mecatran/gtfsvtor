@@ -1,8 +1,8 @@
 package com.mecatran.gtfsvtor.dao;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -23,7 +23,7 @@ public interface LinearGeometryIndex {
 		/**
 		 * @return The list of all trip IDs for this pattern projection.
 		 */
-		public Collection<GtfsTrip.Id> getTripIds();
+		public Stream<GtfsTrip.Id> getTripIds();
 
 		/**
 		 * @return The shape ID associated to this projection, if any.
@@ -75,5 +75,5 @@ public interface LinearGeometryIndex {
 	public Double getLinearDistance(GtfsStopTime stopTime1,
 			GtfsStopTime stopTime2);
 
-	public Collection<? extends ProjectedShapePattern> getProjectedPatterns();
+	public Stream<? extends ProjectedShapePattern> getProjectedPatterns();
 }

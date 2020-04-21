@@ -42,7 +42,7 @@ public class StopTooCloseValidator implements DaoValidator {
 			 * than stop1 (to prevent duplicated warnings: A-B and B-A).
 			 */
 			List<GtfsStop> stops2 = dsi
-					.getStopsAround(p, minDistanceMeters, true).stream()
+					.getStopsAround(p, minDistanceMeters, true)
 					.filter(stop2 -> !stop2.equals(stop1))
 					.filter(stop2 -> stop2.getType().equals(stop1.getType()))
 					.filter(stop2 -> stop2.getId().getInternalId()

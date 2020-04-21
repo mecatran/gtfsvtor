@@ -1,7 +1,7 @@
 package com.mecatran.gtfsvtor.dao;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
@@ -23,27 +23,27 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
  */
 public interface IndexedReadOnlyDao extends ReadOnlyDao {
 
-	public Collection<GtfsRoute> getRoutesOfAgency(GtfsAgency.Id agencyId);
+	public Stream<GtfsRoute> getRoutesOfAgency(GtfsAgency.Id agencyId);
 
-	public Collection<GtfsStop> getStopsOfType(GtfsStopType stopType);
+	public Stream<GtfsStop> getStopsOfType(GtfsStopType stopType);
 
-	public Collection<GtfsStop> getStopsOfStation(GtfsStop.Id station);
+	public Stream<GtfsStop> getStopsOfStation(GtfsStop.Id station);
 
-	public Collection<GtfsStop> getEntrancesOfStation(GtfsStop.Id station);
+	public Stream<GtfsStop> getEntrancesOfStation(GtfsStop.Id station);
 
-	public Collection<GtfsStop> getNodesOfStation(GtfsStop.Id station);
+	public Stream<GtfsStop> getNodesOfStation(GtfsStop.Id station);
 
-	public Collection<GtfsStop> getBoardingAreasOfStop(GtfsStop.Id stop);
+	public Stream<GtfsStop> getBoardingAreasOfStop(GtfsStop.Id stop);
 
 	public List<GtfsStopTime> getStopTimesOfTrip(GtfsTrip.Id tripId);
 
 	public List<GtfsShapePoint> getPointsOfShape(GtfsShape.Id shapeId);
 
-	public Collection<GtfsTrip> getTripsOfRoute(GtfsRoute.Id routeId);
+	public Stream<GtfsTrip> getTripsOfRoute(GtfsRoute.Id routeId);
 
-	public Collection<GtfsTrip> getTripsOfCalendar(GtfsCalendar.Id calendarId);
+	public Stream<GtfsTrip> getTripsOfCalendar(GtfsCalendar.Id calendarId);
 
-	public Collection<GtfsFrequency> getFrequenciesOfTrip(GtfsTrip.Id tripId);
+	public Stream<GtfsFrequency> getFrequenciesOfTrip(GtfsTrip.Id tripId);
 
 	public CalendarIndex getCalendarIndex();
 

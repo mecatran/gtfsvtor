@@ -250,12 +250,13 @@ public class TestGtfs {
 				.getStopTimesOfTrip(GtfsTrip.id("FOOBAR"));
 		assertTrue(unknownStopTimes.isEmpty());
 
-		Collection<GtfsFrequency> frequencies = dao.getFrequencies()
+		List<GtfsFrequency> frequencies = dao.getFrequencies()
 				.collect(Collectors.toList());
 		assertEquals(11, frequencies.size());
-		frequencies = dao.getFrequenciesOfTrip(GtfsTrip.id("STBA"));
+		frequencies = dao.getFrequenciesOfTrip(GtfsTrip.id("STBA"))
+				.collect(Collectors.toList());
 		assertEquals(1, frequencies.size());
-		GtfsFrequency frequency = frequencies.iterator().next();
+		GtfsFrequency frequency = frequencies.get(0);
 		assertEquals(GtfsTrip.id("STBA"), frequency.getTripId());
 		assertEquals(GtfsLogicalTime.getTime(6, 0, 0),
 				frequency.getStartTime());
@@ -652,26 +653,31 @@ public class TestGtfs {
 		// Test spatial indexing
 		DaoSpatialIndex dsi = tb.dao.getSpatialIndex();
 		Collection<GtfsStop> stops = dsi
-				.getStopsAround(new GeoCoordinates(0, 0), 10000, true);
+				.getStopsAround(new GeoCoordinates(0, 0), 10000, true)
+				.collect(Collectors.toList());
 		assertTrue(stops.isEmpty());
 		GtfsStop furCreek = tb.dao.getStop(GtfsStop.id("FUR_CREEK_RES"));
 		GtfsStop beattyAirport = tb.dao
 				.getStop(GtfsStop.id("BEATTY_AIRPORT_STATION"));
-		stops = dsi.getStopsAround(furCreek.getCoordinates(), 1, true);
+		stops = dsi.getStopsAround(furCreek.getCoordinates(), 1, true)
+				.collect(Collectors.toList());
 		assertEquals(1, stops.size());
 		assertEquals(furCreek, stops.iterator().next());
-		stops = dsi.getStopsAround(
-				new GeoCoordinates(furCreek.getLat() + Geodesics.deltaLat(2),
-						furCreek.getLon()),
-				1, true);
+		stops = dsi
+				.getStopsAround(new GeoCoordinates(
+						furCreek.getLat() + Geodesics.deltaLat(2),
+						furCreek.getLon()), 1, true)
+				.collect(Collectors.toList());
 		assertTrue(stops.isEmpty());
 		double dMax = Geodesics.distanceMeters(beattyAirport.getCoordinates(),
 				furCreek.getCoordinates());
-		stops = dsi.getStopsAround(beattyAirport.getCoordinates(), dMax - 1,
-				true);
+		stops = dsi
+				.getStopsAround(beattyAirport.getCoordinates(), dMax - 1, true)
+				.collect(Collectors.toList());
 		assertEquals(tb.dao.getStops().count() - 1, stops.size());
-		stops = dsi.getStopsAround(beattyAirport.getCoordinates(), dMax + 1,
-				true);
+		stops = dsi
+				.getStopsAround(beattyAirport.getCoordinates(), dMax + 1, true)
+				.collect(Collectors.toList());
 		assertEquals(tb.dao.getStops().count(), stops.size());
 	}
 
