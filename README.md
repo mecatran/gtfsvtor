@@ -4,8 +4,6 @@ GTFSVTOR
 An open-source GTFS validator, released under GPLv3.
 See the [LICENSE file](LICENSE) for more information.
 
-[![Build Status](https://travis-ci.com/mecatran/gtfsvtor.svg?branch=master)](https://travis-ci.com/mecatran/gtfsvtor)
-
 Project goals
 -------------
 
