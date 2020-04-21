@@ -247,6 +247,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withTimezone(erow.getTimeZone("stop_timezone"))
 					.withWheelchairBoarding(
 							erow.getWheelchairAccess("wheelchair_boarding"))
+					.withLevelId(GtfsLevel.id(erow.getString("level_id")))
 					.withPlatformCode(erow.getString("platform_code"));
 			GtfsStop stop = builder.build();
 			sourceContext.setRow(row);

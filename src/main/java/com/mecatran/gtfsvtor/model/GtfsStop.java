@@ -22,7 +22,7 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 	private String url;
 	private TimeZone timezone;
 	private GtfsWheelchairAccess wheelchairBoarding;
-	// TODO Level ID
+	private GtfsLevel.Id levelId;
 	private String platformCode;
 
 	private DataObjectSourceInfo sourceInfo;
@@ -118,6 +118,10 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 				: wheelchairBoarding;
 	}
 
+	public GtfsLevel.Id getLevelId() {
+		return levelId;
+	}
+
 	public String getPlatformCode() {
 		return platformCode;
 	}
@@ -205,6 +209,11 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 		public Builder withWheelchairBoarding(
 				GtfsWheelchairAccess wheelchairBoarding) {
 			stop.wheelchairBoarding = wheelchairBoarding;
+			return this;
+		}
+
+		public Builder withLevelId(GtfsLevel.Id levelId) {
+			stop.levelId = levelId;
 			return this;
 		}
 
