@@ -40,4 +40,9 @@ public class UnivocityCsvDataRow implements DataRow {
 		return new DataObjectSourceInfoImpl(csvDataTable.getTableSourceInfo(),
 				fields, csvDataTable.getCurrentLineNumber());
 	}
+
+	@Override
+	public int getRecordCount() {
+		return record.length;
+	}
 }

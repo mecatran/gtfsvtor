@@ -64,6 +64,7 @@ import com.mecatran.gtfsvtor.reporting.issues.DuplicatedTripIssue;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
+import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
@@ -320,16 +321,30 @@ public class TestGtfs {
 
 	@Test
 	public void testBadEol() {
-		// TODO What's wrong in this file???
+		// See TODO file for a list of issues to validate
 		TestBundle tb = loadAndValidate("bad_eol.zip");
 		// assertEquals(1,
 		// tb.report.getReportItems(GeneralIOError.class).size());
 	}
 
 	@Test
+	public void testExtraRowCells() {
+		TestBundle tb = loadAndValidate("extra_row_cells");
+		List<InconsistentNumberOfFieldsWarning> inofs = tb.report
+				.getReportIssues(InconsistentNumberOfFieldsWarning.class);
+		assertEquals(2, inofs.size());
+		InconsistentNumberOfFieldsWarning inof0 = inofs.get(0);
+		assertEquals(7, inof0.getNumberOfFields());
+		assertEquals(6, inof0.getNumberOfHeaderColumns());
+		assertEquals(GtfsRoute.TABLE_NAME, inof0.getSourceInfos().get(0)
+				.getSourceInfo().getTable().getTableName());
+		InconsistentNumberOfFieldsWarning inof1 = inofs.get(1);
+		assertEquals(4, inof1.getNumberOfFields());
+	}
+
+	@Test
 	public void testUnrecognizedColumn() {
 		TestBundle tb = loadAndValidate("unrecognized_columns");
-
 		Collection<UnrecognizedColumnInfo> ucws = tb.report
 				.getReportIssues(UnrecognizedColumnInfo.class);
 		// TODO Enable
@@ -377,7 +392,6 @@ public class TestGtfs {
 	@Test
 	public void testUnrecognizedFile() {
 		TestBundle tb = loadAndValidate("unknown_file");
-
 		Collection<UnknownFileInfo> ucws = tb.report
 				.getReportIssues(UnknownFileInfo.class);
 		// TODO Enable

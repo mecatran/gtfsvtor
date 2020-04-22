@@ -9,4 +9,6 @@ public interface DataRow {
 	public String getString(String field);
 
 	public DataObjectSourceInfo getSourceInfo();
+
+	public int getRecordCount();
 }

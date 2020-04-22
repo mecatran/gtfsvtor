@@ -35,6 +35,7 @@ import com.mecatran.gtfsvtor.model.impl.SmallGtfsStopTime;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
+import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
@@ -119,7 +120,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withFeedContactEmail(erow.getString("feed_contact_email"))
 					.withFeedContactUrl(erow.getString("feed_contact_url"));
 			GtfsFeedInfo feedInfo = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsFeedInfo.class,
 					feedInfo, sourceContext);
 			context.getDao().setFeedInfo(feedInfo, sourceContext);
@@ -150,7 +151,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withFareUrl(erow.getString("agency_fare_url"))
 					.withEmail(erow.getString("agency_email"));
 			GtfsAgency agency = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsAgency.class, agency,
 					sourceContext);
 			context.getDao().addAgency(agency, sourceContext);
@@ -185,7 +186,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withTextColor(erow.getColor("route_text_color"))
 					.withSortOrder(erow.getInteger("route_sort_order", false));
 			GtfsRoute route = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsRoute.class, route,
 					sourceContext);
 			context.getDao().addRoute(route, sourceContext);
@@ -211,7 +212,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withIndex(erow.getDouble("level_index", true))
 					.withName(erow.getString("level_name"));
 			GtfsLevel level = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsLevel.class, level,
 					sourceContext);
 			context.getDao().addLevel(level, sourceContext);
@@ -250,7 +251,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withLevelId(GtfsLevel.id(erow.getString("level_id")))
 					.withPlatformCode(erow.getString("platform_code"));
 			GtfsStop stop = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsStop.class, stop,
 					sourceContext);
 			context.getDao().addStop(stop, sourceContext);
@@ -286,7 +287,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withStartDate(erow.getLogicalDate("start_date", true))
 					.withEndDate(erow.getLogicalDate("end_date", true));
 			GtfsCalendar calendar = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsCalendar.class,
 					calendar, sourceContext);
 			context.getDao().addCalendar(calendar, sourceContext);
@@ -314,7 +315,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withExceptionType(erow
 							.getCalendarDateExceptionType("exception_type"));
 			GtfsCalendarDate calendarDate = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsCalendarDate.class,
 					calendarDate, sourceContext);
 			context.getDao().addCalendarDate(calendarDate, sourceContext);
@@ -343,7 +344,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withShapeDistTraveled(
 							erow.getDouble("shape_dist_traveled", false));
 			GtfsShapePoint shapePoint = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsShapePoint.class,
 					shapePoint, sourceContext);
 			context.getDao().addShapePoint(shapePoint, sourceContext);
@@ -378,7 +379,7 @@ public class GtfsDataLoader implements DataLoader {
 							erow.getWheelchairAccess("wheelchair_accessible"))
 					.withBikesAllowed(erow.getBikeAccess("bikes_allowed"));
 			GtfsTrip trip = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsTrip.class, trip,
 					sourceContext);
 			context.getDao().addTrip(trip, sourceContext);
@@ -416,7 +417,7 @@ public class GtfsDataLoader implements DataLoader {
 							erow.getDouble("shape_dist_traveled", false))
 					.withTimepoint(erow.getTimepoint("timepoint"));
 			GtfsStopTime stopTime = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsStopTime.class,
 					stopTime, sourceContext);
 			context.getDao().addStopTime(stopTime, sourceContext);
@@ -453,7 +454,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withHeadwaySeconds(erow.getInteger("headway_secs", true))
 					.withExactTimes(erow.getExactTimes("exact_times"));
 			GtfsFrequency frequency = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsFrequency.class,
 					frequency, sourceContext);
 			context.getDao().addFrequency(frequency, sourceContext);
@@ -480,7 +481,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withMinTransferTime(
 							erow.getInteger("min_transfer_time", false));
 			GtfsTransfer transfer = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsTransfer.class,
 					transfer, sourceContext);
 			context.getDao().addTransfer(transfer, sourceContext);
@@ -517,7 +518,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withReversedSignpostedAs(
 							erow.getString("reversed_signposted_as"));
 			GtfsPathway pathway = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsPathway.class, pathway,
 					sourceContext);
 			context.getDao().addPathway(pathway, sourceContext);
@@ -548,7 +549,7 @@ public class GtfsDataLoader implements DataLoader {
 					.withTransferDuration(
 							erow.getInteger("transfer_duration", false));
 			GtfsFareAttribute fareAttribute = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsFareAttribute.class,
 					fareAttribute, sourceContext);
 			context.getDao().addFareAttribute(fareAttribute, sourceContext);
@@ -576,7 +577,7 @@ public class GtfsDataLoader implements DataLoader {
 							GtfsZone.id(erow.getString("destination_id")))
 					.withContainsId(GtfsZone.id(erow.getString("contains_id")));
 			GtfsFareRule fareRule = builder.build();
-			sourceContext.setRow(row);
+			sourceContext.setAndValidateRow(row);
 			context.getStreamingValidator().validate(GtfsFareRule.class,
 					fareRule, sourceContext);
 			context.getDao().addFareRule(fareRule, sourceContext);
@@ -672,8 +673,14 @@ public class GtfsDataLoader implements DataLoader {
 			this.dao = dao;
 		}
 
-		private void setRow(DataRow row) {
+		private void setAndValidateRow(DataRow row) {
 			this.row = row;
+			int numberOfHeaderColumns = dataTable.getColumnHeaders().size();
+			if (row.getRecordCount() != numberOfHeaderColumns) {
+				reportSink.report(new InconsistentNumberOfFieldsWarning(
+						row.getSourceInfo(), row.getRecordCount(),
+						numberOfHeaderColumns));
+			}
 		}
 
 		@Override

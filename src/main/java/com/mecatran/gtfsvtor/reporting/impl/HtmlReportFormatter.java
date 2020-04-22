@@ -137,10 +137,10 @@ public class HtmlReportFormatter implements ReportFormatter {
 				html.tr();
 				html.td().classAttr("linenr")
 						.text("L" + sourceInfo.getLineNumber()).end();
+				List<String> headers = sourceInfo.getTable().getHeaderColumns();
 				for (int i = 0; i < sourceInfo.getFields().size(); i++) {
 					String fieldValue = sourceInfo.getFields().get(i);
-					String header = sourceInfo.getTable().getHeaderColumns()
-							.get(i);
+					String header = i < headers.size() ? headers.get(i) : "-";
 					html.td();
 					ReportIssueSeverity fieldSeverity = subCategory
 							.getFieldSeverity(sourceInfoIndex, header);
