@@ -1,3 +1,0 @@
-service_id,date,exception_type
-FULLW,20070604,2
-WE,20070604,1

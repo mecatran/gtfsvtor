@@ -98,12 +98,6 @@ import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
-/**
- * TODO filter_unusual_trips
- *
- * TODO flatten_feed (which errors are we expecting here?)
- *
- */
 public class TestGtfs {
 
 	private void testGoodDao(IndexedReadOnlyDao dao) {
