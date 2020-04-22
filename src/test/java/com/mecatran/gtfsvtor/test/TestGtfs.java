@@ -1055,6 +1055,16 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testRepeatedRouteName() {
+		TestBundle tb = loadAndValidate("repeated_route_name");
+		List<InvalidFieldValueIssue> ifvs = tb.report
+				.getReportIssues(InvalidFieldValueIssue.class);
+		assertEquals(1, ifvs.size());
+		InvalidFieldValueIssue ifv0 = ifvs.get(0);
+		assertEquals(3, ifv0.getSourceInfos().size());
+	}
+
+	@Test
 	public void testMBTA42951766() {
 		TestBundle tb = loadAndValidate("MBTA_42951766");
 		IndexedReadOnlyDao dao = tb.dao;
