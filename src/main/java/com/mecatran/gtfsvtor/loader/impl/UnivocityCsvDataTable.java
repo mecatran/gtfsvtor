@@ -39,6 +39,11 @@ public class UnivocityCsvDataTable implements DataTable {
 	private boolean checkRecordConsistent = false;
 	private boolean emptyFile = false;
 
+	public static DataTable.Factory factory() {
+		return (tableName, inputStream) -> new UnivocityCsvDataTable(tableName,
+				inputStream);
+	}
+
 	public UnivocityCsvDataTable(String tableName, InputStream inputStream)
 			throws IOException {
 		this.tableName = tableName;

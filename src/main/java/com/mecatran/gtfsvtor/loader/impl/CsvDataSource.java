@@ -12,9 +12,17 @@ import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 public class CsvDataSource implements NamedTabularDataSource {
 
 	private NamedInputStreamSource inputStreamSource;
+	private DataTable.Factory dataTableFactory = UnivocityCsvDataTable
+			.factory();
 
 	public CsvDataSource(NamedInputStreamSource inputStreamSource) {
 		this.inputStreamSource = inputStreamSource;
+	}
+
+	public CsvDataSource setDataTableFactory(
+			DataTable.Factory dataTableFactory) {
+		this.dataTableFactory = dataTableFactory;
+		return this;
 	}
 
 	@Override
@@ -22,9 +30,7 @@ public class CsvDataSource implements NamedTabularDataSource {
 		if (inputStreamSource == null)
 			throw new IOException("Missing input");
 		InputStream in = inputStreamSource.getInputStream(tableName);
-		// TODO Make this configurable
-		// return new ApacheCommonsCsvDataTable(tableName, in);
-		return new UnivocityCsvDataTable(tableName, in);
+		return dataTableFactory.createDataTable(tableName, in);
 	}
 
 	@Override

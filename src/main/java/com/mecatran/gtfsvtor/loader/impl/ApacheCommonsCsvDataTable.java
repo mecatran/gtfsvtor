@@ -36,6 +36,11 @@ public class ApacheCommonsCsvDataTable implements DataTable {
 
 	private boolean checkRecordConsistent = false;
 
+	public static DataTable.Factory factory() {
+		return (tableName, inputStream) -> new ApacheCommonsCsvDataTable(
+				tableName, inputStream);
+	}
+
 	public ApacheCommonsCsvDataTable(String tableName, InputStream inputStream)
 			throws IOException {
 		this.tableName = tableName;
