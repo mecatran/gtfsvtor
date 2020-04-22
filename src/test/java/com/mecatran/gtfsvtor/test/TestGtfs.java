@@ -97,8 +97,6 @@ import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
 /**
- * TODO contains_null
- *
  * TODO duplicate_stop
  *
  * TODO duplicate_stop_sequence
@@ -353,6 +351,17 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("bad_eol.zip");
 		// assertEquals(1,
 		// tb.report.getReportItems(GeneralIOError.class).size());
+	}
+
+	@Test
+	public void testContainsNull() {
+		TestBundle tb = loadAndValidate("contains_null");
+		List<InvalidEncodingError> iees = tb.report
+				.getReportIssues(InvalidEncodingError.class);
+		assertEquals(1, iees.size());
+		InvalidEncodingError iee0 = iees.get(0);
+		assertEquals("E NULL to the right\0NULL to the left (Demo)",
+				iee0.getValue());
 	}
 
 	@Test
