@@ -60,6 +60,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
+import com.mecatran.gtfsvtor.reporting.issues.DuplicatedStopSequenceError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedTripIssue;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
@@ -80,6 +81,7 @@ import com.mecatran.gtfsvtor.reporting.issues.NonIncreasingShapeDistTraveledErro
 import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
+import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromShapeIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelAtStopError;
@@ -97,10 +99,6 @@ import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
 /**
- * TODO duplicate_stop
- *
- * TODO duplicate_stop_sequence
- *
  * TODO filter_unusual_trips
  *
  * TODO flatten_feed (which errors are we expecting here?)
@@ -829,6 +827,30 @@ public class TestGtfs {
 		assertTrue(Math.abs(762.81 - stf1.getDistanceMeters()) < 1.0);
 		assertEquals(GtfsStop.id("BEATTY_AIRPORT_2"), stf1.getStop().getId());
 		assertEquals(ReportIssueSeverity.WARNING, stf1.getSeverity());
+	}
+
+	@Test
+	public void testStopTooClose() {
+		TestBundle tb = loadAndValidate("duplicate_stop");
+		List<StopTooCloseIssue> stcs = tb.report
+				.getReportIssues(StopTooCloseIssue.class);
+		assertEquals(1, stcs.size());
+		StopTooCloseIssue stc0 = stcs.get(0);
+		// Is the order 1 / 2 stable?
+		assertEquals(GtfsStop.id("BULLFROG"), stc0.getStop1().getId());
+		assertEquals(GtfsStop.id("FROG"), stc0.getStop2().getId());
+	}
+
+	@Test
+	public void testDuplicateStopSequence() {
+		TestBundle tb = loadAndValidate("duplicate_stop_sequence");
+		List<DuplicatedStopSequenceError> dsss = tb.report
+				.getReportIssues(DuplicatedStopSequenceError.class);
+		assertEquals(1, dsss.size());
+		DuplicatedStopSequenceError dss0 = dsss.get(0);
+		assertEquals(GtfsTripStopSequence.fromSequence(10),
+				dss0.getStopSequence());
+		assertEquals(GtfsTrip.id("CITY1"), dss0.getTrip().getId());
 	}
 
 	@Test
