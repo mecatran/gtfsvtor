@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.reporting.issues;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
@@ -13,7 +14,7 @@ import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 @ReportIssuePolicy
 public class InvalidFieldValueIssue implements ReportIssue {
 
-	private SourceInfoWithFields sourceInfo;
+	private List<SourceInfoWithFields> sourceInfos;
 	private String[] fieldNames;
 	private String value;
 	private String errorMessage;
@@ -21,7 +22,14 @@ public class InvalidFieldValueIssue implements ReportIssue {
 
 	public InvalidFieldValueIssue(DataObjectSourceInfo sourceInfo, String value,
 			String errorMessage, String... fieldNames) {
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldNames);
+		this(Arrays.asList(sourceInfo), value, errorMessage, fieldNames);
+	}
+
+	public InvalidFieldValueIssue(List<DataObjectSourceInfo> sourceInfos,
+			String value, String errorMessage, String... fieldNames) {
+		this.sourceInfos = sourceInfos.stream()
+				.map(si -> new SourceInfoWithFields(si, fieldNames)).sorted()
+				.collect(Collectors.toList());
 		this.fieldNames = fieldNames;
 		this.value = value;
 		this.errorMessage = errorMessage;
@@ -34,7 +42,7 @@ public class InvalidFieldValueIssue implements ReportIssue {
 
 	@Override
 	public List<SourceInfoWithFields> getSourceInfos() {
-		return Arrays.asList(sourceInfo);
+		return sourceInfos;
 	}
 
 	@Override
