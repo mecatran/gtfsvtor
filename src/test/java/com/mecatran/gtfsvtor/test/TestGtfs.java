@@ -63,6 +63,7 @@ import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedTripIssue;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
+import com.mecatran.gtfsvtor.reporting.issues.FirstOrLastStopTimeMissingError;
 import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
 import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
@@ -95,6 +96,18 @@ import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
 
+/**
+ * TODO contains_null
+ *
+ * TODO duplicate_stop
+ *
+ * TODO duplicate_stop_sequence
+ *
+ * TODO filter_unusual_trips
+ *
+ * TODO flatten_feed (which errors are we expecting here?)
+ *
+ */
 public class TestGtfs {
 
 	private void testGoodDao(IndexedReadOnlyDao dao) {
@@ -308,6 +321,21 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testOnlyCalendarDates() {
+		/* Good feed, only calendar_date is present */
+		TestBundle tb = loadAndValidate("only_calendar_dates");
+		SortedSet<GtfsLogicalDate> fullw = tb.dao.getCalendarIndex()
+				.getCalendarApplicableDates(GtfsCalendar.id("FULLW"));
+		assertEquals(1, fullw.size());
+		assertEquals(GtfsLogicalDate.getDate(2007, 6, 4),
+				fullw.iterator().next());
+		SortedSet<GtfsLogicalDate> we = tb.dao.getCalendarIndex()
+				.getCalendarApplicableDates(GtfsCalendar.id("WE"));
+		assertEquals(1, we.size());
+		assertEquals(GtfsLogicalDate.getDate(2007, 6, 5), we.iterator().next());
+	}
+
+	@Test
 	public void testMissingFile() {
 		TestBundle tb = loadAndValidate("does_not_exists");
 		assertEquals(1, tb.report.getReportIssues(GeneralIOError.class).size());
@@ -340,6 +368,19 @@ public class TestGtfs {
 				.getSourceInfo().getTable().getTableName());
 		InconsistentNumberOfFieldsWarning inof1 = inofs.get(1);
 		assertEquals(4, inof1.getNumberOfFields());
+	}
+
+	@Test
+	public void testMissingRowCells() {
+		TestBundle tb = loadAndValidate("missing_row_cells");
+		List<InconsistentNumberOfFieldsWarning> inofs = tb.report
+				.getReportIssues(InconsistentNumberOfFieldsWarning.class);
+		assertEquals(1, inofs.size());
+		InconsistentNumberOfFieldsWarning inof0 = inofs.get(0);
+		assertEquals(6, inof0.getNumberOfFields());
+		assertEquals(7, inof0.getNumberOfHeaderColumns());
+		assertEquals(GtfsRoute.TABLE_NAME, inof0.getSourceInfos().get(0)
+				.getSourceInfo().getTable().getTableName());
 	}
 
 	@Test
@@ -441,6 +482,15 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testUtf8Bol() {
+		// agency.txt contains UTF8 BOM
+		TestBundle tb = loadAndValidate("utf8bom");
+		assertEquals(1, tb.dao.getAgencies().count());
+		assertEquals("Demo Transit Authority",
+				tb.dao.getAgency(GtfsAgency.id("DTA")).getName());
+	}
+
+	@Test
 	public void testUtf16() {
 		TestBundle tb = loadAndValidate("utf16");
 		List<InvalidCharsetError> ices = tb.report
@@ -505,12 +555,24 @@ public class TestGtfs {
 	@Test
 	public void testMissingTrips() {
 		TestBundle tb = loadAndValidate("missing_trips");
-		Collection<MissingMandatoryTableError> mmts = tb.report
+		List<MissingMandatoryTableError> mmts = tb.report
 				.getReportIssues(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
-		MissingMandatoryTableError mmt = mmts.iterator().next();
+		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsTrip.TABLE_NAME, mmt.getTableName());
 		assertTrue(tb.dao.getTrips().count() == 0);
+	}
+
+	@Test
+	public void testMissingWeekdayColumn() {
+		TestBundle tb = loadAndValidate("missing_weekday_column");
+		List<MissingMandatoryColumnError> mmcs = tb.report
+				.getReportIssues(MissingMandatoryColumnError.class);
+		assertEquals(1, mmcs.size());
+		MissingMandatoryColumnError mmc = mmcs.get(0);
+		assertEquals(GtfsCalendar.TABLE_NAME, mmc.getSourceInfos().get(0)
+				.getSourceInfo().getTable().getTableName());
+		assertEquals("thursday", mmc.getColumnName());
 	}
 
 	@Test
@@ -539,9 +601,27 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testMissingEndpointTime() {
+		TestBundle tb = loadAndValidate("missing_endpoint_times");
+		List<FirstOrLastStopTimeMissingError> flms = tb.report
+				.getReportIssues(FirstOrLastStopTimeMissingError.class);
+		assertEquals(2, flms.size());
+		FirstOrLastStopTimeMissingError flm0 = flms.get(0);
+		assertEquals(GtfsTrip.id("AB2"), flm0.getStopTime().getTripId());
+		assertEquals(GtfsStop.id("BULLFROG"), flm0.getStopTime().getStopId());
+		assertEquals(GtfsTripStopSequence.fromSequence(1),
+				flm0.getStopTime().getStopSequence());
+		FirstOrLastStopTimeMissingError flm1 = flms.get(1);
+		assertEquals(GtfsTrip.id("BFC2"), flm1.getStopTime().getTripId());
+		assertEquals(GtfsStop.id("BULLFROG"), flm1.getStopTime().getStopId());
+		assertEquals(GtfsTripStopSequence.fromSequence(2),
+				flm1.getStopTime().getStopSequence());
+	}
+
+	@Test
 	public void testMissingCalendars() {
 		TestBundle tb = loadAndValidate("missing_calendar");
-		Collection<MissingMandatoryTableError> mmts = tb.report
+		List<MissingMandatoryTableError> mmts = tb.report
 				.getReportIssues(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
 		/*
@@ -549,10 +629,20 @@ public class TestGtfs {
 		 * only report as missing calendar_dates.txt. Make a special error for
 		 * mandatory table out of two?
 		 */
-		MissingMandatoryTableError mmt = mmts.iterator().next();
+		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsCalendarDate.TABLE_NAME, mmt.getTableName());
 		assertTrue(tb.dao.getCalendars().count() == 0);
 		assertTrue(tb.dao.getCalendarDates().count() == 0);
+	}
+
+	@Test
+	public void testMissingColumn() {
+		TestBundle tb = loadAndValidate("missing_column");
+		List<MissingMandatoryColumnError> mmcs = tb.report
+				.getReportIssues(MissingMandatoryColumnError.class);
+		assertEquals(1, mmcs.size());
+		MissingMandatoryColumnError mmc0 = mmcs.get(0);
+		assertEquals("agency_name", mmc0.getColumnName());
 	}
 
 	@Test
@@ -1062,6 +1152,16 @@ public class TestGtfs {
 		assertEquals(1, ifvs.size());
 		InvalidFieldValueIssue ifv0 = ifvs.get(0);
 		assertEquals(3, ifv0.getSourceInfos().size());
+	}
+
+	@Test
+	public void testNegativeStopSequence() {
+		TestBundle tb = loadAndValidate("negative_stop_sequence");
+		List<InvalidFieldFormatError> iffs = tb.report
+				.getReportIssues(InvalidFieldFormatError.class);
+		assertEquals(1, iffs.size());
+		InvalidFieldFormatError iff0 = iffs.get(0);
+		assertEquals("-2", iff0.getValue());
 	}
 
 	@Test
