@@ -20,7 +20,7 @@ except the two tables `translations.txt` and `attributions.txt`.
 Not all validation rules of the legacy feedvalidator.py are implemented, however.
 See the [TODO](TODO) file to check the few missing rules.
 
-You can browse this [example report](https://mecatran.github.io/gtfsvtor/validation-report.html)
+You can browse this [example report](https://mecatran.github.io/gtfsvtor/validation-results.html)
 to see the validation result of the "verybad" dataset.
 
 For now, as there are no released bundle, you must compile the validator yourself:

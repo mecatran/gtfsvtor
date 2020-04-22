@@ -26,7 +26,7 @@ public class CmdLineArgs {
 
 	@Parameter(names = { "-o",
 			"--output" }, description = "Validation report output file")
-	private String outputReportFile = "validation-report.html";
+	private String outputReportFile = "validation-results.html";
 
 	@Parameter(names = { "-l",
 			"--limit" }, description = "Limit number of issues per category")
