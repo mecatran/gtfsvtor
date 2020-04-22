@@ -611,7 +611,7 @@ public class GtfsDataLoader implements DataLoader {
 			reportSink.report(new UnrecognizedColumnInfo(
 					new DataObjectSourceInfoImpl(table.getTableSourceInfo()),
 					unknownColumn));
-			if (unknownColumn.contains("\uFFFD")) {
+			if (unknownColumn.chars().anyMatch(c -> c == 0xFFFD || c == 0)) {
 				reportSink.report(new InvalidEncodingError(
 						new DataObjectSourceInfoImpl(
 								table.getTableSourceInfo()),

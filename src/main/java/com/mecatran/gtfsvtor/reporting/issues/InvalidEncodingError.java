@@ -33,6 +33,8 @@ public class InvalidEncodingError implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		fmt.text("Invalid UTF-8 encoding for value {0}", fmt.var(value));
+		// Replace null char to invalid encoding char to see it
+		fmt.text("Invalid UTF-8 encoding (or NULL char) in value {0}",
+				fmt.var(value.replace('\0', '\uFFFD')));
 	}
 }

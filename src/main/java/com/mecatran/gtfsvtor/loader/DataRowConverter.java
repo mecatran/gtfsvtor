@@ -52,9 +52,12 @@ public class DataRowConverter {
 	public String getString(String field, String defaultValue,
 			boolean mandatory) {
 		String ret = row.getString(field);
-		if (ret != null && ret.contains("\uFFFD")) {
-			reportSink.report(
-					new InvalidEncodingError(row.getSourceInfo(), field, ret));
+		if (ret != null) {
+			// ret.contains("\uFFFD")
+			if (ret.chars().anyMatch(c -> c == 0xFFFD || c == 0)) {
+				reportSink.report(new InvalidEncodingError(row.getSourceInfo(),
+						field, ret));
+			}
 			// Return the string anyway
 		}
 		if (ret == null || ret.isEmpty()) {
