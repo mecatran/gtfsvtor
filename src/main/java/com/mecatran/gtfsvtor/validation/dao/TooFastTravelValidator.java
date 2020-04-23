@@ -28,7 +28,6 @@ public class TooFastTravelValidator implements DaoValidator {
 	@ConfigurableOption(description = "Speed multiplier factor above which an error is generated")
 	private double errorSpeedMultiplier = 3.;
 
-	// TODO Check default value
 	@ConfigurableOption
 	private int maxStopsWithSameTime = 5;
 
