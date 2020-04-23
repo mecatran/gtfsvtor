@@ -5,6 +5,7 @@ import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.che
 
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
+import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseToOriginError;
@@ -43,7 +44,7 @@ public class StopStreamingValidator implements StreamingValidator<GtfsStop> {
 			reportSink.report(new InvalidFieldValueIssue(
 					context.getSourceInfo(), stop.getDescription(),
 					"Description should not be the same as name", "stop_desc",
-					"stop_name"));
+					"stop_name").withSeverity(ReportIssueSeverity.WARNING));
 		}
 		// Note: Parent station validity is checked in the reference validator
 	}
