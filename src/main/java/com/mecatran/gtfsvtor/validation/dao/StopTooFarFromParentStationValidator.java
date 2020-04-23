@@ -29,6 +29,7 @@ public class StopTooFarFromParentStationValidator implements DaoValidator {
 		ReportSink reportSink = context.getReportSink();
 
 		dao.getStops().forEach(stop -> {
+			// Should we test distance of entrances? nodes?
 			if (stop.getType() != GtfsStopType.STOP)
 				return;
 			if (stop.getParentId() == null)
