@@ -16,7 +16,7 @@ public class CalendarStreamingValidator
 		implements StreamingValidator<GtfsCalendar> {
 
 	@ConfigurableOption(description = "Year in the past before which an error is generated")
-	private int minYearInThePast = 1980;
+	private int minYearInThePast = 1900;
 
 	@ConfigurableOption(description = "Year in the future after which an error is generated")
 	private int maxYearInTheFuture = 2100;
@@ -52,15 +52,5 @@ public class CalendarStreamingValidator
 				date -> date != null && date.getYear() > maxYearInTheFuture,
 				calendar.getEndDate(), "end_date", context,
 				"end date too far in the future");
-
-		// Calendar is not active any day of the week
-		if (IntStream.range(0, 7)
-				.allMatch(dow -> !calendar.isActiveOnDow(dow))) {
-			reportSink
-					.report(new InvalidFieldValueIssue(calendar.getSourceInfo(),
-							"", "calendar is not active any day of the week",
-							"monday", "tuesday", "wednesday", "thursday",
-							"friday", "saturday", "sunday"));
-		}
 	}
 }
