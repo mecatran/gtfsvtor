@@ -17,6 +17,8 @@ public class FirstAndLastStopTimeSetValidator implements DaoValidator {
 		ReportSink reportSink = context.getReportSink();
 		dao.getTrips().forEach(trip -> {
 			List<GtfsStopTime> stopTimes = dao.getStopTimesOfTrip(trip.getId());
+			if (stopTimes.isEmpty())
+				return;
 			GtfsStopTime firstStopTime = stopTimes.get(0);
 			GtfsStopTime lastStopTime = stopTimes.get(stopTimes.size() - 1);
 			if (firstStopTime.getDepartureTime() == null) {
