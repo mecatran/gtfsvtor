@@ -8,7 +8,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Too many stops with identical time")
+@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Too many stops with identical time")
 public class TooManyStopWithSameTimeIssue implements ReportIssue {
 
 	private GtfsRoute route;
