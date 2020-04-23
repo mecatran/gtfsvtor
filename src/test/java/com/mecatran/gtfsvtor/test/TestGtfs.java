@@ -1273,11 +1273,12 @@ public class TestGtfs {
 
 	@Test
 	public void testLoadingAll() {
-		File base = new File("src/test/resources/data");
-		for (String file : base.list()) {
-			TestBundle tb = loadAndValidate(file);
-			// Just check if it does not throw an exception
-		}
+		// Disabled: we already test all the test sets
+		// File base = new File("src/test/resources/data");
+		// for (String file : base.list()) {
+		// TestBundle tb = loadAndValidate(file);
+		// Just check if it does not throw an exception
+		// }
 	}
 
 	@Test
