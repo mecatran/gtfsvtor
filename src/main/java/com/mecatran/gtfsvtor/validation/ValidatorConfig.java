@@ -62,7 +62,7 @@ public interface ValidatorConfig {
 		String str = this.getString(key);
 		if (str == null || str.isEmpty())
 			return defaultValue;
-		DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 		// We do not care about the timezone
 		TimeZone tz = TimeZone.getDefault();
 		df.setTimeZone(tz);
@@ -70,7 +70,8 @@ public interface ValidatorConfig {
 			Calendar cal = GregorianCalendar.getInstance(tz);
 			cal.setTime(df.parse(str));
 			return GtfsLogicalDate.getDate(cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
+					cal.get(Calendar.MONTH) + 1,
+					cal.get(Calendar.DAY_OF_MONTH));
 		} catch (ParseException e) {
 			return defaultValue;
 		}
