@@ -51,7 +51,6 @@ public class SimilarRouteColorWarning implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		// TODO Format float by the formatter itself
 		fmt.text(
 				"Route {0} colors are very similar but not identical: {1} vs {2}, distance is {3}%",
 				colorOrText ? "background" : "text",

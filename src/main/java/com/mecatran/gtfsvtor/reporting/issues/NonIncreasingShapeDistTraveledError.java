@@ -35,12 +35,11 @@ public class NonIncreasingShapeDistTraveledError implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		// TODO Format distance by the formatter itself
 		fmt.text(
 				"Non-increasing shape dist traveled for shape ID {0} between seq {1} and {2}: {3} > {4}.",
 				fmt.id(shapeId), fmt.id(point1.getPointSequence().toString()),
 				fmt.id(point2.getPointSequence().toString()),
-				fmt.var(String.format("%.2f", point1.getShapeDistTraveled())),
-				fmt.var(String.format("%.2f", point2.getShapeDistTraveled())));
+				fmt.var(fmt.distance(point1.getShapeDistTraveled())),
+				fmt.var(fmt.distance(point2.getShapeDistTraveled())));
 	}
 }

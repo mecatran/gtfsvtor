@@ -2,7 +2,7 @@ Code
 ====
 
 Add source info to issue text output
-Add formatters for stop, route, distance
+Add formatters for stop, route
 
 Validations
 ===========

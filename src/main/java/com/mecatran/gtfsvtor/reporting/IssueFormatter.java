@@ -47,4 +47,9 @@ public interface IssueFormatter {
 		return String.format(Locale.US, "(%.6f,%.6f)", p.getLat(), p.getLon());
 	}
 
+	/** Format a distance in meters */
+	public default String distance(Double distanceMeters) {
+		return distanceMeters == null ? "?"
+				: String.format(Locale.US, "%.2fm", distanceMeters);
+	}
 }

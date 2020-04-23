@@ -58,8 +58,7 @@ public class StopTooFarFromParentStationIssue implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		// TODO Format distance by the formatter itself
-		fmt.text("Stop too far from parent station, they are {0}m away",
-				fmt.var(String.format("%.2f", distanceMeters)));
+		fmt.text("Stop too far from parent station, they are {0} away",
+				fmt.var(fmt.distance(distanceMeters)));
 	}
 }

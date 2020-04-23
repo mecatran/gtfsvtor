@@ -58,8 +58,7 @@ public class StopTooCloseIssue implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		// TODO Format distance by the formatter itself
-		fmt.text("Stops too close, they are {0}m away",
-				fmt.var(String.format("%.2f", distanceMeters)));
+		fmt.text("Stops too close, they are {0} away",
+				fmt.var(fmt.distance(distanceMeters)));
 	}
 }

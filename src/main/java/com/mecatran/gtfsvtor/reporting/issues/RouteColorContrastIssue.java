@@ -48,7 +48,6 @@ public class RouteColorContrastIssue implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		// TODO Format float by the formatter itself
 		fmt.text("Route colors not contrasted enough: {0}, delta is {1}%",
 				fmt.colors(route.getNonNullColor(),
 						route.getNonNullTextColor()),
