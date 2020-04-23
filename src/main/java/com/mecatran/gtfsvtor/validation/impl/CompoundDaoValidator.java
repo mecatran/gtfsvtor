@@ -3,8 +3,10 @@ package com.mecatran.gtfsvtor.validation.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 
@@ -46,8 +48,14 @@ public class CompoundDaoValidator implements DaoValidator {
 					return true;
 				});
 			}
-			exec.invokeAll(callables);
-
+			List<Future<Boolean>> results = exec.invokeAll(callables);
+			results.forEach(f -> {
+				try {
+					f.get();
+				} catch (ExecutionException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
