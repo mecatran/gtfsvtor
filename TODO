@@ -17,7 +17,6 @@ Invalid float value (comma instead of point, exponent notation)
 
 Stops
 -----
-Unused node, quay, entrance
 Different station too close (station is close to stop but not parent)
 Stop with multiple route types (bus and metro)
 Quay too far from stop
@@ -34,7 +33,8 @@ Wrong shape projection
 Pathways
 --------
 Complete station coverage
-Blind node, island w/o entrance or stop/platform
+No entrance in, out
+Blind node (one way only), island w/o entrance or stop/platform
 Duplicated pathway (optional)
 
 Fares
