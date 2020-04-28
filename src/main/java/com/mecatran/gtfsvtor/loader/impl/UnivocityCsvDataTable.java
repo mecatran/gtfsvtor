@@ -89,7 +89,7 @@ public class UnivocityCsvDataTable implements DataTable {
 
 		csvParser.beginParsing(br);
 
-		String[] headers = csvParser.getContext().parsedHeaders();
+		String[] headers = csvParser.getContext().headers();
 		if (headers == null) {
 			emptyFile = true;
 		} else {
