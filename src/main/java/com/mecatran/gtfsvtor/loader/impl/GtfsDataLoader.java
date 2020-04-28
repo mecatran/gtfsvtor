@@ -30,7 +30,9 @@ import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsZone;
+import com.mecatran.gtfsvtor.model.impl.SimpleGtfsShapePoint;
 import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime;
+import com.mecatran.gtfsvtor.model.impl.SmallGtfsShapePoint;
 import com.mecatran.gtfsvtor.model.impl.SmallGtfsStopTime;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
@@ -332,10 +334,13 @@ public class GtfsDataLoader implements DataLoader {
 				"shape_pt_lat", "shape_pt_lon", "shape_pt_sequence");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
+		int nShapePoints = 0;
 		for (DataRow row : table) {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
-			GtfsShapePoint.Builder builder = new GtfsShapePoint.Builder();
+			GtfsShapePoint.Builder builder = OPTIMIZE_FOR_SIZE
+					? new SmallGtfsShapePoint.Builder()
+					: new SimpleGtfsShapePoint.Builder();
 			builder.withShapeId(GtfsShape.id(erow.getString("shape_id")))
 					.withCoordinates(erow.getDouble("shape_pt_lat", true),
 							erow.getDouble("shape_pt_lon", true))
@@ -348,6 +353,11 @@ public class GtfsDataLoader implements DataLoader {
 			context.getStreamingValidator().validate(GtfsShapePoint.class,
 					shapePoint, sourceContext);
 			context.getDao().addShapePoint(shapePoint, sourceContext);
+			nShapePoints++;
+			if ((nShapePoints % 100000) == 0) {
+				// TODO Fancier progress bar
+				System.out.print("\r" + nShapePoints + " shape points");
+			}
 		}
 		closeTable(table, context.getReportSink());
 	}
@@ -424,7 +434,7 @@ public class GtfsDataLoader implements DataLoader {
 			nStopTimes++;
 			if ((nStopTimes % 100000) == 0) {
 				// TODO Fancier progress bar
-				System.out.print("\r" + nStopTimes);
+				System.out.print("\r" + nStopTimes + " stop times");
 			}
 		}
 		long end = System.currentTimeMillis();
