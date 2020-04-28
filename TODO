@@ -1,7 +1,6 @@
 Code
 ====
 
-Add source info to issue text output
 Add formatters for stop, route
 
 Validations
@@ -21,6 +20,10 @@ Different station too close (station is close to stop but not parent)
 Stop with multiple route types (bus and metro)
 Quay too far from stop
 Entrance, node too far from station
+
+Calendars
+---------
+No Service Exceptions (All services are defined on a weekly basis from xxx to xxx with no single day variations. If there are exceptions such as holiday service dates please ensure they are listed in calendar_dates.txt)
 
 Frequencies
 -----------
