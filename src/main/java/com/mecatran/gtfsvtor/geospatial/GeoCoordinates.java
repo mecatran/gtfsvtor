@@ -22,6 +22,6 @@ public class GeoCoordinates {
 
 	@Override
 	public String toString() {
-		return String.format(Locale.US, "GeoCoordinates{%.6f,%.6f}", lat, lon);
+		return String.format(Locale.US, "GeoCoordinates{%.8f,%.8f}", lat, lon);
 	}
 }
