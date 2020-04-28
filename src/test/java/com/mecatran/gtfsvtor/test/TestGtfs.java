@@ -749,10 +749,10 @@ public class TestGtfs {
 		assertTrue(d12 <= l12);
 		assertEquals((double) 1601.2931,
 				lgi.getProjectedPoint(stopTimes.get(1)).getArcLengthMeters(),
-				1e-4);
+				1e-2);
 		assertEquals((double) 2204.3906,
 				lgi.getProjectedPoint(stopTimes.get(2)).getArcLengthMeters(),
-				1e-4);
+				1e-2);
 
 		// Test spatial indexing
 		DaoSpatialIndex dsi = tb.dao.getSpatialIndex();
