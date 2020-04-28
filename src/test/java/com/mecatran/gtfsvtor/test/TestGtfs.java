@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1187,6 +1186,15 @@ public class TestGtfs {
 		assertEquals(1, iffs.size());
 		InvalidFieldFormatError iff0 = iffs.get(0);
 		assertEquals("-2", iff0.getValue());
+	}
+
+	@Test
+	public void testSpaceInHeader() {
+		TestBundle tb = loadAndValidate("space_header");
+		assertEquals(0, tb.report
+				.getReportIssues(MissingMandatoryValueError.class).size());
+		assertEquals(0,
+				tb.report.getReportIssues(MissingObjectIdError.class).size());
 	}
 
 	@Test
