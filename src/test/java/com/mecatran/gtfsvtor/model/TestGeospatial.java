@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
@@ -8,6 +9,7 @@ import org.junit.Test;
 
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
+import com.mecatran.gtfsvtor.geospatial.PackedCoordinates;
 
 public class TestGeospatial {
 
@@ -72,4 +74,62 @@ public class TestGeospatial {
 	}
 
 	// TODO Test segment distance
+
+	@Test
+	public void testPackedCoordinates() {
+
+		testOne(0.0, 0.0);
+		testOne(0.000001, 0.000001);
+		testOne(45.0, 90.0);
+		testOne(90.0, 180.0);
+		testOne(-0.000001, -0.000001);
+		testOne(-1.0, -1.0);
+		testOne(-45.0, -90.0);
+		testOne(-90.0, -180.0);
+
+		// Max distance rounding error should be less than 1.2cm
+		double d;
+		double MAX_ERR_DISTANCE_METERS = 1.2e-2;
+
+		Random rand = new Random(42L);
+		for (int i = 0; i < 1000; i++) {
+			double lat = rand.nextDouble() * 180 - 90;
+			double lon = rand.nextDouble() * 360 - 180;
+			GeoCoordinates p1 = new GeoCoordinates(lat, lon);
+			GeoCoordinates p2 = PackedCoordinates
+					.unpack(PackedCoordinates.pack(p1.getLat(), p1.getLon()));
+			assertEquals(lat, p2.getLat(), 1e-7);
+			assertEquals(lon, p2.getLon(), 1e-7);
+			d = Geodesics.distanceMeters(p1, p2);
+			assertTrue(d < MAX_ERR_DISTANCE_METERS);
+		}
+
+		d = Geodesics.distanceMeters(
+				PackedCoordinates.unpack(0x0000000000000000L),
+				PackedCoordinates.unpack(0x0000000000000001L));
+		assertTrue(d < MAX_ERR_DISTANCE_METERS);
+		d = Geodesics.distanceMeters(
+				PackedCoordinates.unpack(0x0000000000000000L),
+				PackedCoordinates.unpack(0x0000000100000000L));
+		assertTrue(d < MAX_ERR_DISTANCE_METERS);
+		d = Geodesics.distanceMeters(
+				PackedCoordinates.unpack(0x7FFFFFFE7FFFFFFEL),
+				PackedCoordinates.unpack(0x7FFFFFFF7FFFFFFFL));
+		assertTrue(d < MAX_ERR_DISTANCE_METERS);
+		d = Geodesics.distanceMeters(
+				PackedCoordinates.unpack(0x8000000080000000L),
+				PackedCoordinates.unpack(0x8000000180000001L));
+		assertTrue(d < MAX_ERR_DISTANCE_METERS);
+		d = Geodesics.distanceMeters(
+				PackedCoordinates.unpack(0xFFFFFFFEFFFFFFFDL),
+				PackedCoordinates.unpack(0xFFFFFFFFFFFFFFFEL));
+		assertTrue(d < MAX_ERR_DISTANCE_METERS);
+	}
+
+	private void testOne(double lat, double lon) {
+		assertEquals(lat, PackedCoordinates
+				.unpack(PackedCoordinates.pack(lat, lon)).getLat(), 1e-7);
+		assertEquals(lon, PackedCoordinates
+				.unpack(PackedCoordinates.pack(lat, lon)).getLon(), 1e-7);
+	}
 }
