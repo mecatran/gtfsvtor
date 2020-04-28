@@ -30,7 +30,8 @@ public class StopTimeStreamingValidator
 		ReportSink reportSink = context.getReportSink();
 		// Trip id / stop sequence is primary key and tested by DAO
 		checkNonNull(stopTime::getStopId, "stop_id", context);
-		if (stopTime.getStopSequence().getSequence() < 0)
+		if (stopTime.getStopSequence() != null
+				&& stopTime.getStopSequence().getSequence() < 0)
 			reportSink.report(new InvalidFieldFormatError(
 					context.getSourceInfo(), "stop_sequence",
 					Integer.toString(stopTime.getStopSequence().getSequence()),
