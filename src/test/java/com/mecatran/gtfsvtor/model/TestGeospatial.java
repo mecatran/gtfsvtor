@@ -1,8 +1,9 @@
 package com.mecatran.gtfsvtor.model;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Random;
 
-import org.junit.ComparisonFailure;
 import org.junit.Test;
 
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
@@ -71,15 +72,4 @@ public class TestGeospatial {
 	}
 
 	// TODO Test segment distance
-
-	private void assertEquals(double expected, double actual, double epsilon) {
-		double delta = Math.abs(actual - expected);
-		if (delta > epsilon)
-			throw new ComparisonFailure(
-					"Delta is " + Double.toString(delta) + ", should be < "
-							+ Double.toString(epsilon),
-					Double.toString(expected), Double.toString(actual));
-
-	}
-
 }
