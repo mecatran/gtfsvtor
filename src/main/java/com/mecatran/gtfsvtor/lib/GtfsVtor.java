@@ -50,7 +50,8 @@ public class GtfsVtor {
 		}
 		// TODO Add remaining cmd line args to config
 
-		report = new InMemoryReportLog().withPrintIssues(args.isPrintIssues());
+		report = new InMemoryReportLog().withPrintIssues(args.isPrintIssues())
+				.withMaxIssues(args.getMaxIssuesPerCategoryLimit());
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
 				.autoGuess(args.getGtfsFile(), report);
 		if (inputStreamSource != null) {

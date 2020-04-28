@@ -2,7 +2,10 @@ package com.mecatran.gtfsvtor.reporting.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -18,6 +21,8 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 			.create();
 	private ListMultimap<ReportIssueSeverity, ReportIssue> reportIssuesBySeverity = ArrayListMultimap
 			.create();
+	private Map<String, AtomicInteger> issuesCountPerCategory = new HashMap<>();
+	private int maxIssuesPerCategory = Integer.MAX_VALUE;
 	private boolean printIssues = false;
 
 	public InMemoryReportLog() {
@@ -28,16 +33,28 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 		return this;
 	}
 
+	public InMemoryReportLog withMaxIssues(int maxIssues) {
+		this.maxIssuesPerCategory = maxIssues;
+		return this;
+	}
+
 	@Override
 	public void report(ReportIssue issue) {
 		synchronized (reportItems) {
+			int count = issuesCountPerCategory
+					.computeIfAbsent(issue.getCategoryName(),
+							cat -> new AtomicInteger(0))
+					.addAndGet(1);
+			boolean skip = count >= maxIssuesPerCategory;
 			if (printIssues) {
-				System.out.println(issue.getSeverity() + ": "
-						+ PlainTextIssueFormatter.format(issue));
+				System.out.println(PlainTextIssueFormatter.format(issue)
+						+ (skip ? " (too much issues, skipped)" : ""));
 			}
-			reportItems.add(issue);
-			reportIssuesByType.put(issue.getClass(), issue);
-			reportIssuesBySeverity.put(issue.getSeverity(), issue);
+			if (!skip) {
+				reportItems.add(issue);
+				reportIssuesByType.put(issue.getClass(), issue);
+				reportIssuesBySeverity.put(issue.getSeverity(), issue);
+			}
 		}
 	}
 
