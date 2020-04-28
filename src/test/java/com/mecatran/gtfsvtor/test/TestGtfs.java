@@ -1257,7 +1257,7 @@ public class TestGtfs {
 	@Test
 	public void testAachener73069683() {
 		TestBundle tb = loadAndValidate("aachener_73069683");
-		assertEquals(0,
+		assertEquals(1,
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.WARNING));
 		// One error: stop too far from projected shape.
 		assertEquals(1,
