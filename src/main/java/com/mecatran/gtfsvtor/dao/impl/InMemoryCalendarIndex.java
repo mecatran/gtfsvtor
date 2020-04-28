@@ -144,6 +144,10 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	@Override
 	public OverlappingCalendarInfo calendarOverlap(GtfsCalendar.Id calendarId1,
 			GtfsCalendar.Id calendarId2) {
+		if (calendarId1 == null || calendarId2 == null) {
+			// Undefined calendars will never overlap.
+			return null;
+		}
 		// Note: this function works too if calendarId1 = calendarId2
 		List<GtfsCalendar.Id> key = new ArrayList<>();
 		key.add(calendarId1);
