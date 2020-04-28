@@ -315,9 +315,11 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 				double k = Math.abs(kb - ka) < 1e-10 ? 0.
 						: (kp - ka) / (kb - ka);
 				double dap = dab * k;
+				GeoCoordinates pa = a.getCoordinates();
+				GeoCoordinates pb = b.getCoordinates();
 				GeoCoordinates pp = new GeoCoordinates(
-						a.getLat() + (b.getLat() - a.getLat()) * k,
-						a.getLon() + (b.getLon() - a.getLon()) * k);
+						pa.getLat() + (pb.getLat() - pa.getLat()) * k,
+						pa.getLon() + (pb.getLon() - pa.getLon()) * k);
 				// Compute distance from stop to shape, if possible
 				double dpp = stop == null ? 0.0
 						: Geodesics.distanceMeters(stop.getCoordinates(), pp);
