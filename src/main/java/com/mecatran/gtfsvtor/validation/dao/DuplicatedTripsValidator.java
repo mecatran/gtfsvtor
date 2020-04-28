@@ -40,11 +40,13 @@ public class DuplicatedTripsValidator implements DaoValidator {
 		dao.getRoutes().forEach(route -> {
 			ListMultimap<Object, GtfsTrip.Id> tripsPerKey = ArrayListMultimap
 					.create();
-			dao.getTripsOfRoute(route.getId()).forEach(trip -> {
-				Object tripKey = computeTripKey(trip,
-						dao.getStopTimesOfTrip(trip.getId()));
-				tripsPerKey.put(tripKey, trip.getId());
-			});
+			dao.getTripsOfRoute(route.getId())
+					.filter(trip -> trip.getServiceId() != null)
+					.forEach(trip -> {
+						Object tripKey = computeTripKey(trip,
+								dao.getStopTimesOfTrip(trip.getId()));
+						tripsPerKey.put(tripKey, trip.getId());
+					});
 
 			for (List<GtfsTrip.Id> identicalTripIds : Multimaps
 					.asMap(tripsPerKey).values()) {
