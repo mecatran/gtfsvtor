@@ -140,3 +140,10 @@ span.pre {
 span.var {
 	color: #21618c;
 }
+
+.image {
+	background-repeat: no-repeat;
+	background-size: 1em;
+	background-position: left center;
+	padding-left: 1.2em;
+}

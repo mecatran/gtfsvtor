@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -178,19 +179,31 @@ public class HtmlReportFormatter implements ReportFormatter {
 	private void formatHeader() throws IOException {
 		writer.write("<!DOCTYPE html>\n");
 		html.html().lang("en").head();
+		html.meta().charset("UTF-8").end();
 		html.start("title").text("GTFS validation report").end();
 		html.style().type("text/css");
-		StringWriter writer = new StringWriter();
-		IOUtils.copy(this.getClass().getResourceAsStream("report.css"), writer,
-				StandardCharsets.UTF_8);
-		html.raw(writer.toString());
-		writer.close();
+		StringWriter cssWriter = new StringWriter();
+		cssWriter.append("\n");
+		IOUtils.copy(this.getClass().getResourceAsStream("report.css"),
+				cssWriter, StandardCharsets.UTF_8);
+		StringWriter logoWriter = new StringWriter();
+		IOUtils.copy(this.getClass().getResourceAsStream("gtfsvtor_logo.svg"),
+				logoWriter, StandardCharsets.UTF_8);
+		logoWriter.close();
+		cssWriter.append(
+				"\n.logo {\n\tbackground-image: url('data:image/svg+xml;base64,");
+		String logoBase64 = Base64.getEncoder().encodeToString(
+				logoWriter.toString().getBytes(StandardCharsets.UTF_8));
+		cssWriter.append(logoBase64);
+		cssWriter.append("');\n}\n");
+		cssWriter.close();
+		html.raw(cssWriter.toString());
 		html.end(); // style
 	}
 
 	private void formatSummary(ClassifiedReviewReport clsReport)
 			throws IOException {
-		html.h1().text("GTFS validation report");
+		html.h1().classAttr("logo image").text("GTFS validation report");
 		for (CategoryCounter cc : clsReport.getSeverityCounters()) {
 			html.span().classAttr("xsmaller");
 			html.text(" • " + cc.getTotalCount() + " ");
