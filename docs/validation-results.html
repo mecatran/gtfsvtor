@@ -166,7 +166,7 @@ span.var {
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="xsmaller"> - 101 
+			<span class="xsmaller"> - 104 
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
@@ -299,6 +299,10 @@ span.var {
 			<li>6 
 				<span class="smaller badge WARNING">WARNING
 				</span>Unused stop
+			</li>
+			<li>3 
+				<span class="smaller badge WARNING">WARNING
+				</span>Useless calendar date
 			</li>
 			<li>2 
 				<span class="smaller badge WARNING">WARNING
@@ -756,7 +760,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Loaded 1 feed-info, 2 agencies, 8 routes, 20 stops, 6 calendars, 15 calendar dates, 15 trips, 42 stop times, 6 transfers, 3 pathways, 3 fare attributes, 8 fare rules
+					<td class="issue">Loaded 1 feed-info, 2 agencies, 8 routes, 20 stops, 6 calendars, 17 calendar dates, 15 trips, 42 stop times, 6 transfers, 3 pathways, 3 fare attributes, 8 fare rules
 					</td>
 				</tr>
 			</table>
@@ -1322,7 +1326,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L12
+					<td class="linenr">L14
 					</td>
 					<td>MONDAY
 					</td>
@@ -1568,7 +1572,7 @@ span.var {
 			</table>
 		</div>
 		<h2>calendar_dates.txt
-			<span class="smaller"> - 6
+			<span class="smaller"> - 9
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
@@ -1585,6 +1589,10 @@ span.var {
 			<li>5
 				<span class="smaller badge WARNING">WARNING
 				</span>Unused calendar date
+			</li>
+			<li>3
+				<span class="smaller badge WARNING">WARNING
+				</span>Useless calendar date
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
@@ -1610,7 +1618,187 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L12
+					<td class="linenr">L2
+					</td>
+					<td class="WARNING">FULLW
+					</td>
+					<td>20061231
+					</td>
+					<td>2
+					</td>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>calendar.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>monday
+						</td>
+						<td>tuesday
+						</td>
+						<td>wednesday
+						</td>
+						<td>thursday
+						</td>
+						<td>friday
+						</td>
+						<td>saturday
+						</td>
+						<td>sunday
+						</td>
+						<td>start_date
+						</td>
+						<td>end_date
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="WARNING">FULLW
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>20070101
+					</td>
+					<td>20111231
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">service_id
+					</td>
+					<td class="issue">Useless calendar date: it is specified as removed (type <span class='pre'>2</span>), but the calendar <span class='id'>FULLW</span> is not active on 2006/12/31.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td class="WARNING">FULLW
+					</td>
+					<td>20070101
+					</td>
+					<td>1
+					</td>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>calendar.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>monday
+						</td>
+						<td>tuesday
+						</td>
+						<td>wednesday
+						</td>
+						<td>thursday
+						</td>
+						<td>friday
+						</td>
+						<td>saturday
+						</td>
+						<td>sunday
+						</td>
+						<td>start_date
+						</td>
+						<td>end_date
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="WARNING">FULLW
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>1
+					</td>
+					<td>20070101
+					</td>
+					<td>20111231
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">service_id
+					</td>
+					<td class="issue">Useless calendar date: it is specified as added (type <span class='pre'>1</span>), but the calendar <span class='id'>FULLW</span> is already active on 2007/01/01.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>service_id
+						</td>
+						<td>date
+						</td>
+						<td>exception_type
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L14
 					</td>
 					<td class="WARNING">MONDAY
 					</td>
@@ -1646,7 +1834,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L13
+					<td class="linenr">L15
 					</td>
 					<td class="WARNING">MONDAY2
 					</td>
@@ -1673,6 +1861,14 @@ span.var {
 					<td class="issue">Unused <span class='var'>calendar date</span> ID <span class='id'>MONDAY2</span>
 					</td>
 				</tr>
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">service_id
+					</td>
+					<td class="issue">Useless calendar date: it is specified as removed (type <span class='pre'>2</span>), but there is no calendar defined with the ID <span class='id'>MONDAY2</span>.
+					</td>
+				</tr>
 			</table>
 		</div>
 		<div class="subcategory">
@@ -1690,7 +1886,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L14
+					<td class="linenr">L16
 					</td>
 					<td class="WARNING">INVERTED
 					</td>
@@ -1734,7 +1930,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L15
+					<td class="linenr">L17
 					</td>
 					<td class="WARNING">UNUSED
 					</td>
@@ -1770,7 +1966,7 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
-					<td class="linenr">L16
+					<td class="linenr">L18
 					</td>
 					<td class="WARNING">INVERTED
 					</td>
@@ -9116,6 +9312,6 @@ span.var {
 			</table>
 		</div>
 		<hr/>
-		<p class="comments">Validation done at Thu Apr 30 11:56:40 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
+		<p class="comments">Validation done at Thu Apr 30 17:44:44 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
 		</p>
 	</head>
