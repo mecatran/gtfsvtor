@@ -2,9 +2,11 @@
 
 <html lang="en">
 	<head>
+		<meta charset="UTF-8"/>
 		<title>GTFS validation report
 		</title>
-		<style type="text/css">body {
+		<style type="text/css">
+body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -147,17 +149,28 @@ span.var {
 	color: #21618c;
 }
 
+.image {
+	background-repeat: no-repeat;
+	background-size: 1em;
+	background-position: left center;
+	padding-left: 1.2em;
+}
+
+.logo {
+	background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICB3aWR0aD0iNDUuOTY1ODM2bW0iCiAgIGhlaWdodD0iNDUuOTY1ODM2bW0iCiAgIHZpZXdCb3g9IjAgMCA0NS45NjU4MzYgNDUuOTY1ODM2IgogICB2ZXJzaW9uPSIxLjEiCiAgIGlkPSJzdmc4ODYiCiAgIGlua3NjYXBlOnZlcnNpb249IjAuOTIuMyAoMjQwNTU0NiwgMjAxOC0wMy0xMSkiCiAgIHNvZGlwb2RpOmRvY25hbWU9Imd0ZnN2dG9yX2xvZ28uc3ZnIj4KICA8ZGVmcwogICAgIGlkPSJkZWZzODgwIiAvPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0iYmFzZSIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiCiAgICAgYm9yZGVyb3BhY2l0eT0iMS4wIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwLjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp6b29tPSIyLjgiCiAgICAgaW5rc2NhcGU6Y3g9IjE0Mi4xMjUyMSIKICAgICBpbmtzY2FwZTpjeT0iNTYuNDY5NDA3IgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJtbSIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJsYXllcjEiCiAgICAgc2hvd2dyaWQ9ImZhbHNlIgogICAgIGZpdC1tYXJnaW4tdG9wPSIwIgogICAgIGZpdC1tYXJnaW4tbGVmdD0iMCIKICAgICBmaXQtbWFyZ2luLXJpZ2h0PSIwIgogICAgIGZpdC1tYXJnaW4tYm90dG9tPSIwIgogICAgIGlua3NjYXBlOnNuYXAtZ2xvYmFsPSJmYWxzZSIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iMTAyMyIKICAgICBpbmtzY2FwZTp3aW5kb3cteD0iMCIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMzMiCiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgLz4KICA8bWV0YWRhdGEKICAgICBpZD0ibWV0YWRhdGE4ODMiPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgICAgPGRjOnRpdGxlPjwvZGM6dGl0bGU+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxnCiAgICAgaW5rc2NhcGU6bGFiZWw9IkNhbHF1ZSAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSIKICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMTUuMTkyNjc4LC0xNy43NDkyMjUpIj4KICAgIDxnCiAgICAgICBpZD0iZzEyMDMiCiAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTcuODcyNzQ0LC02MS42MTgyMzcpIj4KICAgICAgPHJlY3QKICAgICAgICAgcnk9IjguNDgzMTg1OCIKICAgICAgICAgeT0iODAuMjk4Mzc4IgogICAgICAgICB4PSI3NC4xMzQ0OTkiCiAgICAgICAgIGhlaWdodD0iNDMuOTY1ODM2IgogICAgICAgICB3aWR0aD0iNDMuOTY1ODM2IgogICAgICAgICBpZD0icmVjdDExNjgtNyIKICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXNpemU6MjEuMjYwNDk2MTRweDtsaW5lLWhlaWdodDoxLjI1O2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7b3BhY2l0eToxO2ZpbGw6I2U3ZTdlNztmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MjtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjpiZXZlbDtzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2UtZGFzaG9mZnNldDowO3N0cm9rZS1vcGFjaXR5OjEiIC8+CiAgICAgIDxwYXRoCiAgICAgICAgIHN0eWxlPSJjb2xvcjojMDAwMDAwO2ZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1zaXplOjIxLjI2MDQ5NjE0cHg7bGluZS1oZWlnaHQ6MS4yNTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2ZvbnQtdmFyaWFudC1saWdhdHVyZXM6bm9ybWFsO2ZvbnQtdmFyaWFudC1wb3NpdGlvbjpub3JtYWw7Zm9udC12YXJpYW50LWNhcHM6bm9ybWFsO2ZvbnQtdmFyaWFudC1udW1lcmljOm5vcm1hbDtmb250LXZhcmlhbnQtYWx0ZXJuYXRlczpub3JtYWw7Zm9udC1mZWF0dXJlLXNldHRpbmdzOm5vcm1hbDt0ZXh0LWluZGVudDowO3RleHQtYWxpZ246c3RhcnQ7dGV4dC1kZWNvcmF0aW9uOm5vbmU7dGV4dC1kZWNvcmF0aW9uLWxpbmU6bm9uZTt0ZXh0LWRlY29yYXRpb24tc3R5bGU6c29saWQ7dGV4dC1kZWNvcmF0aW9uLWNvbG9yOiMwMDAwMDA7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7dGV4dC10cmFuc2Zvcm06bm9uZTt3cml0aW5nLW1vZGU6bHItdGI7ZGlyZWN0aW9uOmx0cjt0ZXh0LW9yaWVudGF0aW9uOm1peGVkO2RvbWluYW50LWJhc2VsaW5lOmF1dG87YmFzZWxpbmUtc2hpZnQ6YmFzZWxpbmU7dGV4dC1hbmNob3I6c3RhcnQ7d2hpdGUtc3BhY2U6bm9ybWFsO3NoYXBlLXBhZGRpbmc6MDtjbGlwLXJ1bGU6bm9uemVybztkaXNwbGF5OmlubGluZTtvdmVyZmxvdzp2aXNpYmxlO3Zpc2liaWxpdHk6dmlzaWJsZTtvcGFjaXR5OjE7aXNvbGF0aW9uOmF1dG87bWl4LWJsZW5kLW1vZGU6bm9ybWFsO2NvbG9yLWludGVycG9sYXRpb246c1JHQjtjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM6bGluZWFyUkdCO3NvbGlkLWNvbG9yOiMwMDAwMDA7c29saWQtb3BhY2l0eToxO3ZlY3Rvci1lZmZlY3Q6bm9uZTtmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46YmV2ZWw7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLWRhc2hvZmZzZXQ6MDtzdHJva2Utb3BhY2l0eToxO2NvbG9yLXJlbmRlcmluZzphdXRvO2ltYWdlLXJlbmRlcmluZzphdXRvO3NoYXBlLXJlbmRlcmluZzphdXRvO3RleHQtcmVuZGVyaW5nOmF1dG87ZW5hYmxlLWJhY2tncm91bmQ6YWNjdW11bGF0ZSIKICAgICAgICAgZD0ibSA4Mi41NDg4MjgsNzkuMzY3MTg4IGMgLTUuMjM2Mzg4LDAgLTkuNDg0Mzc1LDQuMjQ3OTg3IC05LjQ4NDM3NSw5LjQ4NDM3NCB2IDI2Ljk5ODA0OCBjIDAsNS4yMzYzOSA0LjI0Nzk4Nyw5LjQ4NDM3IDkuNDg0Mzc1LDkuNDg0MzcgaCAyNy4wMDAwMDIgYyA1LjIzNjM5LDAgOS40ODI0MiwtNC4yNDc5OCA5LjQ4MjQyLC05LjQ4NDM3IFYgODguODUxNTYyIGMgMCwtNS4yMzYzODcgLTQuMjQ2MDMsLTkuNDg0Mzc0IC05LjQ4MjQyLC05LjQ4NDM3NCB6IG0gMCwyIGggMjcuMDAwMDAyIGMgNC4xNjI5OCwwIDcuNDgyNDIsMy4zMjEzOTIgNy40ODI0Miw3LjQ4NDM3NCB2IDI2Ljk5ODA0OCBjIDAsNC4xNjI5OCAtMy4zMTk0NCw3LjQ4NDM3IC03LjQ4MjQyLDcuNDg0MzcgSCA4Mi41NDg4MjggYyAtNC4xNjI5ODIsMCAtNy40ODQzNzUsLTMuMzIxMzkgLTcuNDg0Mzc1LC03LjQ4NDM3IFYgODguODUxNTYyIGMgMCwtNC4xNjI5ODIgMy4zMjEzOTMsLTcuNDg0Mzc0IDcuNDg0Mzc1LC03LjQ4NDM3NCB6IgogICAgICAgICBpZD0icmVjdDExNjgiCiAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiIC8+CiAgICAgIDxnCiAgICAgICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ4LjIzNzM5NCwtMi4yMDk1OTgpIgogICAgICAgICBpZD0iZzkyOS0wLTMiPgogICAgICAgIDxnCiAgICAgICAgICAgYXJpYS1sYWJlbD0iR1RGUyIKICAgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc2l6ZToyMS4yNjA0OTYxNHB4O2xpbmUtaGVpZ2h0OjEuMjU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjtsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiMzZDNkM2Q7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuMTQ2NTYyMiIKICAgICAgICAgICBpZD0idGV4dDgzMi0zNy0xIj4KICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9InNjc3Njc2Nzc2Nzc2Nzc2Nzc3NzY3Njc3Njc2Nzc2Nzc3Nzc2Nzc3NzY2NjY2NzY3Njc2Njc3Njc3Njc2NzY2NjY3Njc2Nzc2Nzc2Nzc2Nzc2Nzc2Nzc3NzY3NzY3Nzc3Njc3Njc3NzY3NzY3Nzc3Nzc3Njc3Njc3Nzc3NzY3NjY3NzIgogICAgICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgICAgICAgIGlkPSJwYXRoODk5LTUtOSIKICAgICAgICAgICAgIGQ9Im0gMzQuNTAyNjk2LDg3LjIzNTgwNiBjIC0xLjIwNDc2MiwwIC0yLjE3NTQ1NSwwLjM1NDMgLTIuOTEyNDg2LDEuMDYyOTg1IC0wLjcyMjg1NSwwLjY5NDUwNyAtMS4wODQxNywxLjYyMjYwMiAtMS4wODQxNywyLjc4NDg0MyB2IDguNTg0NDg4IGMgMCwxLjE2MjIzOCAwLjM2MTMxNSwyLjA5Nzg1OCAxLjA4NDE3LDIuODA2NTQ4IDAuNzM3MDMxLDAuNjk0NTEgMS43MDc3MjQsMS4wNDE4IDIuOTEyNDg2LDEuMDQxOCAxLjIwNDc1OSwwIDIuMTc1OTY3LC0wLjM0NzI5IDIuOTEyOTk5LC0xLjA0MTggMC43NTEyMDUsLTAuNzA4NjkgMS4xMjY1NDUsLTEuNjQ0MzEgMS4xMjY1NDUsLTIuODA2NTQ4IFYgOTUuNzM1MDMgYyAwLC0wLjA3MDg3IC0wLjAyODA1LC0wLjEyNzQ5OCAtMC4wODQ3NSwtMC4xNzAwMTYgLTAuMDQyNTIsLTAuMDU2NyAtMC4wOTkxNSwtMC4wODQ3NSAtMC4xNzAwMTYsLTAuMDg0NzUgaCAtMy42MTQyNDggYyAtMC4wNzA4NywwIC0wLjEzNTAyOCwwLjAyODA2IC0wLjE5MTcyLDAuMDg0NzUgLTAuMDQyNTIsMC4wNDI1MiAtMC4wNjM1NiwwLjA5OTE0IC0wLjA2MzU2LDAuMTcwMDE2IHYgMS41NTIzNTggYyAwLDAuMDcwODcgMC4wMjEwNCwwLjEzNDUwOSAwLjA2MzU2LDAuMTkxMjAzIDAuMDU2NywwLjA0MjUyIDAuMTIwODUxLDAuMDYzNTYgMC4xOTE3MiwwLjA2MzU2IGggMS4yOTY1NjEgYyAwLjA3MDg3LDAgMC4xMDY0NTMsMC4wMzU1OSAwLjEwNjQ1MywwLjEwNjQ1NSB2IDIuMDQxMjE4IGMgMCwwLjUxMDI1NiAtMC4xNDg4MzYsMC45MjExNzYgLTAuNDQ2NDg1LDEuMjMzMDA2IC0wLjI4MzQ3MiwwLjMxMTgyIC0wLjY1ODgxNSwwLjQ2NzY3IC0xLjEyNjU0NSwwLjQ2NzY3IC0wLjQ2NzczMSwwIC0wLjg0MzU5LC0wLjE1NTg1IC0xLjEyNzA2NCwtMC40Njc2NyAtMC4yODM0NzIsLTAuMzExODMgLTAuNDI1Mjk3LC0wLjcyMjc1IC0wLjQyNTI5NywtMS4yMzMwMDYgdiAtOC42MjczNzkgYyAwLC0wLjUxMDI1MiAwLjE0MTgyNSwtMC45MjExNzkgMC40MjUyOTcsLTEuMjMzMDAxIDAuMjgzNDc0LC0wLjMxMTgxOSAwLjY1OTMzMywtMC40Njc2NzIgMS4xMjcwNjQsLTAuNDY3NjcyIDAuNDY3NzMsMCAwLjg0MzA3MywwLjE1NTg1MyAxLjEyNjU0NSwwLjQ2NzY3MiAwLjI5NzY0OSwwLjMxMTgyMiAwLjQ0NjQ4NSwwLjcyMjc0OSAwLjQ0NjQ4NSwxLjIzMzAwMSB2IDAuODcxNzgxIGMgMCwwLjA3MDg3IDAuMDIxMDMsMC4xMzQ1MDggMC4wNjM1NiwwLjE5MTIwMyAwLjA1NjY5LDAuMDQyNTIgMC4xMjA4NTEsMC4wNjQwOCAwLjE5MTcyLDAuMDY0MDggaCAxLjk1NTk1MSBjIDAuMDcwODcsMCAwLjEyNzQ5NywtMC4wMjE1NiAwLjE3MDAxNiwtMC4wNjQwOCAwLjA1NjY5LC0wLjA1NjY5IDAuMDg0NzUsLTAuMTIwMzM1IDAuMDg0NzUsLTAuMTkxMjAzIFYgOTEuMTA0ODIgYyAwLC0xLjE3NjQxNCAtMC4zNzUzNCwtMi4xMTE1MjMgLTEuMTI2NTQ1LC0yLjgwNjAzIC0wLjczNzAzMiwtMC43MDg2ODUgLTEuNzA4MjQsLTEuMDYyOTg1IC0yLjkxMjk5OSwtMS4wNjI5ODUgeiBtIDI2LjcwMDY5NCwwIGMgLTEuMTYyMjQxLDAgLTIuMDk3ODYzLDAuMzQ3Mjg3IC0yLjgwNjU0NywxLjA0MTc5NyAtMC43MDg2ODQsMC42OTQ1MSAtMS4wNjI5ODQsMS42Mjk2MTYgLTEuMDYyOTg0LDIuODA2MDMxIDAsMC43MzcwMjggMC4xNDE4MjQsMS43MDc2OTcgMC40MjUyOTYsMi4yNzQ2NDQgMC4yOTc2NDgsMC41NTI3NzIgMC42NTg5NjMsMS4yMzgzMzIgMS4wODQxNzMsMS42MzUxOTMgMC40MzkzODMsMC4zOTY4NjIgMS4wMTM2OTIsMC44NTAzOSAxLjcyMjM3NCwxLjM2MDY0MSAwLjYyMzY0MSwwLjQ1MzU1NyAxLjA3NzE2OSwwLjk0MTE2IDEuMzYwNjQxLDEuMTgyMTE0IDAuMjgzNDc0LDAuMjQwOTUgMC41MDI5NjUsMC42ODMxMTcgMC42NTg4NzYsMC45NTI0MTggMC4xNTU5MTEsMC4yNjkyOTggMC4yMzQwOTIsMC43ODk3NzYgMC4yMzQwOTIsMS4xNTgyOSAwLDAuNTI0NDI2IC0wLjE0MTgyMiwwLjk0OTg5NiAtMC40MjUyOTYsMS4yNzU4OTYgLTAuMjgzNDcyLDAuMzExODIgLTAuNjQ0Nzg3LDAuNDY3NjcgLTEuMDg0MTczLDAuNDY3NjcgLTAuNDM5MzgzLDAgLTAuODAwNjk4LC0wLjE2OTg4IC0xLjA4NDE3LC0wLjUxMDA1IC0wLjI2OTMwMSwtMC4zNDAxNyAtMC40MDQxMTEsLTAuNzg2NjggLTAuNDA0MTExLC0xLjMzOTQ1MyB2IC0wLjQyNTI5NiBjIDNlLTYsLTAuMDcwODcgLTAuMDI4NTcsLTAuMTI3NDk1IC0wLjA4NTI2LC0wLjE3MDAxNiAtMC4wNDI1MiwtMC4wNTY2OSAtMC4wOTkxNSwtMC4wODUyNiAtMC4xNzAwMTYsLTAuMDg1MjYgSCA1Ny42MzE1MiBjIC0wLjA3MDg3LDAgLTAuMTM0NTA5LDAuMDI4NTcgLTAuMTkxMjA0LDAuMDg1MjYgLTAuMDQyNTIsMC4wNDI1MiAtMC4wNjM1NiwwLjA5OTE1IC0wLjA2MzU2LDAuMTcwMDE2IHYgMC41NTI0MjEgYyAwLDEuMTQ4MDY4IDAuMzYxMzE1LDIuMDc2Njc4IDEuMDg0MTczLDIuNzg1MzU4IDAuNzIyODU1LDAuNzA4NjggMS42NzI1MDUsMS4wNjI5OSAyLjg0ODkxOSwxLjA2Mjk5IDEuMTc2NDE3LDAgMi4xMjYwNjgsLTAuMzYxMzIgMi44NDg5MjIsLTEuMDg0MTcgMC43MjI4NTgsLTAuNzM3MDQgMS4wODQxNzMsLTEuNzA4MjQgMS4wODQxNzMsLTIuOTEzMDA2IDAsLTAuNjY2MTYzIC0wLjEyMDI2NiwtMS41MzUyNjEgLTAuMzYxMjIsLTIuMDE3MTY1IEMgNjQuNjQwNzY2LDk3LjAyMDIyMiA2NC4zMDA0OTQsOTYuNDg3MTgyIDYzLjg2MTEwOCw5Ni4wOTAzMiA2My40MjE3MjUsOTUuNjc5MjgyIDYyLjc2OTc1LDk1LjAxNDc4NiA2MS45MDUxNTUsOTQuMzc2OTcxIDYxLjA1NDczNiw5My43NTMzMyA2MC40ODA0MjksOTMuMDUzNzQyIDYwLjE4Mjc4MSw5Mi42OTk0MDIgNTkuODk5MzA2LDkyLjM0NTA2MSA1OS43NTgsOTEuNTkzODg1IDU5Ljc1OCw5MS4wODM2MzQgYyAwLC0wLjUzODYgMC4xMzQyOTIsLTAuOTU2NTQxIDAuNDAzNTkzLC0xLjI1NDE4OSAwLjI2OTMwMSwtMC4zMTE4MTkgMC42MTY1ODgsLTAuNDY3NjcyIDEuMDQxNzk3LC0wLjQ2NzY3MiAwLjQ1MzU1NiwwIDAuODE0ODcxLDAuMTY5ODgxIDEuMDg0MTcyLDAuNTEwMDQ4IDAuMjgzNDcyLDAuMzI1OTkzIDAuNDI1Mjk3LDAuNzY1NDkyIDAuNDI1Mjk3LDEuMzE4MjY1IHYgMC41NTI5MzcgYyAwLDAuMDcwODcgMC4wMjE1NiwwLjEzNDUxMSAwLjA2NDA4LDAuMTkxMjA0IDAuMDU2NjksMC4wNDI1MiAwLjEyMDMzNSwwLjA2MzU2IDAuMTkxMjAxLDAuMDYzNTYgaCAxLjkxMzU3OCBjIDAuMDcwODcsMCAwLjEyNzQ5OCwtMC4wMjEwMyAwLjE3MDAxNiwtMC4wNjM1NiAwLjA1NjcsLTAuMDU2NyAwLjA4NDc1LC0wLjEyMDMzNiAwLjA4NDc1LC0wLjE5MTIwNCB2IC0wLjUxMDU2MSBjIDAsLTEuMjA0NzYyIC0wLjM2MTMxNSwtMi4xNjg0NDEgLTEuMDg0MTcyLC0yLjg5MTI5OCAtMC43MjI4NTgsLTAuNzM3MDMgLTEuNjcyNTA4LC0xLjEwNTM1OCAtMi44NDg5MjIsLTEuMTA1MzU4IHogbSAtMjEuNTYzMDI2LDAuMTcwMDE1IGMgLTAuMDcwODcsMCAtMC4xMzQ1MDksMC4wMjgwNiAtMC4xOTEyMDEsMC4wODQ3NSAtMC4wNDI1MiwwLjA0MjUyIC0wLjA2NDA4LDAuMDk5NjYgLTAuMDY0MDgsMC4xNzA1MzMgdiAxLjYxNTQwNSBjIDAsMC4wNzA4NyAwLjAyMTU2LDAuMTM1MDI1IDAuMDY0MDgsMC4xOTE3MiAwLjA1NjcsMC4wNDI1MiAwLjEyMDMzMywwLjA2MzU2IDAuMTkxMjAxLDAuMDYzNTYgaCAyLjU1MTI2NiBjIDAuMDcwODcsMCAwLjEwNjQ1NSwwLjAzNTU5IDAuMTA2NDU1LDAuMTA2NDU1IHYgMTMuNDUyOTI2IGMgMCwwLjA3MDkgMC4wMjEwMywwLjEzNDUxIDAuMDYzNTYsMC4xOTEyIDAuMDU2NjksMC4wNDI1IDAuMTIwMzM1LDAuMDY0MSAwLjE5MTIwNCwwLjA2NDEgSCA0NC41MDg4IGMgMC4wNzA4NywwIDAuMTI4MDEzLC0wLjAyMTYgMC4xNzA1MzQsLTAuMDY0MSAwLjA1NjY5LC0wLjA1NjcgMC4wODQ3NSwtMC4xMjAzMyAwLjA4NDc1LC0wLjE5MTIgViA4OS42MzgyNDQgYyAwLC0wLjA3MDg3IDAuMDM1NTgsLTAuMTA2NDU1IDAuMTA2NDUyLC0wLjEwNjQ1NSBoIDIuNzAwMDk0IGMgMC4wNzA4NywwIDAuMTI3NDk1LC0wLjAyMTAzIDAuMTcwMDE2LC0wLjA2MzU2IDAuMDU2NjksLTAuMDU2NjkgMC4wODQ3NSwtMC4xMjA4NTEgMC4wODQ3NSwtMC4xOTE3MiB2IC0xLjYxNTQwNSBjIDAsLTAuMDcwODcgLTAuMDI4MDYsLTAuMTI4MDEzIC0wLjA4NDc1LC0wLjE3MDUzMyAtMC4wNDI1MiwtMC4wNTY2OSAtMC4wOTkxNSwtMC4wODQ3NSAtMC4xNzAwMTYsLTAuMDg0NzUgeiBtIDkuNzQ2NjkyLDAgYyAtMC4wNzA4NywwIC0wLjEzNDUwOSwwLjAyODA2IC0wLjE5MTIwMSwwLjA4NDc1IC0wLjA0MjUyLDAuMDQyNTIgLTAuMDYzNTYsMC4wOTk2NiAtMC4wNjM1NiwwLjE3MDUzMyB2IDE1LjQzMDA2NiBjIDAsMC4wNzA5IDAuMDIxMDMsMC4xMzQ1MSAwLjA2MzU2LDAuMTkxMiAwLjA1NjY5LDAuMDQyNSAwLjEyMDMzNSwwLjA2NDEgMC4xOTEyMDEsMC4wNjQxIGggMS45NTU5NTMgYyAwLjA3MDg3LDAgMC4xMjc0OTgsLTAuMDIxNiAwLjE3MDAxNiwtMC4wNjQxIDAuMDU2NjksLTAuMDU2NyAwLjA4NTI3LC0wLjEyMDMzIDAuMDg1MjcsLTAuMTkxMiB2IC02LjU0NTg1MyBjIDAsLTAuMDcwODcgMC4wMzU1OCwtMC4xMDY0NTUgMC4xMDY0NTIsLTAuMTA2NDU1IGggMi43MDAwOTQgYyAwLjA3MDg3LDAgMC4xMjc0OTUsLTAuMDIxMDMgMC4xNzAwMTYsLTAuMDYzNTYgMC4wNTY2OSwtMC4wNTY2OSAwLjA4NDc1LC0wLjEyMDMzNSAwLjA4NDc1LC0wLjE5MTIwNCB2IC0xLjYzNzEwOSBjIDAsLTAuMDcwODcgLTAuMDI4MDYsLTAuMTI3NDk1IC0wLjA4NDc1LC0wLjE3MDAxNiAtMC4wNDI1MiwtMC4wNTY2OSAtMC4wOTkxNSwtMC4wODUyNiAtMC4xNzAwMTYsLTAuMDg1MjYgaCAtMi43MDAwOTQgYyAtMC4wNzA4NywwIC0wLjEwNjQ1MiwtMC4wMzU1OSAtMC4xMDY0NTIsLTAuMTA2NDU1IHYgLTQuNTQ3MDA3IGMgMCwtMC4wNzA4NyAwLjAzNTU4LC0wLjEwNjQ1NSAwLjEwNjQ1MiwtMC4xMDY0NTUgaCA0LjU3MDc4IGMgMC4wNzA4NywwIDAuMTI3NDk1LC0wLjAyMTAzIDAuMTcwMDE2LC0wLjA2MzU2IDAuMDU2NjksLTAuMDU2NjkgMC4wODUyNiwtMC4xMjA4NTEgMC4wODUyNiwtMC4xOTE3MiB2IC0xLjYxNTQwNSBjIDJlLTYsLTAuMDcwODcgLTAuMDI4NTcsLTAuMTI4MDEzIC0wLjA4NTI2LC0wLjE3MDUzMyAtMC4wNDI1MiwtMC4wNTY2OSAtMC4wOTkxNSwtMC4wODQ3NSAtMC4xNzAwMTYsLTAuMDg0NzUgeiIKICAgICAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OjYwMDtmb250LXN0cmV0Y2g6Y29uZGVuc2VkO2ZvbnQtZmFtaWx5OidCYXJsb3cgQ29uZGVuc2VkJzstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidCYXJsb3cgQ29uZGVuc2VkLCBTZW1pLUJvbGQgQ29uZGVuc2VkJztmaWxsOiMzZDNkM2Q7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQ2NTYyMiIgLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcKICAgICAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxLjA1ODMzMzMsMTMuOTU2NzcxKSIKICAgICAgICAgICBhcmlhLWxhYmVsPSJWVE9SIgogICAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjIxLjI2MDQ5NjE0cHg7bGluZS1oZWlnaHQ6MS4yNTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MC4xNDY1NjIyIgogICAgICAgICAgIGlkPSJ0ZXh0ODMyLTMtOC00Ij4KICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDo2MDA7Zm9udC1zdHJldGNoOmNvbmRlbnNlZDtmb250LWZhbWlseTonQmFybG93IENvbmRlbnNlZCc7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjonQmFybG93IENvbmRlbnNlZCwgU2VtaS1Cb2xkIENvbmRlbnNlZCc7ZmlsbDojZjI1ZTNmO2ZpbGwtb3BhY2l0eToxO3N0cm9rZS13aWR0aDowLjU1MzkzNTg5IgogICAgICAgICAgICAgZD0ibSAxNDIuMTkxNDMsMzU2LjA1ODU5IGggMTIuODAyNzMgYyAwLjI2Nzg2LDAgMC40MDIzNCwwLjEzNDQ5IDAuNDAyMzQsMC40MDIzNSB2IDUwLjg0NTcgYyAwLDAuMjY3OTMgMC4wODE1LDAuNTEwMzEgMC4yNDIxOSwwLjcyNDYxIDAuMjE0MjgsMC4xNjA2MyAwLjQ1NDgsMC4yNDAyMyAwLjcyMjY2LDAuMjQwMjMgaCA3LjM5MjU4IGMgMC4yNjc4MywwIDAuNDgxODcsLTAuMDc5NiAwLjY0MjU3LC0wLjI0MDIzIDAuMjE0MjcsLTAuMjE0MyAwLjMyMjI3LC0wLjQ1NjY0IDAuMzIyMjcsLTAuNzI0NjEgdiAtNTAuODQ1NyBjIDAsLTAuMjY3ODcgMC4xMzI1NCwtMC40MDIzNSAwLjQwMDM5LC0wLjQwMjM1IGggOC43OTg4MyBjIDAuMjY3ODMsMCAwLjQ4MTg3LC0wLjA3OTUgMC42NDI1OCwtMC4yNDAyMyAwLjIxNDI2LC0wLjIxNDI4IDAuMjMxMzQsLTAuNDcyNjUgMC4zMjIyNiwtMC43MjQ2MSAwLjgxNjU5LC0yLjI2Mjg5IDIuMDA3NDQsLTQuMjU4NDUgMy40MDYyNSwtNi4xMDU0NyAwLjE2MTcsLTAuMjEzNTEgLTAuMTA4LC0wLjQ4MTg3IC0wLjMyMjI2LC0wLjY0MjU4IC0wLjE2MDcxLC0wLjIxNDI2IC0wLjM3NDczLC0wLjMyMjI2IC0wLjY0MjU4LC0wLjMyMjI2IGggLTQyLjMyNDIyIHoiCiAgICAgICAgICAgICB0cmFuc2Zvcm09InNjYWxlKDAuMjY0NTgzMzMpIgogICAgICAgICAgICAgaWQ9InBhdGg5MDgtOS03IgogICAgICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY3Nzc2Nzc2Nzc3NzY3NzY2NjYyIgLz4KICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9InNjc3Njc3Nzc2Nzc2Nzc2NzY3NzY3MiCiAgICAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAgICAgICAgZD0ibSA1MC42OTYzNzksMTA4LjE5MTk2IGMgLTEuMjE4OTM1LDAgLTIuMjA0MDA1LC0wLjM2ODUyIC0yLjk1NTIwOSwtMS4xMDU1NSAtMC43MzcwMzEsLTAuNzM3MDMgLTEuMTA1NTQ2LC0xLjcxNTAxIC0xLjEwNTU0NiwtMi45MzM5NSB2IC04LjIwMTg1NyBjIDAsLTEuMjE4OTM1IDAuMzY4NTE1LC0yLjE5NjkxOCAxLjEwNTU0NiwtMi45MzM5NDggMC43NTEyMDQsLTAuNzM3MDMxIDEuNzM2Mjc0LC0xLjEwNTU0NiAyLjk1NTIwOSwtMS4xMDU1NDYgMS4yMTg5MzUsMCAyLjIwNDAwNSwwLjM2ODUxNSAyLjk1NTIwOSwxLjEwNTU0NiAwLjc1MTIwNCwwLjczNzAzIDEuMTI2ODA2LDEuNzE1MDEzIDEuMTI2ODA2LDIuOTMzOTQ4IHYgOC4yMDE4NTcgYyAwLDEuMjE4OTQgLTAuMzc1NjAyLDIuMTk2OTIgLTEuMTI2ODA2LDIuOTMzOTUgLTAuNzUxMjA0LDAuNzM3MDMgLTEuNzM2Mjc0LDEuMTA1NTUgLTIuOTU1MjA5LDEuMTA1NTUgeiBtIDAsLTIuMTI2MDUgYyAwLjQ4MTkwNSwwIDAuODcxNjgsLTAuMTYzIDEuMTY5MzI3LC0wLjQ4ODk5IDAuMjk3NjQ3LC0wLjM0MDE3IDAuNDQ2NDcxLC0wLjc3OTU2IDAuNDQ2NDcxLC0xLjMxODE1IHYgLTguNDE0NDY5IGMgMCwtMC41Mzg2IC0wLjE0ODgyNCwtMC45NzA4OTYgLTAuNDQ2NDcxLC0xLjI5Njg5IC0wLjI5NzY0NywtMC4zNDAxNjggLTAuNjg3NDIyLC0wLjUxMDI1MiAtMS4xNjkzMjcsLTAuNTEwMjUyIC0wLjQ4MTkwNSwwIC0wLjg3MTY4LDAuMTcwMDg0IC0xLjE2OTMyNywwLjUxMDI1MiAtMC4yODM0NzMsMC4zMjU5OTQgLTAuNDI1MjEsMC43NTgyOSAtMC40MjUyMSwxLjI5Njg5IHYgOC40MTQ0NjkgYyAwLDAuNTM4NTkgMC4xNDE3MzcsMC45Nzc5OCAwLjQyNTIxLDEuMzE4MTUgMC4yOTc2NDcsMC4zMjU5OSAwLjY4NzQyMiwwLjQ4ODk5IDEuMTY5MzI3LDAuNDg4OTkgeiIKICAgICAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OjYwMDtmb250LXN0cmV0Y2g6Y29uZGVuc2VkO2ZvbnQtZmFtaWx5OidCYXJsb3cgQ29uZGVuc2VkJzstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidCYXJsb3cgQ29uZGVuc2VkLCBTZW1pLUJvbGQgQ29uZGVuc2VkJztmaWxsOiNkNWFlMzM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQ2NTYyMiIKICAgICAgICAgICAgIGlkPSJwYXRoOTEyLTctOCIgLz4KICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9InNjY3Nzc3Njc3Njc3Njc3NjY3NjY2Njc3Nzc3Nzc3Njc2NzcyIKICAgICAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICAgICAgICBkPSJtIDYyLjA1OTUxOSwxMDguMDIxODcgYyAtMC4xNDE3MzcsMCAtMC4yMzM4NjUsLTAuMDcwOSAtMC4yNzYzODYsLTAuMjEyNiBsIC0xLjgwNzE0MiwtNi42MzA5MyBjIC0wLjAyODM1LC0wLjA1NjcgLTAuMDYzNzgsLTAuMDg1IC0wLjEwNjMwMywtMC4wODUgaCAtMS4xMjY4MDYgYyAtMC4wNzA4NywwIC0wLjEwNjMwMywwLjAzNTQgLTAuMTA2MzAzLDAuMTA2MzEgdiA2LjU2NzE1IGMgMCwwLjA3MDkgLTAuMDI4MzUsMC4xMzQ2NSAtMC4wODUwNCwwLjE5MTM0IC0wLjA0MjUyLDAuMDQyNSAtMC4wOTkyMSwwLjA2MzggLTAuMTcwMDg0LDAuMDYzOCBIIDU2LjQyNTQ5IGMgLTAuMDcwODcsMCAtMC4xMzQ2NSwtMC4wMjEzIC0wLjE5MTM0NSwtMC4wNjM4IC0wLjA0MjUyLC0wLjA1NjcgLTAuMDYzNzgsLTAuMTIwNDUgLTAuMDYzNzgsLTAuMTkxMzQgViA5Mi4zMzYzMTggYyAwLC0wLjA3MDg3IDAuMDIxMjYsLTAuMTI3NTYyIDAuMDYzNzgsLTAuMTcwMDg0IDAuMDU2NjksLTAuMDU2NjkgMC4xMjA0NzUsLTAuMDg1MDQgMC4xOTEzNDUsLTAuMDg1MDQgaCAzLjk5Njk3MyBjIDAuNzUxMjA0LDAgMS40MTAyNzksMC4xODQyNTggMS45NzcyMjYsMC41NTI3NzMgMC41ODExMjEsMC4zNTQzNDIgMS4wMjc1OTEsMC44NjQ1OTQgMS4zMzk0MTEsMS41MzA3NTYgMC4zMjU5OTUsMC42NTE5ODkgMC40ODg5OTIsMS41Njg1NTggMC40ODg5OTIsMi40MTg5NzcgMCwwLjg3ODc2OCAtMC4xNzAwODQsMi4wMDA4NjEgLTAuNTEwMjUyLDIuNjM4Njc1IC0wLjM0MDE2OCwwLjYzNzgxMiAtMC44MTQ5ODYsMS4xMTk3MTUgLTEuNDI0NDUzLDEuNDQ1NzA1IC0wLjA1NjY5LDAuMDE0MiAtMC4wNzc5NSwwLjA1NjcgLTAuMDYzNzgsMC4xMjc1NyBsIDIuMDgzNTI5LDYuOTI4NTggYyAwLjAxNDE3LDAuMDI4MyAwLjAyMTI2LDAuMDYzOCAwLjAyMTI2LDAuMTA2MyAwLDAuMTI3NTYgLTAuMDc3OTYsMC4xOTEzNCAtMC4yMzM4NjUsMC4xOTEzNCB6IE0gNTguNzQyODgyLDk0LjIwNzI0MiBjIC0wLjA3MDg3LDAgLTAuMTA2MzAzLDAuMDM1NDMgLTAuMTA2MzAzLDAuMTA2MzAyIHYgNC43NjAwMDYgYyAwLDAuMDcwODcgMC4wMzU0MywwLjEwNjMwMiAwLjEwNjMwMywwLjEwNjMwMiBoIDEuMjk2ODkgYyAwLjUxMDI1MiwwIDAuOTIxMjg4LC0wLjE5ODQzMSAxLjIzMzEwOSwtMC41OTUyOTMgMC4zMjU5OTQsLTAuMzk2ODYyIDAuNDg4OTkxLC0xLjI5OTI2NCAwLjQ4ODk5MSwtMS45Nzk2IDAsLTAuNjgwMzM2IC0wLjE2Mjk5NywtMS4zODQzIC0wLjQ4ODk5MSwtMS43ODExNjMgLTAuMzExODIxLC0wLjQxMTAzNiAtMC43MjI4NTcsLTAuNjE2NTU0IC0xLjIzMzEwOSwtMC42MTY1NTQgeiIKICAgICAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OjYwMDtmb250LXN0cmV0Y2g6Y29uZGVuc2VkO2ZvbnQtZmFtaWx5OidCYXJsb3cgQ29uZGVuc2VkJzstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidCYXJsb3cgQ29uZGVuc2VkLCBTZW1pLUJvbGQgQ29uZGVuc2VkJztmaWxsOiMyOWIwY2Q7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQ2NTYyMiIKICAgICAgICAgICAgIGlkPSJwYXRoOTE0LTMtNCIgLz4KICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDo2MDA7Zm9udC1zdHJldGNoOmNvbmRlbnNlZDtmb250LXNpemU6MjEuMjYwNDk2MTRweDtsaW5lLWhlaWdodDoxLjI1O2ZvbnQtZmFtaWx5OidCYXJsb3cgQ29uZGVuc2VkJzstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidCYXJsb3cgQ29uZGVuc2VkLCBTZW1pLUJvbGQgQ29uZGVuc2VkJztsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiNhYzUxYzM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuMTQ2NTYyMiIKICAgICAgICAgICAgIGQ9Im0gMjkuNDA0NDA2LDkyLjA4MTI0IGMgLTAuMTU1OTExLC0xMGUtNyAtMC4yMzM1NzksMC4wNjM2NCAtMC4yMzM1NzksMC4xOTEyMDEgbCAwLjAyMTE5LDAuMDg1MjcgMy4wNDAxMjYsMTUuNDMwNTc5IGMgMC4wMjgzNSwwLjE1NTkxIDAuMTIwNTU4LDAuMjMzNTggMC4yNzY0NjksMC4yMzM1OCBoIDIuMTY4MzQyIGMgMC4xNTU5MTEsMCAwLjI0ODEyMSwtMC4wNzc3IDAuMjc2NDY4LC0wLjIzMzU4IGwgMi42NjgwNTYsLTEzLjU4MTA4IC0xLjkwMjcyNCwtMi4xMjYwMDQgYyAtMC4xNzAwODUsMCAtMC4yNjIyOTUsMC4wNzgxOCAtMC4yNzY0NjksMC4yMzQwOTMgbCAtMS43MjE4NTgsMTAuNzU1NDUxIGMgLTAuMDE0MTgsMC4wNDI1IC0wLjAzNTIyLDAuMDYzNiAtMC4wNjM1NiwwLjA2MzYgLTAuMDI4MzUsMCAtMC4wNDk5MSwtMC4wMjEgLTAuMDY0MDgsLTAuMDYzNiBMIDMxLjgyODAzOCw5Mi4zMTUzMzkgYyAtMC4wMTQxOCwtMC4xNTU5MTEgLTAuMTA1ODY4LC0wLjIzNDA5MyAtMC4yNzU5NTMsLTAuMjM0MDkzIHoiCiAgICAgICAgICAgICBpZD0icGF0aDkwOC05LTktNSIKICAgICAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9InNjY2Nzc2NjY2Njc2Njc3MiIC8+CiAgICAgICAgPC9nPgogICAgICA8L2c+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K');
+}
+
 		</style>
-		<h1>GTFS validation report
-			<span class="xsmaller"> • 5 
+		<h1 class="logo image">GTFS validation report
+			<span class="xsmaller"> - 5 
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="xsmaller"> • 96 
+			<span class="xsmaller"> - 101 
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="xsmaller"> • 125 
+			<span class="xsmaller"> - 119 
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -209,7 +222,19 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
+				</span>Invalid route_desc/route_long_name value
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Invalid route_short_name format
+			</li>
+			<li>2 
+				<span class="smaller badge WARNING">WARNING
 				</span>Invalid route_short_name/route_long_name value
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Invalid stop_desc/stop_name value
 			</li>
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
@@ -238,6 +263,10 @@ span.var {
 			<li>2 
 				<span class="smaller badge WARNING">WARNING
 				</span>Too many days w/o service
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Too many stops with identical time
 			</li>
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
@@ -355,7 +384,7 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid direction_id format
 			</li>
-			<li>2 
+			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid end_date value
 			</li>
@@ -415,21 +444,9 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid price format
 			</li>
-			<li>1 
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid route_desc/route_long_name value
-			</li>
 			<li>2 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid route_id reference
-			</li>
-			<li>1 
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid route_long_name format
-			</li>
-			<li>1 
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid route_short_name format
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -454,10 +471,6 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid station(1) parent type
-			</li>
-			<li>1 
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid stop_desc/stop_name value
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -621,10 +634,6 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
-				</span>Too many stops with identical time
-			</li>
-			<li>1 
-				<span class="smaller badge ERROR">ERROR
 				</span>Wrong pathway stop type
 			</li>
 			<li>5 
@@ -637,7 +646,7 @@ span.var {
 			</li>
 		</ul>
 		<h2>Duplicated stop sequence
-			<span class="smaller"> • 2
+			<span class="smaller"> - 2
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -663,7 +672,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Expired feed
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
@@ -675,13 +684,13 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Feed ending too soon or expired. Last date with service is 2011/12/31 < 2020/01/31
+					<td class="issue">Feed ending too soon or expired. Last date with service is 2011/12/31 < 2020/12/31
 					</td>
 				</tr>
 			</table>
 		</div>
 		<h2>First stop time missing
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -699,7 +708,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Last stop time missing
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -717,7 +726,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Non increasing shape dist traveled
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -729,13 +738,13 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Non-increasing shape dist traveled for shape ID <span class='id'>SHAPE3</span> between seq <span class='id'>2</span> and <span class='id'>3</span>: <span class='var'>1,77</span> > <span class='var'>1,67</span>.
+					<td class="issue">Non-increasing shape dist traveled for shape ID <span class='id'>SHAPE3</span> between seq <span class='id'>2</span> and <span class='id'>3</span>: <span class='var'>1.76m</span> > <span class='var'>1.67m</span>.
 					</td>
 				</tr>
 			</table>
 		</div>
 		<h2>Statistics
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge INFO">INFO
 				</span>
 			</span>
@@ -753,7 +762,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Time travel
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -771,11 +780,11 @@ span.var {
 			</table>
 		</div>
 		<h2>Too fast travel
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 5
+			<span class="smaller"> - 5
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -833,7 +842,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Too many days w/o service
-			<span class="smaller"> • 2
+			<span class="smaller"> - 2
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
@@ -859,15 +868,15 @@ span.var {
 			</table>
 		</div>
 		<h2>Too many stops with identical time
-			<span class="smaller"> • 1
-				<span class="badge ERROR">ERROR
+			<span class="smaller"> - 1
+				<span class="badge WARNING">WARNING
 				</span>
 			</span>
 		</h2>
 		<div class="subcategory">
 			<table class="issuelist">
 				<tr>
-					<td class="severity ERROR">ERROR
+					<td class="severity WARNING">WARNING
 					</td>
 					<td class="fieldname">
 					</td>
@@ -877,7 +886,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Unknown file
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge INFO">INFO
 				</span>
 			</span>
@@ -895,7 +904,7 @@ span.var {
 			</table>
 		</div>
 		<h2>Unused shape
-			<span class="smaller"> • 2
+			<span class="smaller"> - 2
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
@@ -921,11 +930,11 @@ span.var {
 			</table>
 		</div>
 		<h2>agency.txt
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 8
+			<span class="smaller"> - 8
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -1149,11 +1158,11 @@ span.var {
 			</table>
 		</div>
 		<h2>calendar.txt
-			<span class="smaller"> • 6
+			<span class="smaller"> - 6
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 4
+			<span class="smaller"> - 3
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -1167,7 +1176,7 @@ span.var {
 				<span class="smaller badge WARNING">WARNING
 				</span>Unused calendar
 			</li>
-			<li>2
+			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid end_date value
 			</li>
@@ -1463,14 +1472,6 @@ span.var {
 				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
-					<td class="fieldname">end_date
-					</td>
-					<td class="issue">Invalid value <span class='var'>1900-12-31</span>: end date too far in the past
-					</td>
-				</tr>
-				<tr>
-					<td class="severity ERROR">ERROR
-					</td>
 					<td class="fieldname">start_date
 					</td>
 					<td class="issue">Invalid value <span class='var'>2212-01-01</span>: start date too far in the future
@@ -1541,19 +1542,19 @@ span.var {
 			</table>
 			<table class="issuelist">
 				<tr>
-					<td class="severity ERROR">ERROR
-					</td>
-					<td class="fieldname">friday, monday, saturday, sunday, thursday, tuesday, wednesday
-					</td>
-					<td class="issue">Invalid value <span class='var'></span>: calendar is not active any day of the week
-					</td>
-				</tr>
-				<tr>
 					<td class="severity WARNING">WARNING
 					</td>
 					<td class="fieldname">
 					</td>
 					<td class="issue">Calendar <span class='id'>NODOW</span> is not active on any day
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">friday, monday, saturday, sunday, thursday, tuesday, wednesday
+					</td>
+					<td class="issue">Invalid value <span class='var'></span>: calendar is not active any day of the week
 					</td>
 				</tr>
 				<tr>
@@ -1567,11 +1568,11 @@ span.var {
 			</table>
 		</div>
 		<h2>calendar_dates.txt
-			<span class="smaller"> • 6
+			<span class="smaller"> - 6
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 2
+			<span class="smaller"> - 2
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -1799,7 +1800,7 @@ span.var {
 			</table>
 		</div>
 		<h2>fare_attributes.txt
-			<span class="smaller"> • 9
+			<span class="smaller"> - 9
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -1996,11 +1997,11 @@ span.var {
 			</table>
 		</div>
 		<h2>fare_rules.txt
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 6
+			<span class="smaller"> - 6
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -2193,11 +2194,11 @@ span.var {
 			</table>
 		</div>
 		<h2>feed_info.txt
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="smaller"> • 4
+			<span class="smaller"> - 4
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -2414,7 +2415,7 @@ span.var {
 			</table>
 		</div>
 		<h2>frequencies.txt
-			<span class="smaller"> • 7
+			<span class="smaller"> - 7
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -2662,11 +2663,11 @@ span.var {
 			</table>
 		</div>
 		<h2>levels.txt
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -2724,11 +2725,11 @@ span.var {
 			</table>
 		</div>
 		<h2>pathways.txt
-			<span class="smaller"> • 4
+			<span class="smaller"> - 4
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 12
+			<span class="smaller"> - 12
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -3074,15 +3075,15 @@ span.var {
 			</table>
 		</div>
 		<h2>routes.txt
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="smaller"> • 12
+			<span class="smaller"> - 15
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 11
+			<span class="smaller"> - 8
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -3102,6 +3103,14 @@ span.var {
 			</li>
 			<li>1
 				<span class="smaller badge WARNING">WARNING
+				</span>Invalid route_desc/route_long_name value
+			</li>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Invalid route_short_name format
+			</li>
+			<li>2
+				<span class="smaller badge WARNING">WARNING
 				</span>Invalid route_short_name/route_long_name value
 			</li>
 			<li>1
@@ -3119,18 +3128,6 @@ span.var {
 			<li>2
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid agency_id reference
-			</li>
-			<li>1
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid route_desc/route_long_name value
-			</li>
-			<li>1
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid route_long_name format
-			</li>
-			<li>1
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid route_short_name format
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
@@ -3221,9 +3218,9 @@ span.var {
 					<td>DTA
 					</td>
 					<td/>
-					<td class="ERROR">Airport ⇒ Bullfrog
+					<td class="WARNING">Airport ⇒ Bullfrog
 					</td>
-					<td class="ERROR">Airport ⇒ Bullfrog
+					<td class="WARNING">Airport ⇒ Bullfrog
 					</td>
 					<td class="ERROR"/>
 					<td class="ERROR">3
@@ -3251,7 +3248,7 @@ span.var {
 					</td>
 				</tr>
 				<tr>
-					<td class="severity ERROR">ERROR
+					<td class="severity WARNING">WARNING
 					</td>
 					<td class="fieldname">route_desc, route_long_name
 					</td>
@@ -3373,9 +3370,9 @@ span.var {
 					</td>
 					<td class="ERROR">FOO
 					</td>
-					<td class="ERROR">THIS ROUTE NAME IS TOO LONG
+					<td class="WARNING">THIS ROUTE NAME IS TOO LONG
 					</td>
-					<td class="ERROR">THIS ROUTE NAME IS TOO LONG
+					<td class="WARNING">THIS ROUTE NAME IS TOO LONG
 					</td>
 					<td/>
 					<td>99
@@ -3420,7 +3417,7 @@ span.var {
 					</td>
 				</tr>
 				<tr>
-					<td class="severity ERROR">ERROR
+					<td class="severity WARNING">WARNING
 					</td>
 					<td class="fieldname">route_short_name
 					</td>
@@ -3428,11 +3425,11 @@ span.var {
 					</td>
 				</tr>
 				<tr>
-					<td class="severity ERROR">ERROR
+					<td class="severity WARNING">WARNING
 					</td>
-					<td class="fieldname">route_long_name
+					<td class="fieldname">route_long_name, route_short_name
 					</td>
-					<td class="issue">Invalid format for value <span class='var'>THIS ROUTE NAME IS TOO LONG</span>, expected: Long name should not start or be equals with short name
+					<td class="issue">Invalid value <span class='var'>THIS ROUTE NAME IS TOO LONG</span>: Long name should not start or be equals with short name
 					</td>
 				</tr>
 			</table>
@@ -4042,11 +4039,11 @@ span.var {
 			</table>
 		</div>
 		<h2>stop_times.txt
-			<span class="smaller"> • 42
+			<span class="smaller"> - 42
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 11
+			<span class="smaller"> - 11
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -6618,15 +6615,15 @@ span.var {
 			</table>
 		</div>
 		<h2>stops.txt
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="smaller"> • 12
+			<span class="smaller"> - 13
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 14
+			<span class="smaller"> - 13
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -6635,6 +6632,10 @@ span.var {
 			<li>1
 				<span class="smaller badge INFO">INFO
 				</span>Unrecognized column fancy_extra_field
+			</li>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Invalid stop_desc/stop_name value
 			</li>
 			<li>1
 				<span class="smaller badge WARNING">WARNING
@@ -6667,10 +6668,6 @@ span.var {
 			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid station(1) parent type
-			</li>
-			<li>1
-				<span class="smaller badge ERROR">ERROR
-				</span>Invalid stop_desc/stop_name value
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
@@ -6923,7 +6920,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stops too close, they are <span class='var'>0,00</span>m away
+					<td class="issue">Stops too close, they are <span class='var'>0.00m</span> away
 					</td>
 				</tr>
 			</table>
@@ -7003,7 +7000,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070,29</span>m): <span class='var'>175732,33</span>m away
+					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070,29</span>m): <span class='var'>175732.34m</span> away
 					</td>
 				</tr>
 			</table>
@@ -7210,7 +7207,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB1</span> is too far from computed projection point <span class='var'>(36.881000,-116.817000)</span> on shape <span class='id'>SHAPE1</span> (at arc-length <span class='var'>3272,00</span>m): <span class='var'>86,73</span>m away
+					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB1</span> is too far from computed projection point <span class='var'>(36.881000,-116.817000)</span> on shape <span class='id'>SHAPE1</span> (at arc-length <span class='var'>3271,99</span>m): <span class='var'>86.74m</span> away
 					</td>
 				</tr>
 				<tr>
@@ -7218,7 +7215,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stop at sequence <span class='var'>1</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070,29</span>m): <span class='var'>178119,67</span>m away
+					<td class="issue">Stop at sequence <span class='var'>1</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070,29</span>m): <span class='var'>178119.68m</span> away
 					</td>
 				</tr>
 			</table>
@@ -7424,9 +7421,9 @@ span.var {
 					</td>
 					<td>AMV
 					</td>
-					<td class="ERROR">Amargosa Valley (Demo)
+					<td class="WARNING">Amargosa Valley (Demo)
 					</td>
-					<td class="ERROR">Amargosa Valley (Demo)
+					<td class="WARNING">Amargosa Valley (Demo)
 					</td>
 					<td>36.641496
 					</td>
@@ -7444,7 +7441,7 @@ span.var {
 			</table>
 			<table class="issuelist">
 				<tr>
-					<td class="severity ERROR">ERROR
+					<td class="severity WARNING">WARNING
 					</td>
 					<td class="fieldname">stop_desc, stop_name
 					</td>
@@ -8001,7 +7998,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stops too close, they are <span class='var'>0,00</span>m away
+					<td class="issue">Stops too close, they are <span class='var'>0.00m</span> away
 					</td>
 				</tr>
 			</table>
@@ -8146,11 +8143,11 @@ span.var {
 			</table>
 		</div>
 		<h2>transfers.txt
-			<span class="smaller"> • 4
+			<span class="smaller"> - 4
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 16
+			<span class="smaller"> - 16
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -8622,11 +8619,11 @@ span.var {
 			</table>
 		</div>
 		<h2>trips.txt
-			<span class="smaller"> • 1
+			<span class="smaller"> - 1
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> • 8
+			<span class="smaller"> - 8
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -9119,6 +9116,6 @@ span.var {
 			</table>
 		</div>
 		<hr/>
-		<p class="comments">Validation done at Wed Apr 22 15:19:58 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
+		<p class="comments">Validation done at Thu Apr 30 11:56:40 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
 		</p>
 	</head>
