@@ -92,6 +92,7 @@ import com.mecatran.gtfsvtor.reporting.issues.TooManyDaysWithoutServiceIssue;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
+import com.mecatran.gtfsvtor.reporting.issues.UselessCalendarDateWarning;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
 import com.mecatran.gtfsvtor.reporting.issues.WrongPathwayStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
@@ -1210,6 +1211,8 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("noservice_exception");
 		assertEquals(1, tb.report
 				.getReportIssues(NoServiceExceptionWarning.class).size());
+		assertEquals(3, tb.report
+				.getReportIssues(UselessCalendarDateWarning.class).size());
 	}
 
 	@Test
