@@ -17,15 +17,14 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 // @DefaultDisabledValidator
 public class StopTooCloseValidator implements DaoValidator {
 
-	@ConfigurableOption(description = "Minimum distance between stops below which an info is generated")
+	@ConfigurableOption(description = "Distance between stops below which an info is generated")
 	private double minDistanceMeters = 5.0;
 
-	@ConfigurableOption(description = "Minimum distance for a warning")
-	private double minWarningDistanceMeters = 1.0;
+	@ConfigurableOption(description = "Distance between stops below which a warning is generated")
+	private double minDistanceMetersWarning = 1.0;
 
-	/* -1 will disable errors */
-	@ConfigurableOption(description = "Minimum distance for an error")
-	private double minErrorDistanceMeters = -1.0;
+	@ConfigurableOption(description = "Distance between stops below which an error is generated")
+	private double minDistanceMetersError = -1.0; /* -1 will disable errors */
 
 	@Override
 	public void validate(DaoValidator.Context context) {
@@ -52,9 +51,9 @@ public class StopTooCloseValidator implements DaoValidator {
 				double distance = Geodesics.distanceMeters(p,
 						stop2.getCoordinates());
 				reportSink.report(new StopTooCloseIssue(stop1, stop2, distance,
-						distance <= minErrorDistanceMeters
+						distance <= minDistanceMetersError
 								? ReportIssueSeverity.ERROR
-								: distance <= minWarningDistanceMeters
+								: distance <= minDistanceMetersWarning
 										? ReportIssueSeverity.WARNING
 										: ReportIssueSeverity.INFO));
 			}

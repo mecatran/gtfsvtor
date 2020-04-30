@@ -17,11 +17,11 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 public class StopTooFarFromParentStationValidator implements DaoValidator {
 
 	@ConfigurableOption(description = "Distance between stop and station above which a warning is generated")
-	private double maxWarningDistanceMeters = 100;
+	private double maxDistanceMetersWarning = 100;
 
 	/* -1 will disable errors */
 	@ConfigurableOption(description = "Distance between stop and station above which a error is generated")
-	private double maxErrorDistanceMeters = 1000;
+	private double maxDistanceMetersError = 1000;
 
 	@Override
 	public void validate(DaoValidator.Context context) {
@@ -47,13 +47,13 @@ public class StopTooFarFromParentStationValidator implements DaoValidator {
 			if (pStation == null)
 				return;
 			double distance = Geodesics.distanceMeters(pStop, pStation);
-			if (distance >= maxWarningDistanceMeters
-					|| distance >= maxErrorDistanceMeters) {
+			if (distance >= maxDistanceMetersWarning
+					|| distance >= maxDistanceMetersError) {
 				reportSink.report(new StopTooFarFromParentStationIssue(stop,
 						station, distance,
-						distance >= maxErrorDistanceMeters
+						distance >= maxDistanceMetersError
 								? ReportIssueSeverity.ERROR
-								: distance >= maxWarningDistanceMeters
+								: distance >= maxDistanceMetersWarning
 										? ReportIssueSeverity.WARNING
 										: ReportIssueSeverity.INFO));
 			}

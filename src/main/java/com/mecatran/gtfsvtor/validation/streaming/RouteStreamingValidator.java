@@ -19,7 +19,7 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 @StreamingValidateType(GtfsRoute.class)
 public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 
-	@ConfigurableOption(description = "Maximum route short name above which an error is generated")
+	@ConfigurableOption(description = "Maximum route short name char length above which a warning is generated")
 	public int maxShortNameLen = 6;
 
 	@Override
@@ -55,10 +55,11 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 				&& route.getLongName().startsWith(route.getShortName())) {
 			// TODO Are we sure about this test?
 			// TODO specific report for this for better explanation
-			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceInfo(), "route_long_name",
-					route.getShortName(),
-					"Long name should not start or be equals with short name"));
+			reportSink.report(new InvalidFieldValueIssue(
+					context.getSourceInfo(), route.getShortName(),
+					"Long name should not start or be equals with short name",
+					"route_short_name", "route_long_name")
+							.withSeverity(ReportIssueSeverity.WARNING));
 		}
 		if (route.getLongName() != null && route.getDescription() != null
 				&& route.getLongName()

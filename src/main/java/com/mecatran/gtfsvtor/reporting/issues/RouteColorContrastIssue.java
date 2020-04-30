@@ -14,14 +14,14 @@ import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 public class RouteColorContrastIssue implements ReportIssue {
 
 	private GtfsRoute route;
-	private double brightnessDelta;
+	private double brightnessDeltaPercent;
 	private ReportIssueSeverity severity;
 	private List<SourceInfoWithFields> sourceInfos;
 
-	public RouteColorContrastIssue(GtfsRoute route, double brightnessDelta,
-			ReportIssueSeverity severity) {
+	public RouteColorContrastIssue(GtfsRoute route,
+			double brightnessDeltaPercent, ReportIssueSeverity severity) {
 		this.route = route;
-		this.brightnessDelta = brightnessDelta;
+		this.brightnessDeltaPercent = brightnessDeltaPercent;
 		this.severity = severity;
 		this.sourceInfos = Arrays.asList(new SourceInfoWithFields(
 				route.getSourceInfo(), "route_color", "route_text_color"));
@@ -31,8 +31,8 @@ public class RouteColorContrastIssue implements ReportIssue {
 		return route;
 	}
 
-	public double getBrightnessDelta() {
-		return brightnessDelta;
+	public double getBrightnessDeltaPercent() {
+		return brightnessDeltaPercent;
 	}
 
 	// This issue can have several severity depending on the distance
@@ -51,6 +51,6 @@ public class RouteColorContrastIssue implements ReportIssue {
 		fmt.text("Route colors not contrasted enough: {0}, delta is {1}%",
 				fmt.colors(route.getNonNullColor(),
 						route.getNonNullTextColor()),
-				fmt.var(String.format("%.1f", brightnessDelta * 100)));
+				fmt.var(String.format("%.1f", brightnessDeltaPercent)));
 	}
 }

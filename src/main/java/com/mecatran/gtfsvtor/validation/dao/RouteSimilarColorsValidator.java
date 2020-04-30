@@ -12,7 +12,7 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class RouteSimilarColorsValidator implements DaoValidator {
 
-	@ConfigurableOption(description = "Color perceived distance threshold, in %")
+	@ConfigurableOption(description = "Color perceived distance threshold, in %, below which a warning is generated")
 	private double minColorDistancePercent = 0.5; // 0.5%
 
 	@Override

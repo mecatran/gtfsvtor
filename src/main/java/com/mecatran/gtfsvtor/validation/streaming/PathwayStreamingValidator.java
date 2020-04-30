@@ -23,10 +23,10 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 public class PathwayStreamingValidator
 		implements StreamingValidator<GtfsPathway> {
 
-	@ConfigurableOption(description = "Fast walking speed, in meters/seconds, for a too fast warning. Default to 2 m/s.")
+	@ConfigurableOption(description = "Fast walking speed, in meters/seconds, above which a warning is generated")
 	private double fastWalkingSpeedMps = 2.0;
 
-	@ConfigurableOption(description = "Fast walking speed slack time, in seconds. Default to 120 sec.")
+	@ConfigurableOption(description = "Fast walking speed slack time, in seconds (added to transfer time before speed computation)")
 	private int walkingTimeSlackSec = 120;
 
 	@Override

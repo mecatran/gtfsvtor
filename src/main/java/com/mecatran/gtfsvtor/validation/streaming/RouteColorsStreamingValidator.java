@@ -13,12 +13,12 @@ public class RouteColorsStreamingValidator
 		implements StreamingValidator<GtfsRoute> {
 
 	// Default value taken from legacy FeedValidator, rounded a bit
-	@ConfigurableOption(description = "Color brightness perceived contrast threshold for warning, ranging [0-1]")
-	public double minWarningBrightnessDelta = 0.2846;
+	@ConfigurableOption(description = "Color brightness perceived contrast threshold, in %, below which a warning is generated")
+	public double minBrightnessDeltaPercentWarning = 28.46;
 
 	// Errors are disabled by default
-	@ConfigurableOption(description = "Color brightness perceived contrast threshold for error, ranging [0-1]")
-	public double minErrorBrightnessDelta = -1.0;
+	@ConfigurableOption(description = "Color brightness perceived contrast threshold, in %, below which an error is generated")
+	public double minBrightnessDeltaPercentError = 0.0;
 
 	@Override
 	public void validate(Class<? extends GtfsRoute> clazz, GtfsRoute route,
@@ -27,15 +27,16 @@ public class RouteColorsStreamingValidator
 
 		double colorBrightness = route.getNonNullColor().getBrightness();
 		double textBrightness = route.getNonNullTextColor().getBrightness();
-		double brightnessDelta = Math.abs(colorBrightness - textBrightness);
+		double brightnessDeltaPercent = Math
+				.abs(colorBrightness - textBrightness) * 100.;
 
-		if (brightnessDelta < minWarningBrightnessDelta
-				|| brightnessDelta < minErrorBrightnessDelta) {
-			reportSink
-					.report(new RouteColorContrastIssue(route, brightnessDelta,
-							brightnessDelta <= minErrorBrightnessDelta
-									? ReportIssueSeverity.ERROR
-									: ReportIssueSeverity.WARNING));
+		if (brightnessDeltaPercent < minBrightnessDeltaPercentWarning
+				|| brightnessDeltaPercent < minBrightnessDeltaPercentError) {
+			reportSink.report(new RouteColorContrastIssue(route,
+					brightnessDeltaPercent,
+					brightnessDeltaPercent < minBrightnessDeltaPercentError
+							? ReportIssueSeverity.ERROR
+							: ReportIssueSeverity.WARNING));
 		}
 	}
 }

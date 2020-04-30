@@ -25,10 +25,10 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 public class TransferStreamingValidator
 		implements StreamingValidator<GtfsTransfer> {
 
-	@ConfigurableOption(description = "Maximum transfer time, in seconds, above which we generate a warning")
+	@ConfigurableOption(description = "Maximum transfer time, in seconds, above which a warning is generated")
 	private int maxTransferTimeSecWarning = 3 * 60 * 60;
 
-	@ConfigurableOption(description = "Maximum transfer time, in seconds, above which we generate an error")
+	@ConfigurableOption(description = "Maximum transfer time, in seconds, above which an error is generated")
 	private int maxTransferTimeSecError = 24 * 60 * 60;
 
 	@ConfigurableOption(description = "Maximum distance between stops, in meters, above which a warning is generated")
@@ -37,10 +37,10 @@ public class TransferStreamingValidator
 	@ConfigurableOption(description = "Maximum distance between stops, in meters, above which an error is generated")
 	private double maxDistanceMetersError = 10000;
 
-	@ConfigurableOption(description = "Fast walking speed, in meters/seconds, for a too fast transfer. Default to 2 m/s.")
+	@ConfigurableOption(description = "Fast walking speed, in meters/seconds, above which an issue is generated")
 	private double fastWalkingSpeedMps = 2.0;
 
-	@ConfigurableOption(description = "Fast walking speed slack time, in seconds. Default to 120 sec.")
+	@ConfigurableOption(description = "Fast walking speed slack time, in seconds (added to transfer time before speed computation)")
 	private int walkingTimeSlackSec = 120;
 
 	@Override

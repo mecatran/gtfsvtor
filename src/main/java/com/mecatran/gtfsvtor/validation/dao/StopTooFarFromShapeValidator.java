@@ -12,11 +12,11 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class StopTooFarFromShapeValidator implements DaoValidator {
 
-	@ConfigurableOption(description = "Distance from stop to projected point on shape, above which a warning is generated")
-	private double maxWarningDistanceMeters = 50.0;
+	@ConfigurableOption(description = "Distance from stop to projected point on shape above which a warning is generated")
+	private double maxDistanceMetersWarning = 50.0;
 
-	@ConfigurableOption(description = "Distance from stop to projected point on shape, above which an error is generated")
-	private double maxErrorDistanceMeters = 100.0;
+	@ConfigurableOption(description = "Distance from stop to projected point on shape above which an error is generated")
+	private double maxDistanceMetersError = 100.0;
 
 	@Override
 	public void validate(DaoValidator.Context context) {
@@ -29,9 +29,9 @@ public class StopTooFarFromShapeValidator implements DaoValidator {
 					for (ProjectedPoint pp : psp.getProjectedPoints()) {
 						double dts = pp.getDistanceToShapeMeters();
 						ReportIssueSeverity severity = null;
-						if (dts > maxErrorDistanceMeters) {
+						if (dts > maxDistanceMetersError) {
 							severity = ReportIssueSeverity.ERROR;
-						} else if (dts > maxWarningDistanceMeters) {
+						} else if (dts > maxDistanceMetersWarning) {
 							severity = ReportIssueSeverity.WARNING;
 						}
 						if (severity == null) {

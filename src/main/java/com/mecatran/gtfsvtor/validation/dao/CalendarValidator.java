@@ -30,14 +30,16 @@ public class CalendarValidator implements DaoValidator {
 	@ConfigurableOption(description = "Check for expired feed (last service date in the past)")
 	private boolean checkExpired = true;
 
-	@ConfigurableOption(description = "Expired feed cutoff date. Default to 'today' in default TZ if none.")
-	private GtfsLogicalDate expiredCutoffDate = null;
+	@ConfigurableOption(description = "Expired feed cutoff date")
+	private GtfsLogicalDate expiredCutoffDate = GtfsLogicalDate
+			.today(TimeZone.getDefault());
 
 	@ConfigurableOption(description = "Check for feed not active yet (first service date in the future)")
 	private boolean checkFuture = true;
 
-	@ConfigurableOption(description = "Future feed cutoff date. Default to 'today' in default TZ if none.")
-	private GtfsLogicalDate futureCutoffDate = null;
+	@ConfigurableOption(description = "Future feed cutoff date")
+	private GtfsLogicalDate futureCutoffDate = GtfsLogicalDate
+			.today(TimeZone.getDefault());
 
 	@ConfigurableOption(description = "Maximum number of contiguous dates w/o service")
 	private int maxDaysWithoutService = 7;
@@ -107,20 +109,15 @@ public class CalendarValidator implements DaoValidator {
 		}
 
 		// Use now in JVM default timezone as default value
-		GtfsLogicalDate today = GtfsLogicalDate.today(TimeZone.getDefault());
-		if (lastDate != null && checkExpired) {
-			GtfsLogicalDate cutoff = expiredCutoffDate == null ? today
-					: expiredCutoffDate;
-			if (lastDate.compareTo(cutoff) < 0) {
-				reportSink.report(new ExpiredFeedWarning(lastDate, cutoff));
-			}
+		if (lastDate != null && checkExpired
+				&& lastDate.compareTo(expiredCutoffDate) < 0) {
+			reportSink.report(
+					new ExpiredFeedWarning(lastDate, expiredCutoffDate));
 		}
-		if (firstDate != null && checkFuture) {
-			GtfsLogicalDate cutoff = futureCutoffDate == null ? today
-					: futureCutoffDate;
-			if (firstDate.compareTo(cutoff) > 0) {
-				reportSink.report(new FutureFeedWarning(firstDate, cutoff));
-			}
+		if (firstDate != null && checkFuture
+				&& firstDate.compareTo(futureCutoffDate) > 0) {
+			reportSink
+					.report(new FutureFeedWarning(firstDate, futureCutoffDate));
 		}
 
 		dao.getCalendars().forEach(calendar -> {

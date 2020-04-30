@@ -23,12 +23,12 @@ import com.mecatran.gtfsvtor.validation.ValidatorConfig;
 
 public class TooFastTravelValidator implements DaoValidator {
 
-	// TODO Configurable speed are not described right now
+	// TODO Each configurable speed are not described right now
 
-	@ConfigurableOption(description = "Speed multiplier factor above which an error is generated")
+	@ConfigurableOption(description = "Speed multiplier factor above which an error is generated instead of a warning")
 	private double errorSpeedMultiplier = 3.;
 
-	@ConfigurableOption
+	@ConfigurableOption(description = "Number of trip stop with identical time above which a warning is generated")
 	private int maxStopsWithSameTime = 5;
 
 	@Override
