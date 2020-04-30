@@ -1,6 +1,5 @@
 package com.mecatran.gtfsvtor.validation.dao;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,8 +40,8 @@ public class UnusedObjectsValidator implements DaoValidator {
 		});
 
 		/* Look for unused calendars and stops */
-		Set<GtfsCalendar.Id> unusedCalendarIds = new HashSet<>(
-				dao.getCalendarIndex().getAllCalendarIds());
+		Set<GtfsCalendar.Id> unusedCalendarIds = dao.getCalendarIndex()
+				.getAllCalendarIds().collect(Collectors.toSet());
 		Set<GtfsStop.Id> unusedStopsIds = dao.getStops()
 				.filter(s -> s.getType() == GtfsStopType.STOP)
 				.map(GtfsStop::getId).collect(Collectors.toSet());

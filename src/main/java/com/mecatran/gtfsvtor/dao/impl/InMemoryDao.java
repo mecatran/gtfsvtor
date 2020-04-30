@@ -306,7 +306,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			long end = System.currentTimeMillis();
 			if (verbose) {
 				System.out.println(
-						"Indexed " + calendarIndex.getAllCalendarIds().size()
+						"Indexed " + calendarIndex.getAllCalendarIds().count()
 								+ " calendars in " + (end - start) + "ms");
 			}
 		}

@@ -1,10 +1,10 @@
 package com.mecatran.gtfsvtor.dao;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.SortedSet;
+import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
+import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 
 public interface CalendarIndex {
@@ -33,13 +33,12 @@ public interface CalendarIndex {
 		}
 	}
 
-	public Collection<GtfsCalendar.Id> getAllCalendarIds();
+	public Stream<GtfsCalendar.Id> getAllCalendarIds();
 
 	public SortedSet<GtfsLogicalDate> getCalendarApplicableDates(
 			GtfsCalendar.Id calendarId);
 
-	public Collection<GtfsCalendar.Id> getCalendarIdsOnDate(
-			GtfsLogicalDate date);
+	public Stream<GtfsCalendar.Id> getCalendarIdsOnDate(GtfsLogicalDate date);
 
 	/**
 	 * @param date
@@ -52,7 +51,16 @@ public interface CalendarIndex {
 	 * @return A sorted list of all distinct dates where at least one calendar
 	 *         is applicable.
 	 */
-	public List<GtfsLogicalDate> getSortedDates();
+	public Stream<GtfsLogicalDate> getSortedDates();
+
+	/**
+	 * @return A sorted list of all distinct exception dates having an effect
+	 *         for this calendar (ie a positive exception on a calendar not
+	 *         active this day, or a negative exception on a calendar normally
+	 *         active this day).
+	 */
+	public Stream<GtfsCalendarDate> getEffectiveExceptionDates(
+			GtfsCalendar.Id calendarId);
 
 	/**
 	 * @return The overlapping calendar info (number of overlapping days,

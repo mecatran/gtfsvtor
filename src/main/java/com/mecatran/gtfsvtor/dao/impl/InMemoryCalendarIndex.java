@@ -1,7 +1,6 @@
 package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +11,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
@@ -19,6 +19,7 @@ import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
+import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
@@ -28,6 +29,8 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	private Set<GtfsCalendar.Id> allCalendarIds = new HashSet<>();
 	private Map<GtfsCalendar.Id, SortedSet<GtfsLogicalDate>> datesPerCalendar = new HashMap<>();
 	private SetMultimap<GtfsLogicalDate, GtfsCalendar.Id> calendarsPerDate = HashMultimap
+			.create();
+	private SetMultimap<GtfsCalendar.Id, GtfsCalendarDate> effectiveCalendarDates = HashMultimap
 			.create();
 	private Map<GtfsLogicalDate, AtomicLong> tripCountPerDate = new HashMap<>();
 	private Map<List<GtfsCalendar.Id>, OverlappingCalendarInfo> calendarOverlapCache = new HashMap<>();
@@ -81,13 +84,19 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 				datesForId = new TreeSet<>();
 				datesPerCalendar.put(calDate.getCalendarId(), datesForId);
 			}
+			boolean active;
 			switch (calDate.getExceptionType()) {
 			case ADDED:
-				datesForId.add(calDate.getDate());
+				active = datesForId.add(calDate.getDate());
 				break;
 			case REMOVED:
-				datesForId.remove(calDate.getDate());
+				active = datesForId.remove(calDate.getDate());
 				break;
+			default:
+				active = false;
+			}
+			if (active) {
+				effectiveCalendarDates.put(calDate.getCalendarId(), calDate);
 			}
 		});
 		/*
@@ -111,8 +120,8 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	}
 
 	@Override
-	public Collection<Id> getAllCalendarIds() {
-		return Collections.unmodifiableSet(allCalendarIds);
+	public Stream<Id> getAllCalendarIds() {
+		return allCalendarIds.stream();
 	}
 
 	@Override
@@ -125,9 +134,9 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	}
 
 	@Override
-	public Collection<GtfsCalendar.Id> getCalendarIdsOnDate(
-			GtfsLogicalDate date) {
-		return Collections.unmodifiableCollection(calendarsPerDate.get(date));
+	public Stream<GtfsCalendar.Id> getCalendarIdsOnDate(GtfsLogicalDate date) {
+		Set<GtfsCalendar.Id> ret = calendarsPerDate.get(date);
+		return ret == null ? Stream.empty() : ret.stream();
 	}
 
 	@Override
@@ -137,8 +146,15 @@ public class InMemoryCalendarIndex implements CalendarIndex {
 	}
 
 	@Override
-	public List<GtfsLogicalDate> getSortedDates() {
-		return Collections.unmodifiableList(allDatesSorted);
+	public Stream<GtfsLogicalDate> getSortedDates() {
+		return allDatesSorted.stream();
+	}
+
+	@Override
+	public Stream<GtfsCalendarDate> getEffectiveExceptionDates(
+			GtfsCalendar.Id calendarId) {
+		Set<GtfsCalendarDate> ret = effectiveCalendarDates.get(calendarId);
+		return ret == null ? Stream.empty() : ret.stream();
 	}
 
 	@Override
