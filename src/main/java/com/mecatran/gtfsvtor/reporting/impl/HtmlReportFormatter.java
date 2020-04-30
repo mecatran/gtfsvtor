@@ -6,7 +6,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +56,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 		html.text(category.getCategoryName());
 		for (CategoryCounter cc : category.getSeverityCounters()) {
 			html.span().classAttr("smaller");
-			html.text(" • " + cc.getTotalCount());
+			html.text(" - " + cc.getTotalCount());
 			html.span().classAttr("badge " + cc.getSeverity().toString())
 					.text(cc.getCategoryName()).end();
 			html.end(); // span
@@ -206,7 +208,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 		html.h1().classAttr("logo image").text("GTFS validation report");
 		for (CategoryCounter cc : clsReport.getSeverityCounters()) {
 			html.span().classAttr("xsmaller");
-			html.text(" • " + cc.getTotalCount() + " ");
+			html.text(" - " + cc.getTotalCount() + " ");
 			html.span().classAttr("badge " + cc.getSeverity().toString())
 					.text(cc.getCategoryName()).end();
 			html.end();
@@ -232,8 +234,12 @@ public class HtmlReportFormatter implements ReportFormatter {
 
 	private void formatFooter() throws IOException {
 		html.hr();
-		html.p().classAttr("comments").text("Validation done at " + new Date()
-				+ " by GTFSVTOR - Copyright (c) 2020 Mecatran").end();
+		Date now = new Date();
+		Calendar cal = GregorianCalendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		html.p().classAttr("comments").text(String.format(
+				"Validation done at %s by GTFSVTOR - Copyright (c) %d Mecatran",
+				now, year)).end();
 		html.end(); // html
 	}
 

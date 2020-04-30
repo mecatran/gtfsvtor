@@ -12,6 +12,7 @@ import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsObject;
+import com.mecatran.gtfsvtor.utils.MiscUtils;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
@@ -57,7 +58,7 @@ public class ValidatorInjector<T> {
 					.getClass();
 			boolean defDisabled = clazz
 					.isAnnotationPresent(DefaultDisabledValidator.class);
-			pw.println(" • " + validator.getClass().getSimpleName()
+			pw.println(" * " + validator.getClass().getSimpleName()
 					+ (defDisabled ? " (disabled by default)" : ""));
 			for (Field field : clazz.getDeclaredFields()) {
 				if (field.isAnnotationPresent(ConfigurableOption.class)) {
@@ -75,11 +76,14 @@ public class ValidatorInjector<T> {
 					} catch (Exception e) {
 						System.err.println(e);
 					}
-					pw.println("    - " + fieldName + " ("
+					pw.println("   - " + fieldName + " ("
 							+ field.getType().getSimpleName() + ") = "
 							+ (defOptVal == null ? "?" : defOptVal.toString()));
 					if (fieldDesc != null) {
-						pw.println("      " + fieldDesc);
+						for (String line : MiscUtils
+								.wordProcessorSplit(fieldDesc, 60)) {
+							pw.println("     | " + line);
+						}
 					}
 				}
 			}
