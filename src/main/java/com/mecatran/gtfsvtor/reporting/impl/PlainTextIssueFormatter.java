@@ -10,6 +10,7 @@ import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.utils.MiscUtils;
 
 public class PlainTextIssueFormatter implements IssueFormatter {
 
@@ -106,8 +107,17 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 				sb.append("+\n");
 			}
 		}
-		sb.append(issue.getSeverity()).append(": ");
-		sb.append(fmt.getPlainTextResult());
+		String severity = issue.getSeverity().toString();
+		List<String> lines = MiscUtils
+				.wordProcessorSplit(fmt.getPlainTextResult(), 70);
+		for (int i = 0; i < lines.size(); i++) {
+			if (i == 0) {
+				sb.append(severity).append(" | ");
+			} else {
+				sb.append(pad("", severity.length(), ' ')).append(" | ");
+			}
+			sb.append(lines.get(i)).append("\n");
+		}
 		return sb.toString();
 
 	}
