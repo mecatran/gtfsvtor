@@ -76,6 +76,7 @@ import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.NoServiceError;
+import com.mecatran.gtfsvtor.reporting.issues.NoServiceExceptionWarning;
 import com.mecatran.gtfsvtor.reporting.issues.NonIncreasingShapeDistTraveledError;
 import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
@@ -181,21 +182,25 @@ public class TestGtfs {
 		assertTrue(weDates.contains(GtfsLogicalDate.getDate(2011, 12, 31)));
 		assertFalse(weDates.contains(GtfsLogicalDate.getDate(2012, 1, 1)));
 
-		Collection<GtfsCalendar.Id> calIds;
+		List<GtfsCalendar.Id> calIds;
 		calIds = calIndex
-				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2007, 1, 1));
+				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2007, 1, 1))
+				.collect(Collectors.toList());
 		assertEquals(1, calIds.size());
 		assertEquals(GtfsCalendar.id("FULLW"), calIds.iterator().next());
 		calIds = calIndex
-				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2007, 6, 4));
+				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2007, 6, 4))
+				.collect(Collectors.toList());
 		assertEquals(0, calIds.size());
 		calIds = calIndex
-				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2011, 12, 31));
+				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2011, 12, 31))
+				.collect(Collectors.toList());
 		assertEquals(2, calIds.size());
 		assertTrue(calIds.contains(GtfsCalendar.id("WE")));
 		assertTrue(calIds.contains(GtfsCalendar.id("FULLW")));
 		calIds = calIndex
-				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2012, 1, 1));
+				.getCalendarIdsOnDate(GtfsLogicalDate.getDate(2012, 1, 1))
+				.collect(Collectors.toList());
 		assertEquals(0, calIds.size());
 
 		Collection<GtfsTrip> trips = dao.getTrips()
@@ -1198,6 +1203,13 @@ public class TestGtfs {
 				.getReportIssues(MissingMandatoryValueError.class).size());
 		assertEquals(0,
 				tb.report.getReportIssues(MissingObjectIdError.class).size());
+	}
+
+	@Test
+	public void testNoServiceException() {
+		TestBundle tb = loadAndValidate("noservice_exception");
+		assertEquals(1, tb.report
+				.getReportIssues(NoServiceExceptionWarning.class).size());
 	}
 
 	@Test

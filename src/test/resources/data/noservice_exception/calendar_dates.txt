@@ -1,0 +1,2 @@
+service_id,date,exception_type
+FULLW,20070101,1
