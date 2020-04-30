@@ -46,14 +46,14 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 							cat -> new AtomicInteger(0))
 					.addAndGet(1);
 			boolean skip = count >= maxIssuesPerCategory;
-			if (printIssues) {
-				System.out.println(PlainTextIssueFormatter.format(issue)
-						+ (skip ? " (too much issues, skipped)" : ""));
-			}
 			if (!skip) {
 				reportItems.add(issue);
 				reportIssuesByType.put(issue.getClass(), issue);
 				reportIssuesBySeverity.put(issue.getSeverity(), issue);
+				if (printIssues) {
+					System.out.println(PlainTextIssueFormatter.format(issue));
+					System.out.flush();
+				}
 			}
 		}
 	}
