@@ -928,12 +928,12 @@ public class TestGtfs {
 		ProjectedPoint pp0 = lgi.getProjectedPoint(st0);
 		ProjectedPoint pp1 = lgi.getProjectedPoint(st1);
 		ProjectedPoint pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-4);
-		assertEquals(d01, pp1.getArcLengthMeters(), 1e-4);
-		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-4);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
+		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-2);
+		assertEquals(d01, pp1.getArcLengthMeters(), 1e-2);
+		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
 
 		/* A simple one segment shape, reversed (S2->S1->SO) */
 		stopTimes = dao.getStopTimesOfTrip(GtfsTrip.id("T2"));
@@ -946,18 +946,18 @@ public class TestGtfs {
 		pp0 = lgi.getProjectedPoint(st0);
 		pp1 = lgi.getProjectedPoint(st1);
 		pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(d01 + d12, pp0.getArcLengthMeters(), 1e-4);
-		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-4);
-		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-4);
-		assertEquals(0, pp0.getDistanceToShapeMeters(), 1e-4);
-		assertEquals(d01, pp1.getDistanceToShapeMeters(), 1e-4);
-		assertEquals(d01 + d12, pp2.getDistanceToShapeMeters(), 1e-4);
+		assertEquals(d01 + d12, pp0.getArcLengthMeters(), 1e-2);
+		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-2);
+		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-2);
+		assertEquals(0, pp0.getDistanceToShapeMeters(), 1e-2);
+		assertEquals(d01, pp1.getDistanceToShapeMeters(), 1e-2);
+		assertEquals(d01 + d12, pp2.getDistanceToShapeMeters(), 1e-2);
 		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
-				pp0.getProjectedPoint()) < 1e-4);
+				pp0.getProjectedPoint()) < 1e-2);
 		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
-				pp1.getProjectedPoint()) < 1e-4);
+				pp1.getProjectedPoint()) < 1e-2);
 		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
-				pp2.getProjectedPoint()) < 1e-4);
+				pp2.getProjectedPoint()) < 1e-2);
 
 		/* A backtracing 2 segment shape (S1->S3->S2) */
 		stopTimes = dao.getStopTimesOfTrip(GtfsTrip.id("T3"));
@@ -970,10 +970,10 @@ public class TestGtfs {
 		pp0 = lgi.getProjectedPoint(st0);
 		pp1 = lgi.getProjectedPoint(st1);
 		pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-4);
-		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-4);
-		assertEquals(d01 + d12 + d12, pp2.getArcLengthMeters(), 1e-4);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-4);
+		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-2);
+		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-2);
+		assertEquals(d01 + d12 + d12, pp2.getArcLengthMeters(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
 		assertEquals(0.0, pp1.getDistanceToShapeMeters(), 0.2);
 		assertEquals(0.0, pp2.getDistanceToShapeMeters(), 0.4);
 		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
@@ -991,9 +991,9 @@ public class TestGtfs {
 				.getReportIssues(RouteColorContrastIssue.class);
 		assertEquals(4, rccs.size());
 		RouteColorContrastIssue rcc0 = rccs.get(0);
-		assertEquals(0.195, rcc0.getBrightnessDelta(), 1e-3);
+		assertEquals(19.5, rcc0.getBrightnessDeltaPercent(), 0.1);
 		RouteColorContrastIssue rcc2 = rccs.get(2);
-		assertEquals(0.0, rcc2.getBrightnessDelta(), 1e-3);
+		assertEquals(0.0, rcc2.getBrightnessDeltaPercent(), 0.1);
 
 		List<SimilarRouteColorWarning> srcs = tb.report
 				.getReportIssues(SimilarRouteColorWarning.class);
@@ -1035,7 +1035,10 @@ public class TestGtfs {
 				.getSourceInfo().getTable().getTableName());
 		List<InvalidFieldFormatError> iffs = tb.report
 				.getReportIssues(InvalidFieldFormatError.class);
-		assertEquals(3, iffs.size());
+		assertEquals(1, iffs.size());
+		List<InvalidFieldValueIssue> ifvs = tb.report
+				.getReportIssues(InvalidFieldValueIssue.class);
+		assertEquals(2, ifvs.size());
 	}
 
 	@Test
@@ -1251,7 +1254,7 @@ public class TestGtfs {
 		assertEquals(1, tftis.size());
 		TooFastTravelIssue tfti0 = tftis.get(0);
 		assertEquals(14.66, tfti0.getSpeedMps(), 1e-2);
-		assertEquals(439.82, tfti0.getDistanceMeters(), 1e-2);
+		assertEquals(439.81, tfti0.getDistanceMeters(), 1e-2);
 	}
 
 	@Test
