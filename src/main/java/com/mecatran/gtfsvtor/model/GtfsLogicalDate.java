@@ -108,6 +108,14 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 				cal.get(Calendar.DAY_OF_MONTH));
 	}
 
+	/**
+	 * @return The number of logical days between from (inclusive) and to
+	 *         (exclusive). delta(X,X) = 0.
+	 */
+	public static int deltaDays(GtfsLogicalDate from, GtfsLogicalDate to) {
+		return to.getJulianDay() - from.getJulianDay();
+	}
+
 	public GtfsLogicalDate next() {
 		return offset(1);
 	}
