@@ -356,7 +356,7 @@ public class GtfsDataLoader implements DataLoader {
 			nShapePoints++;
 			if ((nShapePoints % 100000) == 0) {
 				// TODO Fancier progress bar
-				System.out.print("\r" + nShapePoints + " shape points");
+				System.out.print("\r" + nShapePoints + " shape points   ");
 			}
 		}
 		closeTable(table, context.getReportSink());
@@ -434,7 +434,7 @@ public class GtfsDataLoader implements DataLoader {
 			nStopTimes++;
 			if ((nStopTimes % 100000) == 0) {
 				// TODO Fancier progress bar
-				System.out.print("\r" + nStopTimes + " stop times");
+				System.out.print("\r" + nStopTimes + " stop times   ");
 			}
 		}
 		long end = System.currentTimeMillis();
