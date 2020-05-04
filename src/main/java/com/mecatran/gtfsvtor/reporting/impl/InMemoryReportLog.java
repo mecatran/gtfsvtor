@@ -22,6 +22,7 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 	private ListMultimap<ReportIssueSeverity, ReportIssue> reportIssuesBySeverity = ArrayListMultimap
 			.create();
 	private Map<String, AtomicInteger> issuesCountPerCategory = new HashMap<>();
+	// Note: we do not use this threshold for now.
 	private int maxIssuesPerCategory = Integer.MAX_VALUE;
 	private boolean printIssues = false;
 
@@ -51,8 +52,7 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 				reportIssuesByType.put(issue.getClass(), issue);
 				reportIssuesBySeverity.put(issue.getSeverity(), issue);
 				if (printIssues) {
-					System.out.println(PlainTextIssueFormatter.format(issue));
-					System.out.flush();
+					System.err.println(PlainTextIssueFormatter.format(issue));
 				}
 			}
 		}
