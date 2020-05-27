@@ -2,6 +2,7 @@ stop_id,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,stop_code,locatio
 FUR_CREEK_RES,Furnace Creek Resort (Demo),,36.425288,-117.133162,,,1234,,,,,
 BEATTY_AIRPORT,Nye County Airport (Demo),,36.868446,-116.784582,,,1235,0,BEATTY_AIRPORT_STATION,America/Phoenix,,ground_level
 BEATTY_AIRPORT_STATION,Nye County Airport (Demo),,36.868446,-116.784582,,,1235,1,,,,
+BEATTY_AIRPORT_STATION_2,Nye County Airport (Demo 2),,36.868461,-116.784589,,,1235B,1,,,,
 BEATTY_AIRPORT_ENTRANCE_SOUTH,Nye County Airport Entrance South,,36.868321,-116.784580,,,1236,2,,,,level_0
 BEATTY_AIRPORT_ENTRANCE_NORTH,Nye County Airport Entrance North,,36.868567,-116.784583,,,1237,2,,,,level_1
 BULLFROG,Bullfrog (Demo),,36.88108,-116.81797,,,,,,,,
