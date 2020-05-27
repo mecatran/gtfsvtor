@@ -14,9 +14,12 @@ Found 1 CR LF "\r\n" line end (line 2) and 2 LF "\n" line ends (lines 1, 3). A f
 Deprecated column (headway vs frequency)
 Invalid float value (comma instead of point, exponent notation)
 
+Routes
+------
+Backward compat: Route long name should not start with short name: "O" vs "ORLEANS xxx" raises an error but do not in existing validator. Take space into account? And/or min length?
+
 Stops
 -----
-Different station too close (station is close to stop but not parent)
 Stop with multiple route types (bus and metro)
 Quay too far from stop
 Entrance, node too far from station
