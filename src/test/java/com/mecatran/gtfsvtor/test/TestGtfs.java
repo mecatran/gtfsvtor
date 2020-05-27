@@ -57,6 +57,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.issues.DifferentStationTooCloseWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedStopSequenceError;
@@ -1213,6 +1214,13 @@ public class TestGtfs {
 				.getReportIssues(NoServiceExceptionWarning.class).size());
 		assertEquals(3, tb.report
 				.getReportIssues(UselessCalendarDateWarning.class).size());
+	}
+
+	@Test
+	public void testDifferentStationTooClose() {
+		TestBundle tb = loadAndValidate("different_station_too_close");
+		assertEquals(1, tb.report
+				.getReportIssues(DifferentStationTooCloseWarning.class).size());
 	}
 
 	@Test
