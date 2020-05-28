@@ -10,6 +10,7 @@ Project goals
 - Fast
 - Extensible
 - Extensive coverage
+- Backward-compatible with current "standard" validator
 
 How to use GTFSVTOR
 -------------------
@@ -23,16 +24,18 @@ See the [TODO](TODO) file to check the few missing rules.
 You can browse this [example report](https://mecatran.github.io/gtfsvtor/validation-results.html)
 to see the validation result of the "verybad" dataset.
 
-For now, as there are no released bundle, you must compile the validator yourself:
+To use it:
 
-- Download the source code
-- Install gradle
-- Run `gradle assemble` in the root directory of the project
-- Unzip the generated zip file (`gtfsvtor.zip` in `build/distributions`)
+- Download the latest release (available in the project github)
+- Unzip the file somewhere
 - Run gtfsvtor:
 
-    ./bin/gtfsvtor --help
-    ./bin/gtfsvtor [options] <GTFS file>
+    ./gtfsvtor/bin/gtfsvtor --help
+    ./gtfsvtor/bin/gtfsvtor [options] <GTFS file>
+
+On Windows, use the provided `gtfsvtor.bat` file instead.
+
+Please note that a Java JRE is required to run the application.
 
 A sample config.properties file is included in the root of the project
 if you want to configure the validation.
@@ -49,9 +52,9 @@ Performance tests are done using:
 
   | GTFS            | Routes | Stops | Trips  | Times  | Shp pts | FeedValidator | GTFSVTOR      |
   |-----------------|--------|-------|--------|--------|---------|---------------|---------------|
-  | MBTA Boston     |    236 |  9861 |  70446 |  1829k |    323k | 2m20s         | 7s            |
-  | Montréal        |    229 |  9241 | 206069 |  7814k |    199k | 9m23s         | 19s           |
-  | IDFM Paris      |   1870 | 63471 | 467457 | 10564k |       - | 57m50s        | 36s           |
+  | MBTA Boston     |    236 |  9861 |  70446 |  1829k |    323k | 2m20s         | 8s            |
+  | Montréal        |    229 |  9241 | 206069 |  7814k |    199k | 9m23s         | 20s           |
+  | IDFM Paris      |   1870 | 63471 | 467457 | 10564k |       - | 57m50s        | 40s           |
   | OV Netherlands  |   2703 | 63995 | 787736 | 16103k |   3384k | ?             | 1m50s         |
 
 **Note**: Performances comparisons should be fairly accurate now,
