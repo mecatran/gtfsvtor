@@ -21,13 +21,31 @@ distZip {
 }
 tasks.distTar.enabled = false
 
+// Return the current commit hash from git
+def scmRevisionInfo() {
+  new ByteArrayOutputStream().withStream { os ->
+    def result = exec {
+      executable = 'git'
+      args = [ 'rev-parse', 'HEAD' ]
+      standardOutput = os
+    }
+    return os.toString().trim()
+  }
+}
+
+def utcDateTime() {
+  def df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm 'UTC'");
+  df.setTimeZone(TimeZone.getTimeZone("UTC"));
+  return df.format(new Date())
+}
+
 jar {
   manifest {
     attributes 'Implementation-Title'  : project.description,
                'Implementation-Version': version,
                'Built-By'              : System.properties['user.name'],
-               'Build-Date'            : new java.text.SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-               'Build-Revision'        : "TODO",
+               'Build-Date'            : utcDateTime(),
+               'Build-Revision'        : scmRevisionInfo(),
                'Created-By'            : "Gradle ${gradle.gradleVersion}",
                'Build-Jdk'             : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
                'Build-OS'              : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
