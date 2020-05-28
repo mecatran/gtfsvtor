@@ -6,7 +6,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 description = 'GTFSVTOR - General Transit Feed Specification Validator'
-version = '0.1.0'
+version = '0.1.1'
 mainClassName = 'com.mecatran.gtfsvtor.cmdline.GtfsVtorMain'
 applicationDefaultJvmArgs = [ "-Xmx4G" ]
 
