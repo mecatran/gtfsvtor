@@ -5,6 +5,8 @@ import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.che
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
+import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
