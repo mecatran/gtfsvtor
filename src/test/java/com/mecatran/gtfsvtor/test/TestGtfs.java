@@ -271,7 +271,7 @@ public class TestGtfs {
 		assertEquals(GtfsLogicalTime.getTime(6, 0, 0),
 				frequency.getStartTime());
 		assertEquals(GtfsLogicalTime.getTime(22, 0, 0), frequency.getEndTime());
-		assertEquals(new Integer(1800), frequency.getHeadwaySeconds());
+		assertEquals(Integer.valueOf(1800), frequency.getHeadwaySeconds());
 		assertEquals(GtfsExactTime.FREQUENCY_BASED,
 				frequency.getNonNullExactTime());
 
