@@ -3,10 +3,12 @@ package com.mecatran.gtfsvtor.validation;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import com.mecatran.gtfsvtor.geospatial.GeoBounds;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 
 public interface ValidatorConfig {
@@ -73,6 +75,23 @@ public interface ValidatorConfig {
 					cal.get(Calendar.MONTH) + 1,
 					cal.get(Calendar.DAY_OF_MONTH));
 		} catch (ParseException e) {
+			return defaultValue;
+		}
+	}
+
+	public default GeoBounds getBounds(String key, GeoBounds defaultValue) {
+		String str = this.getString(key);
+		if (str == null || str.isEmpty())
+			return defaultValue;
+		try {
+			double[] bb = Arrays.stream(str.split(",")).mapToDouble(
+					Double::parseDouble).toArray();
+			if (bb.length == 4) {
+				return new GeoBounds(bb[0], bb[1], bb[2], bb[3]);
+			} else {
+				return defaultValue;
+			}
+		} catch (NumberFormatException e) {
 			return defaultValue;
 		}
 	}

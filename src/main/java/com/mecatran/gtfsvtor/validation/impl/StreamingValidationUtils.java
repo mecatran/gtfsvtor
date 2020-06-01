@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
+import com.mecatran.gtfsvtor.geospatial.GeoBounds;
+import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidCoordinateError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryValueError;
@@ -89,6 +92,18 @@ public class StreamingValidationUtils {
 			context.getReportSink()
 					.report(new InvalidFieldFormatError(context.getSourceInfo(),
 							fieldName, value.toString(), expectedFormat));
+		}
+	}
+
+	public static void checkCoordinates(FieldGetter<Double> getterLat,
+			FieldGetter<Double> getterLon, String fieldNameLat, String fieldNameLon,
+			GeoBounds boundingBox, StreamingValidator.Context context) {
+		Double lat = getterLat.get();
+		Double lon = getterLon.get();
+		if (!boundingBox.contains(lat, lon)) {
+			context.getReportSink().report(
+					new InvalidCoordinateError(context.getSourceInfo(), fieldNameLat,
+							fieldNameLon, new GeoCoordinates(lat, lon), boundingBox));
 		}
 	}
 }

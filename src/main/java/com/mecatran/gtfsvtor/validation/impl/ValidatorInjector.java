@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
+import com.mecatran.gtfsvtor.geospatial.GeoBounds;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
@@ -194,6 +195,8 @@ public class ValidatorInjector<T> {
 						value = Boolean.valueOf((boolean) value);
 				} else if (fieldType.equals(GtfsLogicalDate.class)) {
 					value = config.getLogicalDate(configKey, null);
+				} else if (fieldType.equals(GeoBounds.class)) {
+					value = config.getBounds(configKey, null);
 				} else {
 					System.err.println("Cannot configure validator "
 							+ validator.getClass().getSimpleName()

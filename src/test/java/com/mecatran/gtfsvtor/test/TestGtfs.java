@@ -68,6 +68,7 @@ import com.mecatran.gtfsvtor.reporting.issues.FirstOrLastStopTimeMissingError;
 import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
 import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
+import com.mecatran.gtfsvtor.reporting.issues.InvalidCoordinateError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
@@ -689,6 +690,14 @@ public class TestGtfs {
 				siwf2.getSourceInfo().getTable().getTableName());
 		assertTrue(siwf2.getFieldNames().contains("date"));
 		assertEquals("2007-06-04", iffe2.getValue());
+	}
+
+	@Test
+	public void testBadCoords() {
+		TestBundle tb = loadAndValidate("bad_coords");
+		List<InvalidCoordinateError> icrds = tb.report
+				.getReportIssues(InvalidCoordinateError.class);
+		assertEquals(4, icrds.size());
 	}
 
 	@Test

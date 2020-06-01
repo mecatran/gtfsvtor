@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.reporting;
 
 import java.util.Locale;
 
+import com.mecatran.gtfsvtor.geospatial.GeoBounds;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.model.GtfsId;
@@ -45,6 +46,13 @@ public interface IssueFormatter {
 	/** Format coordinates */
 	public default String coordinates(GeoCoordinates p) {
 		return String.format(Locale.US, "(%.6f,%.6f)", p.getLat(), p.getLon());
+	}
+
+	/** Format bounding box */
+	public default String bounds(GeoBounds b) {
+		return String.format(Locale.US, "(%.6f,%.6f,%.6f,%.6f)",
+				b.getMin().getLat(), b.getMin().getLon(), b.getMax().getLat(),
+				b.getMax().getLon());
 	}
 
 	/** Format a distance in meters */
