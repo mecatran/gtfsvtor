@@ -40,6 +40,13 @@ Please note that a Java JRE is required to run the application.
 A sample config.properties file is included in the root of the project
 if you want to configure the validation.
 
+For large GTFS, you can increase the default JVM heap size by setting
+the appropriate JVM options in the `GTFSVTOR_OPTS` variable:
+
+    GTFSVTOR_OPTS=-Xmx6G ./gtfsvtor/bin/gtfsvtor <GTFS file>
+
+Also, unzipping data on disk can reduce memory usage for large GTFS.
+
 Performances
 ------------
 
