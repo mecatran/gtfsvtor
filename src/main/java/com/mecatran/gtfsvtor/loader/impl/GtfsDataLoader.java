@@ -487,6 +487,10 @@ public class GtfsDataLoader implements DataLoader {
 			GtfsTransfer.Builder builder = new GtfsTransfer.Builder();
 			builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
 					.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
+					.withFromRouteId(GtfsRoute.id(erow.getString("from_route_id")))
+					.withToRouteId(GtfsRoute.id(erow.getString("to_route_id")))
+					.withFromTripId(GtfsTrip.id(erow.getString("from_trip_id")))
+					.withToTripId(GtfsTrip.id(erow.getString("to_trip_id")))
 					.withTransferType(erow.getTransferType("transfer_type"))
 					.withMinTransferTime(
 							erow.getInteger("min_transfer_time", false));

@@ -5,6 +5,8 @@ import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.che
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
+import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
@@ -107,7 +109,6 @@ public class TransferStreamingValidator
 				}
 			}
 		}
-
 		// Check from-to stop distance and walk speed
 		if (fromStop != null && toStop != null) {
 			GeoCoordinates p1 = fromStop.getCoordinates();
@@ -145,6 +146,44 @@ public class TransferStreamingValidator
 			}
 		}
 
+		// check from/to route reference
+		GtfsRoute fromRoute = null;
+		GtfsRoute toRoute = null;
+		if (transfer.getFromRouteId() != null) {
+			fromRoute = dao.getRoute(transfer.getFromRouteId());
+			if (fromRoute == null) {
+				reportSink
+						.report(new InvalidReferenceError(context.getSourceInfo(), "from_route_id",
+								transfer.getFromRouteId().getInternalId(), GtfsRoute.TABLE_NAME,
+								"route_id"));
+			}
+		}
+		if (transfer.getToRouteId() != null) {
+			toRoute = dao.getRoute(transfer.getToRouteId());
+			if (toRoute == null) {
+				reportSink.report(new InvalidReferenceError(context.getSourceInfo(), "to_route_id",
+						transfer.getToRouteId().getInternalId(), GtfsRoute.TABLE_NAME, "route_id"));
+			}
+		}
+
+		// check from/to route reference
+		GtfsTrip fromTrip = null;
+		GtfsTrip toTrip = null;
+		if (transfer.getFromTripId() != null) {
+			fromTrip = dao.getTrip(transfer.getFromTripId());
+			if (fromTrip == null) {
+				reportSink.report(new InvalidReferenceError(context.getSourceInfo(), "from_trip_id",
+						transfer.getFromTripId().getInternalId(), GtfsRoute.TABLE_NAME, "trip_id"));
+			}
+		}
+		if (transfer.getToTripId() != null) {
+			toTrip = dao.getTrip(transfer.getToTripId());
+			if (toTrip == null) {
+				reportSink.report(new InvalidReferenceError(context.getSourceInfo(), "to_trip_id",
+						transfer.getToTripId().getInternalId(), GtfsTrip.TABLE_NAME, "trip_id"));
+			}
+		}
+		
 		if (transfer.getNonNullType() == GtfsTransferType.TIMED) {
 			// min transfer time should be present for TIMED type
 			if (transfer.getMinTransferTime() == null) {
