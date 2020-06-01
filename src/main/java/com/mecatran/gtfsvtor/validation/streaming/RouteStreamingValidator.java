@@ -51,9 +51,16 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 							"Max " + maxShortNameLen + " chars long")
 									.withSeverity(ReportIssueSeverity.WARNING));
 		}
-		if (route.getShortName() != null && route.getLongName() != null
-				&& route.getLongName().startsWith(route.getShortName())) {
-			// TODO Are we sure about this test?
+		String lowercaseShortName = route.getShortName() != null ?
+				route.getShortName().toLowerCase().trim() : null;
+		String lowercaseLongName =
+				route.getLongName() != null ? route.getLongName().toLowerCase().trim() :
+						null;
+		if (lowercaseShortName != null && lowercaseLongName != null && (
+				lowercaseLongName.equals(lowercaseShortName)
+						|| lowercaseLongName.startsWith(lowercaseShortName + " ")
+						|| lowercaseLongName.startsWith(lowercaseShortName + "(")
+						|| lowercaseLongName.startsWith(lowercaseShortName + "-"))) {
 			// TODO specific report for this for better explanation
 			reportSink.report(new InvalidFieldValueIssue(
 					context.getSourceInfo(), route.getShortName(),
