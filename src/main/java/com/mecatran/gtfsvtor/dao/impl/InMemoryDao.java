@@ -203,11 +203,18 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
+	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
+			GtfsStop.Id toStopId) {
+		return getTransfer(fromStopId, toStopId, null, null, null, null);
+	}
+
+	@Override
 	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
 			GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId,
 			GtfsTrip.Id toTripId) {
-		return transfers.get(new Sextet<>(fromStopId, toStopId, fromRouteId, toRouteId, fromTripId,
-				toTripId));
+		return transfers.get(
+				new Sextet<>(fromStopId, toStopId, fromRouteId, toRouteId, fromTripId,
+						toTripId));
 	}
 
 	@Override
