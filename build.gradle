@@ -53,7 +53,7 @@ jar {
 }
 
 dependencies {
-  compile 'com.google.guava:guava:21.0'
+  compile 'com.google.guava:guava:29.0-jre'
   compile 'org.apache.commons:commons-csv:1.7'
   compile 'com.univocity:univocity-parsers:2.8.4'
   compile 'commons-io:commons-io:2.6'

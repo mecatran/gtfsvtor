@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 
@@ -73,6 +75,17 @@ public interface ValidatorConfig {
 					cal.get(Calendar.MONTH) + 1,
 					cal.get(Calendar.DAY_OF_MONTH));
 		} catch (ParseException e) {
+			return defaultValue;
+		}
+	}
+
+	public default Pattern getPattern(String key, Pattern defaultValue) {
+		String str = this.getString(key);
+		if (str == null || str.isEmpty())
+			return defaultValue;
+		try {
+			return Pattern.compile(str);
+		} catch (PatternSyntaxException e) {
 			return defaultValue;
 		}
 	}

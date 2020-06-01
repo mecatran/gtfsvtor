@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
@@ -178,7 +179,7 @@ public class ValidatorInjector<T> {
 						|| fieldType.equals(Float.class)) {
 					value = config.getDouble(configKey, null);
 					if (value != null)
-						value = new Float((float) value);
+						value = Float.valueOf((float) value);
 				} else if (fieldType.equals(long.class)
 						|| fieldType.equals(Long.class)) {
 					value = config.getLong(configKey, null);
@@ -186,14 +187,16 @@ public class ValidatorInjector<T> {
 						|| fieldType.equals(Integer.class)) {
 					value = config.getLong(configKey, null);
 					if (value != null)
-						value = new Integer((int) value);
+						value = Integer.valueOf((int) value);
 				} else if (fieldType.equals(boolean.class)
 						|| fieldType.equals(Boolean.class)) {
 					value = config.getBoolean(configKey, null);
 					if (value != null)
-						value = new Boolean((boolean) value);
+						value = Boolean.valueOf((boolean) value);
 				} else if (fieldType.equals(GtfsLogicalDate.class)) {
 					value = config.getLogicalDate(configKey, null);
+				} else if (fieldType.equals(Pattern.class)) {
+					value = config.getPattern(configKey, null);
 				} else {
 					System.err.println("Cannot configure validator "
 							+ validator.getClass().getSimpleName()
