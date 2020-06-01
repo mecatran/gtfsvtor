@@ -6,12 +6,14 @@ import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldFormatError;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
+import com.mecatran.gtfsvtor.validation.DefaultDisabledValidator;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
 import java.util.regex.Pattern;
 
 @StreamingValidateType(GtfsStop.class)
+@DefaultDisabledValidator
 public class IFOPTStopIDStreamingValidator implements StreamingValidator<GtfsStop> {
 
 	@ConfigurableOption(description = "Pattern the stop_id must conform to for stops of stop_type station")
