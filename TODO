@@ -16,7 +16,6 @@ Invalid float value (comma instead of point, exponent notation)
 
 Routes
 ------
-Backward compat: Route long name should not start with short name: "O" vs "ORLEANS xxx" raises an error but do not in existing validator. Take space into account? And/or min length?
 
 Stops
 -----
