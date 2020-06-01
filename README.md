@@ -57,13 +57,14 @@ Performance tests are done using:
 - small memory-footprint GtfsStopTime implementation enabled for GTFSVTOR
 - multi-threading validation enabled (--numThreads 8) for GTFSVTOR
 
-  | GTFS            | Routes | Stops | Trips  | Times  | Shp pts | FeedValidator | GTFSVTOR      |
-  |-----------------|--------|-------|--------|--------|---------|---------------|---------------|
-  | MBTA Boston     |    236 |  9861 |  70446 |  1829k |    323k | 2m20s         | 8s            |
-  | Montréal        |    229 |  9241 | 206069 |  7814k |    199k | 9m23s         | 20s           |
-  | IDFM Paris      |   1870 | 63471 | 467457 | 10564k |       - | 57m50s        | 40s           |
-  | OV Netherlands  |   2703 | 63995 | 787736 | 16103k |   3384k | ?             | 1m50s         |
-
+  | GTFS            | Routes | Stops  | Trips   | Times  | Shp pts | FeedValidator | GTFSVTOR      |
+  |-----------------|--------|--------|---------|--------|---------|---------------|---------------|
+  | MBTA Boston     |    236 |   9861 |   70446 |  1829k |    323k | 2m20s         | 8s            |
+  | Montréal        |    229 |   9241 |  206069 |  7814k |    199k | 9m23s         | 20s           |
+  | IDFM Paris      |   1870 |  63471 |  467457 | 10564k |       - | 57m50s        | 40s           |
+  | OV Netherlands  |   2703 |  63995 |  787736 | 16103k |   3384k | ?             | 1m50s         |
+  | DELFI Germany   |  20385 | 561958 | 1992882 | 38519k |   8036k | ?             | 2m58s         |
+  
 **Note**: Performances comparisons should be fairly accurate now,
 as GTFSVTOR do have all CPU-intensive validators implemented
 (loading and conversion of stops, trips, times, shapes, calendars; shape linear indexing; calendar indexing;
