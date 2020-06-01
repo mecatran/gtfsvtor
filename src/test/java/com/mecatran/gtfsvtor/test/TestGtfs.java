@@ -1054,7 +1054,7 @@ public class TestGtfs {
 		assertEquals(1, iffs.size());
 		List<InvalidFieldValueIssue> ifvs = tb.report
 				.getReportIssues(InvalidFieldValueIssue.class);
-		assertEquals(2, ifvs.size());
+		assertEquals(1, ifvs.size());
 	}
 
 	@Test
