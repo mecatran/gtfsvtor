@@ -279,10 +279,10 @@ public class TestGtfs {
 				.collect(Collectors.toList());
 		assertEquals(2, transfers.size());
 		GtfsTransfer t1 = dao.getTransfer(GtfsStop.id("NADAV"),
-				GtfsStop.id("NANAA"));
+				GtfsStop.id("NANAA"),null, null, null, null);
 		assertEquals(GtfsTransferType.NONE, t1.getNonNullType());
 		GtfsTransfer t2 = dao.getTransfer(GtfsStop.id("EMSI"),
-				GtfsStop.id("NANAA"));
+				GtfsStop.id("NANAA"), null, null, null, null);
 		assertEquals(GtfsTransferType.TIMED, t2.getNonNullType());
 		assertEquals(Integer.valueOf(1200), t2.getMinTransferTime());
 
@@ -1148,6 +1148,19 @@ public class TestGtfs {
 				tb.report.getReportIssues(InvalidReferenceError.class).size());
 		assertEquals(1, tb.report
 				.getReportIssues(WrongTransferStopTypeError.class).size());
+		assertEquals(1, tb.report
+				.getReportIssues(DuplicatedObjectIdError.class).size());
+	}
+
+	@Test
+	public void testBogusTransfersExtended() {
+		TestBundle tb = loadAndValidate("bogus_transfers_extended");
+		assertEquals(1,
+				tb.report.getReportIssues(InvalidReferenceError.class).size());
+		assertEquals(1,
+				tb.report.getReportIssues(DuplicatedObjectIdError.class).size());
+		assertEquals(0, tb.report
+				.getReportIssues(UnrecognizedColumnInfo.class).size());
 	}
 
 	@Test

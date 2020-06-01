@@ -69,6 +69,10 @@ public interface ReadOnlyDao {
 	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
 			GtfsStop.Id toStopId);
 
+	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
+			GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId,
+			GtfsTrip.Id toTripId);
+
 	public Stream<GtfsPathway> getPathways();
 
 	public GtfsPathway getPathway(GtfsPathway.Id pathwayId);
