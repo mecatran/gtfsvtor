@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
@@ -194,6 +195,8 @@ public class ValidatorInjector<T> {
 						value = Boolean.valueOf((boolean) value);
 				} else if (fieldType.equals(GtfsLogicalDate.class)) {
 					value = config.getLogicalDate(configKey, null);
+				} else if (fieldType.equals(Pattern.class)) {
+					value = config.getPattern(configKey, null);
 				} else {
 					System.err.println("Cannot configure validator "
 							+ validator.getClass().getSimpleName()
