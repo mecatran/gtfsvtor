@@ -7,8 +7,6 @@ import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsShape;
-import com.mecatran.gtfsvtor.model.GtfsStop;
-import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
@@ -39,16 +37,15 @@ public class UnusedObjectsValidator implements DaoValidator {
 			}
 		});
 
-		/* Look for unused calendars and stops */
+		/* Look for unused calendars and shapes */
+		Set<GtfsShape.Id> unusedShapeIds = dao.getShapeIds()
+				.collect(Collectors.toSet());
 		Set<GtfsCalendar.Id> unusedCalendarIds = dao.getCalendarIndex()
 				.getAllCalendarIds().collect(Collectors.toSet());
-		Set<GtfsStop.Id> unusedStopsIds = dao.getStops()
-				.filter(s -> s.getType() == GtfsStopType.STOP)
-				.map(GtfsStop::getId).collect(Collectors.toSet());
 		dao.getTrips().forEach(trip -> {
 			unusedCalendarIds.remove(trip.getServiceId());
-			for (GtfsStopTime stopTime : dao.getStopTimesOfTrip(trip.getId())) {
-				unusedStopsIds.remove(stopTime.getStopId());
+			if (trip.getShapeId() != null) {
+				unusedShapeIds.remove(trip.getShapeId());
 			}
 		});
 		for (GtfsCalendar.Id unusedCalendarId : unusedCalendarIds) {
@@ -64,10 +61,9 @@ public class UnusedObjectsValidator implements DaoValidator {
 						"service_id"));
 			});
 		}
-		for (GtfsStop.Id unusedStopId : unusedStopsIds) {
-			GtfsStop stop = dao.getStop(unusedStopId);
-			reportSink.report(new UnusedObjectWarning("stop", unusedStopId,
-					stop.getSourceInfo(), "stop_id"));
+		for (GtfsShape.Id unusedShapeId : unusedShapeIds) {
+			reportSink.report(new UnusedObjectWarning("shape", unusedShapeId,
+					null, "shape_id"));
 		}
 
 		/* Look for unused stations */
@@ -85,19 +81,6 @@ public class UnusedObjectsValidator implements DaoValidator {
 						station.getId(), station.getSourceInfo(), "stop_id"));
 			}
 		});
-
-		/* Look for unused shapes */
-		Set<GtfsShape.Id> unusedShapeIds = dao.getShapeIds()
-				.collect(Collectors.toSet());
-		dao.getTrips().forEach(trip -> {
-			if (trip.getShapeId() != null) {
-				unusedShapeIds.remove(trip.getShapeId());
-			}
-		});
-		for (GtfsShape.Id unusedShapeId : unusedShapeIds) {
-			reportSink.report(new UnusedObjectWarning("shape", unusedShapeId,
-					null, "shape_id"));
-		}
 
 		/* Look for unused levels */
 		Set<GtfsLevel.Id> unusedLevelIds = dao.getLevels().map(GtfsLevel::getId)

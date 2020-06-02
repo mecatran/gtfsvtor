@@ -17,6 +17,7 @@ import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
+import com.mecatran.gtfsvtor.validation.DefaultTripTimesValidator;
 import com.mecatran.gtfsvtor.validation.impl.DefaultDaoValidatorContext;
 import com.mecatran.gtfsvtor.validation.impl.DefaultValidatorConfig;
 
@@ -66,8 +67,13 @@ public class GtfsVtor {
 			loader.load(new DefaultDataLoaderContext(dao, dao, report,
 					defStreamingValidator));
 			long end = System.currentTimeMillis();
+			System.gc();
+			Runtime runtime = Runtime.getRuntime();
 			System.out.println("Loaded '" + args.getGtfsFile() + "' in "
-					+ (end - start) + "ms");
+					+ (end - start) + "ms. Used memory: ~"
+					+ (runtime.totalMemory() - runtime.freeMemory())
+							/ (1024 * 1024)
+					+ "Mb");
 
 			DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
 					report, config);
@@ -75,6 +81,9 @@ public class GtfsVtor {
 					.withVerbose(args.isVerbose())
 					.withNumThreads(args.getNumThreads());
 			daoValidator.validate(context);
+			DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
+					config).withVerbose(args.isVerbose());
+			tripTimesValidator.scanValidate(context);
 		}
 
 		ReportFormatter formatter = new HtmlReportFormatter(

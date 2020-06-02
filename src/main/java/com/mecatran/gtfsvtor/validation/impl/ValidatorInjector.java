@@ -20,10 +20,13 @@ import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDisabledValidator;
 import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
+import com.mecatran.gtfsvtor.validation.DefaultTripTimesValidator;
 import com.mecatran.gtfsvtor.validation.StreamingValidator;
+import com.mecatran.gtfsvtor.validation.TripTimesValidator;
 import com.mecatran.gtfsvtor.validation.ValidatorConfig;
 import com.mecatran.gtfsvtor.validation.dao.ReferencesValidator;
 import com.mecatran.gtfsvtor.validation.streaming.AgencyStreamingValidator;
+import com.mecatran.gtfsvtor.validation.triptimes.OverlappingBlockIdValidator;
 
 public class ValidatorInjector<T> {
 
@@ -51,6 +54,12 @@ public class ValidatorInjector<T> {
 				DefaultStreamingValidator.class.getClassLoader(),
 				AgencyStreamingValidator.class.getPackage());
 		return ret;
+	}
+
+	public static ValidatorInjector<TripTimesValidator> getTripTimesStreamingValidatorInjector() {
+		return new ValidatorInjector<>(TripTimesValidator.class,
+				DefaultTripTimesValidator.class.getClassLoader(),
+				OverlappingBlockIdValidator.class.getPackage());
 	}
 
 	public void listValidatorOptions(PrintStream pw) {

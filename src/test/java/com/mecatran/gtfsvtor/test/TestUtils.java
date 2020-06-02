@@ -13,6 +13,7 @@ import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
+import com.mecatran.gtfsvtor.validation.DefaultTripTimesValidator;
 import com.mecatran.gtfsvtor.validation.impl.DefaultDaoValidatorContext;
 import com.mecatran.gtfsvtor.validation.impl.DefaultValidatorConfig;
 
@@ -54,6 +55,10 @@ public class TestUtils {
 		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
 				.withVerbose(true);
 		daoValidator.validate(context);
+		DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
+				config).withVerbose(true);
+		tripTimesValidator.scanValidate(context);
+
 		System.out.println(String.format(
 				"Validation result for '%s': %d INFO, %d WARNING, %d ERROR, %d CRITICAL",
 				gtfsFileOrDirectory,
