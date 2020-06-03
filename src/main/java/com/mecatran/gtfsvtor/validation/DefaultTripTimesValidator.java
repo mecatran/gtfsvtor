@@ -32,13 +32,8 @@ public class DefaultTripTimesValidator implements TripTimesValidator {
 		}
 		this.start(context);
 		IndexedReadOnlyDao dao = context.getDao();
-		dao.getRoutes().forEach(route -> {
-			dao.getTripsOfRoute(route.getId()).forEach(trip -> {
-				GtfsTripAndTimes tripAndTimes = new GtfsTripAndTimes(trip,
-						dao.getStopTimesOfTrip(trip.getId()));
-				this.validate(context, tripAndTimes);
-			});
-		});
+		dao.getTripsAndTimes()
+				.forEach(tripAndTimes -> this.validate(context, tripAndTimes));
 		this.end(context);
 	}
 

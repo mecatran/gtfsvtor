@@ -37,6 +37,7 @@ import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 import com.mecatran.gtfsvtor.model.GtfsZone;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
@@ -60,8 +61,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			.create();
 	private Multimap<GtfsCalendar.Id, GtfsCalendarDate> calendarDates = ArrayListMultimap
 			.create();
-	private Map<Sextet<GtfsStop.Id, GtfsStop.Id, GtfsRoute.Id, GtfsRoute.Id, GtfsTrip.Id,
-			GtfsTrip.Id>, GtfsTransfer> transfers = new HashMap<>();
+	private Map<Sextet<GtfsStop.Id, GtfsStop.Id, GtfsRoute.Id, GtfsRoute.Id, GtfsTrip.Id, GtfsTrip.Id>, GtfsTransfer> transfers = new HashMap<>();
 	private Map<GtfsPathway.Id, GtfsPathway> pathways = new HashMap<>();
 	private Map<GtfsFareAttribute.Id, GtfsFareAttribute> fareAttributes = new HashMap<>();
 	private ListMultimap<GtfsFareAttribute.Id, GtfsFareRule> fareRules = ArrayListMultimap
@@ -209,12 +209,12 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
-			GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId,
+	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
+			GtfsStop.Id toStopId, GtfsRoute.Id fromRouteId,
+			GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId,
 			GtfsTrip.Id toTripId) {
-		return transfers.get(
-				new Sextet<>(fromStopId, toStopId, fromRouteId, toRouteId, fromTripId,
-						toTripId));
+		return transfers.get(new Sextet<>(fromStopId, toStopId, fromRouteId,
+				toRouteId, fromTripId, toTripId));
 	}
 
 	@Override
@@ -300,6 +300,15 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public List<GtfsStopTime> getStopTimesOfTrip(GtfsTrip.Id tripId) {
 		return Collections.unmodifiableList(stopTimes.get(tripId));
+	}
+
+	@Override
+	public Stream<GtfsTripAndTimes> getTripsAndTimes() {
+		// TODO Delegate this method to a stop time store
+		// This is a temporary implementation
+		return getRoutes().flatMap(route -> getTripsOfRoute(route.getId()))
+				.map(trip -> new GtfsTripAndTimes(trip,
+						getStopTimesOfTrip(trip.getId())));
 	}
 
 	@Override
@@ -559,17 +568,19 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		GtfsTransfer existingTransfer = getTransfer(transfer.getFromStopId(),
-				transfer.getToStopId(), transfer.getFromRouteId(), transfer.getToRouteId(),
-				transfer.getFromTripId(), transfer.getToTripId());
+				transfer.getToStopId(), transfer.getFromRouteId(),
+				transfer.getToRouteId(), transfer.getFromTripId(),
+				transfer.getToTripId());
 		if (existingTransfer != null) {
-			sourceContext.getReportSink()
-					.report(new DuplicatedObjectIdError(sourceContext.getSourceInfo(),
-							existingTransfer.getId(), "from_stop_id", "to_stop_id"));
+			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
+					sourceContext.getSourceInfo(), existingTransfer.getId(),
+					"from_stop_id", "to_stop_id"));
 			return;
 		}
 		Sextet<GtfsStop.Id, GtfsStop.Id, GtfsRoute.Id, GtfsRoute.Id, GtfsTrip.Id, GtfsTrip.Id> id = new Sextet<>(
-				transfer.getFromStopId(), transfer.getToStopId(), transfer.getFromRouteId(),
-				transfer.getToRouteId(), transfer.getFromTripId(), transfer.getToTripId());
+				transfer.getFromStopId(), transfer.getToStopId(),
+				transfer.getFromRouteId(), transfer.getToRouteId(),
+				transfer.getFromTripId(), transfer.getToTripId());
 		transfers.put(id, transfer);
 		// TODO Should we index on from/to stop IDs?
 	}
