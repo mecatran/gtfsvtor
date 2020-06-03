@@ -24,8 +24,6 @@ import com.mecatran.gtfsvtor.model.GtfsZone;
  * Only objects with valid primary IDs (non-null, and not duplicated), are
  * stored and thus returned by the DAO. For duplicated IDs, the first one is
  * stored only.
- *
- * TODO - Use iterable for the return signature of collection of elements.
  */
 public interface ReadOnlyDao {
 
