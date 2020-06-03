@@ -33,18 +33,24 @@ public interface IssueFormatter {
 
 	/** Format a time */
 	public default String time(GtfsLogicalTime time) {
+		if (time == null)
+			return "-:--:--";
 		return String.format("%d:%02d:%02d", time.getHour(), time.getMinute(),
 				time.getSecond());
 	}
 
 	/** Format a date */
 	public default String date(GtfsLogicalDate date) {
+		if (date == null)
+			return "----/--/--";
 		return String.format("%04d/%02d/%02d", date.getYear(), date.getMonth(),
 				date.getDay());
 	}
 
 	/** Format coordinates */
 	public default String coordinates(GeoCoordinates p) {
+		if (p == null)
+			return "(null)";
 		return String.format(Locale.US, "(%.6f,%.6f)", p.getLat(), p.getLon());
 	}
 
