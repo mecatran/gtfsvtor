@@ -96,6 +96,7 @@ import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
 import com.mecatran.gtfsvtor.reporting.issues.UselessCalendarDateWarning;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
+import com.mecatran.gtfsvtor.reporting.issues.WrongDropOffPickUpTypeForSplitTripsIssue;
 import com.mecatran.gtfsvtor.reporting.issues.WrongPathwayStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
@@ -1065,6 +1066,14 @@ public class TestGtfs {
 		assertEquals(3, obis.size());
 		OverlappingBlockIdIssue obi0 = obis.get(0);
 		assertEquals(GtfsBlockId.fromValue("B1"), obi0.getBlockId());
+	}
+
+	@Test
+	public void testSplitJoinedTrips() {
+		TestBundle tb = loadAndValidate("split_or_joined_trips");
+		List<WrongDropOffPickUpTypeForSplitTripsIssue> obis = tb.report
+				.getReportIssues(WrongDropOffPickUpTypeForSplitTripsIssue.class);
+		assertEquals(2, obis.size());
 	}
 
 	@Test
