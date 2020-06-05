@@ -60,6 +60,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentStationTooCloseWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
+import com.mecatran.gtfsvtor.reporting.issues.DuplicatedFareRuleWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedStopSequenceError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedTripIssue;
@@ -745,6 +746,17 @@ public class TestGtfs {
 		assertEquals(10, si2.getFields().size());
 		assertEquals("WE", si2.getFields().get(0));
 		assertEquals("20101231", si2.getFields().get(9));
+	}
+
+	@Test
+	public void testDuplicateIds() {
+		TestBundle tb = loadAndValidate("duplicate_ids");
+		List<DuplicatedObjectIdError> doies = tb.report
+				.getReportIssues(DuplicatedObjectIdError.class);
+		assertEquals(6, doies.size());
+		List<DuplicatedFareRuleWarning> dfrws = tb.report
+				.getReportIssues(DuplicatedFareRuleWarning.class);
+		assertEquals(1, dfrws.size());
 	}
 
 	@Test
