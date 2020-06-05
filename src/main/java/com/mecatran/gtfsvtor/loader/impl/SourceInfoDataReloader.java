@@ -83,6 +83,7 @@ public class SourceInfoDataReloader {
 						}
 					}
 				}
+				dataTable.close();
 			} catch (IOException e) {
 				// This would be strange, as we already managed to load some
 				// data once. Break badly anyway
