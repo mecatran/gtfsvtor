@@ -10,11 +10,11 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
 
 public class ClassifiedReviewReport {
@@ -104,12 +104,12 @@ public class ClassifiedReviewReport {
 	public static class IssuesSubCategory
 			implements Comparable<IssuesSubCategory> {
 
-		private List<DataObjectSourceInfo> sourceInfos;
+		private List<DataObjectSourceRef> sourceRefs;
 		private List<ReportIssue> issues = new ArrayList<>();
 		private Map<String, ReportIssueSeverity> fieldSeverities = new HashMap<>();
 
-		private IssuesSubCategory(List<DataObjectSourceInfo> sourceInfos) {
-			this.sourceInfos = sourceInfos;
+		private IssuesSubCategory(List<DataObjectSourceRef> sourceRefs) {
+			this.sourceRefs = sourceRefs;
 		}
 
 		private void addIssue(ReportIssue issue) {
@@ -120,8 +120,8 @@ public class ClassifiedReviewReport {
 			Collections.sort(issues, ReportIssue.makeComparator());
 			for (ReportIssue issue : issues) {
 				ReportIssueSeverity severity = issue.getSeverity();
-				for (int i = 0; i < issue.getSourceInfos().size(); i++) {
-					SourceInfoWithFields siwf = issue.getSourceInfos().get(i);
+				for (int i = 0; i < issue.getSourceRefs().size(); i++) {
+					SourceRefWithFields siwf = issue.getSourceRefs().get(i);
 					for (String field : siwf.getFieldNames()) {
 						for (String prefix : Arrays.asList(":", i + ":")) {
 							ReportIssueSeverity existingSeverity = fieldSeverities
@@ -136,8 +136,8 @@ public class ClassifiedReviewReport {
 			}
 		}
 
-		public List<DataObjectSourceInfo> getSourceInfos() {
-			return sourceInfos;
+		public List<DataObjectSourceRef> getSourceRefs() {
+			return sourceRefs;
 		}
 
 		public ReportIssueSeverity getFieldSeverity(String headerColumn) {
@@ -155,7 +155,7 @@ public class ClassifiedReviewReport {
 
 		@Override
 		public int compareTo(IssuesSubCategory o) {
-			return MiscUtils.listCompare(this.sourceInfos, o.sourceInfos);
+			return MiscUtils.listCompare(this.sourceRefs, o.sourceRefs);
 		}
 	}
 
@@ -163,7 +163,7 @@ public class ClassifiedReviewReport {
 
 		private String categoryName;
 		private int maxIssues;
-		private Map<List<DataObjectSourceInfo>, IssuesSubCategory> subCatMap = new HashMap<>();
+		private Map<List<DataObjectSourceRef>, IssuesSubCategory> subCatMap = new HashMap<>();
 		private Map<Object, CategoryCounter> categoryCounters = new HashMap<>();
 		private Map<ReportIssueSeverity, CategoryCounter> severityCounters = new HashMap<>();
 		private List<IssuesSubCategory> subCategories;
@@ -191,8 +191,8 @@ public class ClassifiedReviewReport {
 			if (overflow)
 				return;
 			subCatMap.computeIfAbsent(
-					issue.getSourceInfos().stream()
-							.map(SourceInfoWithFields::getSourceInfo)
+					issue.getSourceRefs().stream()
+							.map(SourceRefWithFields::getSourceRef)
 							.collect(Collectors.toList()),
 					k -> new IssuesSubCategory(k)).addIssue(issue);
 		}
@@ -248,13 +248,13 @@ public class ClassifiedReviewReport {
 	}
 
 	private String getCategoryName(ReportIssue issue) {
-		List<SourceInfoWithFields> sourceInfos = issue.getSourceInfos();
+		List<SourceRefWithFields> sourceInfos = issue.getSourceRefs();
 		if (sourceInfos.isEmpty()) {
 			// Issues w/o source info: use the issue class as category
 			return issue.getCategoryName();
 		} else {
 			// Issues w source info: use the FIRST table name as category
-			return sourceInfos.get(0).getSourceInfo().getTable().getTableName();
+			return sourceInfos.get(0).getSourceRef().getTableName();
 		}
 	}
 

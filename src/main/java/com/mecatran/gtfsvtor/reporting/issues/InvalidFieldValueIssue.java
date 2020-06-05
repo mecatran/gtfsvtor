@@ -4,31 +4,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy
 public class InvalidFieldValueIssue implements ReportIssue {
 
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceRefs;
 	private String[] fieldNames;
 	private String value;
 	private String errorMessage;
 	private ReportIssueSeverity severity = ReportIssueSeverity.ERROR;
 
-	public InvalidFieldValueIssue(DataObjectSourceInfo sourceInfo, String value,
+	public InvalidFieldValueIssue(DataObjectSourceRef sourceRef, String value,
 			String errorMessage, String... fieldNames) {
-		this(Arrays.asList(sourceInfo), value, errorMessage, fieldNames);
+		this(Arrays.asList(sourceRef), value, errorMessage, fieldNames);
 	}
 
-	public InvalidFieldValueIssue(List<DataObjectSourceInfo> sourceInfos,
+	public InvalidFieldValueIssue(List<DataObjectSourceRef> sourceRefs,
 			String value, String errorMessage, String... fieldNames) {
-		this.sourceInfos = sourceInfos.stream()
-				.map(si -> new SourceInfoWithFields(si, fieldNames)).sorted()
+		this.sourceRefs = sourceRefs.stream()
+				.map(si -> new SourceRefWithFields(si, fieldNames)).sorted()
 				.collect(Collectors.toList());
 		this.fieldNames = fieldNames;
 		this.value = value;
@@ -41,8 +41,8 @@ public class InvalidFieldValueIssue implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
-		return sourceInfos;
+	public List<SourceRefWithFields> getSourceRefs() {
+		return sourceRefs;
 	}
 
 	@Override

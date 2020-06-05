@@ -3,24 +3,24 @@ package com.mecatran.gtfsvtor.reporting.issues;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Useless timepoint")
 public class UselessTimepointWarning implements ReportIssue {
 
 	private GtfsStopTime stopTime;
-	private SourceInfoWithFields sourceInfo;
+	private SourceRefWithFields sourceRef;
 
 	public UselessTimepointWarning(GtfsStopTime stopTime,
-			DataObjectSourceInfo sourceInfo) {
+			DataObjectSourceRef sourceRef) {
 		this.stopTime = stopTime;
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, "pickup_type",
+		this.sourceRef = new SourceRefWithFields(sourceRef, "pickup_type",
 				"drop_off_type", "timepoint");
 	}
 
@@ -28,8 +28,8 @@ public class UselessTimepointWarning implements ReportIssue {
 		return stopTime;
 	}
 
-	public List<SourceInfoWithFields> getSourceInfos() {
-		return Arrays.asList(sourceInfo);
+	public List<SourceRefWithFields> getSourceRefs() {
+		return Arrays.asList(sourceRef);
 	}
 
 	@Override

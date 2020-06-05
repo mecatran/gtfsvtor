@@ -3,18 +3,26 @@ package com.mecatran.gtfsvtor.reporting.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader.PostLoadable;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
-public class InMemoryReportLog implements ReportSink, ReviewReport {
+public class InMemoryReportLog
+		implements ReportSink, ReviewReport, PostLoadable {
 
 	private List<ReportIssue> reportItems = new ArrayList<>();
 	private ListMultimap<Class<? extends ReportIssue>, ReportIssue> reportIssuesByType = ArrayListMultimap
@@ -25,6 +33,8 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 	// Note: we do not use this threshold for now.
 	private int maxIssuesPerCategory = Integer.MAX_VALUE;
 	private boolean printIssues = false;
+	private Map<DataObjectSourceRef, DataObjectSourceInfo> loadedSourceInfos = new HashMap<>();
+	private Set<DataObjectSourceRef> unloadedSourceRefs = new HashSet<>();
 
 	public InMemoryReportLog() {
 	}
@@ -51,11 +61,47 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 				reportItems.add(issue);
 				reportIssuesByType.put(issue.getClass(), issue);
 				reportIssuesBySeverity.put(issue.getSeverity(), issue);
+				/* Add each new unknown source info ref as unloaded */
+				issue.getSourceRefs().stream()
+						.map(refwf -> refwf.getSourceRef())
+						.filter(ref -> !loadedSourceInfos.containsKey(ref))
+						.forEach(unloadedSourceRefs::add);
 				if (printIssues) {
-					System.err.println(PlainTextIssueFormatter.format(issue));
+					System.err.println(
+							PlainTextIssueFormatter.format(null, issue));
 				}
 			}
 		}
+	}
+
+	@Override
+	public void report(ReportIssue issue, DataObjectSourceInfo... infoList) {
+		List<SourceRefWithFields> refs = issue.getSourceRefs();
+		if (refs.size() != infoList.length)
+			throw new IllegalArgumentException("Trying to report an issue with "
+					+ issue.getSourceRefs().size() + " refs, but with "
+					+ infoList.length
+					+ " source info. Both sizes should match!");
+		/*
+		 * We have to store the infos first, to prevent the report(issue) to
+		 * create a loaded source info.
+		 */
+		for (int i = 0; i < infoList.length; i++) {
+			DataObjectSourceInfo info = infoList[i];
+			if (info == null)
+				continue; // This is perfectly legal
+			DataObjectSourceRef ref = refs.get(i).getSourceRef();
+			if (ref.getLineNumber() != info.getLineNumber() || !ref
+					.getTableName().equals(info.getTable().getTableName())) {
+				throw new IllegalArgumentException("Ref #" + i + " " + ref
+						+ " does not match info " + info + "!");
+			}
+			loadedSourceInfos.put(ref, info);
+			// This line should not be necessary,
+			// but just in case...
+			unloadedSourceRefs.remove(ref);
+		}
+		this.report(issue);
 	}
 
 	@Override
@@ -75,5 +121,28 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 	public int issuesCountOfSeverity(ReportIssueSeverity severity) {
 		return reportIssuesBySeverity.asMap()
 				.getOrDefault(severity, Collections.emptyList()).size();
+	}
+
+	@Override
+	public DataObjectSourceInfo getSourceInfo(DataObjectSourceRef ref) {
+		// TODO In case the source info is not found, return a dummy info
+		DataObjectSourceInfo info = loadedSourceInfos.get(ref);
+		if (info == null) {
+			throw new IllegalArgumentException(
+					"Source info not found for " + ref);
+		}
+		return info;
+	}
+
+	@Override
+	public Stream<DataObjectSourceRef> getSourceRefsToPostLoad() {
+		return unloadedSourceRefs.stream();
+	}
+
+	@Override
+	public void addSourceInfo(DataObjectSourceRef ref,
+			DataObjectSourceInfo info) {
+		loadedSourceInfos.put(ref, info);
+		unloadedSourceRefs.remove(ref);
 	}
 }

@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.validation;
 
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 
@@ -16,6 +17,8 @@ public interface StreamingValidator<T extends GtfsObject<?>> {
 	public interface Context {
 
 		public ReportSink getReportSink();
+
+		public DataObjectSourceRef getSourceRef();
 
 		public DataObjectSourceInfo getSourceInfo();
 

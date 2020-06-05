@@ -1,6 +1,10 @@
 package com.mecatran.gtfsvtor.reporting;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 
 public interface ReviewReport {
 
@@ -23,5 +27,9 @@ public interface ReviewReport {
 	 * @return The total number of issues so far of this severity.
 	 */
 	public int issuesCountOfSeverity(ReportIssueSeverity severity);
+
+	/**
+	 */
+	public DataObjectSourceInfo getSourceInfo(DataObjectSourceRef ref);
 
 }

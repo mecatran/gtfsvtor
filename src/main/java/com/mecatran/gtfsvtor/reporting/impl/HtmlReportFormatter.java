@@ -45,13 +45,14 @@ public class HtmlReportFormatter implements ReportFormatter {
 		formatHeader();
 		formatSummary(clsReport);
 		for (IssuesCategory category : clsReport.getCategories()) {
-			formatCategory(category);
+			formatCategory(report, category);
 		}
 		formatFooter();
 		writer.close();
 	}
 
-	private void formatCategory(IssuesCategory category) throws IOException {
+	private void formatCategory(ReviewReport report, IssuesCategory category)
+			throws IOException {
 		html.h2();
 		html.text(category.getCategoryName());
 		for (CategoryCounter cc : category.getSeverityCounters()) {
@@ -86,28 +87,28 @@ public class HtmlReportFormatter implements ReportFormatter {
 			html.end(); // ul
 		}
 		for (IssuesSubCategory subCategory : category.getSubCategories()) {
-			formatSubCategory(subCategory);
+			formatSubCategory(report, subCategory);
 		}
 	}
 
-	private void formatSubCategory(IssuesSubCategory subCategory)
-			throws IOException {
+	private void formatSubCategory(ReviewReport report,
+			IssuesSubCategory subCategory) throws IOException {
 		html.div().classAttr("subcategory");
-		if (!subCategory.getSourceInfos().isEmpty()) {
-			formatSourceInfos(subCategory);
+		if (!subCategory.getSourceRefs().isEmpty()) {
+			formatSourceInfos(report, subCategory);
 		}
 		formatIssueList(subCategory.getIssues());
 		html.end(); // div.subcategory
 	}
 
-	private void formatSourceInfos(IssuesSubCategory subCategory)
-			throws IOException {
+	private void formatSourceInfos(ReviewReport report,
+			IssuesSubCategory subCategory) throws IOException {
 		String lastTableName = null;
 		boolean inTable = false;
-		for (int sourceInfoIndex = 0; sourceInfoIndex < subCategory
-				.getSourceInfos().size(); sourceInfoIndex++) {
-			DataObjectSourceInfo sourceInfo = subCategory.getSourceInfos()
-					.get(sourceInfoIndex);
+		for (int sourceRefIndex = 0; sourceRefIndex < subCategory
+				.getSourceRefs().size(); sourceRefIndex++) {
+			DataObjectSourceInfo sourceInfo = report.getSourceInfo(
+					subCategory.getSourceRefs().get(sourceRefIndex));
 			String tableName = sourceInfo.getTable().getTableName();
 			if (!tableName.equals(lastTableName)) {
 				// Output table header
@@ -141,12 +142,13 @@ public class HtmlReportFormatter implements ReportFormatter {
 				html.td().classAttr("linenr")
 						.text("L" + sourceInfo.getLineNumber()).end();
 				List<String> headers = sourceInfo.getTable().getHeaderColumns();
-				for (int i = 0; i < sourceInfo.getFields().size(); i++) {
-					String fieldValue = sourceInfo.getFields().get(i);
+				List<String> fields = sourceInfo.getFields();
+				for (int i = 0; i < fields.size(); i++) {
+					String fieldValue = fields.get(i);
 					String header = i < headers.size() ? headers.get(i) : "-";
 					html.td();
 					ReportIssueSeverity fieldSeverity = subCategory
-							.getFieldSeverity(sourceInfoIndex, header);
+							.getFieldSeverity(sourceRefIndex, header);
 					if (fieldSeverity != null)
 						html.classAttr(fieldSeverity.toString());
 					html.text(fieldValue);
@@ -166,7 +168,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 			html.tr();
 			html.td().classAttr("severity " + severity.toString())
 					.text(severity.toString()).end();
-			List<String> fieldNames = issue.getSourceInfos().stream()
+			List<String> fieldNames = issue.getSourceRefs().stream()
 					.flatMap(si -> si.getFieldNames().stream()).sorted()
 					.distinct().collect(Collectors.toList());
 			html.td().classAttr("fieldname").text(String.join(", ", fieldNames))

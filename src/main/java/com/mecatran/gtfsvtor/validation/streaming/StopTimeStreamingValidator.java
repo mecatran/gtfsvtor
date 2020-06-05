@@ -33,9 +33,9 @@ public class StopTimeStreamingValidator
 		if (stopTime.getStopSequence() != null
 				&& stopTime.getStopSequence().getSequence() < 0)
 			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceInfo(), "stop_sequence",
+					context.getSourceRef(), "stop_sequence",
 					Integer.toString(stopTime.getStopSequence().getSequence()),
-					"positive integer"));
+					"positive integer"), context.getSourceInfo());
 
 		ReadOnlyDao dao = context.getPartialDao();
 		// stoptime->trip reference
@@ -43,9 +43,10 @@ public class StopTimeStreamingValidator
 			GtfsTrip trip = dao.getTrip(stopTime.getTripId());
 			if (trip == null) {
 				reportSink.report(
-						new InvalidReferenceError(context.getSourceInfo(),
+						new InvalidReferenceError(context.getSourceRef(),
 								"trip_id", stopTime.getTripId().getInternalId(),
-								GtfsTrip.TABLE_NAME, "trip_id"));
+								GtfsTrip.TABLE_NAME, "trip_id"),
+						context.getSourceInfo());
 			}
 		}
 		if (stopTime.getStopId() != null) {
@@ -53,35 +54,43 @@ public class StopTimeStreamingValidator
 			// stoptime->stop reference
 			if (stop == null) {
 				reportSink.report(
-						new InvalidReferenceError(context.getSourceInfo(),
+						new InvalidReferenceError(context.getSourceRef(),
 								"stop_id", stopTime.getStopId().getInternalId(),
-								GtfsStop.TABLE_NAME, "stop_id"));
+								GtfsStop.TABLE_NAME, "stop_id"),
+						context.getSourceInfo());
 			} else {
 				// stop type
 				if (stop.getType() != GtfsStopType.STOP) {
-					reportSink.report(new WrongStopTimeStopTypeError(
-							context.getSourceInfo(), stopTime, stop));
+					reportSink.report(
+							new WrongStopTimeStopTypeError(
+									context.getSourceRef(), stopTime, stop),
+							context.getSourceInfo());
 				}
 			}
 		}
 		// Departure/arrival should be either set or not
 		if (stopTime.getDepartureTime() == null
 				&& stopTime.getArrivalTime() != null) {
-			reportSink.report(new MissingMandatoryValueError(
-					context.getSourceInfo(), "departure_time"));
+			reportSink.report(
+					new MissingMandatoryValueError(context.getSourceRef(),
+							"departure_time"),
+					context.getSourceInfo());
 		}
 		if (stopTime.getDepartureTime() != null
 				&& stopTime.getArrivalTime() == null) {
-			reportSink.report(new MissingMandatoryValueError(
-					context.getSourceInfo(), "arrival_time"));
+			reportSink.report(
+					new MissingMandatoryValueError(context.getSourceRef(),
+							"arrival_time"),
+					context.getSourceInfo());
 		}
 		// Departure should be after arrival
 		if (stopTime.getDepartureTime() != null
 				&& stopTime.getArrivalTime() != null
 				&& stopTime.getDepartureTime()
 						.compareTo(stopTime.getArrivalTime()) < 0) {
-			reportSink.report(new TimeTravelAtStopError(stopTime,
-					context.getSourceInfo()));
+			reportSink.report(
+					new TimeTravelAtStopError(stopTime, context.getSourceRef()),
+					context.getSourceInfo());
 		}
 		// No pickup/dropoff and no timepoint
 		if (stopTime.getNonNullDropoffType() == GtfsDropoffType.NO_DROPOFF
@@ -89,7 +98,7 @@ public class StopTimeStreamingValidator
 				&& stopTime
 						.getNonNullTimepoint() == GtfsTimepoint.APPROXIMATE) {
 			reportSink.report(new UselessTimepointWarning(stopTime,
-					context.getSourceInfo()));
+					context.getSourceRef()), context.getSourceInfo());
 		}
 	}
 }

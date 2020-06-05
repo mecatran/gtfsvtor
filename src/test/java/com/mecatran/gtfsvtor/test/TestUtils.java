@@ -7,12 +7,14 @@ import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
 import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
+import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
+import com.mecatran.gtfsvtor.validation.DefaultTripTimesValidator;
 import com.mecatran.gtfsvtor.validation.impl.DefaultDaoValidatorContext;
 import com.mecatran.gtfsvtor.validation.impl.DefaultValidatorConfig;
 
@@ -54,6 +56,14 @@ public class TestUtils {
 		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
 				.withVerbose(true);
 		daoValidator.validate(context);
+		DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
+				config).withVerbose(true);
+		tripTimesValidator.scanValidate(context);
+
+		SourceInfoDataReloader sourceInfoReloader = new SourceInfoDataReloader(
+				dataSource).withVerbose(true);
+		sourceInfoReloader.loadSourceInfos(report);
+
 		System.out.println(String.format(
 				"Validation result for '%s': %d INFO, %d WARNING, %d ERROR, %d CRITICAL",
 				gtfsFileOrDirectory,

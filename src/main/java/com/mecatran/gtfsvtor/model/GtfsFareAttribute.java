@@ -4,10 +4,8 @@ import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
 public class GtfsFareAttribute
-		implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+		implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "fare_attributes.txt";
 
@@ -19,15 +17,15 @@ public class GtfsFareAttribute
 	private GtfsAgency.Id agencyId;
 	private Integer transferDuration;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	public GtfsFareAttribute.Id getId() {
 		return id;
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public Double getPrice() {
@@ -91,8 +89,8 @@ public class GtfsFareAttribute
 			fareAttribute.id = id(id);
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			fareAttribute.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			fareAttribute.sourceLineNumber = lineNumber;
 			return this;
 		}
 

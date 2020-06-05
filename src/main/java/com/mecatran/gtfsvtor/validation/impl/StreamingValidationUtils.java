@@ -29,16 +29,20 @@ public class StreamingValidationUtils {
 	public static <T> void checkNonNull(FieldGetter<T> getter, String fieldName,
 			StreamingValidator.Context context) {
 		if (getter.get() == null) {
-			context.getReportSink().report(new MissingMandatoryValueError(
-					context.getSourceInfo(), fieldName));
+			context.getReportSink()
+					.report(new MissingMandatoryValueError(
+							context.getSourceRef(), fieldName),
+							context.getSourceInfo());
 		}
 	}
 
 	public static <T> void checkOptionalPresent(FieldGetter<Optional<T>> getter,
 			String fieldName, StreamingValidator.Context context) {
 		if (!getter.get().isPresent()) {
-			context.getReportSink().report(new MissingMandatoryValueError(
-					context.getSourceInfo(), fieldName));
+			context.getReportSink()
+					.report(new MissingMandatoryValueError(
+							context.getSourceRef(), fieldName),
+							context.getSourceInfo());
 		}
 	}
 
@@ -47,8 +51,9 @@ public class StreamingValidationUtils {
 			String errorMessage) {
 		if (predicate.test(t)) {
 			context.getReportSink()
-					.report(new InvalidFieldValueIssue(context.getSourceInfo(),
-							t.toString(), errorMessage, fieldName));
+					.report(new InvalidFieldValueIssue(context.getSourceRef(),
+							t.toString(), errorMessage, fieldName),
+							context.getSourceInfo());
 		}
 	}
 
@@ -90,20 +95,24 @@ public class StreamingValidationUtils {
 			return;
 		if (!predicate.test(value)) {
 			context.getReportSink()
-					.report(new InvalidFieldFormatError(context.getSourceInfo(),
-							fieldName, value.toString(), expectedFormat));
+					.report(new InvalidFieldFormatError(context.getSourceRef(),
+							fieldName, value.toString(), expectedFormat),
+							context.getSourceInfo());
 		}
 	}
 
 	public static void checkCoordinates(FieldGetter<Double> getterLat,
-			FieldGetter<Double> getterLon, String fieldNameLat, String fieldNameLon,
-			GeoBounds boundingBox, StreamingValidator.Context context) {
+			FieldGetter<Double> getterLon, String fieldNameLat,
+			String fieldNameLon, GeoBounds boundingBox,
+			StreamingValidator.Context context) {
 		Double lat = getterLat.get();
 		Double lon = getterLon.get();
 		if (!boundingBox.contains(lat, lon)) {
-			context.getReportSink().report(
-					new InvalidCoordinateError(context.getSourceInfo(), fieldNameLat,
-							fieldNameLon, new GeoCoordinates(lat, lon), boundingBox));
+			context.getReportSink()
+					.report(new InvalidCoordinateError(context.getSourceRef(),
+							fieldNameLat, fieldNameLon,
+							new GeoCoordinates(lat, lon), boundingBox),
+							context.getSourceInfo());
 		}
 	}
 }

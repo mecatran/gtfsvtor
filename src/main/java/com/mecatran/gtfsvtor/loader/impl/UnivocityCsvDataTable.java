@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.impl;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,7 +28,7 @@ import com.mecatran.gtfsvtor.loader.TableSourceInfo;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 
-public class UnivocityCsvDataTable implements DataTable {
+public class UnivocityCsvDataTable implements DataTable, Closeable {
 
 	private String tableName;
 	private CsvParser csvParser;
@@ -146,8 +147,19 @@ public class UnivocityCsvDataTable implements DataTable {
 	}
 
 	@Override
+	public String getTableName() {
+		return tableName;
+	}
+
+	@Override
 	public void close() throws IOException {
-		// No-op, auto-close enabled
+		/*
+		 * Need to explicitly stop parsing, as auto-close require us to parse
+		 * until the end, which is not the case when post-loading source infos
+		 * (we break early at the last line to reload, which is almost never the
+		 * last line).
+		 */
+		csvParser.stopParsing();
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 
 /**
  * An indexed read-only DAO for GTFS data.
@@ -35,7 +36,20 @@ public interface IndexedReadOnlyDao extends ReadOnlyDao {
 
 	public Stream<GtfsStop> getBoardingAreasOfStop(GtfsStop.Id stop);
 
+	/**
+	 * Do not use this method in a DaoValidator, if you plan to scan the stop
+	 * times of all trips. Better use the streaming capabilities of a
+	 * TripTimesValidator implementation when possible.
+	 *
+	 * @param tripId
+	 * @return The list of stop times for this trip.
+	 */
 	public List<GtfsStopTime> getStopTimesOfTrip(GtfsTrip.Id tripId);
+
+	/**
+	 * @return A stream of trip with their stop times, ordered by route.
+	 */
+	public Stream<GtfsTripAndTimes> getTripsAndTimes();
 
 	public List<GtfsShapePoint> getPointsOfShape(GtfsShape.Id shapeId);
 

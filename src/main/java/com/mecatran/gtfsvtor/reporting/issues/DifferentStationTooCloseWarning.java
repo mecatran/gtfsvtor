@@ -9,14 +9,14 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(categoryName = "Different station too close", severity = ReportIssueSeverity.WARNING)
 public class DifferentStationTooCloseWarning implements ReportIssue {
 
 	private GtfsStop stop, station, otherStation;
 	private double distanceMeters;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public DifferentStationTooCloseWarning(GtfsStop stop, GtfsStop station,
 			GtfsStop otherStation, double distanceMeters) {
@@ -25,11 +25,11 @@ public class DifferentStationTooCloseWarning implements ReportIssue {
 		this.otherStation = otherStation;
 		this.distanceMeters = distanceMeters;
 		this.sourceInfos = Arrays.asList(
-				new SourceInfoWithFields(stop.getSourceInfo(), "stop_lat",
+				new SourceRefWithFields(stop.getSourceRef(), "stop_lat",
 						"stop_lon"),
-				new SourceInfoWithFields(station.getSourceInfo(), "stop_lat",
+				new SourceRefWithFields(station.getSourceRef(), "stop_lat",
 						"stop_lon"),
-				new SourceInfoWithFields(otherStation.getSourceInfo(),
+				new SourceRefWithFields(otherStation.getSourceRef(),
 						"stop_lat", "stop_lon"));
 		Collections.sort(this.sourceInfos);
 	}
@@ -51,7 +51,7 @@ public class DifferentStationTooCloseWarning implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

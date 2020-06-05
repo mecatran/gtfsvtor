@@ -12,6 +12,7 @@ import com.mecatran.gtfsvtor.loader.DataRow;
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
 import com.mecatran.gtfsvtor.loader.DataTable;
 import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
@@ -108,7 +109,7 @@ public class GtfsDataLoader implements DataLoader {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
 			GtfsFeedInfo.Builder builder = new GtfsFeedInfo.Builder();
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withFeedPublisherName(
 							erow.getString("feed_publisher_name"))
 					.withFeedPublisherUrl(erow.getString("feed_publisher_url"))
@@ -144,7 +145,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsAgency.Builder builder = new GtfsAgency.Builder(
 					erow.getString("agency_id"));
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withName(erow.getString("agency_name", true))
 					.withUrl(erow.getString("agency_url", true))
 					.withTimezone(erow.getTimeZone("agency_timezone", true))
@@ -175,7 +176,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsRoute.Builder builder = new GtfsRoute.Builder(
 					erow.getString("route_id"));
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withAgencyId(GtfsAgency
 							.id(erow.getString("agency_id", "", false)))
 					.withType(GtfsRouteType
@@ -210,7 +211,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsLevel.Builder builder = new GtfsLevel.Builder(
 					erow.getString("level_id"));
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withIndex(erow.getDouble("level_index", true))
 					.withName(erow.getString("level_name"));
 			GtfsLevel level = builder.build();
@@ -236,7 +237,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsStop.Builder builder = new GtfsStop.Builder(
 					erow.getString("stop_id"));
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withType(erow.getStopType("location_type"))
 					.withCode(erow.getString("stop_code"))
 					.withName(erow.getString("stop_name", true))
@@ -278,7 +279,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsCalendar.Builder builder = new GtfsCalendar.Builder(
 					erow.getString("service_id"));
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withDow(erow.getBoolean("monday", true),
 							erow.getBoolean("tuesday", true),
 							erow.getBoolean("wednesday", true),
@@ -310,7 +311,7 @@ public class GtfsDataLoader implements DataLoader {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
 			GtfsCalendarDate.Builder builder = new GtfsCalendarDate.Builder();
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withCalendarId(
 							GtfsCalendar.id(erow.getString("service_id")))
 					.withDate(erow.getLogicalDate("date", true))
@@ -376,7 +377,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsTrip.Builder builder = new GtfsTrip.Builder(
 					erow.getString("trip_id"));
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withRouteId(GtfsRoute.id(erow.getString("route_id")))
 					.withServiceId(
 							GtfsCalendar.id(erow.getString("service_id")))
@@ -457,7 +458,7 @@ public class GtfsDataLoader implements DataLoader {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
 			GtfsFrequency.Builder builder = new GtfsFrequency.Builder();
-			builder.withSourceInfo(row.getSourceInfo())
+			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withTripId(GtfsTrip.id(erow.getString("trip_id")))
 					.withStartTime(erow.getLogicalTime("start_time", true))
 					.withEndTime(erow.getLogicalTime("end_time", true))
@@ -487,7 +488,8 @@ public class GtfsDataLoader implements DataLoader {
 			GtfsTransfer.Builder builder = new GtfsTransfer.Builder();
 			builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
 					.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
-					.withFromRouteId(GtfsRoute.id(erow.getString("from_route_id")))
+					.withFromRouteId(
+							GtfsRoute.id(erow.getString("from_route_id")))
 					.withToRouteId(GtfsRoute.id(erow.getString("to_route_id")))
 					.withFromTripId(GtfsTrip.id(erow.getString("from_trip_id")))
 					.withToTripId(GtfsTrip.id(erow.getString("to_trip_id")))
@@ -556,7 +558,7 @@ public class GtfsDataLoader implements DataLoader {
 					erow.getString("fare_id"));
 			builder.withPrice(erow.getDouble("price", true))
 					.withCurrencyType(erow.getCurrency("currency_type"))
-					.withSourceInfo(row.getSourceInfo())
+					.withSourceLineNumber(table.getCurrentLineNumber())
 					.withPaymentMethod(erow.getPaymentMethod("payment_method"))
 					.withTransfers(erow.getNumTransfers("transfers"))
 					.withAgencyId(GtfsAgency.id(erow.getString("agency_id")))
@@ -584,7 +586,7 @@ public class GtfsDataLoader implements DataLoader {
 					context.getReportSink());
 			GtfsFareRule.Builder builder = new GtfsFareRule.Builder();
 			builder.withFareId(GtfsFareAttribute.id(erow.getString("fare_id")))
-					.withSourceInfo(row.getSourceInfo())
+					.withSourceLineNumber(table.getCurrentLineNumber())
 					.withRouteId(GtfsRoute.id(erow.getString("route_id")))
 					.withOriginId(GtfsZone.id(erow.getString("origin_id")))
 					.withDestinationId(
@@ -623,12 +625,11 @@ public class GtfsDataLoader implements DataLoader {
 		}
 		for (String unknownColumn : table.getUnreadColumnHeaders()) {
 			reportSink.report(new UnrecognizedColumnInfo(
-					new DataObjectSourceInfoImpl(table.getTableSourceInfo()),
+					new DataObjectSourceRef(table.getTableName(), 1L),
 					unknownColumn));
 			if (unknownColumn.chars().anyMatch(c -> c == 0xFFFD || c == 0)) {
 				reportSink.report(new InvalidEncodingError(
-						new DataObjectSourceInfoImpl(
-								table.getTableSourceInfo()),
+						new DataObjectSourceRef(table.getTableName(), 1L),
 						unknownColumn, unknownColumn));
 			}
 		}
@@ -653,21 +654,18 @@ public class GtfsDataLoader implements DataLoader {
 		for (String columnHeader : table.getColumnHeaders()) {
 			if (headerSet.contains(columnHeader)) {
 				reportSink
-						.report(new DuplicatedColumnError(
-								new DataObjectSourceInfoImpl(
-										table.getTableSourceInfo()),
-								columnHeader));
+						.report(new DuplicatedColumnError(table.getSourceRef(),
+								columnHeader), table.getSourceInfo());
 			} else {
 				headerSet.add(columnHeader);
 			}
 		}
 		for (String columnHeader : columnHeaders) {
 			if (!headerSet.contains(columnHeader)) {
-				reportSink
-						.report(new MissingMandatoryColumnError(
-								new DataObjectSourceInfoImpl(
-										table.getTableSourceInfo()),
-								columnHeader));
+				reportSink.report(
+						new MissingMandatoryColumnError(table.getSourceRef(),
+								columnHeader),
+						table.getSourceInfo());
 			}
 		}
 	}
@@ -692,16 +690,21 @@ public class GtfsDataLoader implements DataLoader {
 			int numberOfHeaderColumns = dataTable.getColumnHeaders().size();
 			if (row.getRecordCount() != numberOfHeaderColumns) {
 				reportSink.report(new InconsistentNumberOfFieldsWarning(
-						row.getSourceInfo(), row.getRecordCount(),
+						row.getSourceRef(), row.getRecordCount(),
 						numberOfHeaderColumns));
 			}
 		}
 
 		@Override
-		public DataObjectSourceInfo getSourceInfo() {
+		public DataObjectSourceRef getSourceRef() {
 			return row == null
-					? new DataObjectSourceInfoImpl(
-							dataTable.getTableSourceInfo())
+					? new DataObjectSourceRef(dataTable.getTableName(), 1L)
+					: row.getSourceRef();
+		}
+
+		@Override
+		public DataObjectSourceInfo getSourceInfo() {
+			return row == null ? dataTable.getSourceInfo()
 					: row.getSourceInfo();
 		}
 

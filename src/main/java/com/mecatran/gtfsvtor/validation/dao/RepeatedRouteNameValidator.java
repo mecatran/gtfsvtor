@@ -32,7 +32,7 @@ public class RepeatedRouteNameValidator implements DaoValidator {
 				.filter(kv -> kv.getValue().size() >= 2).forEach(kv -> {
 					reportSink.report(new InvalidFieldValueIssue(
 							kv.getValue().stream().map(
-									route -> route.getSourceInfo())
+									route -> route.getSourceRef())
 									.collect(Collectors.toList()),
 							kv.getKey().getFirst() + " / "
 									+ kv.getKey().getSecond(),

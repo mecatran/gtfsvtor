@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
-public class GtfsTrip implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+public class GtfsTrip implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "trips.txt";
 
@@ -21,15 +19,15 @@ public class GtfsTrip implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 	private GtfsWheelchairAccess wheelchairAccessible;
 	private GtfsBikeAccess bikesAllowed;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	public GtfsTrip.Id getId() {
 		return id;
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsRoute.Id getRouteId() {
@@ -113,8 +111,8 @@ public class GtfsTrip implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 			trip.id = id(id);
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			trip.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			trip.sourceLineNumber = lineNumber;
 			return this;
 		}
 

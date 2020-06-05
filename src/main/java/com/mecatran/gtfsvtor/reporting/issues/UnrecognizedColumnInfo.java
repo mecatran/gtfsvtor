@@ -3,28 +3,28 @@ package com.mecatran.gtfsvtor.reporting.issues;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.INFO)
 public class UnrecognizedColumnInfo implements ReportIssue {
 
-	private SourceInfoWithFields sourceInfo;
+	private SourceRefWithFields sourceRef;
 	private String columnName;
 
-	public UnrecognizedColumnInfo(DataObjectSourceInfo sourceInfo,
+	public UnrecognizedColumnInfo(DataObjectSourceRef sourceRef,
 			String columnName) {
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, columnName);
+		this.sourceRef = new SourceRefWithFields(sourceRef, columnName);
 		this.columnName = columnName;
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
-		return Arrays.asList(sourceInfo);
+	public List<SourceRefWithFields> getSourceRefs() {
+		return Arrays.asList(sourceRef);
 	}
 
 	@Override

@@ -3,9 +3,7 @@ package com.mecatran.gtfsvtor.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
-public class GtfsLevel implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+public class GtfsLevel implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "levels.txt";
 
@@ -13,15 +11,15 @@ public class GtfsLevel implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 	private Double index;
 	private String name;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	public GtfsLevel.Id getId() {
 		return id;
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public Double getIndex() {
@@ -67,8 +65,8 @@ public class GtfsLevel implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 			level.id = id(id);
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			level.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			level.sourceLineNumber = lineNumber;
 			return this;
 		}
 

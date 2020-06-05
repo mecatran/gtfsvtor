@@ -9,7 +9,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(categoryName = "Stops too close")
 public class StopTooCloseIssue implements ReportIssue {
@@ -17,7 +17,7 @@ public class StopTooCloseIssue implements ReportIssue {
 	private GtfsStop stop1, stop2;
 	private double distanceMeters;
 	private ReportIssueSeverity severity;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public StopTooCloseIssue(GtfsStop stop1, GtfsStop stop2,
 			double distanceMeters, ReportIssueSeverity severity) {
@@ -26,9 +26,9 @@ public class StopTooCloseIssue implements ReportIssue {
 		this.distanceMeters = distanceMeters;
 		this.severity = severity;
 		this.sourceInfos = Arrays.asList(
-				new SourceInfoWithFields(stop1.getSourceInfo(), "stop_lat",
+				new SourceRefWithFields(stop1.getSourceRef(), "stop_lat",
 						"stop_lon"),
-				new SourceInfoWithFields(stop2.getSourceInfo(), "stop_lat",
+				new SourceRefWithFields(stop2.getSourceRef(), "stop_lat",
 						"stop_lon"));
 		Collections.sort(this.sourceInfos);
 	}
@@ -52,7 +52,7 @@ public class StopTooCloseIssue implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

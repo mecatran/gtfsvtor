@@ -3,26 +3,26 @@ package com.mecatran.gtfsvtor.reporting.issues;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.ERROR)
 public class InvalidReferenceError implements ReportIssue {
 
-	private SourceInfoWithFields sourceInfo;
+	private SourceRefWithFields sourceRef;
 	private String fieldName;
 	private String value; // Should we use a GtfsId<?,?> ?
 	private String refTableName;
 	private String refFieldName;
 
-	public InvalidReferenceError(DataObjectSourceInfo sourceInfo,
+	public InvalidReferenceError(DataObjectSourceRef sourceRef,
 			String fieldName, String value, String refTableName,
 			String refFieldName) {
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldName);
+		this.sourceRef = new SourceRefWithFields(sourceRef, fieldName);
 		this.fieldName = fieldName;
 		this.value = value;
 		this.refTableName = refTableName;
@@ -30,8 +30,8 @@ public class InvalidReferenceError implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
-		return Arrays.asList(sourceInfo);
+	public List<SourceRefWithFields> getSourceRefs() {
+		return Arrays.asList(sourceRef);
 	}
 
 	@Override

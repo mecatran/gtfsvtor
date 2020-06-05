@@ -25,27 +25,33 @@ public class TripStreamingValidator implements StreamingValidator<GtfsTrip> {
 		// Check trip->route reference
 		if (trip.getRouteId() != null
 				&& dao.getRoute(trip.getRouteId()) == null) {
-			reportSink.report(new InvalidReferenceError(trip.getSourceInfo(),
-					"route_id", trip.getRouteId().getInternalId(),
-					GtfsRoute.TABLE_NAME, "route_id"));
+			reportSink.report(
+					new InvalidReferenceError(context.getSourceRef(),
+							"route_id", trip.getRouteId().getInternalId(),
+							GtfsRoute.TABLE_NAME, "route_id"),
+					context.getSourceInfo());
 		}
 		// Check trip->calendar reference
 		if (trip.getServiceId() != null
 				&& dao.getCalendar(trip.getServiceId()) == null
 				&& dao.getCalendarDates(trip.getServiceId()).count() == 0) {
-			reportSink.report(new InvalidReferenceError(trip.getSourceInfo(),
-					"service_id",
-					trip.getServiceId() == null ? null
-							: trip.getServiceId().getInternalId(),
-					GtfsCalendar.TABLE_NAME, "service_id"));
+			reportSink.report(
+					new InvalidReferenceError(context.getSourceRef(),
+							"service_id",
+							trip.getServiceId() == null ? null
+									: trip.getServiceId().getInternalId(),
+							GtfsCalendar.TABLE_NAME, "service_id"),
+					context.getSourceInfo());
 		}
 		// Check trip->shape reference
 		if (trip.getShapeId() != null && !dao.hasShape(trip.getShapeId())) {
 			reportSink.report(
-					new InvalidReferenceError(trip.getSourceInfo(), "shape_id",
+					new InvalidReferenceError(context.getSourceRef(),
+							"shape_id",
 							trip.getShapeId() == null ? null
 									: trip.getShapeId().getInternalId(),
-							GtfsShapePoint.TABLE_NAME, "shape_id"));
+							GtfsShapePoint.TABLE_NAME, "shape_id"),
+					context.getSourceInfo());
 		}
 	}
 }

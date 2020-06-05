@@ -23,18 +23,18 @@ public class FrequencyStreamingValidator
 		// Check frequency->trip reference
 		if (frequency.getTripId() != null
 				&& dao.getTrip(frequency.getTripId()) == null) {
-			reportSink.report(new InvalidReferenceError(context.getSourceInfo(),
+			reportSink.report(new InvalidReferenceError(context.getSourceRef(),
 					"trip_id", frequency.getTripId().getInternalId(),
-					GtfsTrip.TABLE_NAME, "trip_id"));
+					GtfsTrip.TABLE_NAME, "trip_id"), context.getSourceInfo());
 		}
 		// Check start_time < end_time
 		if (frequency.getStartTime() != null && frequency.getEndTime() != null
 				&& frequency.getStartTime()
 						.compareTo(frequency.getEndTime()) > 0) {
 			reportSink.report(new InvalidFieldValueIssue(
-					context.getSourceInfo(), frequency.getEndTime().toString(),
+					context.getSourceRef(), frequency.getEndTime().toString(),
 					"end time should be greater or equal than start time",
-					"end_time"));
+					"end_time"), context.getSourceInfo());
 		}
 	}
 }

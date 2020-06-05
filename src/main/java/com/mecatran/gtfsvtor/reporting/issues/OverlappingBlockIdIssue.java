@@ -12,7 +12,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Overlapping trip in block")
 public class OverlappingBlockIdIssue implements ReportIssue {
@@ -21,7 +21,7 @@ public class OverlappingBlockIdIssue implements ReportIssue {
 	private GtfsTrip trip1, trip2;
 	private GtfsLogicalTime trip1Start, trip1End, trip2Start, trip2End;
 	private OverlappingCalendarInfo calendarOverlap;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public OverlappingBlockIdIssue(GtfsBlockId blockId, GtfsTrip trip1,
 			GtfsTrip trip2, GtfsLogicalTime trip1Start,
@@ -36,9 +36,9 @@ public class OverlappingBlockIdIssue implements ReportIssue {
 		this.trip2End = trip2End;
 		this.calendarOverlap = calendarOverlap;
 		this.sourceInfos = Arrays.asList(
-				new SourceInfoWithFields(trip1.getSourceInfo(), "trip_id",
+				new SourceRefWithFields(trip1.getSourceRef(), "trip_id",
 						"block_id"),
-				new SourceInfoWithFields(trip2.getSourceInfo(), "trip_id",
+				new SourceRefWithFields(trip2.getSourceRef(), "trip_id",
 						"block_id"));
 		Collections.sort(this.sourceInfos);
 	}
@@ -60,7 +60,7 @@ public class OverlappingBlockIdIssue implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

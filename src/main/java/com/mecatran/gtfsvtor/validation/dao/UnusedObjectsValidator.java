@@ -7,8 +7,6 @@ import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsShape;
-import com.mecatran.gtfsvtor.model.GtfsStop;
-import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
@@ -27,7 +25,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 		dao.getAgencies().forEach(agency -> {
 			if (dao.getRoutesOfAgency(agency.getId()).count() == 0) {
 				reportSink.report(new UnusedObjectWarning("agency",
-						agency.getId(), agency.getSourceInfo(), "agency_id"));
+						agency.getId(), agency.getSourceRef(), "agency_id"));
 			}
 		});
 
@@ -35,20 +33,19 @@ public class UnusedObjectsValidator implements DaoValidator {
 		dao.getRoutes().forEach(route -> {
 			if (dao.getTripsOfRoute(route.getId()).count() == 0) {
 				reportSink.report(new UnusedObjectWarning("route",
-						route.getId(), route.getSourceInfo(), "route_id"));
+						route.getId(), route.getSourceRef(), "route_id"));
 			}
 		});
 
-		/* Look for unused calendars and stops */
+		/* Look for unused calendars and shapes */
+		Set<GtfsShape.Id> unusedShapeIds = dao.getShapeIds()
+				.collect(Collectors.toSet());
 		Set<GtfsCalendar.Id> unusedCalendarIds = dao.getCalendarIndex()
 				.getAllCalendarIds().collect(Collectors.toSet());
-		Set<GtfsStop.Id> unusedStopsIds = dao.getStops()
-				.filter(s -> s.getType() == GtfsStopType.STOP)
-				.map(GtfsStop::getId).collect(Collectors.toSet());
 		dao.getTrips().forEach(trip -> {
 			unusedCalendarIds.remove(trip.getServiceId());
-			for (GtfsStopTime stopTime : dao.getStopTimesOfTrip(trip.getId())) {
-				unusedStopsIds.remove(stopTime.getStopId());
+			if (trip.getShapeId() != null) {
+				unusedShapeIds.remove(trip.getShapeId());
 			}
 		});
 		for (GtfsCalendar.Id unusedCalendarId : unusedCalendarIds) {
@@ -56,18 +53,17 @@ public class UnusedObjectsValidator implements DaoValidator {
 			if (calendar != null) {
 				reportSink.report(
 						new UnusedObjectWarning("calendar", unusedCalendarId,
-								calendar.getSourceInfo(), "service_id"));
+								calendar.getSourceRef(), "service_id"));
 			}
 			dao.getCalendarDates(unusedCalendarId).forEach(calendarDate -> {
 				reportSink.report(new UnusedObjectWarning("calendar date",
-						unusedCalendarId, calendarDate.getSourceInfo(),
+						unusedCalendarId, calendarDate.getSourceRef(),
 						"service_id"));
 			});
 		}
-		for (GtfsStop.Id unusedStopId : unusedStopsIds) {
-			GtfsStop stop = dao.getStop(unusedStopId);
-			reportSink.report(new UnusedObjectWarning("stop", unusedStopId,
-					stop.getSourceInfo(), "stop_id"));
+		for (GtfsShape.Id unusedShapeId : unusedShapeIds) {
+			reportSink.report(new UnusedObjectWarning("shape", unusedShapeId,
+					null, "shape_id"));
 		}
 
 		/* Look for unused stations */
@@ -82,22 +78,9 @@ public class UnusedObjectsValidator implements DaoValidator {
 					.count() == 0;
 			if (noStops && noEntrances && noNodes) {
 				reportSink.report(new UnusedObjectWarning("station",
-						station.getId(), station.getSourceInfo(), "stop_id"));
+						station.getId(), station.getSourceRef(), "stop_id"));
 			}
 		});
-
-		/* Look for unused shapes */
-		Set<GtfsShape.Id> unusedShapeIds = dao.getShapeIds()
-				.collect(Collectors.toSet());
-		dao.getTrips().forEach(trip -> {
-			if (trip.getShapeId() != null) {
-				unusedShapeIds.remove(trip.getShapeId());
-			}
-		});
-		for (GtfsShape.Id unusedShapeId : unusedShapeIds) {
-			reportSink.report(new UnusedObjectWarning("shape", unusedShapeId,
-					null, "shape_id"));
-		}
 
 		/* Look for unused levels */
 		Set<GtfsLevel.Id> unusedLevelIds = dao.getLevels().map(GtfsLevel::getId)
@@ -109,7 +92,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 		for (GtfsLevel.Id unusedLevelId : unusedLevelIds) {
 			GtfsLevel level = dao.getLevel(unusedLevelId);
 			reportSink.report(new UnusedObjectWarning("level", unusedLevelId,
-					level.getSourceInfo(), "level_id"));
+					level.getSourceRef(), "level_id"));
 		}
 
 		/* Empty (or single stop) trips do have a special validator */

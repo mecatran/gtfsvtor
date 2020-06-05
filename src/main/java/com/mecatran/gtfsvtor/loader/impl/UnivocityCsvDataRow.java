@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.loader.DataRow;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 
 public class UnivocityCsvDataRow implements DataRow {
 
@@ -39,6 +40,12 @@ public class UnivocityCsvDataRow implements DataRow {
 		}
 		return new DataObjectSourceInfoImpl(csvDataTable.getTableSourceInfo(),
 				fields, csvDataTable.getCurrentLineNumber());
+	}
+
+	@Override
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(csvDataTable.getTableName(),
+				csvDataTable.getCurrentLineNumber());
 	}
 
 	@Override

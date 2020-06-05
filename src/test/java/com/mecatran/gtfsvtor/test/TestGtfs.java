@@ -26,6 +26,7 @@ import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex.ProjectedPoint;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
+import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsBlockId;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
@@ -56,10 +57,11 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentStationTooCloseWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
+import com.mecatran.gtfsvtor.reporting.issues.DuplicatedFareRuleWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedStopSequenceError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedTripIssue;
@@ -282,7 +284,7 @@ public class TestGtfs {
 				.collect(Collectors.toList());
 		assertEquals(2, transfers.size());
 		GtfsTransfer t1 = dao.getTransfer(GtfsStop.id("NADAV"),
-				GtfsStop.id("NANAA"),null, null, null, null);
+				GtfsStop.id("NANAA"), null, null, null, null);
 		assertEquals(GtfsTransferType.NONE, t1.getNonNullType());
 		GtfsTransfer t2 = dao.getTransfer(GtfsStop.id("EMSI"),
 				GtfsStop.id("NANAA"), null, null, null, null);
@@ -374,8 +376,8 @@ public class TestGtfs {
 		InconsistentNumberOfFieldsWarning inof0 = inofs.get(0);
 		assertEquals(7, inof0.getNumberOfFields());
 		assertEquals(6, inof0.getNumberOfHeaderColumns());
-		assertEquals(GtfsRoute.TABLE_NAME, inof0.getSourceInfos().get(0)
-				.getSourceInfo().getTable().getTableName());
+		assertEquals(GtfsRoute.TABLE_NAME,
+				inof0.getSourceRefs().get(0).getSourceRef().getTableName());
 		InconsistentNumberOfFieldsWarning inof1 = inofs.get(1);
 		assertEquals(4, inof1.getNumberOfFields());
 	}
@@ -389,8 +391,8 @@ public class TestGtfs {
 		InconsistentNumberOfFieldsWarning inof0 = inofs.get(0);
 		assertEquals(6, inof0.getNumberOfFields());
 		assertEquals(7, inof0.getNumberOfHeaderColumns());
-		assertEquals(GtfsRoute.TABLE_NAME, inof0.getSourceInfos().get(0)
-				.getSourceInfo().getTable().getTableName());
+		assertEquals(GtfsRoute.TABLE_NAME,
+				inof0.getSourceRefs().get(0).getSourceRef().getTableName());
 	}
 
 	@Test
@@ -404,17 +406,14 @@ public class TestGtfs {
 		boolean routeTextColor = false;
 		boolean stopUri = false;
 		for (UnrecognizedColumnInfo ucw : ucws) {
-			SourceInfoWithFields siwf = ucw.getSourceInfos().get(0);
-			if (siwf.getSourceInfo().getTable().getTableName()
-					.equals(GtfsAgency.TABLE_NAME)
+			SourceRefWithFields siwf = ucw.getSourceRefs().get(0);
+			if (siwf.getSourceRef().getTableName().equals(GtfsAgency.TABLE_NAME)
 					&& siwf.getFieldNames().contains("agency_lange"))
 				agencyLange = true;
-			if (siwf.getSourceInfo().getTable().getTableName()
-					.equals(GtfsRoute.TABLE_NAME)
+			if (siwf.getSourceRef().getTableName().equals(GtfsRoute.TABLE_NAME)
 					&& siwf.getFieldNames().contains("Route_Text_Color"))
 				routeTextColor = true;
-			if (siwf.getSourceInfo().getTable().getTableName()
-					.equals(GtfsStop.TABLE_NAME)
+			if (siwf.getSourceRef().getTableName().equals(GtfsStop.TABLE_NAME)
 					&& siwf.getFieldNames().contains("stop_uri"))
 				stopUri = true;
 		}
@@ -426,17 +425,17 @@ public class TestGtfs {
 				.getReportIssues(MissingMandatoryColumnError.class);
 		assertEquals(1, mmcs.size());
 		MissingMandatoryColumnError mmc0 = mmcs.get(0);
-		assertEquals(GtfsAgency.TABLE_NAME, mmc0.getSourceInfos().get(0)
-				.getSourceInfo().getTable().getTableName());
+		assertEquals(GtfsAgency.TABLE_NAME,
+				mmc0.getSourceRefs().get(0).getSourceRef().getTableName());
 		assertEquals("agency_name", mmc0.getColumnName());
 
 		List<DuplicatedColumnError> dcs = tb.report
 				.getReportIssues(DuplicatedColumnError.class);
 		assertEquals(1, dcs.size());
 		DuplicatedColumnError dc = dcs.get(0);
-		assertEquals(GtfsAgency.TABLE_NAME, dc.getSourceInfos().get(0)
-				.getSourceInfo().getTable().getTableName());
-		assertTrue(dc.getSourceInfos().get(0).getFieldNames()
+		assertEquals(GtfsAgency.TABLE_NAME,
+				dc.getSourceRefs().get(0).getSourceRef().getTableName());
+		assertTrue(dc.getSourceRefs().get(0).getFieldNames()
 				.contains("agency_url"));
 	}
 
@@ -476,13 +475,13 @@ public class TestGtfs {
 		boolean agencyHeader = false;
 		boolean agencyName = false;
 		for (InvalidEncodingError iee : iees) {
-			SourceInfoWithFields siwf = iee.getSourceInfos().get(0);
-			if (siwf.getSourceInfo().getTable().getTableName()
+			SourceRefWithFields siwf = iee.getSourceRefs().get(0);
+			if (siwf.getSourceRef().getTableName()
 					.equals(GtfsAgency.TABLE_NAME)) {
-				if (siwf.getSourceInfo().getLineNumber() == 1
+				if (siwf.getSourceRef().getLineNumber() == 1
 						&& siwf.getFieldNames().contains("badheader�"))
 					agencyHeader = true;
-				if (siwf.getSourceInfo().getLineNumber() == 2
+				if (siwf.getSourceRef().getLineNumber() == 2
 						&& siwf.getFieldNames().contains("agency_name"))
 					agencyName = true;
 			}
@@ -540,10 +539,10 @@ public class TestGtfs {
 				.getReportIssues(InvalidReferenceError.class);
 		assertEquals(28, ires.size());
 		for (InvalidReferenceError ire : ires) {
-			assertEquals(1, ire.getSourceInfos().size());
-			SourceInfoWithFields siwf = ire.getSourceInfos().get(0);
+			assertEquals(1, ire.getSourceRefs().size());
+			SourceRefWithFields siwf = ire.getSourceRefs().get(0);
 			assertEquals(GtfsStopTime.TABLE_NAME,
-					siwf.getSourceInfo().getTable().getTableName());
+					siwf.getSourceRef().getTableName());
 			assertTrue(siwf.getFieldNames().contains("stop_id"));
 			assertEquals(GtfsStop.TABLE_NAME, ire.getRefTableName());
 			assertEquals("stop_id", ire.getRefFieldName());
@@ -580,8 +579,8 @@ public class TestGtfs {
 				.getReportIssues(MissingMandatoryColumnError.class);
 		assertEquals(1, mmcs.size());
 		MissingMandatoryColumnError mmc = mmcs.get(0);
-		assertEquals(GtfsCalendar.TABLE_NAME, mmc.getSourceInfos().get(0)
-				.getSourceInfo().getTable().getTableName());
+		assertEquals(GtfsCalendar.TABLE_NAME,
+				mmc.getSourceRefs().get(0).getSourceRef().getTableName());
 		assertEquals("thursday", mmc.getColumnName());
 	}
 
@@ -604,10 +603,10 @@ public class TestGtfs {
 				.getReportIssues(MissingMandatoryValueError.class);
 		assertEquals(1, mmvs.size());
 		MissingMandatoryValueError mmv = mmvs.get(0);
-		assertEquals(GtfsStopTime.TABLE_NAME, mmv.getSourceInfos().get(0)
-				.getSourceInfo().getTable().getTableName());
+		assertEquals(GtfsStopTime.TABLE_NAME,
+				mmv.getSourceRefs().get(0).getSourceRef().getTableName());
 		assertEquals("departure_time",
-				mmv.getSourceInfos().get(0).getFieldNames().iterator().next());
+				mmv.getSourceRefs().get(0).getFieldNames().iterator().next());
 	}
 
 	@Test
@@ -662,10 +661,9 @@ public class TestGtfs {
 				.getReportIssues(InvalidReferenceError.class);
 		assertEquals(1, ires.size());
 		InvalidReferenceError ire = ires.get(0);
-		assertEquals(1, ire.getSourceInfos().size());
-		SourceInfoWithFields siwf = ire.getSourceInfos().get(0);
-		assertEquals(GtfsRoute.TABLE_NAME,
-				siwf.getSourceInfo().getTable().getTableName());
+		assertEquals(1, ire.getSourceRefs().size());
+		SourceRefWithFields siwf = ire.getSourceRefs().get(0);
+		assertEquals(GtfsRoute.TABLE_NAME, siwf.getSourceRef().getTableName());
 		assertTrue(siwf.getFieldNames().contains("agency_id"));
 		assertEquals("DVT", ire.getValue());
 		assertEquals(GtfsAgency.TABLE_NAME, ire.getRefTableName());
@@ -679,17 +677,17 @@ public class TestGtfs {
 				.getReportIssues(InvalidFieldFormatError.class);
 		assertEquals(2, iffes.size());
 		InvalidFieldFormatError iffe1 = iffes.get(0);
-		assertEquals(1, iffe1.getSourceInfos().size());
-		SourceInfoWithFields siwf1 = iffe1.getSourceInfos().get(0);
+		assertEquals(1, iffe1.getSourceRefs().size());
+		SourceRefWithFields siwf1 = iffe1.getSourceRefs().get(0);
 		assertEquals(GtfsCalendar.TABLE_NAME,
-				siwf1.getSourceInfo().getTable().getTableName());
+				siwf1.getSourceRef().getTableName());
 		assertTrue(siwf1.getFieldNames().contains("start_date"));
 		assertEquals("2007.01.01", iffe1.getValue());
 		InvalidFieldFormatError iffe2 = iffes.get(1);
-		assertEquals(1, iffe2.getSourceInfos().size());
-		SourceInfoWithFields siwf2 = iffe2.getSourceInfos().get(0);
+		assertEquals(1, iffe2.getSourceRefs().size());
+		SourceRefWithFields siwf2 = iffe2.getSourceRefs().get(0);
 		assertEquals(GtfsCalendarDate.TABLE_NAME,
-				siwf2.getSourceInfo().getTable().getTableName());
+				siwf2.getSourceRef().getTableName());
 		assertTrue(siwf2.getFieldNames().contains("date"));
 		assertEquals("2007-06-04", iffe2.getValue());
 	}
@@ -709,10 +707,10 @@ public class TestGtfs {
 				.getReportIssues(InvalidReferenceError.class);
 		assertEquals(1, ires.size());
 		InvalidReferenceError ire = ires.get(0);
-		assertEquals(1, ire.getSourceInfos().size());
-		SourceInfoWithFields siwf = ire.getSourceInfos().get(0);
+		assertEquals(1, ire.getSourceRefs().size());
+		SourceRefWithFields siwf = ire.getSourceRefs().get(0);
 		assertEquals(GtfsStopTime.TABLE_NAME,
-				siwf.getSourceInfo().getTable().getTableName());
+				siwf.getSourceRef().getTableName());
 		assertTrue(siwf.getFieldNames().contains("stop_id"));
 		assertEquals("NADAR", ire.getValue());
 		assertEquals(GtfsStop.TABLE_NAME, ire.getRefTableName());
@@ -727,15 +725,40 @@ public class TestGtfs {
 		assertEquals(1, doies.size());
 		DuplicatedObjectIdError doie = doies.get(0);
 		assertEquals(GtfsCalendar.id("WE"), doie.getDuplicatedId());
-		assertEquals(2, doie.getSourceInfos().size());
-		SourceInfoWithFields siwf1 = doie.getSourceInfos().get(0);
+		assertEquals(2, doie.getSourceRefs().size());
+		SourceRefWithFields siwf1 = doie.getSourceRefs().get(0);
 		assertEquals(GtfsCalendar.TABLE_NAME,
-				siwf1.getSourceInfo().getTable().getTableName());
-		assertEquals(3, siwf1.getSourceInfo().getLineNumber());
-		SourceInfoWithFields siwf2 = doie.getSourceInfos().get(1);
+				siwf1.getSourceRef().getTableName());
+		assertEquals(3, siwf1.getSourceRef().getLineNumber());
+		DataObjectSourceInfo si1 = tb.report
+				.getSourceInfo(siwf1.getSourceRef());
+		assertEquals(3, si1.getLineNumber());
+		assertEquals(GtfsCalendar.TABLE_NAME, si1.getTable().getTableName());
+		assertEquals(10, si1.getFields().size());
+		assertEquals("WE", si1.getFields().get(0));
+		assertEquals("20101231", si1.getFields().get(9));
+		SourceRefWithFields siwf2 = doie.getSourceRefs().get(1);
 		assertEquals(GtfsCalendar.TABLE_NAME,
-				siwf2.getSourceInfo().getTable().getTableName());
-		assertEquals(4, siwf2.getSourceInfo().getLineNumber());
+				siwf2.getSourceRef().getTableName());
+		assertEquals(4, siwf2.getSourceRef().getLineNumber());
+		DataObjectSourceInfo si2 = tb.report
+				.getSourceInfo(siwf2.getSourceRef());
+		assertEquals(4, si2.getLineNumber());
+		assertEquals(GtfsCalendar.TABLE_NAME, si2.getTable().getTableName());
+		assertEquals(10, si2.getFields().size());
+		assertEquals("WE", si2.getFields().get(0));
+		assertEquals("20101231", si2.getFields().get(9));
+	}
+
+	@Test
+	public void testDuplicateIds() {
+		TestBundle tb = loadAndValidate("duplicate_ids");
+		List<DuplicatedObjectIdError> doies = tb.report
+				.getReportIssues(DuplicatedObjectIdError.class);
+		assertEquals(6, doies.size());
+		List<DuplicatedFareRuleWarning> dfrws = tb.report
+				.getReportIssues(DuplicatedFareRuleWarning.class);
+		assertEquals(1, dfrws.size());
 	}
 
 	@Test
@@ -1049,8 +1072,8 @@ public class TestGtfs {
 				.getReportIssues(MissingMandatoryValueError.class);
 		assertEquals(1, mmvs.size());
 		MissingMandatoryValueError mmv0 = mmvs.get(0);
-		assertEquals(GtfsRoute.TABLE_NAME, mmv0.getSourceInfos().get(0)
-				.getSourceInfo().getTable().getTableName());
+		assertEquals(GtfsRoute.TABLE_NAME,
+				mmv0.getSourceRefs().get(0).getSourceRef().getTableName());
 		List<InvalidFieldFormatError> iffs = tb.report
 				.getReportIssues(InvalidFieldFormatError.class);
 		assertEquals(1, iffs.size());
@@ -1105,10 +1128,10 @@ public class TestGtfs {
 				.getReportIssues(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
 		InvalidFieldValueIssue ifv0 = ifvs.get(0);
-		assertTrue(ifv0.getSourceInfos().get(0).getFieldNames()
-				.contains("monday"));
-		assertTrue(ifv0.getSourceInfos().get(0).getFieldNames()
-				.contains("sunday"));
+		assertTrue(
+				ifv0.getSourceRefs().get(0).getFieldNames().contains("monday"));
+		assertTrue(
+				ifv0.getSourceRefs().get(0).getFieldNames().contains("sunday"));
 	}
 
 	@Test
@@ -1170,8 +1193,8 @@ public class TestGtfs {
 				tb.report.getReportIssues(InvalidReferenceError.class).size());
 		assertEquals(1, tb.report
 				.getReportIssues(WrongTransferStopTypeError.class).size());
-		assertEquals(1, tb.report
-				.getReportIssues(DuplicatedObjectIdError.class).size());
+		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
+				.size());
 	}
 
 	@Test
@@ -1179,10 +1202,10 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("bogus_transfers_extended");
 		assertEquals(1,
 				tb.report.getReportIssues(InvalidReferenceError.class).size());
-		assertEquals(1,
-				tb.report.getReportIssues(DuplicatedObjectIdError.class).size());
-		assertEquals(0, tb.report
-				.getReportIssues(UnrecognizedColumnInfo.class).size());
+		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
+				.size());
+		assertEquals(0,
+				tb.report.getReportIssues(UnrecognizedColumnInfo.class).size());
 	}
 
 	@Test
@@ -1220,7 +1243,7 @@ public class TestGtfs {
 				.getReportIssues(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
 		InvalidFieldValueIssue ifv0 = ifvs.get(0);
-		assertEquals(3, ifv0.getSourceInfos().size());
+		assertEquals(3, ifv0.getSourceRefs().size());
 	}
 
 	@Test

@@ -9,7 +9,8 @@ import com.mecatran.gtfsvtor.loader.TableSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
 
 public class PlainTextIssueFormatter implements IssueFormatter {
@@ -48,51 +49,40 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 		return sb.toString();
 	}
 
-	public static String format(ReportIssue issue) {
+	/*
+	 * TODO We source info loading post-poned, we cannot have a full formatter
+	 * context at the time an issue is reported. In order to fully print an
+	 * issue with source info, delegate the console printing of issue at a later
+	 * stage.
+	 */
+	public static String format(ReviewReport report, ReportIssue issue) {
 		PlainTextIssueFormatter fmt = new PlainTextIssueFormatter();
 		issue.format(fmt);
 		StringBuffer sb = new StringBuffer();
 		sb.append("\n");
-		for (SourceInfoWithFields siwf : issue.getSourceInfos()) {
-			DataObjectSourceInfo dosi = siwf.getSourceInfo();
-			TableSourceInfo tsi = dosi.getTable();
-			int nCols = tsi.getHeaderColumns().size();
-			int nVals = dosi.getFields() == null ? 0 : dosi.getFields().size();
-			int tbLen = tsi.getTableName().length();
-			List<Integer> colWidths = new ArrayList<>();
-			for (int i = 0; i < nCols; i++) {
-				int headerWidth = tsi.getHeaderColumns().get(i).length();
-				int valueWidth = 0;
-				if (i < nVals) {
-					String val = dosi.getFields().get(i);
-					valueWidth = val == null ? 0 : val.length();
+		if (report != null) {
+			for (SourceRefWithFields siwf : issue.getSourceRefs()) {
+				DataObjectSourceInfo dosi = report
+						.getSourceInfo(siwf.getSourceRef());
+				TableSourceInfo tsi = dosi.getTable();
+				int nCols = tsi.getHeaderColumns().size();
+				List<String> fields = dosi.getFields();
+				int nVals = fields == null ? 0 : fields.size();
+				int tbLen = tsi.getTableName().length();
+				List<Integer> colWidths = new ArrayList<>();
+				for (int i = 0; i < nCols; i++) {
+					int headerWidth = tsi.getHeaderColumns().get(i).length();
+					int valueWidth = 0;
+					if (i < nVals) {
+						String val = fields.get(i);
+						valueWidth = val == null ? 0 : val.length();
+					}
+					colWidths.add(Math.max(headerWidth, valueWidth));
 				}
-				colWidths.add(Math.max(headerWidth, valueWidth));
-			}
-			sb.append(pad(dosi.getTable().getTableName(), tbLen + 1, ' '));
-			for (int i = 0; i < nCols; i++) {
-				sb.append("| ").append(pad(tsi.getHeaderColumns().get(i),
-						colWidths.get(i), ' ')).append(" ");
-			}
-			sb.append("|\n");
-			sb.append(pad("", tbLen + 1, ' '));
-			for (int i = 0; i < nCols; i++) {
-				boolean highlight = siwf.getFieldNames()
-						.contains(tsi.getHeaderColumns().get(i));
-				sb.append(highlight ? "+=" : "+-")
-						.append(pad("", colWidths.get(i),
-								highlight ? '=' : '-'))
-						.append(highlight ? "=" : "-");
-			}
-			sb.append("+\n");
-			if (nVals > 0) {
-				sb.append(pad(String.format("L%d", dosi.getLineNumber()),
-						tbLen + 1, ' '));
-				for (int i = 0; i < nCols && i < nVals; i++) {
-					String val = dosi.getFields().get(i);
-					sb.append("| ").append(
-							pad(val == null ? "" : val, colWidths.get(i), ' '))
-							.append(" ");
+				sb.append(pad(dosi.getTable().getTableName(), tbLen + 1, ' '));
+				for (int i = 0; i < nCols; i++) {
+					sb.append("| ").append(pad(tsi.getHeaderColumns().get(i),
+							colWidths.get(i), ' ')).append(" ");
 				}
 				sb.append("|\n");
 				sb.append(pad("", tbLen + 1, ' '));
@@ -105,7 +95,30 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 							.append(highlight ? "=" : "-");
 				}
 				sb.append("+\n");
+				if (nVals > 0) {
+					sb.append(pad(String.format("L%d", dosi.getLineNumber()),
+							tbLen + 1, ' '));
+					for (int i = 0; i < nCols && i < nVals; i++) {
+						String val = fields.get(i);
+						sb.append("| ").append(pad(val == null ? "" : val,
+								colWidths.get(i), ' ')).append(" ");
+					}
+					sb.append("|\n");
+					sb.append(pad("", tbLen + 1, ' '));
+					for (int i = 0; i < nCols; i++) {
+						boolean highlight = siwf.getFieldNames()
+								.contains(tsi.getHeaderColumns().get(i));
+						sb.append(highlight ? "+=" : "+-")
+								.append(pad("", colWidths.get(i),
+										highlight ? '=' : '-'))
+								.append(highlight ? "=" : "-");
+					}
+					sb.append("+\n");
+				}
 			}
+		} else {
+			issue.getSourceRefs().stream()
+					.forEach(refwf -> sb.append(refwf.toString()).append("\n"));
 		}
 		String severity = issue.getSeverity().toString();
 		List<String> lines = MiscUtils
@@ -119,7 +132,6 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 			sb.append(lines.get(i)).append("\n");
 		}
 		return sb.toString();
-
 	}
 
 	private static String pad(String s, int n, char pad) {

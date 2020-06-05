@@ -3,13 +3,13 @@ package com.mecatran.gtfsvtor.reporting.issues;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(categoryName = "Too fast walking speed")
 public class TooFastWalkingSpeed
@@ -21,9 +21,9 @@ public class TooFastWalkingSpeed
 	private double maxSpeedMps;
 	private ReportIssueSeverity severity;
 
-	private SourceInfoWithFields sourceInfo;
+	private SourceRefWithFields sourceRef;
 
-	public TooFastWalkingSpeed(DataObjectSourceInfo sourceInfo,
+	public TooFastWalkingSpeed(DataObjectSourceRef sourceRef,
 			GtfsStop fromStop, GtfsStop toStop, double distanceMeters,
 			double speedMps, double maxSpeedMps, ReportIssueSeverity severity) {
 		this.fromStop = fromStop;
@@ -32,7 +32,7 @@ public class TooFastWalkingSpeed
 		this.speedMps = speedMps;
 		this.maxSpeedMps = maxSpeedMps;
 		this.severity = severity;
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, "from_stop_id",
+		this.sourceRef = new SourceRefWithFields(sourceRef, "from_stop_id",
 				"to_stop_id");
 	}
 
@@ -53,8 +53,8 @@ public class TooFastWalkingSpeed
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
-		return Arrays.asList(sourceInfo);
+	public List<SourceRefWithFields> getSourceRefs() {
+		return Arrays.asList(sourceRef);
 	}
 
 	@Override

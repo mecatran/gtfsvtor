@@ -3,7 +3,7 @@ package com.mecatran.gtfsvtor.reporting.issues;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
@@ -11,7 +11,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Wrong transfer stop type")
 public class WrongTransferStopTypeError implements ReportIssue {
@@ -19,14 +19,14 @@ public class WrongTransferStopTypeError implements ReportIssue {
 	private GtfsTransfer transfer;
 	private GtfsStop stop;
 	private String fieldname;
-	private SourceInfoWithFields sourceInfo;
+	private SourceRefWithFields sourceRef;
 
-	public WrongTransferStopTypeError(DataObjectSourceInfo sourceInfo,
+	public WrongTransferStopTypeError(DataObjectSourceRef sourceRef,
 			GtfsTransfer transfer, GtfsStop stop, String fieldname) {
 		this.transfer = transfer;
 		this.stop = stop;
 		this.fieldname = fieldname;
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, fieldname);
+		this.sourceRef = new SourceRefWithFields(sourceRef, fieldname);
 	}
 
 	public GtfsTransfer getTransfer() {
@@ -42,8 +42,8 @@ public class WrongTransferStopTypeError implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
-		return Arrays.asList(sourceInfo);
+	public List<SourceRefWithFields> getSourceRefs() {
+		return Arrays.asList(sourceRef);
 	}
 
 	@Override

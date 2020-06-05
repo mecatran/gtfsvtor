@@ -10,14 +10,14 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Duplicated trips")
 public class DuplicatedTripIssue implements ReportIssue {
 
 	private GtfsTrip trip1, trip2;
 	private OverlappingCalendarInfo calendarOverlap;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public DuplicatedTripIssue(GtfsTrip trip1, GtfsTrip trip2,
 			OverlappingCalendarInfo calendarOverlap) {
@@ -25,8 +25,8 @@ public class DuplicatedTripIssue implements ReportIssue {
 		this.trip2 = trip2;
 		this.calendarOverlap = calendarOverlap;
 		this.sourceInfos = Arrays.asList(
-				new SourceInfoWithFields(trip1.getSourceInfo(), "trip_id"),
-				new SourceInfoWithFields(trip2.getSourceInfo(), "trip_id"));
+				new SourceRefWithFields(trip1.getSourceRef(), "trip_id"),
+				new SourceRefWithFields(trip2.getSourceRef(), "trip_id"));
 		Collections.sort(this.sourceInfos);
 	}
 
@@ -43,7 +43,7 @@ public class DuplicatedTripIssue implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

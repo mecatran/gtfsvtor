@@ -3,10 +3,8 @@ package com.mecatran.gtfsvtor.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
 public class GtfsCalendar
-		implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+		implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "calendar.txt";
 
@@ -21,15 +19,15 @@ public class GtfsCalendar
 	private GtfsLogicalDate startDate;
 	private GtfsLogicalDate endDate;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	public GtfsCalendar.Id getId() {
 		return id;
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public Boolean isMonday() {
@@ -120,8 +118,8 @@ public class GtfsCalendar
 			calendar.id = id(id);
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			calendar.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			calendar.sourceLineNumber = lineNumber;
 			return this;
 		}
 

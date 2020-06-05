@@ -9,7 +9,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(categoryName = "Stop too far from parent station")
 public class StopTooFarFromParentStationIssue implements ReportIssue {
@@ -17,7 +17,7 @@ public class StopTooFarFromParentStationIssue implements ReportIssue {
 	private GtfsStop stop, station;
 	private double distanceMeters;
 	private ReportIssueSeverity severity;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public StopTooFarFromParentStationIssue(GtfsStop stop, GtfsStop station,
 			double distanceMeters, ReportIssueSeverity severity) {
@@ -26,9 +26,9 @@ public class StopTooFarFromParentStationIssue implements ReportIssue {
 		this.distanceMeters = distanceMeters;
 		this.severity = severity;
 		this.sourceInfos = Arrays.asList(
-				new SourceInfoWithFields(stop.getSourceInfo(), "stop_lat",
+				new SourceRefWithFields(stop.getSourceRef(), "stop_lat",
 						"stop_lon"),
-				new SourceInfoWithFields(station.getSourceInfo(), "stop_lat",
+				new SourceRefWithFields(station.getSourceRef(), "stop_lat",
 						"stop_lon"));
 		Collections.sort(this.sourceInfos);
 	}
@@ -52,7 +52,7 @@ public class StopTooFarFromParentStationIssue implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 
