@@ -2,10 +2,8 @@ package com.mecatran.gtfsvtor.model;
 
 import java.util.Locale;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
 public class GtfsFeedInfo
-		implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+		implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "feed_info.txt";
 
@@ -19,11 +17,11 @@ public class GtfsFeedInfo
 	private String feedContactEmail;
 	private String feedContactUrl;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public String getFeedPublisherName() {
@@ -77,8 +75,8 @@ public class GtfsFeedInfo
 			feedInfo = new GtfsFeedInfo();
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			feedInfo.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			feedInfo.sourceLineNumber = lineNumber;
 			return this;
 		}
 

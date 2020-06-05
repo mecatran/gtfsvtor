@@ -55,15 +55,15 @@ public class DataRowConverter {
 		if (ret != null) {
 			// ret.contains("\uFFFD")
 			if (ret.chars().anyMatch(c -> c == 0xFFFD || c == 0)) {
-				reportSink.report(new InvalidEncodingError(row.getSourceInfo(),
-						field, ret));
+				reportSink.report(new InvalidEncodingError(row.getSourceRef(),
+						field, ret), row.getSourceInfo());
 			}
 			// Return the string anyway
 		}
 		if (ret == null || ret.isEmpty()) {
 			if (mandatory) {
 				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
+						row.getSourceRef(), field), row.getSourceInfo());
 			}
 			return defaultValue;
 		}
@@ -85,7 +85,7 @@ public class DataRowConverter {
 		if (value == null || value.isEmpty()) {
 			if (mandatory) {
 				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
+						row.getSourceRef(), field), row.getSourceInfo());
 			}
 			return defaultValue;
 		}
@@ -93,7 +93,8 @@ public class DataRowConverter {
 			return Double.parseDouble(value);
 		} catch (NumberFormatException e) {
 			reportSink.report(
-					fieldFormatError(field, value, "floating-point (double)"));
+					fieldFormatError(field, value, "floating-point (double)"),
+					row.getSourceInfo());
 			return defaultValueIfInvalid;
 		}
 	}
@@ -262,14 +263,15 @@ public class DataRowConverter {
 		if (str == null || str.isEmpty()) {
 			if (mandatory) {
 				reportSink.report(new MissingMandatoryValueError(
-						row.getSourceInfo(), field));
+						row.getSourceRef(), field), row.getSourceInfo());
 			}
 			return null;
 		}
 		try {
 			return func.convert(str);
 		} catch (Exception e) {
-			reportSink.report(fieldFormatError(field, str, expectedFormat));
+			reportSink.report(fieldFormatError(field, str, expectedFormat),
+					row.getSourceInfo());
 			return null;
 		}
 	}
@@ -281,7 +283,7 @@ public class DataRowConverter {
 
 	private InvalidFieldFormatError fieldFormatError(String field, String value,
 			String expectedFormat, String additionalInfo) {
-		return new InvalidFieldFormatError(row.getSourceInfo(), field, value,
+		return new InvalidFieldFormatError(row.getSourceRef(), field, value,
 				expectedFormat, additionalInfo);
 	}
 }

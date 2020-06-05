@@ -6,9 +6,8 @@ import java.util.Optional;
 import java.util.TimeZone;
 
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 
-public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "stops.txt";
 
@@ -27,15 +26,15 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 	private GtfsLevel.Id levelId;
 	private String platformCode;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	public GtfsStop.Id getId() {
 		return id;
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsStop.Id getParentId() {
@@ -163,8 +162,8 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 			stop.id = id(id);
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			stop.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			stop.sourceLineNumber = lineNumber;
 			return this;
 		}
 

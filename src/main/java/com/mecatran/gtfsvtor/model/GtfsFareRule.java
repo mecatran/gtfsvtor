@@ -1,9 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
 public class GtfsFareRule
-		implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+		implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "fare_rules.txt";
 
@@ -13,15 +11,15 @@ public class GtfsFareRule
 	private GtfsZone.Id destinationId;
 	private GtfsZone.Id containsId;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	public GtfsFareAttribute.Id getFareId() {
 		return fareId;
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsRoute.Id getRouteId() {
@@ -59,8 +57,8 @@ public class GtfsFareRule
 			return this;
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			fareRule.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			fareRule.sourceLineNumber = lineNumber;
 			return this;
 		}
 

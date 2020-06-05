@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
@@ -58,16 +58,16 @@ public class CalendarValidator implements DaoValidator {
 		calIndex.getAllCalendarIds().forEach(calId -> {
 			if (checkEmptyCalendars) {
 				if (calIndex.getCalendarApplicableDates(calId).isEmpty()) {
-					List<DataObjectSourceInfo> sourceInfos = new ArrayList<>();
+					List<DataObjectSourceRef> sourceRefs = new ArrayList<>();
 					GtfsCalendar calendar = dao.getCalendar(calId);
 					if (calendar != null) {
-						sourceInfos.add(calendar.getSourceInfo());
+						sourceRefs.add(calendar.getSourceRef());
 					}
 					dao.getCalendarDates(calId)
-							.map(date -> date.getSourceInfo())
-							.forEach(sourceInfos::add);
+							.map(date -> date.getSourceRef())
+							.forEach(sourceRefs::add);
 					reportSink.report(
-							new EmptyCalendarWarning(calId, sourceInfos));
+							new EmptyCalendarWarning(calId, sourceRefs));
 				}
 			}
 		});
@@ -151,7 +151,7 @@ public class CalendarValidator implements DaoValidator {
 									.getExceptionType() == GtfsCalendarDateExceptionType.ADDED)
 							.count() == 0) {
 				reportSink.report(
-						new InvalidFieldValueIssue(calendar.getSourceInfo(), "",
+						new InvalidFieldValueIssue(calendar.getSourceRef(), "",
 								"calendar is not active any day of the week",
 								"monday", "tuesday", "wednesday", "thursday",
 								"friday", "saturday", "sunday"));

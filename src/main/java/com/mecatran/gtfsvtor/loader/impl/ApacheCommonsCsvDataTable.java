@@ -121,6 +121,11 @@ public class ApacheCommonsCsvDataTable implements DataTable {
 	}
 
 	@Override
+	public String getTableName() {
+		return tableName;
+	}
+
+	@Override
 	public void close() throws IOException {
 		csvParser.close();
 	}

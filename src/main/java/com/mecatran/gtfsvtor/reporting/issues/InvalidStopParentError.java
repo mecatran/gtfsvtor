@@ -10,7 +10,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.ERROR)
 public class InvalidStopParentError implements ReportIssue {
@@ -18,7 +18,7 @@ public class InvalidStopParentError implements ReportIssue {
 	private GtfsStop child;
 	private GtfsStop parent;
 	private GtfsStopType expectedParentType;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public InvalidStopParentError(GtfsStop child, GtfsStop parent,
 			GtfsStopType expectedParentType) {
@@ -26,15 +26,15 @@ public class InvalidStopParentError implements ReportIssue {
 		this.parent = parent;
 		this.expectedParentType = expectedParentType;
 		this.sourceInfos = Arrays.asList(
-				new SourceInfoWithFields(child.getSourceInfo(), "location_type",
+				new SourceRefWithFields(child.getSourceRef(), "location_type",
 						"parent_station"),
-				new SourceInfoWithFields(parent.getSourceInfo(),
+				new SourceRefWithFields(parent.getSourceRef(),
 						"location_type"));
 		Collections.sort(this.sourceInfos);
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

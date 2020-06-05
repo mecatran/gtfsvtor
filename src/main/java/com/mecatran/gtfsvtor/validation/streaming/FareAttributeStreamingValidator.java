@@ -23,17 +23,17 @@ public class FareAttributeStreamingValidator
 		if (fareAttribute.getTransferDuration() != null
 				&& fareAttribute.getTransferDuration() < 0) {
 			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceInfo(), "transfer_duration",
+					context.getSourceRef(), "transfer_duration",
 					Integer.toString(fareAttribute.getTransferDuration()),
-					"positive integer"));
+					"positive integer"), context.getSourceInfo());
 		}
 
 		// Check price is not negative
 		if (fareAttribute.getPrice() != null && fareAttribute.getPrice() < 0.) {
 			reportSink
-					.report(new InvalidFieldFormatError(context.getSourceInfo(),
+					.report(new InvalidFieldFormatError(context.getSourceRef(),
 							"price", Double.toString(fareAttribute.getPrice()),
-							"non-negative float"));
+							"non-negative float"), context.getSourceInfo());
 		}
 
 		ReadOnlyDao dao = context.getPartialDao();
@@ -41,9 +41,10 @@ public class FareAttributeStreamingValidator
 		// Check agency reference
 		if (fareAttribute.getAgencyId() != null
 				&& dao.getAgency(fareAttribute.getAgencyId()) == null) {
-			reportSink.report(new InvalidReferenceError(context.getSourceInfo(),
+			reportSink.report(new InvalidReferenceError(context.getSourceRef(),
 					"agency_id", fareAttribute.getAgencyId().getInternalId(),
-					GtfsAgency.TABLE_NAME, "agency_id"));
+					GtfsAgency.TABLE_NAME, "agency_id"),
+					context.getSourceInfo());
 		}
 	}
 }

@@ -7,6 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.loader.DataRow;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 
 public class ApacheCommonsCsvDataRow implements DataRow {
 
@@ -46,6 +47,12 @@ public class ApacheCommonsCsvDataRow implements DataRow {
 		}
 		return new DataObjectSourceInfoImpl(csvDataTable.getTableSourceInfo(),
 				fields, csvDataTable.getCurrentLineNumber());
+	}
+
+	@Override
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(csvDataTable.getTableName(),
+				csvDataTable.getCurrentLineNumber());
 	}
 
 	@Override

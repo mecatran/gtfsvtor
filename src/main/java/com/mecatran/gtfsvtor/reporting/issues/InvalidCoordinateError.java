@@ -1,26 +1,32 @@
 package com.mecatran.gtfsvtor.reporting.issues;
 
-import com.mecatran.gtfsvtor.geospatial.GeoBounds;
-import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-import com.mecatran.gtfsvtor.reporting.*;
-
 import java.util.Arrays;
 import java.util.List;
+
+import com.mecatran.gtfsvtor.geospatial.GeoBounds;
+import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
+import com.mecatran.gtfsvtor.reporting.IssueFormatter;
+import com.mecatran.gtfsvtor.reporting.ReportIssue;
+import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
+import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy
 public class InvalidCoordinateError implements ReportIssue {
 
-	private SourceInfoWithFields sourceInfo;
+	private SourceRefWithFields sourceRef;
 	private String latFieldName;
 	private String lonFieldName;
 	private GeoCoordinates value;
 	private GeoBounds expectedBounds;
 	private ReportIssueSeverity severity = ReportIssueSeverity.ERROR;
 
-	public InvalidCoordinateError(DataObjectSourceInfo sourceInfo,
-			String latFieldName, String lonFieldName, GeoCoordinates value, GeoBounds expectedBounds) {
-		this.sourceInfo = new SourceInfoWithFields(sourceInfo, latFieldName, lonFieldName);
+	public InvalidCoordinateError(DataObjectSourceRef sourceRef,
+			String latFieldName, String lonFieldName, GeoCoordinates value,
+			GeoBounds expectedBounds) {
+		this.sourceRef = new SourceRefWithFields(sourceRef, latFieldName,
+				lonFieldName);
 		this.latFieldName = latFieldName;
 		this.lonFieldName = lonFieldName;
 		this.value = value;
@@ -33,13 +39,13 @@ public class InvalidCoordinateError implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
-		return Arrays.asList(sourceInfo);
+	public List<SourceRefWithFields> getSourceRefs() {
+		return Arrays.asList(sourceRef);
 	}
 
 	@Override
 	public String getCategoryName() {
-		return "Invalid " + latFieldName + "/"+ lonFieldName+" coordinate";
+		return "Invalid " + latFieldName + "/" + lonFieldName + " coordinate";
 	}
 
 	@Override
@@ -57,7 +63,7 @@ public class InvalidCoordinateError implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		fmt.text("Invalid coordinate value {0}, should be inside: {1}", fmt.coordinates(value),
-				fmt.bounds(expectedBounds));
+		fmt.text("Invalid coordinate value {0}, should be inside: {1}",
+				fmt.coordinates(value), fmt.bounds(expectedBounds));
 	}
 }

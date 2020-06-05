@@ -56,18 +56,24 @@ public class TransferStreamingValidator
 			if (transfer.getNonNullType() == GtfsTransferType.TIMED) {
 				if (maxTransferTimeSecError > 0 && transfer
 						.getMinTransferTime() > maxTransferTimeSecError) {
-					reportSink.report(new InvalidFieldValueIssue(
-							context.getSourceInfo(),
-							Integer.toString(transfer.getMinTransferTime()),
-							"Suspiciously large time", "min_transfer_time")
-									.withSeverity(ReportIssueSeverity.ERROR));
+					reportSink.report(
+							new InvalidFieldValueIssue(context.getSourceRef(),
+									Integer.toString(
+											transfer.getMinTransferTime()),
+									"Suspiciously large time",
+									"min_transfer_time").withSeverity(
+											ReportIssueSeverity.ERROR),
+							context.getSourceInfo());
 				} else if (maxTransferTimeSecWarning > 0 && transfer
 						.getMinTransferTime() > maxTransferTimeSecWarning) {
-					reportSink.report(new InvalidFieldValueIssue(
-							context.getSourceInfo(),
-							Integer.toString(transfer.getMinTransferTime()),
-							"Suspiciously large time", "min_transfer_time")
-									.withSeverity(ReportIssueSeverity.WARNING));
+					reportSink.report(
+							new InvalidFieldValueIssue(context.getSourceRef(),
+									Integer.toString(
+											transfer.getMinTransferTime()),
+									"Suspiciously large time",
+									"min_transfer_time").withSeverity(
+											ReportIssueSeverity.WARNING),
+							context.getSourceInfo());
 				}
 			}
 		}
@@ -80,32 +86,36 @@ public class TransferStreamingValidator
 		if (transfer.getFromStopId() != null) {
 			fromStop = dao.getStop(transfer.getFromStopId());
 			if (fromStop == null) {
-				reportSink.report(new InvalidReferenceError(
-						context.getSourceInfo(), "from_stop_id",
-						transfer.getFromStopId().getInternalId(),
-						GtfsStop.TABLE_NAME, "stop_id"));
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"from_stop_id",
+								transfer.getFromStopId().getInternalId(),
+								GtfsStop.TABLE_NAME, "stop_id"),
+						context.getSourceInfo());
 			} else {
 				if (fromStop.getType() != GtfsStopType.STOP
 						&& fromStop.getType() != GtfsStopType.STATION) {
 					reportSink.report(new WrongTransferStopTypeError(
-							context.getSourceInfo(), transfer, fromStop,
-							"from_stop_id"));
+							context.getSourceRef(), transfer, fromStop,
+							"from_stop_id"), context.getSourceInfo());
 				}
 			}
 		}
 		if (transfer.getToStopId() != null) {
 			toStop = dao.getStop(transfer.getToStopId());
 			if (toStop == null) {
-				reportSink.report(new InvalidReferenceError(
-						context.getSourceInfo(), "to_stop_id",
-						transfer.getToStopId().getInternalId(),
-						GtfsStop.TABLE_NAME, "stop_id"));
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"to_stop_id",
+								transfer.getToStopId().getInternalId(),
+								GtfsStop.TABLE_NAME, "stop_id"),
+						context.getSourceInfo());
 			} else {
 				if (toStop.getType() != GtfsStopType.STOP
 						&& toStop.getType() != GtfsStopType.STATION) {
 					reportSink.report(new WrongTransferStopTypeError(
-							context.getSourceInfo(), transfer, toStop,
-							"to_stop_id"));
+							context.getSourceRef(), transfer, toStop,
+							"to_stop_id"), context.getSourceInfo());
 				}
 			}
 		}
@@ -125,11 +135,12 @@ public class TransferStreamingValidator
 				if (severity != null) {
 					// TODO Make a specific error class?
 					reportSink.report(new InvalidFieldValueIssue(
-							context.getSourceInfo(),
+							context.getSourceRef(),
 							String.format("%.2f meters", d),
 							"Suspiciously large transfer distance between stops",
-							"from_stop_id", "to_stop_id")
-									.withSeverity(severity));
+							"from_stop_id", "to_stop_id").withSeverity(
+									severity),
+							context.getSourceInfo());
 				}
 
 				if (transfer.getMinTransferTime() != null
@@ -137,10 +148,12 @@ public class TransferStreamingValidator
 					double speedMps = d / (transfer.getMinTransferTime()
 							+ walkingTimeSlackSec);
 					if (speedMps > fastWalkingSpeedMps) {
-						reportSink.report(new TooFastWalkingSpeed(
-								context.getSourceInfo(), fromStop, toStop, d,
-								speedMps, fastWalkingSpeedMps,
-								ReportIssueSeverity.WARNING));
+						reportSink.report(
+								new TooFastWalkingSpeed(context.getSourceRef(),
+										fromStop, toStop, d, speedMps,
+										fastWalkingSpeedMps,
+										ReportIssueSeverity.WARNING),
+								context.getSourceInfo());
 					}
 				}
 			}
@@ -152,17 +165,23 @@ public class TransferStreamingValidator
 		if (transfer.getFromRouteId() != null) {
 			fromRoute = dao.getRoute(transfer.getFromRouteId());
 			if (fromRoute == null) {
-				reportSink
-						.report(new InvalidReferenceError(context.getSourceInfo(), "from_route_id",
-								transfer.getFromRouteId().getInternalId(), GtfsRoute.TABLE_NAME,
-								"route_id"));
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"from_route_id",
+								transfer.getFromRouteId().getInternalId(),
+								GtfsRoute.TABLE_NAME, "route_id"),
+						context.getSourceInfo());
 			}
 		}
 		if (transfer.getToRouteId() != null) {
 			toRoute = dao.getRoute(transfer.getToRouteId());
 			if (toRoute == null) {
-				reportSink.report(new InvalidReferenceError(context.getSourceInfo(), "to_route_id",
-						transfer.getToRouteId().getInternalId(), GtfsRoute.TABLE_NAME, "route_id"));
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"to_route_id",
+								transfer.getToRouteId().getInternalId(),
+								GtfsRoute.TABLE_NAME, "route_id"),
+						context.getSourceInfo());
 			}
 		}
 
@@ -172,31 +191,43 @@ public class TransferStreamingValidator
 		if (transfer.getFromTripId() != null) {
 			fromTrip = dao.getTrip(transfer.getFromTripId());
 			if (fromTrip == null) {
-				reportSink.report(new InvalidReferenceError(context.getSourceInfo(), "from_trip_id",
-						transfer.getFromTripId().getInternalId(), GtfsRoute.TABLE_NAME, "trip_id"));
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"from_trip_id",
+								transfer.getFromTripId().getInternalId(),
+								GtfsRoute.TABLE_NAME, "trip_id"),
+						context.getSourceInfo());
 			}
 		}
 		if (transfer.getToTripId() != null) {
 			toTrip = dao.getTrip(transfer.getToTripId());
 			if (toTrip == null) {
-				reportSink.report(new InvalidReferenceError(context.getSourceInfo(), "to_trip_id",
-						transfer.getToTripId().getInternalId(), GtfsTrip.TABLE_NAME, "trip_id"));
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"to_trip_id",
+								transfer.getToTripId().getInternalId(),
+								GtfsTrip.TABLE_NAME, "trip_id"),
+						context.getSourceInfo());
 			}
 		}
-		
+
 		if (transfer.getNonNullType() == GtfsTransferType.TIMED) {
 			// min transfer time should be present for TIMED type
 			if (transfer.getMinTransferTime() == null) {
-				reportSink.report(new MissingMandatoryValueError(
-						context.getSourceInfo(), "min_transfer_time"));
+				reportSink.report(
+						new MissingMandatoryValueError(context.getSourceRef(),
+								"min_transfer_time"),
+						context.getSourceInfo());
 			}
 		} else {
 			// min transfer time should not be present for other types
 			if (transfer.getMinTransferTime() != null) {
-				reportSink.report(new UselessValueWarning(
-						context.getSourceInfo(), "min_transfer_time",
-						Integer.toString(transfer.getMinTransferTime()),
-						"This field is only useful if transfer_type=2"));
+				reportSink.report(
+						new UselessValueWarning(context.getSourceRef(),
+								"min_transfer_time",
+								Integer.toString(transfer.getMinTransferTime()),
+								"This field is only useful if transfer_type=2"),
+						context.getSourceInfo());
 			}
 		}
 	}

@@ -36,7 +36,8 @@ public class RouteColorsStreamingValidator
 					brightnessDeltaPercent,
 					brightnessDeltaPercent < minBrightnessDeltaPercentError
 							? ReportIssueSeverity.ERROR
-							: ReportIssueSeverity.WARNING));
+							: ReportIssueSeverity.WARNING),
+					context.getSourceInfo());
 		}
 	}
 }

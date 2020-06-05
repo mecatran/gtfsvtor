@@ -32,51 +32,61 @@ public class RouteStreamingValidator implements StreamingValidator<GtfsRoute> {
 		// Check route->agency reference
 		if (route.getAgencyId() != null
 				&& dao.getAgency(route.getAgencyId()) == null) {
-			reportSink.report(new InvalidReferenceError(route.getSourceInfo(),
-					"agency_id", route.getAgencyId().getInternalId(),
-					GtfsAgency.TABLE_NAME, "agency_id"));
+			reportSink.report(
+					new InvalidReferenceError(context.getSourceRef(),
+							"agency_id", route.getAgencyId().getInternalId(),
+							GtfsAgency.TABLE_NAME, "agency_id"),
+					context.getSourceInfo());
 		}
 		if (route.getShortName() == null && route.getLongName() == null) {
 			// TODO specific report for this for better explanation
 			reportSink.report(
-					new MissingMandatoryValueError(context.getSourceInfo(),
-							"route_short_name", "route_long_name"));
+					new MissingMandatoryValueError(context.getSourceRef(),
+							"route_short_name", "route_long_name"),
+					context.getSourceInfo());
 		}
 		if (route.getShortName() != null
 				&& route.getShortName().length() > maxShortNameLen) {
 			// TODO specific report for this for better explanation
-			reportSink
-					.report(new InvalidFieldFormatError(context.getSourceInfo(),
+			reportSink.report(
+					new InvalidFieldFormatError(context.getSourceRef(),
 							"route_short_name", route.getShortName(),
 							"Max " + maxShortNameLen + " chars long")
-									.withSeverity(ReportIssueSeverity.WARNING));
+									.withSeverity(ReportIssueSeverity.WARNING),
+					context.getSourceInfo());
 		}
-		String lowercaseShortName = route.getShortName() != null ?
-				route.getShortName().toLowerCase().trim() : null;
-		String lowercaseLongName =
-				route.getLongName() != null ? route.getLongName().toLowerCase().trim() :
-						null;
-		if (lowercaseShortName != null && lowercaseLongName != null && (
-				lowercaseLongName.equals(lowercaseShortName)
-						|| lowercaseLongName.startsWith(lowercaseShortName + " ")
-						|| lowercaseLongName.startsWith(lowercaseShortName + "(")
-						|| lowercaseLongName.startsWith(lowercaseShortName + "-"))) {
+		String lowercaseShortName = route.getShortName() != null
+				? route.getShortName().toLowerCase().trim()
+				: null;
+		String lowercaseLongName = route.getLongName() != null
+				? route.getLongName().toLowerCase().trim()
+				: null;
+		if (lowercaseShortName != null && lowercaseLongName != null
+				&& (lowercaseLongName.equals(lowercaseShortName)
+						|| lowercaseLongName
+								.startsWith(lowercaseShortName + " ")
+						|| lowercaseLongName
+								.startsWith(lowercaseShortName + "(")
+						|| lowercaseLongName
+								.startsWith(lowercaseShortName + "-"))) {
 			// TODO specific report for this for better explanation
-			reportSink.report(new InvalidFieldValueIssue(
-					context.getSourceInfo(), route.getShortName(),
+			reportSink.report(new InvalidFieldValueIssue(context.getSourceRef(),
+					route.getShortName(),
 					"Long name should not start or be equals with short name",
 					"route_short_name", "route_long_name")
-							.withSeverity(ReportIssueSeverity.WARNING));
+							.withSeverity(ReportIssueSeverity.WARNING),
+					context.getSourceInfo());
 		}
 		if (route.getLongName() != null && route.getDescription() != null
 				&& route.getLongName()
 						.equalsIgnoreCase(route.getDescription())) {
-			reportSink
-					.report(new InvalidFieldValueIssue(context.getSourceInfo(),
+			reportSink.report(
+					new InvalidFieldValueIssue(context.getSourceRef(),
 							route.getDescription(),
 							"Description should not be the same as long name",
 							"route_desc", "route_long_name")
-									.withSeverity(ReportIssueSeverity.WARNING));
+									.withSeverity(ReportIssueSeverity.WARNING),
+					context.getSourceInfo());
 		}
 	}
 }

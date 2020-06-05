@@ -9,7 +9,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 /*
  * Note: we set the severity to warning, as the GTFS specs do not clearly state this to be forbidden. But anyway, this is useless.
@@ -20,14 +20,14 @@ public class DuplicatedFareRuleWarning implements ReportIssue {
 	private GtfsFareAttribute fareAttribute;
 	private List<GtfsFareRule> fareRules;
 
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public DuplicatedFareRuleWarning(GtfsFareAttribute fareAttribute,
 			List<GtfsFareRule> fareRules) {
 		this.fareAttribute = fareAttribute;
 		this.fareRules = fareRules;
 		this.sourceInfos = fareRules.stream()
-				.map(rule -> new SourceInfoWithFields(rule.getSourceInfo(),
+				.map(rule -> new SourceRefWithFields(rule.getSourceRef(),
 						"route_id", "origin_id", "destination_id",
 						"contains_id"))
 				.collect(Collectors.toList());
@@ -42,7 +42,7 @@ public class DuplicatedFareRuleWarning implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

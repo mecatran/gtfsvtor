@@ -22,7 +22,7 @@ public class StopParentValidator implements DaoValidator {
 				parent = dao.getStop(stop.getParentId());
 				if (parent == null) {
 					reportSink.report(new InvalidReferenceError(
-							stop.getSourceInfo(), "parent_station",
+							stop.getSourceRef(), "parent_station",
 							stop.getParentId().getInternalId(),
 							GtfsStop.TABLE_NAME, "stop_id"));
 				}
@@ -51,7 +51,7 @@ public class StopParentValidator implements DaoValidator {
 				if (parent == null) {
 					// Missing
 					reportSink.report(new MissingMandatoryValueError(
-							stop.getSourceInfo(), "parent_station"));
+							stop.getSourceRef(), "parent_station"));
 				} else {
 					GtfsStopType actualParentType = parent.getType();
 					GtfsStopType expectedParentType = stop

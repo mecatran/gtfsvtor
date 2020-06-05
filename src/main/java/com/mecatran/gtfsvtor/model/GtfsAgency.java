@@ -5,10 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
-public class GtfsAgency
-		implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+public class GtfsAgency implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "agency.txt";
 
@@ -21,7 +18,7 @@ public class GtfsAgency
 	private String fareUrl;
 	private String email;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	/* Note: For a null ID, we store a non-null ID. */
 	public GtfsAgency.Id getId() {
@@ -29,8 +26,8 @@ public class GtfsAgency
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public String getName() {
@@ -101,8 +98,8 @@ public class GtfsAgency
 			agency.id = id(id);
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			agency.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			agency.sourceLineNumber = lineNumber;
 			return this;
 		}
 

@@ -1,5 +1,6 @@
 package com.mecatran.gtfsvtor.loader.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,5 +65,11 @@ public class DataObjectSourceInfoImpl implements DataObjectSourceInfo {
 		if (cmp != 0)
 			return cmp;
 		return Long.compare(lineNumber, other.getLineNumber());
+	}
+
+	@Override
+	public String toString() {
+		return getTable().getTableName() + ", L" + getLineNumber() + ": "
+				+ Arrays.toString(getFields().toArray());
 	}
 }

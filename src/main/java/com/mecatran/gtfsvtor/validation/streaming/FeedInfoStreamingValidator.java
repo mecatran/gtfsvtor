@@ -34,25 +34,24 @@ public class FeedInfoStreamingValidator
 				&& feedInfo.getFeedEndDate() != null
 				&& feedInfo.getFeedStartDate()
 						.compareTo(feedInfo.getFeedEndDate()) > 0) {
-			reportSink.report(new InvalidFieldValueIssue(
-					feedInfo.getSourceInfo(),
+			reportSink.report(new InvalidFieldValueIssue(context.getSourceRef(),
 					feedInfo.getFeedEndDate().toString(),
 					"end date should be greater or equal than start date",
-					"feed_end_date"));
+					"feed_end_date"), context.getSourceInfo());
 		}
 		if (feedInfo.getFeedStartDate() == null
 				&& feedInfo.getFeedEndDate() != null) {
-			reportSink.report(new InvalidFieldValueIssue(
-					feedInfo.getSourceInfo(), null,
+			reportSink.report(new InvalidFieldValueIssue(context.getSourceRef(),
+					null,
 					"both feed_start_date and feed_end_date should be set, or none",
-					"feed_start_date"));
+					"feed_start_date"), context.getSourceInfo());
 		}
 		if (feedInfo.getFeedEndDate() == null
 				&& feedInfo.getFeedStartDate() != null) {
-			reportSink.report(new InvalidFieldValueIssue(
-					feedInfo.getSourceInfo(), null,
+			reportSink.report(new InvalidFieldValueIssue(context.getSourceRef(),
+					null,
 					"both feed_start_date and feed_end_date should be set, or none",
-					"feed_end_date"));
+					"feed_end_date"), context.getSourceInfo());
 		}
 	}
 }

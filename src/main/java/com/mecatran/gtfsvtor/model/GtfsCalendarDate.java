@@ -1,9 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
 public class GtfsCalendarDate
-		implements GtfsObject<Void>, GtfsObjectWithSourceInfo {
+		implements GtfsObject<Void>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "calendar_dates.txt";
 
@@ -11,11 +9,11 @@ public class GtfsCalendarDate
 	private GtfsLogicalDate date;
 	private GtfsCalendarDateExceptionType exceptionType;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsCalendar.Id getCalendarId() {
@@ -37,8 +35,8 @@ public class GtfsCalendarDate
 			calendarDate = new GtfsCalendarDate();
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			calendarDate.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			calendarDate.sourceLineNumber = lineNumber;
 			return this;
 		}
 

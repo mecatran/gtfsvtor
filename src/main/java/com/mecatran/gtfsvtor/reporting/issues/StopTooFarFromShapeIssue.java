@@ -12,7 +12,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(categoryName = "Stop too far from shape")
 public class StopTooFarFromShapeIssue implements ReportIssue {
@@ -25,7 +25,7 @@ public class StopTooFarFromShapeIssue implements ReportIssue {
 	private double arcLengthMeters;
 	private GeoCoordinates projectedPoint;
 	private ReportIssueSeverity severity;
-	private SourceInfoWithFields sourceInfo;
+	private SourceRefWithFields sourceInfo;
 
 	public StopTooFarFromShapeIssue(GtfsStop stop,
 			GtfsTripStopSequence stopSequence, GtfsShape.Id shapeId,
@@ -40,7 +40,7 @@ public class StopTooFarFromShapeIssue implements ReportIssue {
 		this.arcLengthMeters = linearDistanceMeters;
 		this.projectedPoint = projectedPoint;
 		this.severity = severity;
-		this.sourceInfo = new SourceInfoWithFields(stop.getSourceInfo(),
+		this.sourceInfo = new SourceRefWithFields(stop.getSourceRef(),
 				"stop_lat", "stop_lon");
 	}
 
@@ -79,7 +79,7 @@ public class StopTooFarFromShapeIssue implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return Arrays.asList(sourceInfo);
 	}
 

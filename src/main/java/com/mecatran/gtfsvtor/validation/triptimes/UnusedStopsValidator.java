@@ -41,7 +41,7 @@ public class UnusedStopsValidator implements TripTimesValidator {
 		for (GtfsStop.Id unusedStopId : unusedStopsIds) {
 			GtfsStop stop = dao.getStop(unusedStopId);
 			reportSink.report(new UnusedObjectWarning("stop", unusedStopId,
-					stop.getSourceInfo(), "stop_id"));
+					stop.getSourceRef(), "stop_id"));
 		}
 	}
 }

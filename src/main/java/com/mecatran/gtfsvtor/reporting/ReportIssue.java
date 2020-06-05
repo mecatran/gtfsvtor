@@ -9,10 +9,10 @@ import com.mecatran.gtfsvtor.utils.MiscUtils;
 public interface ReportIssue {
 
 	/**
-	 * @return Sorted list of source infos. Empty by default if no source info
-	 *         is available. Please do not return null.
+	 * @return Sorted list of source references. Empty by default if no source
+	 *         info is available. Please do not return null.
 	 */
-	public default List<SourceInfoWithFields> getSourceInfos() {
+	public default List<SourceRefWithFields> getSourceRefs() {
 		return Collections.emptyList();
 	}
 
@@ -65,8 +65,8 @@ public interface ReportIssue {
 		return new Comparator<ReportIssue>() {
 			@Override
 			public int compare(ReportIssue o1, ReportIssue o2) {
-				List<SourceInfoWithFields> si1 = o1.getSourceInfos();
-				List<SourceInfoWithFields> si2 = o2.getSourceInfos();
+				List<SourceRefWithFields> si1 = o1.getSourceRefs();
+				List<SourceRefWithFields> si2 = o2.getSourceRefs();
 				if (si1.isEmpty() && si2.isEmpty()) {
 					if (o1 instanceof Comparable
 							&& o1.getClass().equals(o2.getClass())) {

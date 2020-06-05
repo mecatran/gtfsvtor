@@ -25,7 +25,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 		dao.getAgencies().forEach(agency -> {
 			if (dao.getRoutesOfAgency(agency.getId()).count() == 0) {
 				reportSink.report(new UnusedObjectWarning("agency",
-						agency.getId(), agency.getSourceInfo(), "agency_id"));
+						agency.getId(), agency.getSourceRef(), "agency_id"));
 			}
 		});
 
@@ -33,7 +33,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 		dao.getRoutes().forEach(route -> {
 			if (dao.getTripsOfRoute(route.getId()).count() == 0) {
 				reportSink.report(new UnusedObjectWarning("route",
-						route.getId(), route.getSourceInfo(), "route_id"));
+						route.getId(), route.getSourceRef(), "route_id"));
 			}
 		});
 
@@ -53,11 +53,11 @@ public class UnusedObjectsValidator implements DaoValidator {
 			if (calendar != null) {
 				reportSink.report(
 						new UnusedObjectWarning("calendar", unusedCalendarId,
-								calendar.getSourceInfo(), "service_id"));
+								calendar.getSourceRef(), "service_id"));
 			}
 			dao.getCalendarDates(unusedCalendarId).forEach(calendarDate -> {
 				reportSink.report(new UnusedObjectWarning("calendar date",
-						unusedCalendarId, calendarDate.getSourceInfo(),
+						unusedCalendarId, calendarDate.getSourceRef(),
 						"service_id"));
 			});
 		}
@@ -78,7 +78,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 					.count() == 0;
 			if (noStops && noEntrances && noNodes) {
 				reportSink.report(new UnusedObjectWarning("station",
-						station.getId(), station.getSourceInfo(), "stop_id"));
+						station.getId(), station.getSourceRef(), "stop_id"));
 			}
 		});
 
@@ -92,7 +92,7 @@ public class UnusedObjectsValidator implements DaoValidator {
 		for (GtfsLevel.Id unusedLevelId : unusedLevelIds) {
 			GtfsLevel level = dao.getLevel(unusedLevelId);
 			reportSink.report(new UnusedObjectWarning("level", unusedLevelId,
-					level.getSourceInfo(), "level_id"));
+					level.getSourceRef(), "level_id"));
 		}
 
 		/* Empty (or single stop) trips do have a special validator */

@@ -146,6 +146,11 @@ public class UnivocityCsvDataTable implements DataTable {
 	}
 
 	@Override
+	public String getTableName() {
+		return tableName;
+	}
+
+	@Override
 	public void close() throws IOException {
 		// No-op, auto-close enabled
 	}

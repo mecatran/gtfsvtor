@@ -55,14 +55,14 @@ public class PathwayStreamingValidator
 			fromStop = dao.getStop(pathway.getFromStopId());
 			if (fromStop == null) {
 				reportSink.report(new InvalidReferenceError(
-						context.getSourceInfo(), "from_stop_id",
+						context.getSourceRef(), "from_stop_id",
 						pathway.getFromStopId().getInternalId(),
-						GtfsStop.TABLE_NAME, "stop_id"));
+						GtfsStop.TABLE_NAME, "stop_id"), context.getSourceInfo());
 			} else {
 				if (fromStop.getType() == GtfsStopType.STATION) {
 					reportSink.report(new WrongPathwayStopTypeError(
-							context.getSourceInfo(), pathway, fromStop,
-							"from_stop_id"));
+							context.getSourceRef(), pathway, fromStop,
+							"from_stop_id"), context.getSourceInfo());
 				}
 			}
 		}
@@ -70,14 +70,14 @@ public class PathwayStreamingValidator
 			toStop = dao.getStop(pathway.getToStopId());
 			if (toStop == null) {
 				reportSink.report(new InvalidReferenceError(
-						context.getSourceInfo(), "to_stop_id",
+						context.getSourceRef(), "to_stop_id",
 						pathway.getToStopId().getInternalId(),
-						GtfsStop.TABLE_NAME, "stop_id"));
+						GtfsStop.TABLE_NAME, "stop_id"), context.getSourceInfo());
 			} else {
 				if (toStop.getType() == GtfsStopType.STATION) {
 					reportSink.report(new WrongPathwayStopTypeError(
-							context.getSourceInfo(), pathway, toStop,
-							"to_stop_id"));
+							context.getSourceRef(), pathway, toStop,
+							"to_stop_id"), context.getSourceInfo());
 				}
 			}
 		}
@@ -97,9 +97,9 @@ public class PathwayStreamingValidator
 						/ (pathway.getTraversalTime() + walkingTimeSlackSec);
 				if (speedMps > fastWalkingSpeedMps) {
 					reportSink.report(new TooFastWalkingSpeed(
-							context.getSourceInfo(), fromStop, toStop, d,
+							context.getSourceRef(), fromStop, toStop, d,
 							speedMps, fastWalkingSpeedMps,
-							ReportIssueSeverity.WARNING));
+							ReportIssueSeverity.WARNING), context.getSourceInfo());
 				}
 			}
 		}

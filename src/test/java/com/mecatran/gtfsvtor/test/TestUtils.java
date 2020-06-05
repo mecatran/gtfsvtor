@@ -7,6 +7,7 @@ import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
 import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
+import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
@@ -58,6 +59,10 @@ public class TestUtils {
 		DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
 				config).withVerbose(true);
 		tripTimesValidator.scanValidate(context);
+
+		SourceInfoDataReloader sourceInfoReloader = new SourceInfoDataReloader(
+				dataSource).withVerbose(true);
+		sourceInfoReloader.loadSourceInfos(report);
 
 		System.out.println(String.format(
 				"Validation result for '%s': %d INFO, %d WARNING, %d ERROR, %d CRITICAL",

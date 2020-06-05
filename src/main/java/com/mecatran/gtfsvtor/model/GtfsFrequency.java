@@ -2,10 +2,8 @@ package com.mecatran.gtfsvtor.model;
 
 import java.util.Optional;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
 public class GtfsFrequency
-		implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+		implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "frequencies.txt";
 
@@ -15,11 +13,11 @@ public class GtfsFrequency
 	private Integer headwaySeconds;
 	private GtfsExactTime exactTimes;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsTrip.Id getTripId() {
@@ -59,8 +57,8 @@ public class GtfsFrequency
 			frequency = new GtfsFrequency();
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			frequency.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			frequency.sourceLineNumber = lineNumber;
 			return this;
 		}
 

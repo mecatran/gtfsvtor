@@ -24,17 +24,21 @@ public class FareRuleStreamingValidator
 		// Check fare reference
 		if (fareRule.getFareId() != null
 				&& dao.getFareAttribute(fareRule.getFareId()) == null) {
-			reportSink.report(new InvalidReferenceError(context.getSourceInfo(),
-					"fare_id", fareRule.getFareId().getInternalId(),
-					GtfsFareAttribute.TABLE_NAME, "fare_id"));
+			reportSink.report(
+					new InvalidReferenceError(context.getSourceRef(), "fare_id",
+							fareRule.getFareId().getInternalId(),
+							GtfsFareAttribute.TABLE_NAME, "fare_id"),
+					context.getSourceInfo());
 		}
 
 		// Check route reference
 		if (fareRule.getRouteId() != null
 				&& dao.getRoute(fareRule.getRouteId()) == null) {
-			reportSink.report(new InvalidReferenceError(context.getSourceInfo(),
-					"route_id", fareRule.getRouteId().getInternalId(),
-					GtfsAgency.TABLE_NAME, "route_id"));
+			reportSink.report(
+					new InvalidReferenceError(context.getSourceRef(),
+							"route_id", fareRule.getRouteId().getInternalId(),
+							GtfsAgency.TABLE_NAME, "route_id"),
+					context.getSourceInfo());
 		}
 
 		// Check zone reference
@@ -49,9 +53,10 @@ public class FareRuleStreamingValidator
 			GtfsZone.Id zoneId, String fieldName) {
 		if (zoneId != null && !context.getPartialDao().hasZoneId(zoneId)) {
 			context.getReportSink()
-					.report(new InvalidReferenceError(context.getSourceInfo(),
+					.report(new InvalidReferenceError(context.getSourceRef(),
 							"zone_id", zoneId.getInternalId(),
-							GtfsStop.TABLE_NAME, "zone_id"));
+							GtfsStop.TABLE_NAME, "zone_id"),
+							context.getSourceInfo());
 		}
 	}
 }

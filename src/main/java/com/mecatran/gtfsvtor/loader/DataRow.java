@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.loader;
 
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
+
 public interface DataRow {
 
 	/**
@@ -9,6 +11,8 @@ public interface DataRow {
 	public String getString(String field);
 
 	public DataObjectSourceInfo getSourceInfo();
+
+	public DataObjectSourceRef getSourceRef();
 
 	public int getRecordCount();
 }

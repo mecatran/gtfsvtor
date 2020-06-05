@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 
-public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceInfo {
+public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "routes.txt";
 
@@ -21,15 +21,15 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 	private GtfsColor textColor;
 	private Integer sortOrder;
 
-	private DataObjectSourceInfo sourceInfo;
+	private long sourceLineNumber;
 
 	public GtfsRoute.Id getId() {
 		return id;
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo() {
-		return sourceInfo;
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsAgency.Id getAgencyId() {
@@ -112,8 +112,8 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceInfo {
 			route.id = id(id);
 		}
 
-		public Builder withSourceInfo(DataObjectSourceInfo sourceInfo) {
-			route.sourceInfo = sourceInfo;
+		public Builder withSourceLineNumber(long lineNumber) {
+			route.sourceLineNumber = lineNumber;
 			return this;
 		}
 

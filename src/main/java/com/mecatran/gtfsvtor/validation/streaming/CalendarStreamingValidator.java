@@ -2,8 +2,6 @@ package com.mecatran.gtfsvtor.validation.streaming;
 
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkFieldValue;
 
-import java.util.stream.IntStream;
-
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
@@ -29,10 +27,10 @@ public class CalendarStreamingValidator
 		if (calendar.getStartDate() != null && calendar.getEndDate() != null
 				&& calendar.getStartDate()
 						.compareTo(calendar.getEndDate()) > 0) {
-			reportSink.report(new InvalidFieldValueIssue(
-					calendar.getSourceInfo(), calendar.getEndDate().toString(),
+			reportSink.report(new InvalidFieldValueIssue(context.getSourceRef(),
+					calendar.getEndDate().toString(),
 					"end date should be greater or equal than start date",
-					"end_date"));
+					"end_date"), context.getSourceInfo());
 		}
 
 		// Check date range

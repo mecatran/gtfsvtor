@@ -9,18 +9,18 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Stop too close to origin")
 public class StopTooCloseToOriginError implements ReportIssue {
 
 	private GtfsStop stop;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public StopTooCloseToOriginError(GtfsStop stop) {
 		this.stop = stop;
-		this.sourceInfos = Arrays.asList(new SourceInfoWithFields(
-				stop.getSourceInfo(), "stop_lat", "stop_lon"));
+		this.sourceInfos = Arrays.asList(new SourceRefWithFields(
+				stop.getSourceRef(), "stop_lat", "stop_lon"));
 	}
 
 	public GtfsStop getStop() {
@@ -28,7 +28,7 @@ public class StopTooCloseToOriginError implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

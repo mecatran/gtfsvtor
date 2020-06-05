@@ -10,24 +10,24 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Useless calendar date")
 public class UselessCalendarDateWarning implements ReportIssue {
 
 	private GtfsCalendarDate calendarDate;
 	private GtfsCalendar calendar;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public UselessCalendarDateWarning(GtfsCalendarDate calendarDate,
 			GtfsCalendar calendar) {
 		this.calendarDate = calendarDate;
 		this.calendar = calendar;
 		this.sourceInfos = new ArrayList<>();
-		sourceInfos.add(new SourceInfoWithFields(calendarDate.getSourceInfo(),
+		sourceInfos.add(new SourceRefWithFields(calendarDate.getSourceRef(),
 				"service_id"));
 		if (calendar != null)
-			sourceInfos.add(new SourceInfoWithFields(calendar.getSourceInfo(),
+			sourceInfos.add(new SourceRefWithFields(calendar.getSourceRef(),
 					"service_id"));
 	}
 
@@ -40,7 +40,7 @@ public class UselessCalendarDateWarning implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

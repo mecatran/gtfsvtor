@@ -8,7 +8,7 @@ import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(categoryName = "Color contrast")
 public class RouteColorContrastIssue implements ReportIssue {
@@ -16,15 +16,15 @@ public class RouteColorContrastIssue implements ReportIssue {
 	private GtfsRoute route;
 	private double brightnessDeltaPercent;
 	private ReportIssueSeverity severity;
-	private List<SourceInfoWithFields> sourceInfos;
+	private List<SourceRefWithFields> sourceInfos;
 
 	public RouteColorContrastIssue(GtfsRoute route,
 			double brightnessDeltaPercent, ReportIssueSeverity severity) {
 		this.route = route;
 		this.brightnessDeltaPercent = brightnessDeltaPercent;
 		this.severity = severity;
-		this.sourceInfos = Arrays.asList(new SourceInfoWithFields(
-				route.getSourceInfo(), "route_color", "route_text_color"));
+		this.sourceInfos = Arrays.asList(new SourceRefWithFields(
+				route.getSourceRef(), "route_color", "route_text_color"));
 	}
 
 	public GtfsRoute getRoute() {
@@ -42,7 +42,7 @@ public class RouteColorContrastIssue implements ReportIssue {
 	}
 
 	@Override
-	public List<SourceInfoWithFields> getSourceInfos() {
+	public List<SourceRefWithFields> getSourceRefs() {
 		return sourceInfos;
 	}
 

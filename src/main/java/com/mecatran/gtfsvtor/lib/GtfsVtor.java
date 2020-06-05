@@ -10,6 +10,7 @@ import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
 import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
+import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
 import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.HtmlReportFormatter;
@@ -84,6 +85,10 @@ public class GtfsVtor {
 			DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
 					config).withVerbose(args.isVerbose());
 			tripTimesValidator.scanValidate(context);
+
+			SourceInfoDataReloader sourceInfoReloader = new SourceInfoDataReloader(
+					dataSource).withVerbose(args.isVerbose());
+			sourceInfoReloader.loadSourceInfos(report);
 		}
 
 		ReportFormatter formatter = new HtmlReportFormatter(

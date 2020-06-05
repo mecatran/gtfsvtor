@@ -18,15 +18,15 @@ public class ShapePointStreamingValidator
 		if (shapePoint.getPointSequence() != null
 				&& shapePoint.getPointSequence().getSequence() < 0)
 			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceInfo(), "shape_pt_sequence",
+					context.getSourceRef(), "shape_pt_sequence",
 					Integer.toString(
 							shapePoint.getPointSequence().getSequence()),
-					"positive integer"));
+					"positive integer"), context.getSourceInfo());
 		if (shapePoint.getShapeDistTraveled() != null
 				&& shapePoint.getShapeDistTraveled() < 0.0)
 			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceInfo(), "shape_dist_traveled",
+					context.getSourceRef(), "shape_dist_traveled",
 					Double.toString(shapePoint.getShapeDistTraveled()),
-					"positive floating point"));
+					"positive floating point"), context.getSourceInfo());
 	}
 }
