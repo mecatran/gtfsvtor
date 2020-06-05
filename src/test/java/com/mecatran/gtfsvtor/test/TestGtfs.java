@@ -57,6 +57,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceInfoWithFields;
+import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentStationTooCloseWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
@@ -1074,6 +1075,9 @@ public class TestGtfs {
 		List<WrongDropOffPickUpTypeForSplitTripsIssue> obis = tb.report
 				.getReportIssues(WrongDropOffPickUpTypeForSplitTripsIssue.class);
 		assertEquals(2, obis.size());
+		List<DifferentHeadsignsIssue> dhs = tb.report
+				.getReportIssues(DifferentHeadsignsIssue.class);
+		assertEquals(1, dhs.size());
 	}
 
 	@Test
