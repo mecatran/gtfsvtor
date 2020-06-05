@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.validation.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,14 +12,20 @@ import com.google.common.collect.Multimaps;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
+import com.mecatran.gtfsvtor.model.GtfsRouteType;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
+import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
 import com.mecatran.gtfsvtor.reporting.issues.WrongDropOffPickUpTypeForSplitTripsIssue;
+import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 
 public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 		implements DaoValidator {
+
+	@ConfigurableOption
+	GtfsRouteType[] routeTypes = 	new GtfsRouteType[]{GtfsRouteType.RAIL};
 
 	/**
 	 * Validates that boarding restrictions for split and joined trains are
@@ -35,6 +42,7 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 	public void validate(Context context) {
 		IndexedReadOnlyDao dao = context.getDao();
 		ReportSink reportSink = context.getReportSink();
+		List<GtfsRouteType> routeTypesList = Arrays.asList(routeTypes);
 
 		// Process trips route by route to reduce memory usage
 		// split trains have at least their two first stops in common, joined
@@ -43,7 +51,9 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 		// match so we collect all split/joined trips by a key representing
 		// their first/last to stops and service id.
 		dao.getRoutes().forEach(route -> {
-			// TODO validation could be restricted to trainish (or configurable) route types.
+			if (!routeTypesList.contains(route.getType())) {
+				return;
+			}
 			ListMultimap<Object, GtfsTrip.Id> tripsPerStartKey = ArrayListMultimap.create();
 			ListMultimap<Object, GtfsTrip.Id> tripsPerEndKey = ArrayListMultimap.create();
 			dao.getTripsOfRoute(route.getId()).forEach(trip -> {
@@ -78,7 +88,7 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 					}
 				}
 			}
-			// validate that of split trains, at least one has dop-off none set
+			// validate that of joined trains, at least one has dop-off none set
 			// for stops in common
 			for (List<GtfsTrip.Id> joinedTripsIds : Multimaps.asMap(
 					tripsPerEndKey).values()) {
@@ -95,6 +105,12 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 							reportSink.report(
 									new WrongDropOffPickUpTypeForSplitTripsIssue(tripId1,
 											tripId2, false));
+						}
+
+						GtfsTrip trip1 = dao.getTrip(tripId1);
+						GtfsTrip trip2 = dao.getTrip(tripId2);
+						if (!Objects.equals(trip1.getHeadsign(), trip2.getHeadsign())) {
+							reportSink.report(new DifferentHeadsignsIssue(trip1, trip2));
 						}
 					}
 				}
