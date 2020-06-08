@@ -10,7 +10,6 @@ import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
-import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
@@ -39,12 +38,13 @@ public interface IndexedReadOnlyDao extends ReadOnlyDao {
 	/**
 	 * Do not use this method in a DaoValidator, if you plan to scan the stop
 	 * times of all trips. Better use the streaming capabilities of a
-	 * TripTimesValidator implementation when possible.
+	 * TripTimesValidator implementation when possible. But you can safely use
+	 * this method for cherry-picking the stop times of a few selected trips.
 	 *
 	 * @param tripId
 	 * @return The list of stop times for this trip.
 	 */
-	public List<GtfsStopTime> getStopTimesOfTrip(GtfsTrip.Id tripId);
+	public GtfsTripAndTimes getTripAndTimes(GtfsTrip.Id tripId);
 
 	/**
 	 * @return A stream of trip with their stop times, ordered by route.

@@ -25,8 +25,7 @@ import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.validation.DaoValidator.Context;
 import com.mecatran.gtfsvtor.validation.TripTimesValidator;
 
-public class OverlappingBlockIdValidator
-		implements TripTimesValidator {
+public class OverlappingBlockIdValidator implements TripTimesValidator {
 
 	// TODO Handle frequencies when loaded
 
@@ -114,9 +113,9 @@ public class OverlappingBlockIdValidator
 					}
 					// Overlapping block found
 					List<GtfsStopTime> stopTimes1 = dao
-							.getStopTimesOfTrip(activeTrip.getId());
+							.getTripAndTimes(activeTrip.getId()).getStopTimes();
 					List<GtfsStopTime> stopTimes2 = dao
-							.getStopTimesOfTrip(newTrip.getId());
+							.getTripAndTimes(newTrip.getId()).getStopTimes();
 					reportSink.report(new OverlappingBlockIdIssue(blockId,
 							activeTrip, newTrip,
 							stopTimes1.get(0).getDepartureOrArrivalTime(),

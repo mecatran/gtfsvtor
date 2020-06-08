@@ -57,8 +57,8 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
-import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
+import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentStationTooCloseWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedFareRuleWarning;
@@ -231,7 +231,7 @@ public class TestGtfs {
 		assertNull(unknownTrip);
 
 		List<GtfsStopTime> city1stopTimes = dao
-				.getStopTimesOfTrip(GtfsTrip.id("CITY1"));
+				.getTripAndTimes(GtfsTrip.id("CITY1")).getStopTimes();
 		assertEquals(5, city1stopTimes.size());
 		assertEquals(GtfsStop.id("STAGECOACH"),
 				city1stopTimes.get(0).getStopId());
@@ -262,7 +262,7 @@ public class TestGtfs {
 				city1stopTimes.get(0).getNonNullDropoffType());
 
 		List<GtfsStopTime> unknownStopTimes = dao
-				.getStopTimesOfTrip(GtfsTrip.id("FOOBAR"));
+				.getTripAndTimes(GtfsTrip.id("FOOBAR")).getStopTimes();
 		assertTrue(unknownStopTimes.isEmpty());
 
 		List<GtfsFrequency> frequencies = dao.getFrequencies()
@@ -593,7 +593,7 @@ public class TestGtfs {
 		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsStopTime.TABLE_NAME, mmt.getTableName());
 		tb.dao.getTrips().forEach(trip -> assertTrue(
-				tb.dao.getStopTimesOfTrip(trip.getId()).isEmpty()));
+				tb.dao.getTripAndTimes(trip.getId()).getStopTimes().isEmpty()));
 	}
 
 	@Test
@@ -768,7 +768,8 @@ public class TestGtfs {
 		// Test linear indexing
 		LinearGeometryIndex lgi = tb.dao.getLinearGeometryIndex();
 		GtfsTrip city1 = tb.dao.getTrip(GtfsTrip.id("CITY1"));
-		List<GtfsStopTime> stopTimes = tb.dao.getStopTimesOfTrip(city1.getId());
+		List<GtfsStopTime> stopTimes = tb.dao.getTripAndTimes(city1.getId())
+				.getStopTimes();
 		assertEquals((double) 0.0,
 				lgi.getProjectedPoint(stopTimes.get(0)).getArcLengthMeters(),
 				1e-10);
@@ -954,8 +955,8 @@ public class TestGtfs {
 		LinearGeometryIndex lgi = dao.getLinearGeometryIndex();
 
 		/* A simple one segment shape (S0->S1->S2) */
-		List<GtfsStopTime> stopTimes = dao
-				.getStopTimesOfTrip(GtfsTrip.id("T1"));
+		List<GtfsStopTime> stopTimes = dao.getTripAndTimes(GtfsTrip.id("T1"))
+				.getStopTimes();
 		GtfsStopTime st0 = stopTimes.get(0);
 		GtfsStopTime st1 = stopTimes.get(1);
 		GtfsStopTime st2 = stopTimes.get(2);
@@ -977,7 +978,7 @@ public class TestGtfs {
 		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
 
 		/* A simple one segment shape, reversed (S2->S1->SO) */
-		stopTimes = dao.getStopTimesOfTrip(GtfsTrip.id("T2"));
+		stopTimes = dao.getTripAndTimes(GtfsTrip.id("T2")).getStopTimes();
 		st0 = stopTimes.get(0);
 		st1 = stopTimes.get(1);
 		st2 = stopTimes.get(2);
@@ -1001,7 +1002,7 @@ public class TestGtfs {
 				pp2.getProjectedPoint()) < 1e-2);
 
 		/* A backtracing 2 segment shape (S1->S3->S2) */
-		stopTimes = dao.getStopTimesOfTrip(GtfsTrip.id("T3"));
+		stopTimes = dao.getTripAndTimes(GtfsTrip.id("T3")).getStopTimes();
 		st0 = stopTimes.get(0);
 		st1 = stopTimes.get(1);
 		st2 = stopTimes.get(2);
@@ -1096,7 +1097,8 @@ public class TestGtfs {
 	public void testSplitJoinedTrips() {
 		TestBundle tb = loadAndValidate("split_or_joined_trips");
 		List<WrongDropOffPickUpTypeForSplitTripsIssue> obis = tb.report
-				.getReportIssues(WrongDropOffPickUpTypeForSplitTripsIssue.class);
+				.getReportIssues(
+						WrongDropOffPickUpTypeForSplitTripsIssue.class);
 		assertEquals(2, obis.size());
 		List<DifferentHeadsignsIssue> dhs = tb.report
 				.getReportIssues(DifferentHeadsignsIssue.class);
@@ -1287,7 +1289,7 @@ public class TestGtfs {
 		IndexedReadOnlyDao dao = tb.dao;
 		LinearGeometryIndex lgi = dao.getLinearGeometryIndex();
 		List<GtfsStopTime> stopTimes = dao
-				.getStopTimesOfTrip(GtfsTrip.id("42951766"));
+				.getTripAndTimes(GtfsTrip.id("42951766")).getStopTimes();
 		// Average distance from stop to shape
 		double avgDist = 0.0;
 		// Average factor between stop distance and shape linear distance

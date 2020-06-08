@@ -1,27 +1,18 @@
 package com.mecatran.gtfsvtor.model;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  * A simple holder for a trip and it's associated list of stop times.
  */
-public class GtfsTripAndTimes {
+public interface GtfsTripAndTimes {
 
-	private GtfsTrip trip;
+	public GtfsTrip getTrip();
 
-	private List<GtfsStopTime> stopTimes;
+	public List<GtfsStopTime> getStopTimes();
 
-	public GtfsTripAndTimes(GtfsTrip trip, List<GtfsStopTime> stopTimes) {
-		this.trip = trip;
-		this.stopTimes = Collections.unmodifiableList(stopTimes);
-	}
-
-	public GtfsTrip getTrip() {
-		return trip;
-	}
-
-	public List<GtfsStopTime> getStopTimes() {
-		return stopTimes;
-	}
+	/*
+	 * TODO Add indexed getter to stop times fields that do not need to
+	 * instantiate a full list
+	 */
 }

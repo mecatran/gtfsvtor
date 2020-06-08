@@ -17,6 +17,7 @@ import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
+import com.mecatran.gtfsvtor.dao.StopTimesDao;
 import com.mecatran.gtfsvtor.loader.DataLoader;
 import com.mecatran.gtfsvtor.loader.DataLoader.SourceContext;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
@@ -53,8 +54,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Set<GtfsZone.Id> zoneIds = new HashSet<>();
 	private Map<GtfsCalendar.Id, GtfsCalendar> calendars = new HashMap<>();
 	private Map<GtfsTrip.Id, GtfsTrip> trips = new HashMap<>();
-	private ListMultimap<GtfsTrip.Id, GtfsStopTime> stopTimes = ArrayListMultimap
-			.create();
+	private StopTimesDao stopTimesDao = new InMemorySimpleStopTimesDao();
 	private ListMultimap<GtfsShape.Id, GtfsShapePoint> shapePoints = ArrayListMultimap
 			.create();
 	private ListMultimap<GtfsTrip.Id, GtfsFrequency> frequencies = ArrayListMultimap
@@ -184,7 +184,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public int getStopTimesCount() {
-		return stopTimes.size();
+		return stopTimesDao.getStopTimesCount();
 	}
 
 	@Override
@@ -298,17 +298,14 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public List<GtfsStopTime> getStopTimesOfTrip(GtfsTrip.Id tripId) {
-		return Collections.unmodifiableList(stopTimes.get(tripId));
+	public GtfsTripAndTimes getTripAndTimes(GtfsTrip.Id tripId) {
+		return stopTimesDao.getStopTimesOfTrip(tripId, getTrip(tripId));
 	}
 
 	@Override
 	public Stream<GtfsTripAndTimes> getTripsAndTimes() {
-		// TODO Delegate this method to a stop time store
-		// This is a temporary implementation
-		return getRoutes().flatMap(route -> getTripsOfRoute(route.getId()))
-				.map(trip -> new GtfsTripAndTimes(trip,
-						getStopTimesOfTrip(trip.getId())));
+		return getRoutes().flatMap(route -> getTripsOfRoute(route.getId())).map(
+				trip -> stopTimesDao.getStopTimesOfTrip(trip.getId(), trip));
 	}
 
 	@Override
@@ -563,7 +560,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		// But we add times w/o stops
-		stopTimes.put(stopTime.getTripId(), stopTime);
+		stopTimesDao.addStopTime(stopTime);
 		// TODO: Add index stop->trip, stop->route?
 	}
 
@@ -692,9 +689,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void close() {
-		// Sort stop times by stop sequence
-		Multimaps.asMap(stopTimes).values().forEach(times -> Collections
-				.sort(times, GtfsStopTime.STOP_SEQ_COMPARATOR));
+		stopTimesDao.close();
 		// Sort shape points by point sequence
 		Multimaps.asMap(shapePoints).values().forEach(points -> Collections
 				.sort(points, GtfsShapePoint.POINT_SEQ_COMPARATOR));
