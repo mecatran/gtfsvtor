@@ -14,6 +14,7 @@ import com.google.common.reflect.ClassPath.ClassInfo;
 import com.mecatran.gtfsvtor.geospatial.GeoBounds;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsObject;
+import com.mecatran.gtfsvtor.model.GtfsRouteType;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
@@ -209,6 +210,8 @@ public class ValidatorInjector<T> {
 					value = config.getPattern(configKey, null);
 				} else if (fieldType.equals(GeoBounds.class)) {
 					value = config.getBounds(configKey, null);
+				} else if (fieldType.equals(GtfsRouteType[].class)) {
+					value = config.getRouteTypes(configKey, null);
 				} else {
 					System.err.println("Cannot configure validator "
 							+ validator.getClass().getSimpleName()

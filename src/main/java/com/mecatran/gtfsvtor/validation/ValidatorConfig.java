@@ -12,6 +12,7 @@ import java.util.regex.PatternSyntaxException;
 
 import com.mecatran.gtfsvtor.geospatial.GeoBounds;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
+import com.mecatran.gtfsvtor.model.GtfsRouteType;
 
 public interface ValidatorConfig {
 
@@ -102,6 +103,19 @@ public interface ValidatorConfig {
 			} else {
 				return defaultValue;
 			}
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
+	public default GtfsRouteType[] getRouteTypes(String key,
+			GtfsRouteType[] defaultValue) {
+		String str = this.getString(key);
+		if (str == null || str.isEmpty())
+			return defaultValue;
+		try {
+			return Arrays.stream(str.split(",")).mapToInt(Integer::parseInt).mapToObj(
+					GtfsRouteType::fromValue).toArray(GtfsRouteType[]::new);
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}

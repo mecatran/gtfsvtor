@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date
+Autorité de passage de démonstration,http://google.com,en,20070101,20111231

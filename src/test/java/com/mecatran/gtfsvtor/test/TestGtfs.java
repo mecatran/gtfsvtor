@@ -57,6 +57,7 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
+import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentStationTooCloseWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
@@ -98,6 +99,7 @@ import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
 import com.mecatran.gtfsvtor.reporting.issues.UselessCalendarDateWarning;
 import com.mecatran.gtfsvtor.reporting.issues.UselessValueWarning;
+import com.mecatran.gtfsvtor.reporting.issues.WrongDropOffPickUpTypeForSplitTripsIssue;
 import com.mecatran.gtfsvtor.reporting.issues.WrongPathwayStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
@@ -1088,6 +1090,17 @@ public class TestGtfs {
 		assertEquals(3, obis.size());
 		OverlappingBlockIdIssue obi0 = obis.get(0);
 		assertEquals(GtfsBlockId.fromValue("B1"), obi0.getBlockId());
+	}
+
+	@Test
+	public void testSplitJoinedTrips() {
+		TestBundle tb = loadAndValidate("split_or_joined_trips");
+		List<WrongDropOffPickUpTypeForSplitTripsIssue> obis = tb.report
+				.getReportIssues(WrongDropOffPickUpTypeForSplitTripsIssue.class);
+		assertEquals(2, obis.size());
+		List<DifferentHeadsignsIssue> dhs = tb.report
+				.getReportIssues(DifferentHeadsignsIssue.class);
+		assertEquals(1, dhs.size());
 	}
 
 	@Test
