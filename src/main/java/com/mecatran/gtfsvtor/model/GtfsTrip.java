@@ -127,7 +127,7 @@ public class GtfsTrip implements GtfsObject<String>, GtfsObjectWithSourceRef {
 		}
 
 		public Builder withHeadsign(String headsign) {
-			trip.headsign = headsign;
+			trip.headsign = headsign == null ? null : headsign.intern();
 			return this;
 		}
 

@@ -178,12 +178,12 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceRef {
 		}
 
 		public Builder withCode(String code) {
-			stop.code = code;
+			stop.code = code == null ? null : code.intern();
 			return this;
 		}
 
 		public Builder withName(String name) {
-			stop.name = name;
+			stop.name = name == null ? null : name.intern();
 			return this;
 		}
 
@@ -194,7 +194,8 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceRef {
 		}
 
 		public Builder withDescription(String description) {
-			stop.description = description;
+			stop.description = description == null ? null
+					: description.intern();
 			return this;
 		}
 
@@ -204,7 +205,7 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceRef {
 		}
 
 		public Builder withUrl(String url) {
-			stop.url = url;
+			stop.url = url == null ? null : url.intern();
 			return this;
 		}
 
