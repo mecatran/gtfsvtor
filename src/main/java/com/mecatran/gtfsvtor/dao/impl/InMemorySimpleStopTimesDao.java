@@ -9,7 +9,6 @@ import com.mecatran.gtfsvtor.dao.StopTimesDao;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
-import com.mecatran.gtfsvtor.model.impl.SimpleGtfsTripAndTimes;
 
 public class InMemorySimpleStopTimesDao implements StopTimesDao {
 
@@ -36,7 +35,7 @@ public class InMemorySimpleStopTimesDao implements StopTimesDao {
 	@Override
 	public GtfsTripAndTimes getStopTimesOfTrip(GtfsTrip.Id tripId,
 			GtfsTrip trip) {
-		return new SimpleGtfsTripAndTimes(trip,
+		return new GtfsTripAndTimes(trip,
 				Collections.unmodifiableList(stopTimes.get(tripId)));
 	}
 }

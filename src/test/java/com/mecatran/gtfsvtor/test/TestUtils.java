@@ -2,12 +2,14 @@ package com.mecatran.gtfsvtor.test;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
+import com.mecatran.gtfsvtor.dao.impl.PackingStopTimesDao;
 import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
 import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
 import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
 import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
+import com.mecatran.gtfsvtor.model.impl.TestPackedStopTimes;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
@@ -43,6 +45,8 @@ public class TestUtils {
 		NamedTabularDataSource dataSource = new CsvDataSource(
 				inputStreamSource);
 		InMemoryDao dao = new InMemoryDao().withVerbose(true);
+		PackingStopTimesDao
+				.setAssertListener(TestPackedStopTimes::assertStopTimes);
 
 		DefaultValidatorConfig config = new DefaultValidatorConfig();
 		DefaultStreamingValidator streamingValidator = new DefaultStreamingValidator(

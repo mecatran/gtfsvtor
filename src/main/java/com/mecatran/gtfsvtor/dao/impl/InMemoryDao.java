@@ -47,6 +47,9 @@ import com.mecatran.gtfsvtor.utils.Sextet;
 
 public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
+	// TODO Enable this
+	private static final boolean USE_PACKING = false;
+
 	private GtfsFeedInfo feedInfo;
 	private Map<GtfsAgency.Id, GtfsAgency> agencies = new HashMap<>();
 	private Map<GtfsRoute.Id, GtfsRoute> routes = new HashMap<>();
@@ -54,7 +57,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Set<GtfsZone.Id> zoneIds = new HashSet<>();
 	private Map<GtfsCalendar.Id, GtfsCalendar> calendars = new HashMap<>();
 	private Map<GtfsTrip.Id, GtfsTrip> trips = new HashMap<>();
-	private StopTimesDao stopTimesDao = new InMemorySimpleStopTimesDao();
+	private StopTimesDao stopTimesDao = USE_PACKING ? new PackingStopTimesDao()
+			: new InMemorySimpleStopTimesDao();
 	private ListMultimap<GtfsShape.Id, GtfsShapePoint> shapePoints = ArrayListMultimap
 			.create();
 	private ListMultimap<GtfsTrip.Id, GtfsFrequency> frequencies = ArrayListMultimap
@@ -94,6 +98,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	public InMemoryDao withVerbose(boolean verbose) {
 		this.verbose = verbose;
+		stopTimesDao.withVerbose(verbose);
 		return this;
 	}
 

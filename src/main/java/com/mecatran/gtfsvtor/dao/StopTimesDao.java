@@ -12,5 +12,10 @@ public interface StopTimesDao {
 
 	public int getStopTimesCount();
 
-	public GtfsTripAndTimes getStopTimesOfTrip(GtfsTrip.Id tripId, GtfsTrip trip);
+	public GtfsTripAndTimes getStopTimesOfTrip(GtfsTrip.Id tripId,
+			GtfsTrip trip);
+
+	public default StopTimesDao withVerbose(boolean verbose) {
+		return this;
+	}
 }
