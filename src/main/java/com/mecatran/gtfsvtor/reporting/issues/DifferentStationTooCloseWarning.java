@@ -29,8 +29,8 @@ public class DifferentStationTooCloseWarning implements ReportIssue {
 						"stop_lon"),
 				new SourceRefWithFields(station.getSourceRef(), "stop_lat",
 						"stop_lon"),
-				new SourceRefWithFields(otherStation.getSourceRef(),
-						"stop_lat", "stop_lon"));
+				new SourceRefWithFields(otherStation.getSourceRef(), "stop_lat",
+						"stop_lon"));
 		Collections.sort(this.sourceInfos);
 	}
 

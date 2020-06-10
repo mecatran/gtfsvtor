@@ -63,8 +63,7 @@ public class CalendarValidator implements DaoValidator {
 					if (calendar != null) {
 						sourceRefs.add(calendar.getSourceRef());
 					}
-					dao.getCalendarDates(calId)
-							.map(date -> date.getSourceRef())
+					dao.getCalendarDates(calId).map(date -> date.getSourceRef())
 							.forEach(sourceRefs::add);
 					reportSink.report(
 							new EmptyCalendarWarning(calId, sourceRefs));

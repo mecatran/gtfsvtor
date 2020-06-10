@@ -8,8 +8,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 import com.mecatran.gtfsvtor.validation.DaoValidator.Context;
 import com.mecatran.gtfsvtor.validation.TripTimesValidator;
 
-public class CompoundTripTimesValidator
-		implements TripTimesValidator {
+public class CompoundTripTimesValidator implements TripTimesValidator {
 
 	private List<? extends TripTimesValidator> validators;
 

@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import com.mecatran.gtfsvtor.utils.Sextet;
 
-public class GtfsTransfer
-		implements GtfsObject<Sextet<String, String, String, String, String, String>> {
+public class GtfsTransfer implements
+		GtfsObject<Sextet<String, String, String, String, String, String>> {
 
 	public static final String TABLE_NAME = "transfers.txt";
 
@@ -23,8 +23,8 @@ public class GtfsTransfer
 	private Integer minTransferTime;
 
 	public GtfsTransfer.Id getId() {
-		return id(getFromStopId(), getToStopId(), getFromRouteId(), getToRouteId(), getFromTripId(),
-				getToTripId());
+		return id(getFromStopId(), getToStopId(), getFromRouteId(),
+				getToRouteId(), getFromTripId(), getToTripId());
 	}
 
 	public GtfsStop.Id getFromStopId() {
@@ -70,11 +70,12 @@ public class GtfsTransfer
 				+ transferType + "}";
 	}
 
-	public static Id id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId, GtfsRoute.Id fromRouteId,
-			GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId, GtfsTrip.Id toTripId) {
-		return fromStopId == null || toStopId == null ?
-				null :
-				Id.build(fromStopId, toStopId, fromRouteId, toRouteId, fromTripId, toTripId);
+	public static Id id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
+			GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId,
+			GtfsTrip.Id fromTripId, GtfsTrip.Id toTripId) {
+		return fromStopId == null || toStopId == null ? null
+				: Id.build(fromStopId, toStopId, fromRouteId, toRouteId,
+						fromTripId, toTripId);
 	}
 
 	public static class Id extends
@@ -86,15 +87,17 @@ public class GtfsTransfer
 
 		private static Map<Sextet<String, String, String, String, String, String>, Id> CACHE = new HashMap<>();
 
-		private static synchronized Id build(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
-				GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId,
+		private static synchronized Id build(GtfsStop.Id fromStopId,
+				GtfsStop.Id toStopId, GtfsRoute.Id fromRouteId,
+				GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId,
 				GtfsTrip.Id toTripId) {
-			return CACHE.computeIfAbsent(
-					new Sextet<>(fromStopId.getInternalId(), toStopId.getInternalId(),
-							fromRouteId != null ? fromRouteId.getInternalId() : null,
-							toRouteId != null ? toRouteId.getInternalId() : null,
-							fromTripId != null ? fromTripId.getInternalId() : null,
-							toTripId != null ? toTripId.getInternalId() : null), Id::new);
+			return CACHE.computeIfAbsent(new Sextet<>(
+					fromStopId.getInternalId(), toStopId.getInternalId(),
+					fromRouteId != null ? fromRouteId.getInternalId() : null,
+					toRouteId != null ? toRouteId.getInternalId() : null,
+					fromTripId != null ? fromTripId.getInternalId() : null,
+					toTripId != null ? toTripId.getInternalId() : null),
+					Id::new);
 		}
 
 		@Override

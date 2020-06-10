@@ -114,8 +114,9 @@ public interface ValidatorConfig {
 		if (str == null || str.isEmpty())
 			return defaultValue;
 		try {
-			return Arrays.stream(str.split(",")).mapToInt(Integer::parseInt).mapToObj(
-					GtfsRouteType::fromValue).toArray(GtfsRouteType[]::new);
+			return Arrays.stream(str.split(",")).mapToInt(Integer::parseInt)
+					.mapToObj(GtfsRouteType::fromValue)
+					.toArray(GtfsRouteType[]::new);
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}

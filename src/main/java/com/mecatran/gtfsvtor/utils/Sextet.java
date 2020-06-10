@@ -41,12 +41,13 @@ public class Sextet<E1, E2, E3, E4, E5, E6> {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Sextet<?, ?, ?, ?, ?, ?> other = (Sextet<?, ?, ?, ?, ?, ?>) obj;
-		return Objects.equals(a, other.a) && Objects.equals(b, other.b) &&
-				Objects.equals(c, other.c) && Objects.equals(d, other.d) &&
-				Objects.equals(e, other.e) && Objects.equals(f, other.f);
+		return Objects.equals(a, other.a) && Objects.equals(b, other.b)
+				&& Objects.equals(c, other.c) && Objects.equals(d, other.d)
+				&& Objects.equals(e, other.e) && Objects.equals(f, other.f);
 	}
 
 	public String toString() {
-		return "{" + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + "}";
+		return "{" + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f
+				+ "}";
 	}
 }

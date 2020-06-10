@@ -17,16 +17,20 @@ public class ShapePointStreamingValidator
 		// Trip id / stop sequence is primary key and tested by DAO
 		if (shapePoint.getPointSequence() != null
 				&& shapePoint.getPointSequence().getSequence() < 0)
-			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceRef(), "shape_pt_sequence",
-					Integer.toString(
-							shapePoint.getPointSequence().getSequence()),
-					"positive integer"), context.getSourceInfo());
+			reportSink.report(
+					new InvalidFieldFormatError(context.getSourceRef(),
+							"shape_pt_sequence",
+							Integer.toString(shapePoint.getPointSequence()
+									.getSequence()),
+							"positive integer"),
+					context.getSourceInfo());
 		if (shapePoint.getShapeDistTraveled() != null
 				&& shapePoint.getShapeDistTraveled() < 0.0)
-			reportSink.report(new InvalidFieldFormatError(
-					context.getSourceRef(), "shape_dist_traveled",
-					Double.toString(shapePoint.getShapeDistTraveled()),
-					"positive floating point"), context.getSourceInfo());
+			reportSink.report(
+					new InvalidFieldFormatError(context.getSourceRef(),
+							"shape_dist_traveled",
+							Double.toString(shapePoint.getShapeDistTraveled()),
+							"positive floating point"),
+					context.getSourceInfo());
 	}
 }

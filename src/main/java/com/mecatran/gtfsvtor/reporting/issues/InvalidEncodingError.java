@@ -16,8 +16,8 @@ public class InvalidEncodingError implements ReportIssue {
 	private SourceRefWithFields sourceInfo;
 	private String value;
 
-	public InvalidEncodingError(DataObjectSourceRef sourceRef,
-			String fieldName, String value) {
+	public InvalidEncodingError(DataObjectSourceRef sourceRef, String fieldName,
+			String value) {
 		this.sourceInfo = new SourceRefWithFields(sourceRef, fieldName);
 		this.value = value;
 	}

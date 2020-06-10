@@ -54,10 +54,12 @@ public class PathwayStreamingValidator
 		if (pathway.getFromStopId() != null) {
 			fromStop = dao.getStop(pathway.getFromStopId());
 			if (fromStop == null) {
-				reportSink.report(new InvalidReferenceError(
-						context.getSourceRef(), "from_stop_id",
-						pathway.getFromStopId().getInternalId(),
-						GtfsStop.TABLE_NAME, "stop_id"), context.getSourceInfo());
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"from_stop_id",
+								pathway.getFromStopId().getInternalId(),
+								GtfsStop.TABLE_NAME, "stop_id"),
+						context.getSourceInfo());
 			} else {
 				if (fromStop.getType() == GtfsStopType.STATION) {
 					reportSink.report(new WrongPathwayStopTypeError(
@@ -69,10 +71,12 @@ public class PathwayStreamingValidator
 		if (pathway.getToStopId() != null) {
 			toStop = dao.getStop(pathway.getToStopId());
 			if (toStop == null) {
-				reportSink.report(new InvalidReferenceError(
-						context.getSourceRef(), "to_stop_id",
-						pathway.getToStopId().getInternalId(),
-						GtfsStop.TABLE_NAME, "stop_id"), context.getSourceInfo());
+				reportSink.report(
+						new InvalidReferenceError(context.getSourceRef(),
+								"to_stop_id",
+								pathway.getToStopId().getInternalId(),
+								GtfsStop.TABLE_NAME, "stop_id"),
+						context.getSourceInfo());
 			} else {
 				if (toStop.getType() == GtfsStopType.STATION) {
 					reportSink.report(new WrongPathwayStopTypeError(
@@ -96,10 +100,12 @@ public class PathwayStreamingValidator
 				double speedMps = d
 						/ (pathway.getTraversalTime() + walkingTimeSlackSec);
 				if (speedMps > fastWalkingSpeedMps) {
-					reportSink.report(new TooFastWalkingSpeed(
-							context.getSourceRef(), fromStop, toStop, d,
-							speedMps, fastWalkingSpeedMps,
-							ReportIssueSeverity.WARNING), context.getSourceInfo());
+					reportSink.report(
+							new TooFastWalkingSpeed(context.getSourceRef(),
+									fromStop, toStop, d, speedMps,
+									fastWalkingSpeedMps,
+									ReportIssueSeverity.WARNING),
+							context.getSourceInfo());
 				}
 			}
 		}

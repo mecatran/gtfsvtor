@@ -29,14 +29,12 @@ public class TestMiscUtils {
 				"Simple test of text", "justification");
 		testOneTextJustify("Simple test.\nOf text justification", 12,
 				"Simple test.", "Of text", "justification");
-		testOneTextJustify("Simple test.\n \n", 12,
-				"Simple test.");
+		testOneTextJustify("Simple test.\n \n", 12, "Simple test.");
 	}
 
 	private void testOneTextJustify(String longText, int maxWidth,
 			String... expectedLines) {
-		List<String> lines = MiscUtils.wordProcessorSplit(longText,
-				maxWidth);
+		List<String> lines = MiscUtils.wordProcessorSplit(longText, maxWidth);
 		assertArrayEquals(expectedLines, lines.toArray(new String[0]));
 	}
 }

@@ -23,9 +23,9 @@ public class TooFastWalkingSpeed
 
 	private SourceRefWithFields sourceRef;
 
-	public TooFastWalkingSpeed(DataObjectSourceRef sourceRef,
-			GtfsStop fromStop, GtfsStop toStop, double distanceMeters,
-			double speedMps, double maxSpeedMps, ReportIssueSeverity severity) {
+	public TooFastWalkingSpeed(DataObjectSourceRef sourceRef, GtfsStop fromStop,
+			GtfsStop toStop, double distanceMeters, double speedMps,
+			double maxSpeedMps, ReportIssueSeverity severity) {
 		this.fromStop = fromStop;
 		this.toStop = toStop;
 		this.distanceMeters = distanceMeters;
