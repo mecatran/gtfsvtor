@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.validation.dao;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
@@ -33,23 +34,24 @@ public class StopTooCloseValidator implements DaoValidator {
 		DaoSpatialIndex dsi = dao.getSpatialIndex();
 
 		dao.getStops().forEach(stop1 -> {
-			GeoCoordinates p = stop1.getCoordinates();
-			if (p == null)
+			Optional<GeoCoordinates> p = stop1.getValidCoordinates();
+			if (!p.isPresent())
 				return;
 			/*
 			 * We filter stops2: different from stop1, same type, and ID greater
 			 * than stop1 (to prevent duplicated warnings: A-B and B-A).
 			 */
 			List<GtfsStop> stops2 = dsi
-					.getStopsAround(p, minDistanceMeters, true)
+					.getStopsAround(p.get(), minDistanceMeters, true)
 					.filter(stop2 -> !stop2.equals(stop1))
 					.filter(stop2 -> stop2.getType().equals(stop1.getType()))
 					.filter(stop2 -> stop2.getId().getInternalId()
 							.compareTo(stop1.getId().getInternalId()) > 0)
 					.collect(Collectors.toList());
 			for (GtfsStop stop2 : stops2) {
-				double distance = Geodesics.distanceMeters(p,
-						stop2.getCoordinates());
+				double distance = Geodesics.distanceMeters(p.get(),
+						// We expect only stops with valid coords in index
+						stop2.getValidCoordinates().get());
 				reportSink.report(new StopTooCloseIssue(stop1, stop2, distance,
 						distance <= minDistanceMetersError
 								? ReportIssueSeverity.ERROR

@@ -87,6 +87,7 @@ import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseIssue;
+import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseToOriginError;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromShapeIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TimeTravelAtStopError;
@@ -1363,6 +1364,14 @@ public class TestGtfs {
 				stf0.getProjectedPoint());
 		assertTrue(d < 1.0);
 		assertEquals(209.12, stf0.getDistanceMeters(), 1e-2);
+	}
+
+	@Test
+	public void testSwegZeroCoordinates() {
+		TestBundle tb = loadAndValidate("sweg_zero_coordinates");
+		List<StopTooCloseToOriginError> stctoes = tb.report
+				.getReportIssues(StopTooCloseToOriginError.class);
+		assertEquals(1, stctoes.size());
 	}
 
 	@Test
