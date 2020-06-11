@@ -1,0 +1,2 @@
+route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,wheelchair_accessible
+0-104-j20-1,T0+ss,11.T0.0-104-j20-1.1.H,Vogtsburg - Schelingen - Oberrotweil - Achkarren - Breisach,,0,,0-104-j20-1.1.H,0

@@ -1,0 +1,2 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date,service_name
+T0+ss,1,1,1,1,1,0,0,20191216,20201211,"2019-12-16 → 2020-12-11 (33 M, 33 D, 33 M, 31 D, 32 F)"

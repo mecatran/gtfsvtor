@@ -1,0 +1,6 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,shape_dist_traveled,timepoint
+11.T0.0-104-j20-1.1.H,07:20:00,07:20:00,gen:8315:367:0:3,1,Bickensohl Ort,0,0,,1
+11.T0.0-104-j20-1.1.H,07:22:00,07:22:00,de:08315:11400,2,Achkarren Ort,0,0,,1
+11.T0.0-104-j20-1.1.H,07:26:00,07:26:00,de:08315:365,3,Achkarren WG,0,0,,1
+11.T0.0-104-j20-1.1.H,07:27:00,07:27:00,de:08315:363,4,Achkarren Bahnhof,0,0,,1
+11.T0.0-104-j20-1.1.H,07:29:00,07:29:00,de:08315:6691:3:1,5,,0,0,,1

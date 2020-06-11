@@ -1,0 +1,6 @@
+stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,location_type,parent_station,wheelchair_boarding,platform_code
+de:08315:6691:3:1,,Achkarren Bahnhof,,48.05972100,7.60838000,,,0,,0,
+de:08315:365,,Achkarren Ort,,48.06935000,7.62875400,,,0,,0,
+de:08315:363,,Achkarren WG,,48.06616300,7.62049800,,,0,,0,
+de:08315:11400,,Bickensohl Ort,,48.07672700,7.64484300,,,0,,0,
+gen:8315:367:0:3,,Oberrotweil Linde,,0.00000000,0.00000000,,,0,,0,
