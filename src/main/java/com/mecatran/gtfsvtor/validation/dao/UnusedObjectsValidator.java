@@ -22,12 +22,13 @@ public class UnusedObjectsValidator implements DaoValidator {
 		ReportSink reportSink = context.getReportSink();
 
 		/* Look for unused agencies */
-		dao.getAgencies().forEach(agency -> {
-			if (dao.getRoutesOfAgency(agency.getId()).count() == 0) {
-				reportSink.report(new UnusedObjectWarning("agency",
-						agency.getId(), agency.getSourceRef(), "agency_id"));
-			}
-		});
+		if (dao.getAgencies().count() > 1)
+			dao.getAgencies().forEach(agency -> {
+				if (dao.getRoutesOfAgency(agency.getId()).count() == 0) {
+					reportSink.report(new UnusedObjectWarning("agency",
+							agency.getId(), agency.getSourceRef(), "agency_id"));
+				}
+			});
 
 		/* Look for unused (empty) routes */
 		dao.getRoutes().forEach(route -> {

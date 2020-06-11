@@ -1366,6 +1366,23 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testSingleAgency() {
+		TestBundle tb = loadAndValidate("single_agency");
+		List<MissingMandatoryValueError> mmvs = tb.report
+				.getReportIssues(MissingMandatoryValueError.class);
+		// agency_id is optional, if feed contains only a single agencys
+		assertEquals(0, mmvs.size());
+		List<MissingMandatoryColumnError> mmces = tb.report
+				.getReportIssues(MissingMandatoryColumnError.class);
+		// agency_id column is optional, if feed contains only a single agencys
+		assertEquals(0, mmces.size());
+		List<UnusedObjectWarning> uows = tb.report
+				.getReportIssues(UnusedObjectWarning.class);
+		// agency may not be refered, if feed contains only a single agency
+		assertEquals(0, uows.size());
+	}
+
+	@Test
 	public void testLoadingAll() {
 		// Disabled: we already test all the test sets
 		// File base = new File("src/test/resources/data");
