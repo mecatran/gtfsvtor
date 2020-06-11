@@ -70,6 +70,21 @@ as GTFSVTOR do have all CPU-intensive validators implemented
 stop spatial indexing; too fast travel checks, trip duplication detection, block ID overlap...).
 Also GTFSVTOR has trip duplication detection enabled, whereas feedvalidator.py does not.
 
+Docker
+------
+
+Run a dockerized GTFSVTOR from sources:
+
+```sh
+docker build -t gtfsvtor:latest .
+docker run -rm -v <path_data_directory, e.g. $(PWD)>:/data -e TZ=Europe/Berlin gtfsvtor:latest <gtfs-file>
+```
+
+GTFSVTOR is executed in the mounted data-dir. If you'd like to use a custom config.properties, 
+you may place it besides the gtfs file and supply `-c config.properties` as additional parameters.
+Note that the timezone must be specified explicitly (via `-e TZ=<your timezone>`) to have correct timestamps 
+reported in the validation-results.html.
+
 Developer guide
 ---------------
 
@@ -79,3 +94,4 @@ Developer guide
 - Configuration
 - Adding new validation rules
 - Using GTFSVTOR as a library
+
