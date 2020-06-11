@@ -777,10 +777,10 @@ public class TestGtfs {
 		GtfsStop stop0 = tb.dao.getStop(stopTimes.get(0).getStopId());
 		GtfsStop stop1 = tb.dao.getStop(stopTimes.get(1).getStopId());
 		GtfsStop stop2 = tb.dao.getStop(stopTimes.get(2).getStopId());
-		double d01 = Geodesics.distanceMeters(stop0.getCoordinates(),
-				stop1.getCoordinates());
-		double d12 = Geodesics.distanceMeters(stop1.getCoordinates(),
-				stop2.getCoordinates());
+		double d01 = Geodesics.distanceMeters(stop0.getValidCoordinates().get(),
+				stop1.getValidCoordinates().get());
+		double d12 = Geodesics.distanceMeters(stop1.getValidCoordinates().get(),
+				stop2.getValidCoordinates().get());
 		double l01 = lgi.getLinearDistance(stopTimes.get(0), stopTimes.get(1));
 		double l12 = lgi.getLinearDistance(stopTimes.get(1), stopTimes.get(2));
 		double l02 = lgi.getLinearDistance(stopTimes.get(0), stopTimes.get(2));
@@ -806,8 +806,8 @@ public class TestGtfs {
 		GtfsStop furCreek = tb.dao.getStop(GtfsStop.id("FUR_CREEK_RES"));
 		GtfsStop beattyAirport = tb.dao
 				.getStop(GtfsStop.id("BEATTY_AIRPORT_STATION"));
-		stops = dsi.getStopsAround(furCreek.getCoordinates(), 1, true)
-				.collect(Collectors.toList());
+		stops = dsi.getStopsAround(furCreek.getValidCoordinates().get(), 1,
+				true).collect(Collectors.toList());
 		assertEquals(1, stops.size());
 		assertEquals(furCreek, stops.iterator().next());
 		stops = dsi
@@ -816,14 +816,14 @@ public class TestGtfs {
 						furCreek.getLon()), 1, true)
 				.collect(Collectors.toList());
 		assertTrue(stops.isEmpty());
-		double dMax = Geodesics.distanceMeters(beattyAirport.getCoordinates(),
-				furCreek.getCoordinates());
+		double dMax = Geodesics.distanceMeters(beattyAirport.getValidCoordinates().get(),
+				furCreek.getValidCoordinates().get());
 		stops = dsi
-				.getStopsAround(beattyAirport.getCoordinates(), dMax - 1, true)
+				.getStopsAround(beattyAirport.getValidCoordinates().get(), dMax - 1, true)
 				.collect(Collectors.toList());
 		assertEquals(tb.dao.getStops().count() - 1, stops.size());
 		stops = dsi
-				.getStopsAround(beattyAirport.getCoordinates(), dMax + 1, true)
+				.getStopsAround(beattyAirport.getValidCoordinates().get(), dMax + 1, true)
 				.collect(Collectors.toList());
 		assertEquals(tb.dao.getStops().count(), stops.size());
 	}
@@ -964,10 +964,10 @@ public class TestGtfs {
 		GtfsStop s0 = dao.getStop(st0.getStopId());
 		GtfsStop s1 = dao.getStop(st1.getStopId());
 		GtfsStop s2 = dao.getStop(st2.getStopId());
-		double d01 = Geodesics.distanceMeters(s0.getCoordinates(),
-				s1.getCoordinates());
-		double d12 = Geodesics.distanceMeters(s1.getCoordinates(),
-				s2.getCoordinates());
+		double d01 = Geodesics.distanceMeters(s0.getValidCoordinates().get(),
+				s1.getValidCoordinates().get());
+		double d12 = Geodesics.distanceMeters(s1.getValidCoordinates().get(),
+				s2.getValidCoordinates().get());
 		ProjectedPoint pp0 = lgi.getProjectedPoint(st0);
 		ProjectedPoint pp1 = lgi.getProjectedPoint(st1);
 		ProjectedPoint pp2 = lgi.getProjectedPoint(st2);
@@ -995,11 +995,11 @@ public class TestGtfs {
 		assertEquals(0, pp0.getDistanceToShapeMeters(), 1e-2);
 		assertEquals(d01, pp1.getDistanceToShapeMeters(), 1e-2);
 		assertEquals(d01 + d12, pp2.getDistanceToShapeMeters(), 1e-2);
-		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
 				pp0.getProjectedPoint()) < 1e-2);
-		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
 				pp1.getProjectedPoint()) < 1e-2);
-		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
 				pp2.getProjectedPoint()) < 1e-2);
 
 		/* A backtracing 2 segment shape (S1->S3->S2) */
@@ -1019,11 +1019,11 @@ public class TestGtfs {
 		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
 		assertEquals(0.0, pp1.getDistanceToShapeMeters(), 0.2);
 		assertEquals(0.0, pp2.getDistanceToShapeMeters(), 0.4);
-		assertTrue(Geodesics.distanceMeters(s0.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
 				pp0.getProjectedPoint()) < 1);
-		assertTrue(Geodesics.distanceMeters(s1.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s1.getValidCoordinates().get(),
 				pp1.getProjectedPoint()) < 1);
-		assertTrue(Geodesics.distanceMeters(s2.getCoordinates(),
+		assertTrue(Geodesics.distanceMeters(s2.getValidCoordinates().get(),
 				pp2.getProjectedPoint()) < 1);
 	}
 
@@ -1303,14 +1303,14 @@ public class TestGtfs {
 			ProjectedPoint pp = lgi.getProjectedPoint(stopTime);
 			avgDist += pp.getDistanceToShapeMeters();
 			assertTrue(pp.getDistanceToShapeMeters() < 10.0);
-			double d = Geodesics.fastDistanceMeters(stop.getCoordinates(),
+			double d = Geodesics.fastDistanceMeters(stop.getValidCoordinates().get(),
 					pp.getProjectedPoint());
 			assertEquals(pp.getDistanceToShapeMeters(), d, 1e-4);
 			if (prevStopTime != null) {
 				double ld = pp.getArcLengthMeters()
 						- prevPp.getArcLengthMeters();
 				double sd = Geodesics.fastDistanceMeters(
-						prevStop.getCoordinates(), stop.getCoordinates());
+						prevStop.getValidCoordinates().get(), stop.getValidCoordinates().get());
 				// Add 10m to take into account cases where stops are very close
 				double k = (ld + 10) / (sd + 10);
 				avgK += k;
