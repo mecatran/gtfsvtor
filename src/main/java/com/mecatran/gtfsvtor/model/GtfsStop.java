@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 
-import org.locationtech.jts.shape.GeometricShapeBuilder;
-
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 
 public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceRef {
