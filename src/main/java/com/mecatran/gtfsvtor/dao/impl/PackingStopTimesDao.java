@@ -54,8 +54,8 @@ public class PackingStopTimesDao implements StopTimesDao,
 	private static AssertListener assertListener = null;
 	private boolean verbose = false;
 
-	public PackingStopTimesDao() {
-		this.listPacker = new ListPacker<>(this);
+	public PackingStopTimesDao(int maxInterleaving) {
+		this.listPacker = new ListPacker<>(this, maxInterleaving);
 	}
 
 	public PackingStopTimesDao withVerbose(boolean verbose) {

@@ -50,14 +50,23 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
 public class GtfsDataLoader implements DataLoader {
 
-	// TODO Make this configurable
-	private static final boolean OPTIMIZE_FOR_SIZE = true;
-
 	private NamedTabularDataSource dataSource;
 	private boolean missingCalendarsTable = false;
+	private boolean smallShapePoint = true;
+	private boolean smallStopTime = false;
 
 	public GtfsDataLoader(NamedTabularDataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+
+	public GtfsDataLoader withSmallShapePoint(boolean small) {
+		this.smallShapePoint = small;
+		return this;
+	}
+
+	public GtfsDataLoader withSmallStopTime(boolean small) {
+		this.smallStopTime = small;
+		return this;
 	}
 
 	@Override
@@ -339,7 +348,7 @@ public class GtfsDataLoader implements DataLoader {
 		for (DataRow row : table) {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
-			GtfsShapePoint.Builder builder = OPTIMIZE_FOR_SIZE
+			GtfsShapePoint.Builder builder = smallShapePoint
 					? new SmallGtfsShapePoint.Builder()
 					: new SimpleGtfsShapePoint.Builder();
 			builder.withShapeId(GtfsShape.id(erow.getString("shape_id")))
@@ -412,7 +421,7 @@ public class GtfsDataLoader implements DataLoader {
 		for (DataRow row : table) {
 			DataRowConverter erow = new DataRowConverter(row,
 					context.getReportSink());
-			GtfsStopTime.Builder builder = OPTIMIZE_FOR_SIZE
+			GtfsStopTime.Builder builder = smallStopTime
 					? new SmallGtfsStopTime.Builder()
 					: new SimpleGtfsStopTime.Builder();
 			builder.withTripId(GtfsTrip.id(erow.getString("trip_id")))

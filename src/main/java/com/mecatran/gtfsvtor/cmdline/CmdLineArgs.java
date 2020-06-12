@@ -36,6 +36,13 @@ public class CmdLineArgs {
 			"--numThreads" }, description = "Number of threads for running DAO validators in parallel")
 	private int numThreads = 1;
 
+	@Parameter(names = {
+			"--maxStopTimesInterleaving" }, description = "Max number of interleaved trips in stop_times.txt "
+					+ "" + "(number of concurrent 'opened' trips). "
+					+ "Use/increase this option if you have lots of unordered trips in stop_times.txt, "
+					+ "to improve loading performances.")
+	private int maxStopTimesInterleaving = 100;
+
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
 
@@ -69,6 +76,10 @@ public class CmdLineArgs {
 
 	public int getNumThreads() {
 		return numThreads;
+	}
+
+	public int getMaxStopTimeInterleaving() {
+		return maxStopTimesInterleaving;
 	}
 
 	public String getGtfsFile() {
