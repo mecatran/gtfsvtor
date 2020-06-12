@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.test;
 
+import com.beust.jcommander.JCommander;
+import com.mecatran.gtfsvtor.cmdline.CmdLineArgs;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
 import com.mecatran.gtfsvtor.dao.impl.PackingStopTimesDao;
@@ -27,24 +29,59 @@ public class TestUtils {
 		public IndexedReadOnlyDao dao;
 	}
 
-	public static TestBundle loadAndValidate(String gtfsFileOrDirectory) {
-		return loadAndValidate(gtfsFileOrDirectory, "src/test/resources/data/");
+	public static class TestScenario {
+		public String gtfsFileOrDirectory;
+		public int maxStopTimesInterleaving = 3;
+
+		public TestScenario() {
+		}
+
+		// Is this really what we want?
+		public TestScenario(String localGtfsFileOrDirectory) {
+			this.gtfsFileOrDirectory = "src/test/resources/data/"
+					+ localGtfsFileOrDirectory;
+		}
+
+		public CmdLineArgs getCmdLineArgs() {
+			// TODO This is a ugly hack. Make this better
+			CmdLineArgs cmdLineArgs = new CmdLineArgs();
+			JCommander jcmd = JCommander.newBuilder().addObject(cmdLineArgs)
+					.build();
+			jcmd.parse(new String[] { "--maxStopTimesInterleaving",
+					"" + maxStopTimesInterleaving });
+			return cmdLineArgs;
+		}
 	}
 
+	public static TestBundle loadAndValidate(String localGtfsFileOrDirectory) {
+		return runScenario(new TestScenario(localGtfsFileOrDirectory));
+	}
+
+	@Deprecated
 	public static TestBundle loadAndValidate(String gtfsFileOrDirectory,
 			String base) {
+		TestScenario scenario = new TestScenario();
+		scenario.gtfsFileOrDirectory = base + gtfsFileOrDirectory;
+		return runScenario(scenario);
+	}
+
+	// TODO Make a test runner class, not a static method
+	// Or even better, re-use the lib
+	public static TestBundle runScenario(TestScenario scenario) {
 		InMemoryReportLog report = new InMemoryReportLog()
 				.withPrintIssues(true);
 		TestBundle ret = new TestBundle();
 		ret.report = report;
+		CmdLineArgs args = scenario.getCmdLineArgs();
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
-				.autoGuess(base + gtfsFileOrDirectory, report);
+				.autoGuess(scenario.gtfsFileOrDirectory, report);
 		if (inputStreamSource == null) {
 			return ret;
 		}
 		NamedTabularDataSource dataSource = new CsvDataSource(
 				inputStreamSource);
-		InMemoryDao dao = new InMemoryDao().withVerbose(true);
+		InMemoryDao dao = new InMemoryDao(args.getMaxStopTimeInterleaving())
+				.withVerbose(true);
 		PackingStopTimesDao
 				.setAssertListener(TestPackedStopTimes::assertStopTimes);
 
@@ -70,7 +107,7 @@ public class TestUtils {
 
 		System.out.println(String.format(
 				"Validation result for '%s': %d INFO, %d WARNING, %d ERROR, %d CRITICAL",
-				gtfsFileOrDirectory,
+				scenario.gtfsFileOrDirectory,
 				report.issuesCountOfSeverity(ReportIssueSeverity.INFO),
 				report.issuesCountOfSeverity(ReportIssueSeverity.WARNING),
 				report.issuesCountOfSeverity(ReportIssueSeverity.ERROR),

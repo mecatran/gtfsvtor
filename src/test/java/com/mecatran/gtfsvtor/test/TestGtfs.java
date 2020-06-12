@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.test;
 
 import static com.mecatran.gtfsvtor.test.TestUtils.loadAndValidate;
+import static com.mecatran.gtfsvtor.test.TestUtils.runScenario;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -104,6 +105,7 @@ import com.mecatran.gtfsvtor.reporting.issues.WrongPathwayStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongStopTimeStopTypeError;
 import com.mecatran.gtfsvtor.reporting.issues.WrongTransferStopTypeError;
 import com.mecatran.gtfsvtor.test.TestUtils.TestBundle;
+import com.mecatran.gtfsvtor.test.TestUtils.TestScenario;
 
 public class TestGtfs {
 
@@ -1284,6 +1286,23 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testInterleavedStopTimes() {
+		for (int max = 5; max < 20; max += 3) {
+			// Having a small max interleaving factor will force overflow
+			// Check that this will work anyway
+			TestScenario scenario = new TestScenario("interleaved_stoptimes");
+			scenario.maxStopTimesInterleaving = max;
+			TestBundle tb = runScenario(scenario);
+			// TODO Add helper to get issue count by severity
+			assertEquals(0,
+					tb.report.getReportIssues().stream()
+							.filter(i -> i.getSeverity()
+									.compareTo(ReportIssueSeverity.ERROR) >= 0)
+							.count());
+		}
+	}
+
+	@Test
 	public void testMBTA42951766() {
 		TestBundle tb = loadAndValidate("MBTA_42951766");
 		IndexedReadOnlyDao dao = tb.dao;
@@ -1363,6 +1382,12 @@ public class TestGtfs {
 				stf0.getProjectedPoint());
 		assertTrue(d < 1.0);
 		assertEquals(209.12, stf0.getDistanceMeters(), 1e-2);
+	}
+
+	@Test
+	public void testSwegZeroStopCoordinates() {
+		// TestBundle tb = loadAndValidate("sweg_zero_coordinates");
+		// Just test if no NPE is raised
 	}
 
 	@Test
