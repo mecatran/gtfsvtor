@@ -3,6 +3,8 @@ package com.mecatran.gtfsvtor.validation.streaming;
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkFormat;
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkNonNull;
 
+import java.util.Optional;
+
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
@@ -93,10 +95,10 @@ public class PathwayStreamingValidator
 				&& pathway.getPathwayMode() == GtfsPathwayMode.WALKWAY
 				&& pathway.getTraversalTime() != null
 				&& pathway.getTraversalTime() > 0) {
-			GeoCoordinates p1 = fromStop.getCoordinates();
-			GeoCoordinates p2 = toStop.getCoordinates();
-			if (p1 != null && p2 != null) {
-				double d = Geodesics.fastDistanceMeters(p1, p2);
+			Optional<GeoCoordinates> p1 = fromStop.getValidCoordinates();
+			Optional<GeoCoordinates> p2 = toStop.getValidCoordinates();
+			if (p1.isPresent() && p2.isPresent()) {
+				double d = Geodesics.fastDistanceMeters(p1.get(), p2.get());
 				double speedMps = d
 						/ (pathway.getTraversalTime() + walkingTimeSlackSec);
 				if (speedMps > fastWalkingSpeedMps) {

@@ -2,6 +2,8 @@ package com.mecatran.gtfsvtor.validation.streaming;
 
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkFormat;
 
+import java.util.Optional;
+
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
@@ -121,10 +123,10 @@ public class TransferStreamingValidator
 		}
 		// Check from-to stop distance and walk speed
 		if (fromStop != null && toStop != null) {
-			GeoCoordinates p1 = fromStop.getCoordinates();
-			GeoCoordinates p2 = toStop.getCoordinates();
-			if (p1 != null && p2 != null) {
-				double d = Geodesics.fastDistanceMeters(p1, p2);
+			Optional<GeoCoordinates> p1 = fromStop.getValidCoordinates();
+			Optional<GeoCoordinates> p2 = toStop.getValidCoordinates();
+			if (p1.isPresent() && p2.isPresent()) {
+				double d = Geodesics.fastDistanceMeters(p1.get(), p2.get());
 				ReportIssueSeverity severity = null;
 				if (maxDistanceMetersError > 0 && d > maxDistanceMetersError) {
 					severity = ReportIssueSeverity.ERROR;

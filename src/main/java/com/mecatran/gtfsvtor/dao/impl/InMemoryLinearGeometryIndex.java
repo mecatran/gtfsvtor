@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Lists;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
@@ -254,12 +256,13 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			GtfsStop stop = dao.getStop(stopTime.getStopId());
 			if (stop == null)
 				continue;
-			GeoCoordinates p = stop.getCoordinates();
-			if (p == null)
+			Optional<GeoCoordinates> p = stop.getValidCoordinates();
+			if (!p.isPresent()) {
 				continue;
+			}
 			if (lastGeocodedPoint != null) {
 				double distance = Geodesics.distanceMeters(lastGeocodedPoint,
-						p);
+						p.get());
 				totalDistance += distance;
 			}
 			/*
@@ -267,9 +270,9 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			 * projected point is the stop itself.
 			 */
 			patternIndex.projections.put(stopTime.getStopSequence(),
-					new ProjectedPointImpl(totalDistance, 0.0, p, false,
+					new ProjectedPointImpl(totalDistance, 0.0, p.get(), false,
 							stopTime.getStopId(), stopTime.getStopSequence()));
-			lastGeocodedPoint = p;
+			lastGeocodedPoint = p.get();
 		}
 		return patternIndex;
 	}
@@ -301,8 +304,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			if (kp < ka) {
 				// This is wrong
 				// Stops before the start of shape
-				double dap = stop == null ? 0.
-						: Geodesics.distanceMeters(stop.getCoordinates(),
+				double dap = stop == null || ! stop.getValidCoordinates().isPresent() ? 0.
+						: Geodesics.distanceMeters(stop.getValidCoordinates().get(),
 								a.getCoordinates());
 				patternIndex.projections.put(st.getStopSequence(),
 						new ProjectedPointImpl(distance, dap,
@@ -322,8 +325,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 						pa.getLat() + (pb.getLat() - pa.getLat()) * k,
 						pa.getLon() + (pb.getLon() - pa.getLon()) * k);
 				// Compute distance from stop to shape, if possible
-				double dpp = stop == null ? 0.0
-						: Geodesics.distanceMeters(stop.getCoordinates(), pp);
+				double dpp = stop == null || ! stop.getValidCoordinates().isPresent()? 0.0
+						: Geodesics.distanceMeters(stop.getValidCoordinates().get(), pp);
 				patternIndex.projections.put(st.getStopSequence(),
 						new ProjectedPointImpl(distance + dap, dpp, pp, true,
 								st.getStopId(), st.getStopSequence()));
@@ -342,8 +345,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			// Stops after the end of the shape
 			GtfsStopTime st = stopTimes.get(stopIndex);
 			GtfsStop stop = dao.getStop(st.getStopId());
-			double dbp = stop == null ? 0.
-					: Geodesics.distanceMeters(stop.getCoordinates(),
+			double dbp = stop == null || ! stop.getValidCoordinates().isPresent() ? 0.
+					: Geodesics.distanceMeters(stop.getValidCoordinates().get(),
 							pb.getCoordinates());
 			patternIndex.projections.put(st.getStopSequence(),
 					new ProjectedPointImpl(distance, dbp, pb.getCoordinates(),
