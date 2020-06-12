@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.validation.dao;
 
+import java.util.Optional;
+
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
@@ -34,8 +36,8 @@ public class StopTooFarFromParentStationValidator implements DaoValidator {
 				return;
 			if (stop.getParentId() == null)
 				return;
-			GeoCoordinates pStop = stop.getCoordinates();
-			if (pStop == null)
+			Optional<GeoCoordinates> pStop = stop.getValidCoordinates();
+			if (!pStop.isPresent())
 				return;
 			GtfsStop station = dao.getStop(stop.getParentId());
 			if (station == null)
@@ -43,10 +45,10 @@ public class StopTooFarFromParentStationValidator implements DaoValidator {
 			// Do not test distance if data is bogus
 			if (station.getType() != GtfsStopType.STATION)
 				return;
-			GeoCoordinates pStation = station.getCoordinates();
-			if (pStation == null)
+			Optional<GeoCoordinates> pStation = station.getValidCoordinates();
+			if (!pStation.isPresent())
 				return;
-			double distance = Geodesics.distanceMeters(pStop, pStation);
+			double distance = Geodesics.distanceMeters(pStop.get(), pStation.get());
 			if (distance >= maxDistanceMetersWarning
 					|| distance >= maxDistanceMetersError) {
 				reportSink.report(new StopTooFarFromParentStationIssue(stop,

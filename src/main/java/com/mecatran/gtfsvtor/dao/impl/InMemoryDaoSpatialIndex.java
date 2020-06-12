@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -25,10 +26,10 @@ public class InMemoryDaoSpatialIndex implements DaoSpatialIndex {
 		 */
 		spatialIndex = new STRtree();
 		dao.getStops().forEach(stop -> {
-			GeoCoordinates p = stop.getCoordinates();
-			if (p != null) {
+			Optional<GeoCoordinates> p = stop.getValidCoordinates();
+			if (p.isPresent()) {
 				Envelope env = new Envelope(
-						new Coordinate(p.getLon(), p.getLat()));
+						new Coordinate(p.get().getLon(), p.get().getLat()));
 				spatialIndex.insert(env, stop);
 			}
 		});
@@ -46,7 +47,9 @@ public class InMemoryDaoSpatialIndex implements DaoSpatialIndex {
 				position.getLon() + dLon, position.getLat() - dLat,
 				position.getLat() + dLat);
 		return ((List<GtfsStop>) spatialIndex.query(env)).stream().filter(
-				stop -> exact ? Geodesics.distanceMeters(stop.getCoordinates(),
-						position) <= distanceMeters : true);
+				// For indexed stops, we expect valid coordinates
+				stop -> exact ?
+						Geodesics.distanceMeters(stop.getValidCoordinates().get(), position)
+								<= distanceMeters : true);
 	}
 }

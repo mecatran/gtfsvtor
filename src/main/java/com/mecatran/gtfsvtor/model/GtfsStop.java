@@ -28,6 +28,8 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	private long sourceLineNumber;
 
+	private transient Optional<GeoCoordinates> cachedCoordinates;
+
 	public GtfsStop.Id getId() {
 		return id;
 	}
@@ -81,18 +83,39 @@ public class GtfsStop implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	/**
 	 * @return The coordinates associated to this stop. If one of lat or lon is
-	 *         not defined, return null. If both lat and lon are 0.0, the
-	 *         coordinates are most likely to be bogus, we also return null
-	 *         (undefined). Otherwise return the associated position.
+	 *         not defined, return null. Otherwise return the associated position.
 	 */
+	@Deprecated
 	public GeoCoordinates getCoordinates() {
 		// TODO cache this?
-		if (lat != null && lon != null && (lat != 0.0 || lon != 0.0)) {
+		if (lat != null && lon != null) {
 			return new GeoCoordinates(lat, lon);
 		} else {
 			return null;
 		}
 	}
+
+	/**
+	 * @return The coordinates associated to this stop. If one of lat or lon is
+	 *         not defined, return Optional.empty(). If both lat and lon are 0.0, the
+	 *         coordinates are most likely to be bogus, we also return Optional.empty()
+	 *         (undefined). If lat or lon exceed the world bounding box
+	 *         (-90;-180,90,180) we consider the coordinates invalid as well and return
+	 *         Optional.empty(). Otherwise return the associated position.
+	 */
+	public Optional<GeoCoordinates> getValidCoordinates() {
+		if (cachedCoordinates != null)
+			return cachedCoordinates;
+
+		if (lat != null && lon != null && (lat != 0.0 || lon != 0.0)
+				&& (-90 <= lat && lat <= 90 && -180 <= lon && lon <= 180)) {
+			cachedCoordinates = Optional.of(new GeoCoordinates(lat, lon));
+		} else {
+			cachedCoordinates = Optional.empty();
+		}
+		return cachedCoordinates;
+	}
+
 
 	public String getDescription() {
 		return description;
