@@ -808,8 +808,9 @@ public class TestGtfs {
 		GtfsStop furCreek = tb.dao.getStop(GtfsStop.id("FUR_CREEK_RES"));
 		GtfsStop beattyAirport = tb.dao
 				.getStop(GtfsStop.id("BEATTY_AIRPORT_STATION"));
-		stops = dsi.getStopsAround(furCreek.getValidCoordinates().get(), 1,
-				true).collect(Collectors.toList());
+		stops = dsi
+				.getStopsAround(furCreek.getValidCoordinates().get(), 1, true)
+				.collect(Collectors.toList());
 		assertEquals(1, stops.size());
 		assertEquals(furCreek, stops.iterator().next());
 		stops = dsi
@@ -818,15 +819,14 @@ public class TestGtfs {
 						furCreek.getLon()), 1, true)
 				.collect(Collectors.toList());
 		assertTrue(stops.isEmpty());
-		double dMax = Geodesics.distanceMeters(beattyAirport.getValidCoordinates().get(),
+		double dMax = Geodesics.distanceMeters(
+				beattyAirport.getValidCoordinates().get(),
 				furCreek.getValidCoordinates().get());
-		stops = dsi
-				.getStopsAround(beattyAirport.getValidCoordinates().get(), dMax - 1, true)
-				.collect(Collectors.toList());
+		stops = dsi.getStopsAround(beattyAirport.getValidCoordinates().get(),
+				dMax - 1, true).collect(Collectors.toList());
 		assertEquals(tb.dao.getStops().count() - 1, stops.size());
-		stops = dsi
-				.getStopsAround(beattyAirport.getValidCoordinates().get(), dMax + 1, true)
-				.collect(Collectors.toList());
+		stops = dsi.getStopsAround(beattyAirport.getValidCoordinates().get(),
+				dMax + 1, true).collect(Collectors.toList());
 		assertEquals(tb.dao.getStops().count(), stops.size());
 	}
 
@@ -1322,14 +1322,15 @@ public class TestGtfs {
 			ProjectedPoint pp = lgi.getProjectedPoint(stopTime);
 			avgDist += pp.getDistanceToShapeMeters();
 			assertTrue(pp.getDistanceToShapeMeters() < 10.0);
-			double d = Geodesics.fastDistanceMeters(stop.getValidCoordinates().get(),
-					pp.getProjectedPoint());
+			double d = Geodesics.fastDistanceMeters(
+					stop.getValidCoordinates().get(), pp.getProjectedPoint());
 			assertEquals(pp.getDistanceToShapeMeters(), d, 1e-4);
 			if (prevStopTime != null) {
 				double ld = pp.getArcLengthMeters()
 						- prevPp.getArcLengthMeters();
 				double sd = Geodesics.fastDistanceMeters(
-						prevStop.getValidCoordinates().get(), stop.getValidCoordinates().get());
+						prevStop.getValidCoordinates().get(),
+						stop.getValidCoordinates().get());
 				// Add 10m to take into account cases where stops are very close
 				double k = (ld + 10) / (sd + 10);
 				avgK += k;
@@ -1391,6 +1392,23 @@ public class TestGtfs {
 		List<StopTooCloseToOriginError> stctoes = tb.report
 				.getReportIssues(StopTooCloseToOriginError.class);
 		assertEquals(1, stctoes.size());
+	}
+
+	@Test
+	public void testSingleAgency() {
+		TestBundle tb = loadAndValidate("single_agency");
+		List<MissingMandatoryValueError> mmvs = tb.report
+				.getReportIssues(MissingMandatoryValueError.class);
+		// agency_id is optional, if feed contains only a single agencys
+		assertEquals(0, mmvs.size());
+		List<MissingMandatoryColumnError> mmces = tb.report
+				.getReportIssues(MissingMandatoryColumnError.class);
+		// agency_id column is optional, if feed contains only a single agencys
+		assertEquals(0, mmces.size());
+		List<UnusedObjectWarning> uows = tb.report
+				.getReportIssues(UnusedObjectWarning.class);
+		// agency may not be refered, if feed contains only a single agency
+		assertEquals(0, uows.size());
 	}
 
 	@Test

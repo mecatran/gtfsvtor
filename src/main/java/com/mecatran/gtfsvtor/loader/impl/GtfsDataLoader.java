@@ -145,7 +145,7 @@ public class GtfsDataLoader implements DataLoader {
 				context.getReportSink());
 		if (table == null)
 			return;
-		checkMandatoryColumns(context.getReportSink(), table, "agency_id",
+		checkMandatoryColumns(context.getReportSink(), table,
 				"agency_name", "agency_url", "agency_timezone");
 		DataTableContext sourceContext = new DataTableContext(table,
 				context.getReportSink(), context.getReadOnlyDao());
@@ -168,6 +168,10 @@ public class GtfsDataLoader implements DataLoader {
 					sourceContext);
 			context.getDao().addAgency(agency, sourceContext);
 		}
+		// if agency.txt contains more than one agency, column agency_id is required
+		if (table.getCurrentLineNumber()>3)
+			checkMandatoryColumns(context.getReportSink(), table,
+				"agency_id");
 		closeTable(table, context.getReportSink());
 	}
 
@@ -187,7 +191,7 @@ public class GtfsDataLoader implements DataLoader {
 					erow.getString("route_id"));
 			builder.withSourceLineNumber(table.getCurrentLineNumber())
 					.withAgencyId(GtfsAgency
-							.id(erow.getString("agency_id", "", false)))
+							.id(erow.getString("agency_id", null, false)))
 					.withType(GtfsRouteType
 							.fromValue(erow.getInteger("route_type", true)))
 					.withShortName(erow.getString("route_short_name"))
