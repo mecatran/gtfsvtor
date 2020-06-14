@@ -134,9 +134,52 @@ public class TooFastTravelValidator implements TripTimesValidator {
 		return maxSpeedMps;
 	}
 
+	private int mapExtendedToBaseRouteType(int routeType) {
+		if (routeType >= 100 && routeType < 200) {
+			return GtfsRouteType.RAIL_CODE;
+		} else if (routeType >= 200 && routeType < 300) {
+			return GtfsRouteType.INTERCITY_BUS_CODE;
+		} else if (routeType >= 300 && routeType < 400) {
+			return GtfsRouteType.RAIL_CODE;
+		} else if (routeType >= 400 && routeType < 700 || routeType == 10) {
+			// Google's 10 (Communter train) is not yet an official routeType
+			return GtfsRouteType.METRO_CODE;
+		} else if (routeType >= 700 && routeType < 800) {
+			// Note: Google's Feedvalidator handles 701 (RegionalBus), 702 (ExpressBus)
+			// 715 (Demand and Response Bus Service) and 717 (share taxi service) as
+			// INTERCITY_BUS (=> maxSpeed 120km/h)
+			return GtfsRouteType.BUS_CODE;
+		} else if (routeType >= 800 && routeType < 900) {
+			return GtfsRouteType.TROLLEYBUS_CODE;
+		} else if (routeType >= 900 && routeType < 1000) {
+			return GtfsRouteType.TRAM_CODE;
+		} else if (routeType >= 1000 && routeType < 1100) {
+			return GtfsRouteType.FERRY_CODE;
+		} else if (routeType >= 1100 && routeType < 1200) {
+			// No base type for airborne travel
+		} else if (routeType >= 1200 && routeType < 1300) {
+			return GtfsRouteType.FERRY_CODE;
+		} else if (routeType >= 1300 && routeType < 1400) {
+			return GtfsRouteType.GONDOLA_CODE;
+		} else if (routeType >= 1400 && routeType < 1500) {
+			return GtfsRouteType.FUNICULAR_CODE;
+		} else if (routeType >= 1500 && routeType < 1600) {
+			// Taxis are no buses, but that looks like closest match
+			// and is in line with feedvalidator's maxSpeed 100 km/h
+			return GtfsRouteType.BUS_CODE;
+		} else if (routeType >= 1600 && routeType < 1700) {
+			// No base type for self drive travel, return unchanged
+		} else if (routeType == 1701) {
+			return GtfsRouteType.CABLE_CAR_CODE;
+		}
+		// Horse Carriage (8), Horse Drawn Carriage(1702) and all other unknown
+		// codes are returned as is, resulting in default handling
+		return routeType;
+	}
+
 	private double getMaxSpeedMps(int routeTypeCode, ValidatorConfig config) {
 		double maxSpeedKph;
-		switch (routeTypeCode) {
+		switch (mapExtendedToBaseRouteType(routeTypeCode)) {
 		default:
 		case GtfsRouteType.CABLE_CAR_CODE:
 		case GtfsRouteType.GONDOLA_CODE:
@@ -148,9 +191,15 @@ public class TooFastTravelValidator implements TripTimesValidator {
 			break;
 		case GtfsRouteType.TRAM_CODE:
 		case GtfsRouteType.BUS_CODE:
-			maxSpeedKph = 100;
+		case GtfsRouteType.TROLLEYBUS_CODE:
+				maxSpeedKph = 100;
 			break;
-		case GtfsRouteType.METRO_CODE:
+	  case GtfsRouteType.INTERCITY_BUS_CODE:
+	  	// Note: not yet officially adopted routeType
+	  	maxSpeedKph = 120;
+			break;
+	  case GtfsRouteType.MONORAIL_CODE:
+	  case GtfsRouteType.METRO_CODE:
 			maxSpeedKph = 150;
 			break;
 		case GtfsRouteType.RAIL_CODE:
