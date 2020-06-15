@@ -55,6 +55,7 @@ import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTransferType;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
@@ -1355,10 +1356,11 @@ public class TestGtfs {
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
 		List<TooFastTravelIssue> tftis = tb.report
 				.getReportIssues(TooFastTravelIssue.class);
-		assertEquals(1, tftis.size());
-		TooFastTravelIssue tfti0 = tftis.get(0);
-		assertEquals(14.66, tfti0.getSpeedMps(), 1e-2);
-		assertEquals(439.81, tfti0.getDistanceMeters(), 1e-2);
+		assertEquals(0, tftis.size());
+		GtfsTripAndTimes trip = tb.dao.getTripAndTimes(GtfsTrip.id("74431429"));
+		List<GtfsStopTime> stopTimes = trip.getStopTimes();
+		assertEquals(439.81, tb.dao.getLinearGeometryIndex()
+				.getLinearDistance(stopTimes.get(12), stopTimes.get(13)), 1e-2);
 	}
 
 	@Test
