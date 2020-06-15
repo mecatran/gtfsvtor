@@ -136,7 +136,7 @@ public class TooFastTravelValidator implements TripTimesValidator {
 
 	private double getMaxSpeedMps(int routeTypeCode, ValidatorConfig config) {
 		double maxSpeedKph;
-		switch (routeTypeCode) {
+		switch (GtfsRouteType.mapExtendedToBaseRouteTypeCode(routeTypeCode)) {
 		default:
 		case GtfsRouteType.CABLE_CAR_CODE:
 		case GtfsRouteType.GONDOLA_CODE:
@@ -148,9 +148,15 @@ public class TooFastTravelValidator implements TripTimesValidator {
 			break;
 		case GtfsRouteType.TRAM_CODE:
 		case GtfsRouteType.BUS_CODE:
-			maxSpeedKph = 100;
+		case GtfsRouteType.TROLLEYBUS_CODE:
+				maxSpeedKph = 100;
 			break;
-		case GtfsRouteType.METRO_CODE:
+	  case GtfsRouteType.INTERCITY_BUS_CODE:
+	  	// Note: not yet officially adopted routeType
+	  	maxSpeedKph = 120;
+			break;
+	  case GtfsRouteType.MONORAIL_CODE:
+	  case GtfsRouteType.METRO_CODE:
 			maxSpeedKph = 150;
 			break;
 		case GtfsRouteType.RAIL_CODE:
