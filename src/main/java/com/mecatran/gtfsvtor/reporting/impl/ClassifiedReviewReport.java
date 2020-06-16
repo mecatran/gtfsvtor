@@ -236,12 +236,12 @@ public class ClassifiedReviewReport {
 	public ClassifiedReviewReport(ReviewReport report,
 			int maxIssuePerCategory) {
 		Map<String, IssuesCategory> catMap = new HashMap<>();
-		for (ReportIssue issue : report.getReportIssues()) {
+		report.getReportIssues().forEach(issue -> {
 			String categoryName = getCategoryName(issue);
 			catMap.computeIfAbsent(categoryName,
 					k -> new IssuesCategory(categoryName, maxIssuePerCategory))
 					.addIssue(issue);
-		}
+		});
 		categories = catMap.values().stream().collect(Collectors.toList());
 		categories.forEach(IssuesCategory::sortAndIndex);
 		Collections.sort(categories);

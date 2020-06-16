@@ -1,5 +1,8 @@
 package com.mecatran.gtfsvtor.test;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.beust.jcommander.JCommander;
 import com.mecatran.gtfsvtor.cmdline.CmdLineArgs;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
@@ -12,6 +15,7 @@ import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
 import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
 import com.mecatran.gtfsvtor.model.impl.TestPackedStopTimes;
+import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
@@ -27,6 +31,28 @@ public class TestUtils {
 	public static class TestBundle {
 		public ReviewReport report;
 		public IndexedReadOnlyDao dao;
+
+		public <T extends ReportIssue> long issuesCountOfCategory(
+				Class<T> reportClass) {
+			// Maybe we could delegate this method to the report?
+			return report.getReportIssues(reportClass).count();
+		}
+
+		public long issuesCountOfSeverities(ReportIssueSeverity... severities) {
+			// Maybe we could delegate this method to the report too?
+			boolean[] bitmap = new boolean[ReportIssueSeverity.values().length];
+			for (ReportIssueSeverity severity : severities) {
+				bitmap[severity.ordinal()] = true;
+			}
+			return report.getReportIssues()
+					.filter(i -> bitmap[i.getSeverity().ordinal()]).count();
+		}
+
+		public <T extends ReportIssue> List<T> issuesOfCategory(
+				Class<T> reportClass) {
+			return report.getReportIssues(reportClass)
+					.collect(Collectors.toList());
+		}
 	}
 
 	public static class TestScenario {

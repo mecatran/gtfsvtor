@@ -30,7 +30,15 @@ public class InMemoryReportLog
 	private ListMultimap<ReportIssueSeverity, ReportIssue> reportIssuesBySeverity = ArrayListMultimap
 			.create();
 	private Map<String, AtomicInteger> issuesCountPerCategory = new HashMap<>();
-	// Note: we do not use this threshold for now.
+	/*
+	 * Note: we do not use this threshold for now, as this breaks the
+	 * computation of total number of report issue per category AND per source
+	 * info in the report formatter. In order to have correct computation we
+	 * would need to store the total number of issues per categories AND per
+	 * source info here. TODO: either remove this capability in the report
+	 * formatter (or disable it), or count total issues per category and source
+	 * info.
+	 */
 	private int maxIssuesPerCategory = Integer.MAX_VALUE;
 	private boolean printIssues = false;
 	private Map<DataObjectSourceRef, DataObjectSourceInfo> loadedSourceInfos = new HashMap<>();
@@ -105,15 +113,15 @@ public class InMemoryReportLog
 	}
 
 	@Override
-	public List<ReportIssue> getReportIssues() {
-		return reportItems;
+	public Stream<ReportIssue> getReportIssues() {
+		return reportItems.stream();
 	}
 
 	@Override
-	public <T extends ReportIssue> List<T> getReportIssues(
+	public <T extends ReportIssue> Stream<T> getReportIssues(
 			Class<T> issueClass) {
 		@SuppressWarnings("unchecked")
-		List<T> ret = (List<T>) reportIssuesByType.get(issueClass);
+		Stream<T> ret = (Stream<T>) reportIssuesByType.get(issueClass).stream();
 		return ret;
 	}
 

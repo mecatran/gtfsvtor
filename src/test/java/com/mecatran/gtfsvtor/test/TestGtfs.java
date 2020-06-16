@@ -343,13 +343,13 @@ public class TestGtfs {
 	@Test
 	public void testMissingFile() {
 		TestBundle tb = loadAndValidate("does_not_exists");
-		assertEquals(1, tb.report.getReportIssues(GeneralIOError.class).size());
+		assertEquals(1, tb.issuesCountOfCategory(GeneralIOError.class));
 	}
 
 	@Test
 	public void testUnknownFormat() {
 		TestBundle tb = loadAndValidate("unknown_format.zip");
-		assertEquals(1, tb.report.getReportIssues(GeneralIOError.class).size());
+		assertEquals(1, tb.issuesCountOfCategory(GeneralIOError.class));
 	}
 
 	@Test
@@ -363,8 +363,8 @@ public class TestGtfs {
 	@Test
 	public void testContainsNull() {
 		TestBundle tb = loadAndValidate("contains_null");
-		List<InvalidEncodingError> iees = tb.report
-				.getReportIssues(InvalidEncodingError.class);
+		List<InvalidEncodingError> iees = tb
+				.issuesOfCategory(InvalidEncodingError.class);
 		assertEquals(1, iees.size());
 		InvalidEncodingError iee0 = iees.get(0);
 		assertEquals("E NULL to the right\0NULL to the left (Demo)",
@@ -374,8 +374,8 @@ public class TestGtfs {
 	@Test
 	public void testExtraRowCells() {
 		TestBundle tb = loadAndValidate("extra_row_cells");
-		List<InconsistentNumberOfFieldsWarning> inofs = tb.report
-				.getReportIssues(InconsistentNumberOfFieldsWarning.class);
+		List<InconsistentNumberOfFieldsWarning> inofs = tb
+				.issuesOfCategory(InconsistentNumberOfFieldsWarning.class);
 		assertEquals(2, inofs.size());
 		InconsistentNumberOfFieldsWarning inof0 = inofs.get(0);
 		assertEquals(7, inof0.getNumberOfFields());
@@ -389,8 +389,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingRowCells() {
 		TestBundle tb = loadAndValidate("missing_row_cells");
-		List<InconsistentNumberOfFieldsWarning> inofs = tb.report
-				.getReportIssues(InconsistentNumberOfFieldsWarning.class);
+		List<InconsistentNumberOfFieldsWarning> inofs = tb
+				.issuesOfCategory(InconsistentNumberOfFieldsWarning.class);
 		assertEquals(1, inofs.size());
 		InconsistentNumberOfFieldsWarning inof0 = inofs.get(0);
 		assertEquals(6, inof0.getNumberOfFields());
@@ -402,8 +402,8 @@ public class TestGtfs {
 	@Test
 	public void testUnrecognizedColumn() {
 		TestBundle tb = loadAndValidate("unrecognized_columns");
-		Collection<UnrecognizedColumnInfo> ucws = tb.report
-				.getReportIssues(UnrecognizedColumnInfo.class);
+		Collection<UnrecognizedColumnInfo> ucws = tb
+				.issuesOfCategory(UnrecognizedColumnInfo.class);
 		// TODO Enable
 		// assertEquals(3, ucws.size());
 		boolean agencyLange = false;
@@ -425,16 +425,16 @@ public class TestGtfs {
 		assertTrue(routeTextColor);
 		assertTrue(stopUri);
 
-		List<MissingMandatoryColumnError> mmcs = tb.report
-				.getReportIssues(MissingMandatoryColumnError.class);
+		List<MissingMandatoryColumnError> mmcs = tb
+				.issuesOfCategory(MissingMandatoryColumnError.class);
 		assertEquals(1, mmcs.size());
 		MissingMandatoryColumnError mmc0 = mmcs.get(0);
 		assertEquals(GtfsAgency.TABLE_NAME,
 				mmc0.getSourceRefs().get(0).getSourceRef().getTableName());
 		assertEquals("agency_name", mmc0.getColumnName());
 
-		List<DuplicatedColumnError> dcs = tb.report
-				.getReportIssues(DuplicatedColumnError.class);
+		List<DuplicatedColumnError> dcs = tb
+				.issuesOfCategory(DuplicatedColumnError.class);
 		assertEquals(1, dcs.size());
 		DuplicatedColumnError dc = dcs.get(0);
 		assertEquals(GtfsAgency.TABLE_NAME,
@@ -446,8 +446,8 @@ public class TestGtfs {
 	@Test
 	public void testUnrecognizedFile() {
 		TestBundle tb = loadAndValidate("unknown_file");
-		Collection<UnknownFileInfo> ucws = tb.report
-				.getReportIssues(UnknownFileInfo.class);
+		Collection<UnknownFileInfo> ucws = tb
+				.issuesOfCategory(UnknownFileInfo.class);
 		// TODO Enable
 		// assertEquals(1, ucws.size());
 		boolean frecuencias = false;
@@ -461,8 +461,8 @@ public class TestGtfs {
 	@Test
 	public void testEmptyFile() {
 		TestBundle tb = loadAndValidate("empty_file");
-		Collection<EmptyTableError> etes = tb.report
-				.getReportIssues(EmptyTableError.class);
+		Collection<EmptyTableError> etes = tb
+				.issuesOfCategory(EmptyTableError.class);
 		assertEquals(1, etes.size());
 		EmptyTableError ete = etes.iterator().next();
 		assertEquals(GtfsAgency.TABLE_NAME, ete.getTableName());
@@ -472,8 +472,8 @@ public class TestGtfs {
 	@Test
 	public void testBadUtf8() {
 		TestBundle tb = loadAndValidate("bad_utf8");
-		Collection<InvalidEncodingError> iees = tb.report
-				.getReportIssues(InvalidEncodingError.class);
+		Collection<InvalidEncodingError> iees = tb
+				.issuesOfCategory(InvalidEncodingError.class);
 		// TODO Enable this
 		// assertEquals(5, iees.size());
 		boolean agencyHeader = false;
@@ -506,8 +506,8 @@ public class TestGtfs {
 	@Test
 	public void testUtf16() {
 		TestBundle tb = loadAndValidate("utf16");
-		List<InvalidCharsetError> ices = tb.report
-				.getReportIssues(InvalidCharsetError.class);
+		List<InvalidCharsetError> ices = tb
+				.issuesOfCategory(InvalidCharsetError.class);
 		// TODO set final count (number of tables)
 		// assertEquals(1, ices.size());
 		assertTrue(ices.size() > 5);
@@ -519,28 +519,28 @@ public class TestGtfs {
 	@Test
 	public void testMissingAgency() {
 		TestBundle tb = loadAndValidate("missing_agency");
-		List<MissingMandatoryTableError> mmts = tb.report
-				.getReportIssues(MissingMandatoryTableError.class);
+		List<MissingMandatoryTableError> mmts = tb
+				.issuesOfCategory(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsAgency.TABLE_NAME, mmt.getTableName());
 		assertTrue(tb.dao.getAgencies().count() == 0);
-		Collection<InvalidReferenceError> ires = tb.report
-				.getReportIssues(InvalidReferenceError.class);
+		Collection<InvalidReferenceError> ires = tb
+				.issuesOfCategory(InvalidReferenceError.class);
 		assertEquals(5, ires.size());
 	}
 
 	@Test
 	public void testMissingStops() {
 		TestBundle tb = loadAndValidate("missing_stops");
-		List<MissingMandatoryTableError> mmts = tb.report
-				.getReportIssues(MissingMandatoryTableError.class);
+		List<MissingMandatoryTableError> mmts = tb
+				.issuesOfCategory(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.iterator().next();
 		assertEquals(GtfsStop.TABLE_NAME, mmt.getTableName());
 		assertTrue(tb.dao.getStops().count() == 0);
-		List<InvalidReferenceError> ires = tb.report
-				.getReportIssues(InvalidReferenceError.class);
+		List<InvalidReferenceError> ires = tb
+				.issuesOfCategory(InvalidReferenceError.class);
 		assertEquals(28, ires.size());
 		for (InvalidReferenceError ire : ires) {
 			assertEquals(1, ire.getSourceRefs().size());
@@ -557,8 +557,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingRoutes() {
 		TestBundle tb = loadAndValidate("missing_routes");
-		Collection<MissingMandatoryTableError> mmts = tb.report
-				.getReportIssues(MissingMandatoryTableError.class);
+		Collection<MissingMandatoryTableError> mmts = tb
+				.issuesOfCategory(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.iterator().next();
 		assertEquals(GtfsRoute.TABLE_NAME, mmt.getTableName());
@@ -568,8 +568,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingTrips() {
 		TestBundle tb = loadAndValidate("missing_trips");
-		List<MissingMandatoryTableError> mmts = tb.report
-				.getReportIssues(MissingMandatoryTableError.class);
+		List<MissingMandatoryTableError> mmts = tb
+				.issuesOfCategory(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsTrip.TABLE_NAME, mmt.getTableName());
@@ -579,8 +579,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingWeekdayColumn() {
 		TestBundle tb = loadAndValidate("missing_weekday_column");
-		List<MissingMandatoryColumnError> mmcs = tb.report
-				.getReportIssues(MissingMandatoryColumnError.class);
+		List<MissingMandatoryColumnError> mmcs = tb
+				.issuesOfCategory(MissingMandatoryColumnError.class);
 		assertEquals(1, mmcs.size());
 		MissingMandatoryColumnError mmc = mmcs.get(0);
 		assertEquals(GtfsCalendar.TABLE_NAME,
@@ -591,8 +591,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingStopTimes() {
 		TestBundle tb = loadAndValidate("missing_stop_times");
-		List<MissingMandatoryTableError> mmts = tb.report
-				.getReportIssues(MissingMandatoryTableError.class);
+		List<MissingMandatoryTableError> mmts = tb
+				.issuesOfCategory(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
 		MissingMandatoryTableError mmt = mmts.get(0);
 		assertEquals(GtfsStopTime.TABLE_NAME, mmt.getTableName());
@@ -603,8 +603,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingDepartureTime() {
 		TestBundle tb = loadAndValidate("missing_departure_time");
-		List<MissingMandatoryValueError> mmvs = tb.report
-				.getReportIssues(MissingMandatoryValueError.class);
+		List<MissingMandatoryValueError> mmvs = tb
+				.issuesOfCategory(MissingMandatoryValueError.class);
 		assertEquals(1, mmvs.size());
 		MissingMandatoryValueError mmv = mmvs.get(0);
 		assertEquals(GtfsStopTime.TABLE_NAME,
@@ -616,8 +616,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingEndpointTime() {
 		TestBundle tb = loadAndValidate("missing_endpoint_times");
-		List<FirstOrLastStopTimeMissingError> flms = tb.report
-				.getReportIssues(FirstOrLastStopTimeMissingError.class);
+		List<FirstOrLastStopTimeMissingError> flms = tb
+				.issuesOfCategory(FirstOrLastStopTimeMissingError.class);
 		assertEquals(2, flms.size());
 		FirstOrLastStopTimeMissingError flm0 = flms.get(0);
 		assertEquals(GtfsTrip.id("AB2"), flm0.getStopTime().getTripId());
@@ -634,8 +634,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingCalendars() {
 		TestBundle tb = loadAndValidate("missing_calendar");
-		List<MissingMandatoryTableError> mmts = tb.report
-				.getReportIssues(MissingMandatoryTableError.class);
+		List<MissingMandatoryTableError> mmts = tb
+				.issuesOfCategory(MissingMandatoryTableError.class);
 		assertEquals(1, mmts.size());
 		/*
 		 * TODO If both calendars.txt and calendar_dates.txt are missing, we
@@ -651,8 +651,8 @@ public class TestGtfs {
 	@Test
 	public void testMissingColumn() {
 		TestBundle tb = loadAndValidate("missing_column");
-		List<MissingMandatoryColumnError> mmcs = tb.report
-				.getReportIssues(MissingMandatoryColumnError.class);
+		List<MissingMandatoryColumnError> mmcs = tb
+				.issuesOfCategory(MissingMandatoryColumnError.class);
 		assertEquals(1, mmcs.size());
 		MissingMandatoryColumnError mmc0 = mmcs.get(0);
 		assertEquals("agency_name", mmc0.getColumnName());
@@ -661,8 +661,8 @@ public class TestGtfs {
 	@Test
 	public void testInvalidRouteAgency() {
 		TestBundle tb = loadAndValidate("invalid_route_agency");
-		List<InvalidReferenceError> ires = tb.report
-				.getReportIssues(InvalidReferenceError.class);
+		List<InvalidReferenceError> ires = tb
+				.issuesOfCategory(InvalidReferenceError.class);
 		assertEquals(1, ires.size());
 		InvalidReferenceError ire = ires.get(0);
 		assertEquals(1, ire.getSourceRefs().size());
@@ -677,8 +677,8 @@ public class TestGtfs {
 	@Test
 	public void testBadDate() {
 		TestBundle tb = loadAndValidate("bad_date_format");
-		List<InvalidFieldFormatError> iffes = tb.report
-				.getReportIssues(InvalidFieldFormatError.class);
+		List<InvalidFieldFormatError> iffes = tb
+				.issuesOfCategory(InvalidFieldFormatError.class);
 		assertEquals(2, iffes.size());
 		InvalidFieldFormatError iffe1 = iffes.get(0);
 		assertEquals(1, iffe1.getSourceRefs().size());
@@ -699,16 +699,16 @@ public class TestGtfs {
 	@Test
 	public void testBadCoords() {
 		TestBundle tb = loadAndValidate("bad_coords");
-		List<InvalidCoordinateError> icrds = tb.report
-				.getReportIssues(InvalidCoordinateError.class);
+		List<InvalidCoordinateError> icrds = tb
+				.issuesOfCategory(InvalidCoordinateError.class);
 		assertEquals(4, icrds.size());
 	}
 
 	@Test
 	public void testUndefinedStop() {
 		TestBundle tb = loadAndValidate("undefined_stop");
-		List<InvalidReferenceError> ires = tb.report
-				.getReportIssues(InvalidReferenceError.class);
+		List<InvalidReferenceError> ires = tb
+				.issuesOfCategory(InvalidReferenceError.class);
 		assertEquals(1, ires.size());
 		InvalidReferenceError ire = ires.get(0);
 		assertEquals(1, ire.getSourceRefs().size());
@@ -724,8 +724,8 @@ public class TestGtfs {
 	@Test
 	public void testDuplicateScheduleId() {
 		TestBundle tb = loadAndValidate("duplicate_schedule_id");
-		List<DuplicatedObjectIdError> doies = tb.report
-				.getReportIssues(DuplicatedObjectIdError.class);
+		List<DuplicatedObjectIdError> doies = tb
+				.issuesOfCategory(DuplicatedObjectIdError.class);
 		assertEquals(1, doies.size());
 		DuplicatedObjectIdError doie = doies.get(0);
 		assertEquals(GtfsCalendar.id("WE"), doie.getDuplicatedId());
@@ -757,11 +757,11 @@ public class TestGtfs {
 	@Test
 	public void testDuplicateIds() {
 		TestBundle tb = loadAndValidate("duplicate_ids");
-		List<DuplicatedObjectIdError> doies = tb.report
-				.getReportIssues(DuplicatedObjectIdError.class);
+		List<DuplicatedObjectIdError> doies = tb
+				.issuesOfCategory(DuplicatedObjectIdError.class);
 		assertEquals(6, doies.size());
-		List<DuplicatedFareRuleWarning> dfrws = tb.report
-				.getReportIssues(DuplicatedFareRuleWarning.class);
+		List<DuplicatedFareRuleWarning> dfrws = tb
+				.issuesOfCategory(DuplicatedFareRuleWarning.class);
 		assertEquals(1, dfrws.size());
 	}
 
@@ -834,8 +834,8 @@ public class TestGtfs {
 	@Test
 	public void testTooFastTravel() {
 		TestBundle tb = loadAndValidate("toofast_travel");
-		List<TooFastTravelIssue> tfts = tb.report
-				.getReportIssues(TooFastTravelIssue.class);
+		List<TooFastTravelIssue> tfts = tb
+				.issuesOfCategory(TooFastTravelIssue.class);
 		assertEquals(5, tfts.size());
 		TooFastTravelIssue tft0 = tfts.get(0);
 		assertEquals(GtfsStop.id("BEATTY_AIRPORT"), tft0.getStop1().getId());
@@ -854,8 +854,8 @@ public class TestGtfs {
 	@Test
 	public void testStopTooFarFromParentStation() {
 		TestBundle tb = loadAndValidate("stops_toofar");
-		List<StopTooFarFromParentStationIssue> stfs = tb.report
-				.getReportIssues(StopTooFarFromParentStationIssue.class);
+		List<StopTooFarFromParentStationIssue> stfs = tb
+				.issuesOfCategory(StopTooFarFromParentStationIssue.class);
 		assertEquals(2, stfs.size());
 		StopTooFarFromParentStationIssue stf0 = stfs.get(0);
 		assertTrue(Math.abs(3181.11 - stf0.getDistanceMeters()) < 1.0);
@@ -871,8 +871,8 @@ public class TestGtfs {
 	@Test
 	public void testStopTooClose() {
 		TestBundle tb = loadAndValidate("duplicate_stop");
-		List<StopTooCloseIssue> stcs = tb.report
-				.getReportIssues(StopTooCloseIssue.class);
+		List<StopTooCloseIssue> stcs = tb
+				.issuesOfCategory(StopTooCloseIssue.class);
 		assertEquals(1, stcs.size());
 		StopTooCloseIssue stc0 = stcs.get(0);
 		// Is the order 1 / 2 stable?
@@ -883,8 +883,8 @@ public class TestGtfs {
 	@Test
 	public void testDuplicateStopSequence() {
 		TestBundle tb = loadAndValidate("duplicate_stop_sequence");
-		List<DuplicatedStopSequenceError> dsss = tb.report
-				.getReportIssues(DuplicatedStopSequenceError.class);
+		List<DuplicatedStopSequenceError> dsss = tb
+				.issuesOfCategory(DuplicatedStopSequenceError.class);
 		assertEquals(1, dsss.size());
 		DuplicatedStopSequenceError dss0 = dsss.get(0);
 		assertEquals(GtfsTripStopSequence.fromSequence(10),
@@ -895,8 +895,8 @@ public class TestGtfs {
 	@Test
 	public void testEmptyCalendar() {
 		TestBundle tb = loadAndValidate("empty_calendar");
-		List<EmptyCalendarWarning> ecws = tb.report
-				.getReportIssues(EmptyCalendarWarning.class);
+		List<EmptyCalendarWarning> ecws = tb
+				.issuesOfCategory(EmptyCalendarWarning.class);
 		assertEquals(1, ecws.size());
 		EmptyCalendarWarning ecw = ecws.get(0);
 		assertEquals(GtfsCalendar.id("MONDAY"), ecw.getServiceId());
@@ -905,8 +905,8 @@ public class TestGtfs {
 	@Test
 	public void testUnusedStop() {
 		TestBundle tb = loadAndValidate("unused_stop");
-		List<UnusedObjectWarning> uows = tb.report
-				.getReportIssues(UnusedObjectWarning.class);
+		List<UnusedObjectWarning> uows = tb
+				.issuesOfCategory(UnusedObjectWarning.class);
 		assertEquals(1, uows.size());
 		UnusedObjectWarning uow = uows.get(0);
 		assertEquals(GtfsStop.id("BOGUS"), uow.getId());
@@ -915,8 +915,8 @@ public class TestGtfs {
 	@Test
 	public void testUnusedData() {
 		TestBundle tb = loadAndValidate("unused_data");
-		List<UnusedObjectWarning> uows = tb.report
-				.getReportIssues(UnusedObjectWarning.class);
+		List<UnusedObjectWarning> uows = tb
+				.issuesOfCategory(UnusedObjectWarning.class);
 		assertEquals(7, uows.size());
 		Set<GtfsId<?, ?>> unusedIds = uows.stream()
 				.map(UnusedObjectWarning::getId).collect(Collectors.toSet());
@@ -933,22 +933,22 @@ public class TestGtfs {
 	@Test
 	public void testBogusShapes() {
 		TestBundle tb = loadAndValidate("bogus_shape");
-		List<MissingObjectIdError> mois = tb.report
-				.getReportIssues(MissingObjectIdError.class);
+		List<MissingObjectIdError> mois = tb
+				.issuesOfCategory(MissingObjectIdError.class);
 		assertEquals(3, mois.size());
-		List<MissingMandatoryValueError> mmvs = tb.report
-				.getReportIssues(MissingMandatoryValueError.class);
+		List<MissingMandatoryValueError> mmvs = tb
+				.issuesOfCategory(MissingMandatoryValueError.class);
 		assertEquals(5, mmvs.size());
-		List<InvalidFieldFormatError> iffs = tb.report
-				.getReportIssues(InvalidFieldFormatError.class);
+		List<InvalidFieldFormatError> iffs = tb
+				.issuesOfCategory(InvalidFieldFormatError.class);
 		assertEquals(6, iffs.size());
-		List<InvalidReferenceError> ires = tb.report
-				.getReportIssues(InvalidReferenceError.class);
+		List<InvalidReferenceError> ires = tb
+				.issuesOfCategory(InvalidReferenceError.class);
 		assertEquals(1, ires.size());
 		InvalidReferenceError ire = ires.get(0);
 		assertEquals("INEXISTING_SHAPE", ire.getValue());
-		List<NonIncreasingShapeDistTraveledError> nisd = tb.report
-				.getReportIssues(NonIncreasingShapeDistTraveledError.class);
+		List<NonIncreasingShapeDistTraveledError> nisd = tb
+				.issuesOfCategory(NonIncreasingShapeDistTraveledError.class);
 		assertEquals(2, nisd.size());
 	}
 
@@ -1033,16 +1033,16 @@ public class TestGtfs {
 	@Test
 	public void testRouteColors() {
 		TestBundle tb = loadAndValidate("route_colors");
-		List<RouteColorContrastIssue> rccs = tb.report
-				.getReportIssues(RouteColorContrastIssue.class);
+		List<RouteColorContrastIssue> rccs = tb
+				.issuesOfCategory(RouteColorContrastIssue.class);
 		assertEquals(4, rccs.size());
 		RouteColorContrastIssue rcc0 = rccs.get(0);
 		assertEquals(19.5, rcc0.getBrightnessDeltaPercent(), 0.1);
 		RouteColorContrastIssue rcc2 = rccs.get(2);
 		assertEquals(0.0, rcc2.getBrightnessDeltaPercent(), 0.1);
 
-		List<SimilarRouteColorWarning> srcs = tb.report
-				.getReportIssues(SimilarRouteColorWarning.class);
+		List<SimilarRouteColorWarning> srcs = tb
+				.issuesOfCategory(SimilarRouteColorWarning.class);
 		assertEquals(4, srcs.size());
 		SimilarRouteColorWarning src0 = srcs.get(0);
 		assertEquals(0.00226, src0.getColorDistance(), 1e-4);
@@ -1051,8 +1051,8 @@ public class TestGtfs {
 	@Test
 	public void testDupTrips() {
 		TestBundle tb = loadAndValidate("duplicate_trips");
-		List<DuplicatedTripIssue> dtis = tb.report
-				.getReportIssues(DuplicatedTripIssue.class);
+		List<DuplicatedTripIssue> dtis = tb
+				.issuesOfCategory(DuplicatedTripIssue.class);
 		assertEquals(3, dtis.size());
 		assertEquals(261, dtis.get(0).getCalendarOverlap().getDaysCount());
 		// Both following dates should be Mondays
@@ -1073,25 +1073,25 @@ public class TestGtfs {
 	@Test
 	public void testRouteNames() {
 		TestBundle tb = loadAndValidate("route_names");
-		List<MissingMandatoryValueError> mmvs = tb.report
-				.getReportIssues(MissingMandatoryValueError.class);
+		List<MissingMandatoryValueError> mmvs = tb
+				.issuesOfCategory(MissingMandatoryValueError.class);
 		assertEquals(1, mmvs.size());
 		MissingMandatoryValueError mmv0 = mmvs.get(0);
 		assertEquals(GtfsRoute.TABLE_NAME,
 				mmv0.getSourceRefs().get(0).getSourceRef().getTableName());
-		List<InvalidFieldFormatError> iffs = tb.report
-				.getReportIssues(InvalidFieldFormatError.class);
+		List<InvalidFieldFormatError> iffs = tb
+				.issuesOfCategory(InvalidFieldFormatError.class);
 		assertEquals(1, iffs.size());
-		List<InvalidFieldValueIssue> ifvs = tb.report
-				.getReportIssues(InvalidFieldValueIssue.class);
+		List<InvalidFieldValueIssue> ifvs = tb
+				.issuesOfCategory(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
 	}
 
 	@Test
 	public void testOverlappingBlocks() {
 		TestBundle tb = loadAndValidate("overlapping_blockid");
-		List<OverlappingBlockIdIssue> obis = tb.report
-				.getReportIssues(OverlappingBlockIdIssue.class);
+		List<OverlappingBlockIdIssue> obis = tb
+				.issuesOfCategory(OverlappingBlockIdIssue.class);
 		assertEquals(3, obis.size());
 		OverlappingBlockIdIssue obi0 = obis.get(0);
 		assertEquals(GtfsBlockId.fromValue("B1"), obi0.getBlockId());
@@ -1100,27 +1100,26 @@ public class TestGtfs {
 	@Test
 	public void testSplitJoinedTrips() {
 		TestBundle tb = loadAndValidate("split_or_joined_trips");
-		List<WrongDropOffPickUpTypeForSplitTripsIssue> obis = tb.report
-				.getReportIssues(
+		List<WrongDropOffPickUpTypeForSplitTripsIssue> obis = tb
+				.issuesOfCategory(
 						WrongDropOffPickUpTypeForSplitTripsIssue.class);
 		assertEquals(2, obis.size());
-		List<DifferentHeadsignsIssue> dhs = tb.report
-				.getReportIssues(DifferentHeadsignsIssue.class);
+		List<DifferentHeadsignsIssue> dhs = tb
+				.issuesOfCategory(DifferentHeadsignsIssue.class);
 		assertEquals(1, dhs.size());
 	}
 
 	@Test
 	public void testTimeTravels() {
 		TestBundle tb = loadAndValidate("timetravels");
-		List<TimeTravelAtStopError> ttas = tb.report
-				.getReportIssues(TimeTravelAtStopError.class);
+		List<TimeTravelAtStopError> ttas = tb
+				.issuesOfCategory(TimeTravelAtStopError.class);
 		assertEquals(2, ttas.size());
 		TimeTravelAtStopError tta0 = ttas.get(0);
 		assertEquals(GtfsStop.id("STAGECOACH"), tta0.getStopTime().getStopId());
 		assertEquals(GtfsTripStopSequence.fromSequence(0),
 				tta0.getStopTime().getStopSequence());
-		List<TimeTravelError> tts = tb.report
-				.getReportIssues(TimeTravelError.class);
+		List<TimeTravelError> tts = tb.issuesOfCategory(TimeTravelError.class);
 		assertEquals(1, tts.size());
 		TimeTravelError tt0 = tts.get(0);
 		assertEquals(GtfsStop.id("DADAN"), tt0.getStop1().getId());
@@ -1130,8 +1129,8 @@ public class TestGtfs {
 	@Test
 	public void testBogusCalendars() {
 		TestBundle tb = loadAndValidate("bogus_calendars");
-		List<InvalidFieldValueIssue> ifvs = tb.report
-				.getReportIssues(InvalidFieldValueIssue.class);
+		List<InvalidFieldValueIssue> ifvs = tb
+				.issuesOfCategory(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
 		InvalidFieldValueIssue ifv0 = ifvs.get(0);
 		assertTrue(
@@ -1143,8 +1142,8 @@ public class TestGtfs {
 	@Test
 	public void testInvalidStopTimeType() {
 		TestBundle tb = loadAndValidate("invalid_stoptime_type");
-		List<WrongStopTimeStopTypeError> wsts = tb.report
-				.getReportIssues(WrongStopTimeStopTypeError.class);
+		List<WrongStopTimeStopTypeError> wsts = tb
+				.issuesOfCategory(WrongStopTimeStopTypeError.class);
 		assertEquals(1, wsts.size());
 		WrongStopTimeStopTypeError wst0 = wsts.get(0);
 		assertEquals(GtfsStop.id("BEATTY_AIRPORT_STATION"),
@@ -1155,22 +1154,22 @@ public class TestGtfs {
 	@Test
 	public void testBogusFrequencies() {
 		TestBundle tb = loadAndValidate("bogus_frequencies");
-		List<InvalidFieldValueIssue> ifvs = tb.report
-				.getReportIssues(InvalidFieldValueIssue.class);
+		List<InvalidFieldValueIssue> ifvs = tb
+				.issuesOfCategory(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
-		List<InvalidFieldFormatError> iffs = tb.report
-				.getReportIssues(InvalidFieldFormatError.class);
+		List<InvalidFieldFormatError> iffs = tb
+				.issuesOfCategory(InvalidFieldFormatError.class);
 		assertEquals(1, iffs.size());
-		List<MissingMandatoryValueError> mmvs = tb.report
-				.getReportIssues(MissingMandatoryValueError.class);
+		List<MissingMandatoryValueError> mmvs = tb
+				.issuesOfCategory(MissingMandatoryValueError.class);
 		assertEquals(3, mmvs.size());
 	}
 
 	@Test
 	public void testTooManyDaysWoService() {
 		TestBundle tb = loadAndValidate("toomanydayswoservice");
-		List<TooManyDaysWithoutServiceIssue> tmws = tb.report
-				.getReportIssues(TooManyDaysWithoutServiceIssue.class);
+		List<TooManyDaysWithoutServiceIssue> tmws = tb
+				.issuesOfCategory(TooManyDaysWithoutServiceIssue.class);
 		assertEquals(1, tmws.size());
 		TooManyDaysWithoutServiceIssue tmw0 = tmws.get(0);
 		assertEquals(8, tmw0.getNumberOfDays());
@@ -1181,72 +1180,64 @@ public class TestGtfs {
 	@Test
 	public void testNoService() {
 		TestBundle tb = loadAndValidate("noservice");
-		List<NoServiceError> nses = tb.report
-				.getReportIssues(NoServiceError.class);
+		List<NoServiceError> nses = tb.issuesOfCategory(NoServiceError.class);
 		assertEquals(1, nses.size());
 	}
 
 	@Test
 	public void testBogusTransfers() {
 		TestBundle tb = loadAndValidate("bogus_transfers");
-		assertEquals(2,
-				tb.report.getReportIssues(TooFastWalkingSpeed.class).size());
+		assertEquals(2, tb.issuesCountOfCategory(TooFastWalkingSpeed.class));
 		assertEquals(3,
-				tb.report.getReportIssues(InvalidFieldValueIssue.class).size());
-		assertEquals(2,
-				tb.report.getReportIssues(UselessValueWarning.class).size());
+				tb.issuesOfCategory(InvalidFieldValueIssue.class).size());
+		assertEquals(2, tb.issuesCountOfCategory(UselessValueWarning.class));
+		assertEquals(1, tb.issuesCountOfCategory(InvalidReferenceError.class));
 		assertEquals(1,
-				tb.report.getReportIssues(InvalidReferenceError.class).size());
-		assertEquals(1, tb.report
-				.getReportIssues(WrongTransferStopTypeError.class).size());
-		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
-				.size());
+				tb.issuesCountOfCategory(WrongTransferStopTypeError.class));
+		assertEquals(1,
+				tb.issuesCountOfCategory(DuplicatedObjectIdError.class));
 	}
 
 	@Test
 	public void testBogusTransfersExtended() {
 		TestBundle tb = loadAndValidate("bogus_transfers_extended");
+		assertEquals(1, tb.issuesCountOfCategory(InvalidReferenceError.class));
 		assertEquals(1,
-				tb.report.getReportIssues(InvalidReferenceError.class).size());
-		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
-				.size());
-		assertEquals(0,
-				tb.report.getReportIssues(UnrecognizedColumnInfo.class).size());
+				tb.issuesCountOfCategory(DuplicatedObjectIdError.class));
+		assertEquals(0, tb.issuesCountOfCategory(UnrecognizedColumnInfo.class));
 	}
 
 	@Test
 	public void testBogusPathways() {
 		TestBundle tb = loadAndValidate("bogus_pathways");
-		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
-				.size());
-		assertEquals(1, tb.report
-				.getReportIssues(MissingMandatoryColumnError.class).size());
-		assertEquals(1, tb.report
-				.getReportIssues(WrongPathwayStopTypeError.class).size());
-		assertEquals(2, tb.report.getReportIssues(InvalidFieldFormatError.class)
-				.size());
+		assertEquals(1,
+				tb.issuesCountOfCategory(DuplicatedObjectIdError.class));
+		assertEquals(1,
+				tb.issuesCountOfCategory(MissingMandatoryColumnError.class));
+		assertEquals(1,
+				tb.issuesCountOfCategory(WrongPathwayStopTypeError.class));
 		assertEquals(2,
-				tb.report.getReportIssues(InvalidReferenceError.class).size());
-		assertEquals(8, tb.report
-				.getReportIssues(MissingMandatoryValueError.class).size());
+				tb.issuesCountOfCategory(InvalidFieldFormatError.class));
+		assertEquals(2, tb.issuesCountOfCategory(InvalidReferenceError.class));
+		assertEquals(8,
+				tb.issuesCountOfCategory(MissingMandatoryValueError.class));
 	}
 
 	@Test
 	public void testBogusFares() {
 		TestBundle tb = loadAndValidate("bogus_fares");
-		assertEquals(5, tb.report.getReportIssues(InvalidFieldFormatError.class)
-				.size());
-		assertEquals(1, tb.report.getReportIssues(DuplicatedObjectIdError.class)
-				.size());
+		assertEquals(5,
+				tb.issuesCountOfCategory(InvalidFieldFormatError.class));
 		assertEquals(1,
-				tb.report.getReportIssues(InvalidReferenceError.class).size());
+				tb.issuesCountOfCategory(DuplicatedObjectIdError.class));
+		assertEquals(1, tb.issuesCountOfCategory(InvalidReferenceError.class));
 	}
 
 	@Test
 	public void testRepeatedRouteName() {
 		TestBundle tb = loadAndValidate("repeated_route_name");
-		List<InvalidFieldValueIssue> ifvs = tb.report
-				.getReportIssues(InvalidFieldValueIssue.class);
+		List<InvalidFieldValueIssue> ifvs = tb
+				.issuesOfCategory(InvalidFieldValueIssue.class);
 		assertEquals(1, ifvs.size());
 		InvalidFieldValueIssue ifv0 = ifvs.get(0);
 		assertEquals(3, ifv0.getSourceRefs().size());
@@ -1255,8 +1246,8 @@ public class TestGtfs {
 	@Test
 	public void testNegativeStopSequence() {
 		TestBundle tb = loadAndValidate("negative_stop_sequence");
-		List<InvalidFieldFormatError> iffs = tb.report
-				.getReportIssues(InvalidFieldFormatError.class);
+		List<InvalidFieldFormatError> iffs = tb
+				.issuesOfCategory(InvalidFieldFormatError.class);
 		assertEquals(1, iffs.size());
 		InvalidFieldFormatError iff0 = iffs.get(0);
 		assertEquals("-2", iff0.getValue());
@@ -1265,26 +1256,25 @@ public class TestGtfs {
 	@Test
 	public void testSpaceInHeader() {
 		TestBundle tb = loadAndValidate("space_header");
-		assertEquals(0, tb.report
-				.getReportIssues(MissingMandatoryValueError.class).size());
 		assertEquals(0,
-				tb.report.getReportIssues(MissingObjectIdError.class).size());
+				tb.issuesCountOfCategory(MissingMandatoryValueError.class));
+		assertEquals(0, tb.issuesCountOfCategory(MissingObjectIdError.class));
 	}
 
 	@Test
 	public void testNoServiceException() {
 		TestBundle tb = loadAndValidate("noservice_exception");
-		assertEquals(1, tb.report
-				.getReportIssues(NoServiceExceptionWarning.class).size());
-		assertEquals(3, tb.report
-				.getReportIssues(UselessCalendarDateWarning.class).size());
+		assertEquals(1,
+				tb.issuesCountOfCategory(NoServiceExceptionWarning.class));
+		assertEquals(3,
+				tb.issuesCountOfCategory(UselessCalendarDateWarning.class));
 	}
 
 	@Test
 	public void testDifferentStationTooClose() {
 		TestBundle tb = loadAndValidate("different_station_too_close");
-		assertEquals(1, tb.report
-				.getReportIssues(DifferentStationTooCloseWarning.class).size());
+		assertEquals(1, tb
+				.issuesCountOfCategory(DifferentStationTooCloseWarning.class));
 	}
 
 	@Test
@@ -1295,12 +1285,8 @@ public class TestGtfs {
 			TestScenario scenario = new TestScenario("interleaved_stoptimes");
 			scenario.maxStopTimesInterleaving = max;
 			TestBundle tb = runScenario(scenario);
-			// TODO Add helper to get issue count by severity
-			assertEquals(0,
-					tb.report.getReportIssues().stream()
-							.filter(i -> i.getSeverity()
-									.compareTo(ReportIssueSeverity.ERROR) >= 0)
-							.count());
+			assertEquals(0, tb.issuesCountOfSeverities(
+					ReportIssueSeverity.ERROR, ReportIssueSeverity.CRITICAL));
 		}
 	}
 
@@ -1354,8 +1340,8 @@ public class TestGtfs {
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
 		assertEquals(0,
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
-		List<TooFastTravelIssue> tftis = tb.report
-				.getReportIssues(TooFastTravelIssue.class);
+		List<TooFastTravelIssue> tftis = tb
+				.issuesOfCategory(TooFastTravelIssue.class);
 		assertEquals(0, tftis.size());
 		GtfsTripAndTimes trip = tb.dao.getTripAndTimes(GtfsTrip.id("74431429"));
 		List<GtfsStopTime> stopTimes = trip.getStopTimes();
@@ -1374,8 +1360,8 @@ public class TestGtfs {
 		assertEquals(0,
 				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
 
-		List<StopTooFarFromShapeIssue> stfs = tb.report
-				.getReportIssues(StopTooFarFromShapeIssue.class);
+		List<StopTooFarFromShapeIssue> stfs = tb
+				.issuesOfCategory(StopTooFarFromShapeIssue.class);
 		assertEquals(1, stfs.size());
 		StopTooFarFromShapeIssue stf0 = stfs.get(0);
 		assertEquals(GtfsStop.id("000000003934"), stf0.getStop().getId());
@@ -1391,24 +1377,24 @@ public class TestGtfs {
 	@Test
 	public void testSwegZeroCoordinates() {
 		TestBundle tb = loadAndValidate("sweg_zero_coordinates");
-		List<StopTooCloseToOriginError> stctoes = tb.report
-				.getReportIssues(StopTooCloseToOriginError.class);
+		List<StopTooCloseToOriginError> stctoes = tb
+				.issuesOfCategory(StopTooCloseToOriginError.class);
 		assertEquals(1, stctoes.size());
 	}
 
 	@Test
 	public void testSingleAgency() {
 		TestBundle tb = loadAndValidate("single_agency");
-		List<MissingMandatoryValueError> mmvs = tb.report
-				.getReportIssues(MissingMandatoryValueError.class);
+		List<MissingMandatoryValueError> mmvs = tb
+				.issuesOfCategory(MissingMandatoryValueError.class);
 		// agency_id is optional, if feed contains only a single agencys
 		assertEquals(0, mmvs.size());
-		List<MissingMandatoryColumnError> mmces = tb.report
-				.getReportIssues(MissingMandatoryColumnError.class);
+		List<MissingMandatoryColumnError> mmces = tb
+				.issuesOfCategory(MissingMandatoryColumnError.class);
 		// agency_id column is optional, if feed contains only a single agencys
 		assertEquals(0, mmces.size());
-		List<UnusedObjectWarning> uows = tb.report
-				.getReportIssues(UnusedObjectWarning.class);
+		List<UnusedObjectWarning> uows = tb
+				.issuesOfCategory(UnusedObjectWarning.class);
 		// agency may not be refered, if feed contains only a single agency
 		assertEquals(0, uows.size());
 	}
