@@ -20,7 +20,7 @@ public class PackedStopTimes {
 
 		public int indexStopId(GtfsStop.Id stopId);
 
-		public GtfsStop.Id unindexStopId(int stopIdIndex);
+		public GtfsStop.Id getStopIdIndex(int stopIdIndex);
 
 		public PackedTimePattern intern(PackedTimePattern tData);
 
@@ -748,7 +748,7 @@ public class PackedStopTimes {
 			} else {
 				stopVal += stopOff;
 				stopIndex += stopVal;
-				GtfsStop.Id stopId = context.unindexStopId(stopIndex);
+				GtfsStop.Id stopId = context.getStopIdIndex(stopIndex);
 				builder.withStopId(stopId);
 			}
 

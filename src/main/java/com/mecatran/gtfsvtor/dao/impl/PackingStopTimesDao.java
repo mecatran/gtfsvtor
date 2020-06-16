@@ -25,8 +25,10 @@ public class PackingStopTimesDao implements StopTimesDao,
 
 	public static class DefaultContext implements PackedStopTimes.Context {
 		private GtfsIdIndexer<String, GtfsStop, GtfsStop.Id> stopIdIndexer = new GtfsIdIndexer<>();
-		private GenericInterner<PackedTimePattern> tDataInterner = new GenericInterner<>();
-		private GenericInterner<PackedStopPattern> sDataInterner = new GenericInterner<>();
+		private GenericInterner<PackedTimePattern> tDataInterner = new GenericInterner<>(
+				true);
+		private GenericInterner<PackedStopPattern> sDataInterner = new GenericInterner<>(
+				true);
 
 		@Override
 		public int indexStopId(GtfsStop.Id stopId) {
@@ -34,7 +36,7 @@ public class PackingStopTimesDao implements StopTimesDao,
 		}
 
 		@Override
-		public GtfsStop.Id unindexStopId(int stopIdIndex) {
+		public GtfsStop.Id getStopIdIndex(int stopIdIndex) {
 			return stopIdIndexer.unindex(stopIdIndex);
 		}
 
