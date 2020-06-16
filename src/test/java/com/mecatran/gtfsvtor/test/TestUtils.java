@@ -1,5 +1,6 @@
 package com.mecatran.gtfsvtor.test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,13 +40,8 @@ public class TestUtils {
 		}
 
 		public long issuesCountOfSeverities(ReportIssueSeverity... severities) {
-			// Maybe we could delegate this method to the report too?
-			boolean[] bitmap = new boolean[ReportIssueSeverity.values().length];
-			for (ReportIssueSeverity severity : severities) {
-				bitmap[severity.ordinal()] = true;
-			}
-			return report.getReportIssues()
-					.filter(i -> bitmap[i.getSeverity().ordinal()]).count();
+			return Arrays.asList(severities).stream().distinct()
+					.mapToInt(s -> report.issuesCountOfSeverity(s)).sum();
 		}
 
 		public <T extends ReportIssue> List<T> issuesOfCategory(
