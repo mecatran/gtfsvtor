@@ -1,22 +1,22 @@
 package com.mecatran.gtfsvtor.geospatial;
 
-public class PackedCoordinates {
+public final class PackedCoordinates {
 
 	/*
-	 * Here we assume lat/lon ranges to be symetric. Keep a bit of overhead to
-	 * keep clamped values out of bounds for the validator to be able to
-	 * complain.
+	 * Store lat/lon in fixed-point integer format with 7 decimals (value
+	 * multiplied by 10000000). E7 int coordinates do fit in 32 bits, allow for
+	 * some extra spaces in case of overflow, and are easy to debug and store.
+	 * The (worst) precision at the equator is 1.11 cm, which is in our use-case
+	 * sufficient. Also converting using a multiple of 10 ensure that when
+	 * converting back and forth we do not have spurrious rounding issues making
+	 * the value slightly off on the 7th decimal place (useful to print back the
+	 * exact same value as the one from the input data, which is a string in
+	 * base-10).
 	 */
-	/* Latitude range is between -90 to +90. */
-	private static double MAX_LAT = 90.000001;
-	/* Longitude range is between -180 to +180. */
-	private static double MAX_LON = 180.000001;
-
-	private static double MAGIC_LAT_FACTOR = Integer.MAX_VALUE * 1. / MAX_LAT;
-	private static double MAGIC_LON_FACTOR = Integer.MAX_VALUE * 1. / MAX_LON;
-
-	/* A stop at the pole is unlikely */
+	private static int E7_FACTOR = 10000000;
 	public static long NULL = 0xFFFFFFFFFFFFFFFFL;
+	private static int MAX_INT = E7_FACTOR * 200; // Allow slack
+	private static double MAX_DBL = MAX_INT * 1. / E7_FACTOR;
 
 	private static boolean debug = false;
 
@@ -26,22 +26,24 @@ public class PackedCoordinates {
 		if (Double.isNaN(lat) || Double.isNaN(lon))
 			return NULL;
 		/*
-		 * Range check. If out of range, clamp.
+		 * Range check. If out of range, clamp. Note that the range is
+		 * [-200,200], which obviously will be happy to store out of range
+		 * latitude/longitude. But the range check is not done here.
 		 */
-		if (lat < -MAX_LAT)
-			lat = -MAX_LAT;
-		if (lat > MAX_LAT)
-			lat = MAX_LAT;
-		if (lon < -MAX_LON)
-			lon = -MAX_LON;
-		if (lon > MAX_LON)
-			lon = MAX_LON;
-		int ilat = (int) (lat * MAGIC_LAT_FACTOR);
-		int ilon = (int) (lon * MAGIC_LON_FACTOR);
+		if (lat < -MAX_DBL)
+			lat = -MAX_DBL;
+		if (lat > MAX_DBL)
+			lat = MAX_DBL;
+		if (lon < -MAX_DBL)
+			lon = -MAX_DBL;
+		if (lon > MAX_DBL)
+			lon = MAX_DBL;
+		int ilat = (int) (lat * E7_FACTOR);
+		int ilon = (int) (lon * E7_FACTOR);
 		long packed = ((long) ilat << 32) | (ilon & 0xFFFFFFFFL);
 		if (debug) {
 			System.out.println(String.format(
-					"lat: %13.8f -> %08x  lon: %13.8f -> %08x  packed: %016x",
+					"lat: %13.8f -> %12d  lon: %13.8f -> %12d  packed: %016x",
 					lat, ilat, lon, ilon, packed));
 		}
 		return packed;
@@ -53,11 +55,11 @@ public class PackedCoordinates {
 		/* Make sure we cast to int to resurrect negative numbers */
 		int ilat = (int) (packed >> 32);
 		int ilon = (int) (packed & 0x00000000FFFFFFFFL);
-		double lat = ilat * 1. / MAGIC_LAT_FACTOR;
-		double lon = ilon * 1. / MAGIC_LON_FACTOR;
+		double lat = ilat * 1. / E7_FACTOR;
+		double lon = ilon * 1. / E7_FACTOR;
 		if (debug) {
 			System.out.println(String.format(
-					"packed: %016x  lat: %08x -> %13.8f  lon: %08x -> %13.8f",
+					"packed: %016x  lat: %12d -> %13.8f  lon: %12d -> %13.8f",
 					packed, ilat, lat, ilon, lon));
 		}
 		return new GeoCoordinates(lat, lon);

@@ -87,9 +87,9 @@ public class TestGeospatial {
 		testOne(-45.0, -90.0);
 		testOne(-90.0, -180.0);
 
-		// Max distance rounding error should be less than 1.2cm
+		// Max distance rounding error should be less than 1.8cm
 		double d;
-		double MAX_ERR_DISTANCE_METERS = 1.2e-2;
+		double MAX_ERR_DISTANCE_METERS = 1.8e-2;
 
 		Random rand = new Random(42L);
 		for (int i = 0; i < 1000; i++) {
