@@ -11,12 +11,12 @@ import java.util.stream.Stream;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.mecatran.gtfsvtor.dao.AppendableDao;
 import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
+import com.mecatran.gtfsvtor.dao.ShapePointsDao;
 import com.mecatran.gtfsvtor.dao.StopTimesDao;
 import com.mecatran.gtfsvtor.loader.DataLoader;
 import com.mecatran.gtfsvtor.loader.DataLoader.SourceContext;
@@ -58,8 +58,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Map<GtfsCalendar.Id, GtfsCalendar> calendars = new HashMap<>();
 	private Map<GtfsTrip.Id, GtfsTrip> trips = new HashMap<>();
 	private StopTimesDao stopTimesDao;
-	private ListMultimap<GtfsShape.Id, GtfsShapePoint> shapePoints = ArrayListMultimap
-			.create();
+	private ShapePointsDao shapePointsDao;
 	private ListMultimap<GtfsTrip.Id, GtfsFrequency> frequencies = ArrayListMultimap
 			.create();
 	private Multimap<GtfsCalendar.Id, GtfsCalendarDate> calendarDates = ArrayListMultimap
@@ -96,11 +95,13 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		stopTimesDao = USE_PACKING
 				? new PackingStopTimesDao(maxStopTimeInterleaving)
 				: new InMemorySimpleStopTimesDao();
+		shapePointsDao = new InMemorySimpleShapePointsDao();
 	}
 
 	public InMemoryDao withVerbose(boolean verbose) {
 		this.verbose = verbose;
 		stopTimesDao.withVerbose(verbose);
+		shapePointsDao.withVerbose(verbose);
 		return this;
 	}
 
@@ -166,12 +167,12 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public boolean hasShape(GtfsShape.Id shapeId) {
-		return !shapePoints.get(shapeId).isEmpty();
+		return shapePointsDao.getPointsOfShape(shapeId).isPresent();
 	}
 
 	@Override
 	public Stream<GtfsShape.Id> getShapeIds() {
-		return shapePoints.keySet().stream();
+		return shapePointsDao.getShapeIds();
 	}
 
 	@Override
@@ -196,7 +197,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public int getShapePointsCount() {
-		return shapePoints.size();
+		return shapePointsDao.getShapePointsCount();
 	}
 
 	@Override
@@ -317,7 +318,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public List<GtfsShapePoint> getPointsOfShape(GtfsShape.Id shapeId) {
-		return Collections.unmodifiableList(shapePoints.get(shapeId));
+		return shapePointsDao.getPointsOfShape(shapeId)
+				.orElse(Collections.emptyList());
 	}
 
 	@Override
@@ -518,7 +520,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 							sourceContext.getSourceInfo());
 			return;
 		}
-		shapePoints.put(shapePoint.getShapeId(), shapePoint);
+		shapePointsDao.addShapePoint(shapePoint);
 	}
 
 	@Override
@@ -697,8 +699,6 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public void close() {
 		stopTimesDao.close();
-		// Sort shape points by point sequence
-		Multimaps.asMap(shapePoints).values().forEach(points -> Collections
-				.sort(points, GtfsShapePoint.POINT_SEQ_COMPARATOR));
+		shapePointsDao.close();
 	}
 }
