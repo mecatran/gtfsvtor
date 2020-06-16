@@ -10,6 +10,14 @@ import com.mecatran.gtfsvtor.validation.DaoValidator.Context;
 import com.mecatran.gtfsvtor.validation.DefaultDisabledValidator;
 import com.mecatran.gtfsvtor.validation.TripTimesValidator;
 
+/**
+ * Note: this validator does not validate anything, it just print an histogram
+ * of times delta for a given feed. That is the reason why it is disabled. This
+ * code was temporarly put in place to investigate the optimal packing strategy
+ * regarding stop time delta encoding.
+ *
+ * TODO: Remove this code.
+ */
 @DefaultDisabledValidator
 public class StopTimesStatsValidator implements TripTimesValidator {
 
