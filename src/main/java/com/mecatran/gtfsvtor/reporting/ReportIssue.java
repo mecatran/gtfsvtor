@@ -78,10 +78,6 @@ public interface ReportIssue {
 					return si1.getClass().getSimpleName()
 							.compareTo(si2.getClass().getSimpleName());
 				}
-				if (si1.isEmpty())
-					return 1;
-				if (si2.isEmpty())
-					return -1;
 				return MiscUtils.listCompare(si1, si2);
 			}
 		};
