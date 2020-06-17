@@ -11,11 +11,11 @@ public interface ShapePointsDao {
 
 	public void addShapePoint(GtfsShapePoint shapePoint);
 
-	public void close();
-
 	public int getShapePointsCount();
 
 	public Stream<GtfsShape.Id> getShapeIds();
+
+	public boolean hasShape(GtfsShape.Id shapeId);
 
 	public Optional<List<GtfsShapePoint>> getPointsOfShape(
 			GtfsShape.Id shapeId);

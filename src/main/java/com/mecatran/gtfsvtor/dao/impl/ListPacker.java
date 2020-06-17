@@ -103,4 +103,8 @@ public class ListPacker<U, V, W> {
 	public Stream<W> all() {
 		return packedItems.values().stream();
 	}
+
+	public Stream<U> keys() {
+		return packedItems.keySet().stream();
+	}
 }

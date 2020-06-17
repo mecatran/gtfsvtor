@@ -55,6 +55,7 @@ public class PackingStopTimesDao implements StopTimesDao,
 	private DefaultContext context = new DefaultContext();
 	private static AssertListener assertListener = null;
 	private boolean verbose = false;
+	private boolean closed = false;
 
 	public PackingStopTimesDao(int maxInterleaving) {
 		this.listPacker = new ListPacker<>(this, maxInterleaving);
@@ -67,47 +68,27 @@ public class PackingStopTimesDao implements StopTimesDao,
 
 	@Override
 	public void addStopTime(GtfsStopTime stopTime) {
+		if (closed)
+			throw new RuntimeException(
+					"Cannot re-open a closed InMemorySimpleStopTimesDao. Implement this if needed.");
 		GtfsTrip.Id tripId = stopTime.getTripId();
 		listPacker.push(tripId, stopTime);
 	}
 
 	@Override
 	public void close() {
-		listPacker.close();
-		if (verbose) {
-			long nStopTimes = listPacker.itemsCount();
-			long nTrips = listPacker.groupCount();
-			long tripBytes = nTrips * (3 * 8); // 2 pointers, one int
-			long tDataBytes = context.tDataInterner.all()
-					.mapToInt(ptp -> ptp.getTData().length).sum();
-			long sDataBytes = context.sDataInterner.all()
-					.mapToInt(ptp -> ptp.getSData().length
-							+ (ptp.getHeadsigns() == null ? 0
-									: ptp.getHeadsigns().stream()
-											.mapToInt(s -> s.length()).sum()))
-					.sum();
-			long totalBytes = tripBytes + tDataBytes + sDataBytes;
-			System.out.println(String.format(Locale.US,
-					"Packed %d stop times, %d trips (%dk) in %d time patterns (%dk), %d stop patterns (%dk)",
-					nStopTimes, nTrips, tripBytes / 1024,
-					context.tDataInterner.size(), tDataBytes / 1024,
-					context.sDataInterner.size(), sDataBytes / 1024));
-			System.out.println(String.format(Locale.US,
-					"Total %dk. Avg bytes: %.2f per stop time, %.2f per trip, %.2f per time pattern, %.2f per stop pattern",
-					totalBytes / 1024, totalBytes * 1.0 / nStopTimes,
-					totalBytes * 1.0 / nTrips,
-					tDataBytes * 1.0 / context.tDataInterner.size(),
-					sDataBytes * 1.0 / context.sDataInterner.size()));
-		}
+		closeIfNeeded();
 	}
 
 	@Override
 	public int getStopTimesCount() {
+		closeIfNeeded();
 		return listPacker.itemsCount();
 	}
 
 	@Override
 	public GtfsTripAndTimes getStopTimesOfTrip(Id tripId, GtfsTrip trip) {
+		closeIfNeeded();
 		PackedStopTimes pst = listPacker.get(tripId);
 		List<GtfsStopTime> stopTimes = pst == null ? Collections.emptyList()
 				: pst.getStopTimes(tripId, context);
@@ -141,4 +122,35 @@ public class PackingStopTimesDao implements StopTimesDao,
 		PackingStopTimesDao.assertListener = assertListener;
 	}
 
+	private void closeIfNeeded() {
+		if (closed)
+			return;
+		listPacker.close();
+		if (verbose) {
+			long nStopTimes = listPacker.itemsCount();
+			long nTrips = listPacker.groupCount();
+			long tripBytes = nTrips * (3 * 8); // 2 pointers, one int
+			long tDataBytes = context.tDataInterner.all()
+					.mapToInt(ptp -> ptp.getTData().length).sum();
+			long sDataBytes = context.sDataInterner.all()
+					.mapToInt(ptp -> ptp.getSData().length
+							+ (ptp.getHeadsigns() == null ? 0
+									: ptp.getHeadsigns().stream()
+											.mapToInt(s -> s.length()).sum()))
+					.sum();
+			long totalBytes = tripBytes + tDataBytes + sDataBytes;
+			System.out.println(String.format(Locale.US,
+					"Packed %d stop times, %d trips (%dk) in %d time patterns (%dk), %d stop patterns (%dk)",
+					nStopTimes, nTrips, tripBytes / 1024,
+					context.tDataInterner.size(), tDataBytes / 1024,
+					context.sDataInterner.size(), sDataBytes / 1024));
+			System.out.println(String.format(Locale.US,
+					"Total %dk. Avg bytes: %.2f per stop time, %.2f per trip, %.2f per time pattern, %.2f per stop pattern",
+					totalBytes / 1024, totalBytes * 1.0 / nStopTimes,
+					totalBytes * 1.0 / nTrips,
+					tDataBytes * 1.0 / context.tDataInterner.size(),
+					sDataBytes * 1.0 / context.sDataInterner.size()));
+		}
+		closed = true;
+	}
 }

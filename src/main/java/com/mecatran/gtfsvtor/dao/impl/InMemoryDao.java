@@ -47,8 +47,8 @@ import com.mecatran.gtfsvtor.utils.Sextet;
 
 public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
-	// TODO Enable this
-	private static final boolean USE_PACKING = true;
+	private static final boolean USE_STOP_TIMES_PACKING = true;
+	private static final boolean USE_SHAPE_POINTS_PACKING = true;
 
 	private GtfsFeedInfo feedInfo;
 	private Map<GtfsAgency.Id, GtfsAgency> agencies = new HashMap<>();
@@ -92,10 +92,13 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private boolean verbose = false;
 
 	public InMemoryDao(int maxStopTimeInterleaving) {
-		stopTimesDao = USE_PACKING
+		stopTimesDao = USE_STOP_TIMES_PACKING
 				? new PackingStopTimesDao(maxStopTimeInterleaving)
 				: new InMemorySimpleStopTimesDao();
-		shapePointsDao = new InMemorySimpleShapePointsDao();
+		// TODO Add option maxShapePointsInterleaving
+		shapePointsDao = USE_SHAPE_POINTS_PACKING
+				? new PackingShapePointsDao(1000)
+				: new InMemorySimpleShapePointsDao();
 	}
 
 	public InMemoryDao withVerbose(boolean verbose) {
@@ -167,7 +170,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public boolean hasShape(GtfsShape.Id shapeId) {
-		return shapePointsDao.getPointsOfShape(shapeId).isPresent();
+		return shapePointsDao.hasShape(shapeId);
 	}
 
 	@Override
@@ -699,6 +702,5 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public void close() {
 		stopTimesDao.close();
-		shapePointsDao.close();
 	}
 }
