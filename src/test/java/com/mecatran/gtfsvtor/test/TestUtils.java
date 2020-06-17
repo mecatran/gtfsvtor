@@ -8,6 +8,7 @@ import com.beust.jcommander.JCommander;
 import com.mecatran.gtfsvtor.cmdline.CmdLineArgs;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
+import com.mecatran.gtfsvtor.dao.impl.PackingShapePointsDao;
 import com.mecatran.gtfsvtor.dao.impl.PackingStopTimesDao;
 import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
 import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
@@ -15,6 +16,7 @@ import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
 import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
 import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
+import com.mecatran.gtfsvtor.model.impl.TestPackedShapePoints;
 import com.mecatran.gtfsvtor.model.impl.TestPackedStopTimes;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
@@ -106,6 +108,8 @@ public class TestUtils {
 				.withVerbose(true);
 		PackingStopTimesDao
 				.setAssertListener(TestPackedStopTimes::assertStopTimes);
+		PackingShapePointsDao
+				.setAssertListener(TestPackedShapePoints::assertShapePoints);
 
 		DefaultValidatorConfig config = new DefaultValidatorConfig();
 		DefaultStreamingValidator streamingValidator = new DefaultStreamingValidator(
