@@ -47,9 +47,6 @@ import com.mecatran.gtfsvtor.utils.Sextet;
 
 public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
-	private static final boolean USE_STOP_TIMES_PACKING = true;
-	private static final boolean USE_SHAPE_POINTS_PACKING = true;
-
 	private GtfsFeedInfo feedInfo;
 	private Map<GtfsAgency.Id, GtfsAgency> agencies = new HashMap<>();
 	private Map<GtfsRoute.Id, GtfsRoute> routes = new HashMap<>();
@@ -91,14 +88,15 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private LinearGeometryIndex linearGeometryIndex = null;
 	private boolean verbose = false;
 
-	public InMemoryDao(int maxStopTimeInterleaving) {
-		stopTimesDao = USE_STOP_TIMES_PACKING
-				? new PackingStopTimesDao(maxStopTimeInterleaving)
-				: new InMemorySimpleStopTimesDao();
-		// TODO Add option maxShapePointsInterleaving
-		shapePointsDao = USE_SHAPE_POINTS_PACKING
-				? new PackingShapePointsDao(1000)
-				: new InMemorySimpleShapePointsDao();
+	public InMemoryDao(boolean disableStopTimesPackingDao,
+			int maxStopTimesInterleaving, boolean disableShapePointsPackingDao,
+			int maxShapePointsInterleaving) {
+		stopTimesDao = disableStopTimesPackingDao
+				? new InMemorySimpleStopTimesDao()
+				: new PackingStopTimesDao(maxStopTimesInterleaving);
+		shapePointsDao = disableShapePointsPackingDao
+				? new InMemorySimpleShapePointsDao()
+				: new PackingShapePointsDao(maxShapePointsInterleaving);
 	}
 
 	public InMemoryDao withVerbose(boolean verbose) {

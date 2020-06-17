@@ -104,8 +104,10 @@ public class TestUtils {
 		}
 		NamedTabularDataSource dataSource = new CsvDataSource(
 				inputStreamSource);
-		InMemoryDao dao = new InMemoryDao(args.getMaxStopTimeInterleaving())
-				.withVerbose(true);
+		InMemoryDao dao = new InMemoryDao(args.isDisableStopTimePacking(),
+				args.getMaxStopTimeInterleaving(),
+				args.isDisableShapePointsPacking(),
+				args.getMaxShapePointsInterleaving()).withVerbose(true);
 		PackingStopTimesDao
 				.setAssertListener(TestPackedStopTimes::assertStopTimes);
 		PackingShapePointsDao
@@ -114,7 +116,11 @@ public class TestUtils {
 		DefaultValidatorConfig config = new DefaultValidatorConfig();
 		DefaultStreamingValidator streamingValidator = new DefaultStreamingValidator(
 				config);
-		GtfsDataLoader loader = new GtfsDataLoader(dataSource);
+		GtfsDataLoader loader = new GtfsDataLoader(dataSource)
+				.withSmallShapePoint(args.isDisableShapePointsPacking()
+						|| args.getMaxShapePointsInterleaving() > 1000)
+				.withSmallStopTime(args.isDisableStopTimePacking()
+						|| args.getMaxStopTimeInterleaving() > 1000);
 		loader.load(new DefaultDataLoaderContext(dao, dao, report,
 				streamingValidator));
 

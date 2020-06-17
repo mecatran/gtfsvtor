@@ -58,14 +58,18 @@ public class GtfsVtor {
 		if (inputStreamSource != null) {
 			NamedTabularDataSource dataSource = new CsvDataSource(
 					inputStreamSource);
-			InMemoryDao dao = new InMemoryDao(args.getMaxStopTimeInterleaving())
-					.withVerbose(args.isVerbose());
+			InMemoryDao dao = new InMemoryDao(args.isDisableStopTimePacking(),
+					args.getMaxStopTimeInterleaving(),
+					args.isDisableShapePointsPacking(),
+					args.getMaxShapePointsInterleaving()).withVerbose(true);
 
 			DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
 					config);
 			GtfsDataLoader loader = new GtfsDataLoader(dataSource)
-					.withSmallShapePoint(true).withSmallStopTime(
-							args.getMaxStopTimeInterleaving() > 1000);
+					.withSmallShapePoint(args.isDisableShapePointsPacking()
+							|| args.getMaxShapePointsInterleaving() > 1000)
+					.withSmallStopTime(args.isDisableStopTimePacking()
+							|| args.getMaxStopTimeInterleaving() > 1000);
 
 			long start = System.currentTimeMillis();
 			loader.load(new DefaultDataLoaderContext(dao, dao, report,

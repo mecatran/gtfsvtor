@@ -36,12 +36,31 @@ public class CmdLineArgs {
 			"--numThreads" }, description = "Number of threads for running DAO validators in parallel")
 	private int numThreads = 1;
 
-	@Parameter(names = {
-			"--maxStopTimesInterleaving" }, description = "Max number of interleaved trips in stop_times.txt "
-					+ "" + "(number of concurrent 'opened' trips). "
-					+ "Use/increase this option if you have lots of unordered trips in stop_times.txt, "
-					+ "to improve loading performances.")
+	@Parameter(names = { "--maxStopTimesInterleaving" }, description = ""
+			+ "Max number of interleaved trips in stop_times.txt "
+			+ "(number of concurrent 'opened' trips). "
+			+ "Use/increase this option if you have lots of unordered trips in stop_times.txt, "
+			+ "to improve loading performances.")
 	private int maxStopTimesInterleaving = 100;
+
+	@Parameter(names = { "--maxShapePointsInterleaving" }, description = ""
+			+ "Max number of interleaved shapes in shapes.txt "
+			+ "(number of concurrent 'opened' shapes). "
+			+ "Use/increase this option if you have lots of unordered shape points in shapes.txt, "
+			+ "to improve loading performances.")
+	private int maxShapePointsInterleaving = 100;
+
+	@Parameter(names = { "--disableStopTimesPacking" }, description = ""
+			+ "Disable stop times packing DAO. "
+			+ "Useful for totally unsorted stop_times.txt file. "
+			+ "Warning: this will increase memory usage a lot.")
+	private boolean disableStopTimesPacking = false;
+
+	@Parameter(names = { "--disableShapePointsPacking" }, description = ""
+			+ "Disable shape points packing DAO. "
+			+ "Useful for totally unsorted shapes.txt file. "
+			+ "Notice: this will increase memory usage slightly.")
+	private boolean disableShapePointsPacking = false;
 
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
@@ -80,6 +99,18 @@ public class CmdLineArgs {
 
 	public int getMaxStopTimeInterleaving() {
 		return maxStopTimesInterleaving;
+	}
+
+	public int getMaxShapePointsInterleaving() {
+		return maxShapePointsInterleaving;
+	}
+
+	public boolean isDisableStopTimePacking() {
+		return disableStopTimesPacking;
+	}
+
+	public boolean isDisableShapePointsPacking() {
+		return disableShapePointsPacking;
 	}
 
 	public String getGtfsFile() {
