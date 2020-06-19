@@ -9,20 +9,11 @@ import com.mecatran.gtfsvtor.validation.StreamingValidator;
 
 public interface DataLoader {
 
-	public interface SourceContext {
-
-		public ReportSink getReportSink();
-
-		public DataObjectSourceRef getSourceRef();
-
-		public DataObjectSourceInfo getSourceInfo();
-	}
-
 	public interface Context {
 
 		public ReportSink getReportSink();
 
-		public AppendableDao getDao();
+		public AppendableDao getAppendableDao();
 
 		public ReadOnlyDao getReadOnlyDao();
 

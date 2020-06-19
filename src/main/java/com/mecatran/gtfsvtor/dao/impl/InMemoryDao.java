@@ -18,8 +18,6 @@ import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.dao.ShapePointsDao;
 import com.mecatran.gtfsvtor.dao.StopTimesDao;
-import com.mecatran.gtfsvtor.loader.DataLoader;
-import com.mecatran.gtfsvtor.loader.DataLoader.SourceContext;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
@@ -384,8 +382,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public void addAgency(GtfsAgency agency,
-			DataLoader.SourceContext sourceContext) {
+	public void addAgency(GtfsAgency agency, SourceContext sourceContext) {
 		GtfsAgency existingAgency = getAgency(agency.getId());
 		if (existingAgency != null) {
 			sourceContext.getReportSink()
@@ -399,8 +396,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public void addRoute(GtfsRoute route,
-			DataLoader.SourceContext sourceContext) {
+	public void addRoute(GtfsRoute route, SourceContext sourceContext) {
 		if (route.getId() == null) {
 			sourceContext.getReportSink()
 					.report(new MissingObjectIdError(
@@ -423,7 +419,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public void addStop(GtfsStop stop, DataLoader.SourceContext sourceContext) {
+	public void addStop(GtfsStop stop, SourceContext sourceContext) {
 		if (stop.getZoneId() != null) {
 			// Should we really condider an ID-less stop zone valid?
 			zoneIds.add(stop.getZoneId());
@@ -470,7 +466,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void addCalendar(GtfsCalendar calendar,
-			DataLoader.SourceContext sourceContext) {
+			SourceContext sourceContext) {
 		if (calendar.getId() == null) {
 			sourceContext.getReportSink()
 					.report(new MissingObjectIdError(
@@ -490,7 +486,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void addCalendarDate(GtfsCalendarDate calendarDate,
-			DataLoader.SourceContext sourceContext) {
+			SourceContext sourceContext) {
 		if (calendarDate.getCalendarId() == null) {
 			sourceContext.getReportSink()
 					.report(new MissingObjectIdError(
@@ -504,7 +500,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void addShapePoint(GtfsShapePoint shapePoint,
-			DataLoader.SourceContext sourceContext) {
+			SourceContext sourceContext) {
 		// Do not add to DAO shape points w/o shape ID
 		if (shapePoint.getShapeId() == null) {
 			sourceContext.getReportSink()
@@ -525,7 +521,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public void addTrip(GtfsTrip trip, DataLoader.SourceContext sourceContext) {
+	public void addTrip(GtfsTrip trip, SourceContext sourceContext) {
 		if (trip.getId() == null) {
 			sourceContext.getReportSink()
 					.report(new MissingObjectIdError(
@@ -552,7 +548,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void addStopTime(GtfsStopTime stopTime,
-			DataLoader.SourceContext sourceContext) {
+			SourceContext sourceContext) {
 		// Do not add times w/o trip ID
 		if (stopTime.getTripId() == null) {
 			sourceContext.getReportSink()
@@ -576,7 +572,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void addFrequency(GtfsFrequency frequency,
-			DataLoader.SourceContext sourceContext) {
+			SourceContext sourceContext) {
 		// Do not add frequency w/o trip ID
 		if (frequency.getTripId() == null) {
 			sourceContext.getReportSink()
@@ -590,7 +586,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
 	@Override
 	public void addTransfer(GtfsTransfer transfer,
-			DataLoader.SourceContext sourceContext) {
+			SourceContext sourceContext) {
 		// Do not add transfer w/o from/to stop ID
 		if (transfer.getFromStopId() == null
 				|| transfer.getToStopId() == null) {
@@ -619,8 +615,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public void addPathway(GtfsPathway pathway,
-			DataLoader.SourceContext sourceContext) {
+	public void addPathway(GtfsPathway pathway, SourceContext sourceContext) {
 		// Do not add pathway w/o ID
 		if (pathway.getId() == null) {
 			sourceContext.getReportSink()

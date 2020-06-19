@@ -16,6 +16,8 @@ import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
 import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
 import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
+import com.mecatran.gtfsvtor.loader.schema.DefaultGtfsTableSchema;
+import com.mecatran.gtfsvtor.model.factory.DefaultObjectBuilderFactory;
 import com.mecatran.gtfsvtor.model.impl.TestPackedShapePoints;
 import com.mecatran.gtfsvtor.model.impl.TestPackedStopTimes;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
@@ -102,6 +104,8 @@ public class TestUtils {
 		if (inputStreamSource == null) {
 			return ret;
 		}
+		// TODO Add config configuration from args
+		DefaultValidatorConfig config = new DefaultValidatorConfig();
 		NamedTabularDataSource dataSource = new CsvDataSource(
 				inputStreamSource);
 		InMemoryDao dao = new InMemoryDao(args.isDisableStopTimePacking(),
@@ -113,14 +117,16 @@ public class TestUtils {
 		PackingShapePointsDao
 				.setAssertListener(TestPackedShapePoints::assertShapePoints);
 
-		DefaultValidatorConfig config = new DefaultValidatorConfig();
 		DefaultStreamingValidator streamingValidator = new DefaultStreamingValidator(
 				config);
-		GtfsDataLoader loader = new GtfsDataLoader(dataSource)
+		DefaultGtfsTableSchema tableSchema = new DefaultGtfsTableSchema();
+		DefaultObjectBuilderFactory objBldFactory = new DefaultObjectBuilderFactory()
 				.withSmallShapePoint(args.isDisableShapePointsPacking()
 						|| args.getMaxShapePointsInterleaving() > 1000)
 				.withSmallStopTime(args.isDisableStopTimePacking()
 						|| args.getMaxStopTimeInterleaving() > 1000);
+		GtfsDataLoader loader = new GtfsDataLoader(dataSource, tableSchema,
+				objBldFactory);
 		loader.load(new DefaultDataLoaderContext(dao, dao, report,
 				streamingValidator));
 

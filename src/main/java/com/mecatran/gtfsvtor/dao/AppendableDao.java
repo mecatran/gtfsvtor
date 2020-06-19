@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.dao;
 
-import com.mecatran.gtfsvtor.loader.DataLoader.SourceContext;
+import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
@@ -16,8 +17,18 @@ import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.reporting.ReportSink;
 
 public interface AppendableDao {
+
+	public interface SourceContext {
+
+		public ReportSink getReportSink();
+
+		public DataObjectSourceRef getSourceRef();
+
+		public DataObjectSourceInfo getSourceInfo();
+	}
 
 	public void setFeedInfo(GtfsFeedInfo feedInfo, SourceContext sourceContext);
 

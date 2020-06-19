@@ -29,7 +29,7 @@ public class DefaultDataLoaderContext implements DataLoader.Context {
 	}
 
 	@Override
-	public AppendableDao getDao() {
+	public AppendableDao getAppendableDao() {
 		return appendableDao;
 	}
 
