@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.mecatran.gtfsvtor.utils.Annotations;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
 
 public interface ReportIssue {
@@ -30,14 +31,9 @@ public interface ReportIssue {
 	 * too far from parent station, according to the distance).
 	 */
 	public default ReportIssueSeverity getSeverity() {
-		Class<? extends ReportIssue> issueClass = this.getClass();
-		if (issueClass.isAnnotationPresent(ReportIssuePolicy.class)) {
-			ReportIssuePolicy policy = issueClass
-					.getAnnotation(ReportIssuePolicy.class);
-			return policy.severity();
-		}
-		// If not annotated, consider issue an error
-		return ReportIssueSeverity.ERROR;
+		return Annotations.getAnnotation(ReportIssuePolicy.class,
+				ReportIssueSeverity.class, this, ReportIssuePolicy::severity,
+				ReportIssueSeverity.ERROR);
 	}
 
 	/**
@@ -48,17 +44,9 @@ public interface ReportIssue {
 	 * categories.
 	 */
 	public default String getCategoryName() {
-		Class<? extends ReportIssue> issueClass = this.getClass();
-		String name = null;
-		if (issueClass.isAnnotationPresent(ReportIssuePolicy.class)) {
-			ReportIssuePolicy policy = issueClass
-					.getAnnotation(ReportIssuePolicy.class);
-			name = policy.categoryName();
-		}
-		if (name == null || name.isEmpty()) {
-			name = issueClass.getSimpleName();
-		}
-		return name;
+		return Annotations.getAnnotation(ReportIssuePolicy.class, String.class,
+				this, ReportIssuePolicy::categoryName,
+				this.getClass().getSimpleName());
 	}
 
 	public static Comparator<ReportIssue> makeComparator() {
