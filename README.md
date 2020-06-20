@@ -63,7 +63,7 @@ Performance tests are done using:
   | Montréal        |    229 |   9241 |  206069 |  7814k |    199k | 9m23s         | 20s           |
   | IDFM Paris      |   1870 |  63471 |  467457 | 10564k |       - | 57m50s        | 40s           |
   | OV Netherlands  |   2703 |  63995 |  787736 | 16103k |   3384k | ?             | 1m50s         |
-  | DELFI Germany   |  20385 | 561958 | 1992882 | 38519k |   8036k | ?             | 2m58s         |
+  | DELFI Germany   |  20656 | 565016 | 2161712 | 41971k |   8322k | ?             | 2m44s         |
   
 **Note**: Performances comparisons should be fairly accurate now,
 as GTFSVTOR do have all CPU-intensive validators implemented
