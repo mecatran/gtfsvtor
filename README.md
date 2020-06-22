@@ -4,6 +4,8 @@ GTFSVTOR
 An open-source GTFS validator, released under GPLv3.
 See the [LICENSE file](LICENSE) for more information.
 
+![Java CI](https://github.com/mecatran/gtfsvtor/workflows/Java%20CI/badge.svg)
+
 Project goals
 -------------
 
