@@ -63,7 +63,8 @@ public class GtfsVtor {
 			InMemoryDao dao = new InMemoryDao(args.isDisableStopTimePacking(),
 					args.getMaxStopTimeInterleaving(),
 					args.isDisableShapePointsPacking(),
-					args.getMaxShapePointsInterleaving()).withVerbose(true);
+					args.getMaxShapePointsInterleaving())
+							.withVerbose(args.isVerbose());
 
 			DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
 					config);
@@ -81,12 +82,14 @@ public class GtfsVtor {
 					defStreamingValidator));
 			long end = System.currentTimeMillis();
 			System.gc();
-			Runtime runtime = Runtime.getRuntime();
-			System.out.println("Loaded '" + args.getGtfsFile() + "' in "
-					+ (end - start) + "ms. Used memory: ~"
-					+ (runtime.totalMemory() - runtime.freeMemory())
-							/ (1024 * 1024)
-					+ "Mb");
+			if (args.isVerbose()) {
+				Runtime runtime = Runtime.getRuntime();
+				System.out.println("Loaded '" + args.getGtfsFile() + "' in "
+						+ (end - start) + "ms. Used memory: ~"
+						+ (runtime.totalMemory() - runtime.freeMemory())
+								/ (1024 * 1024)
+						+ "Mb");
+			}
 
 			DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
 					report, config);
