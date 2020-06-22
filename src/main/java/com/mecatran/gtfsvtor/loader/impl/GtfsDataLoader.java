@@ -82,8 +82,12 @@ public class GtfsDataLoader implements DataLoader {
 					sourceContext);
 			context.getStreamingValidator().validate(objClass, obj,
 					sourceContext);
+			if (nObjects % 50000 == 0)
+				System.out.print(
+						"Loading " + tableName + ": " + nObjects + "...\r");
 			nObjects++;
 		}
+		System.out.println("Loaded  " + tableName + ": " + nObjects + " rows.");
 		checkMandatoryColumns(context.getReportSink(), table, tableDescriptor
 				.getMandatoryColumns(nObjects).toArray(new String[0]));
 
