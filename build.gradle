@@ -53,15 +53,15 @@ jar {
 }
 
 dependencies {
-  compile 'com.google.guava:guava:29.0-jre'
-  compile 'org.apache.commons:commons-csv:1.7'
-  compile 'com.univocity:univocity-parsers:2.8.4'
-  compile 'commons-io:commons-io:2.6'
-  compile 'commons-validator:commons-validator:1.6'
-  compile 'org.locationtech.jts:jts-core:1.16.1'
-  compile 'com.googlecode.jatl:jatl:0.2.3'
-  compile 'org.apache.httpcomponents:httpclient:4.5.3'
-  compile 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
-  compile 'com.beust:jcommander:1.78'
-  testCompile 'junit:junit:4.12'
+  implementation 'com.google.guava:guava:29.0-jre'
+  implementation 'org.apache.commons:commons-csv:1.7'
+  implementation 'com.univocity:univocity-parsers:2.8.4'
+  implementation 'commons-io:commons-io:2.6'
+  implementation 'commons-validator:commons-validator:1.6'
+  implementation 'org.locationtech.jts:jts-core:1.16.1'
+  implementation 'com.googlecode.jatl:jatl:0.2.3'
+  implementation 'org.apache.httpcomponents:httpclient:4.5.3'
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
+  implementation 'com.beust:jcommander:1.78'
+  testImplementation 'junit:junit:4.12'
 }
