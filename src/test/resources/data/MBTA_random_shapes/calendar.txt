@@ -1,0 +1,4 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+BUS12020-hbq10ns1-Wdy-02,0,1,1,1,1,0,0,20200218,20200221
+MartinLutherKingDay-WashingtonsBirthday,1,0,0,0,0,0,0
+WinterSunday,0,0,0,0,0,0,1,20200105,20200308

@@ -26,6 +26,7 @@ import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex.ProjectedPoint;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
@@ -49,6 +50,7 @@ import com.mecatran.gtfsvtor.model.GtfsPaymentMethod;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
+import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
@@ -1433,6 +1435,28 @@ public class TestGtfs {
 				TestBundle goodFile = testScenario.run();
 				testGoodDao(goodFile.dao);
 			}
+		}
+	}
+
+	@Test
+	public void testRandomShapesWithVariousShapeDaoMode() {
+		for (ShapePointsDaoMode daoMode : Arrays
+				.asList(ShapePointsDaoMode.PACKED, ShapePointsDaoMode.SIMPLE)) {
+			TestScenario testScenario = new TestScenario("MBTA_random_shapes");
+			testScenario.maxStopTimesInterleaving = 5;
+			testScenario.shapePointsDaoMode = daoMode;
+			TestBundle tb = testScenario.run();
+			tb.dao.getShapeIds().forEach(shapeId -> {
+				List<GtfsShapePoint> shapePoints = tb.dao
+						.getPointsOfShape(shapeId);
+				int lastSeq = 0;
+				for (GtfsShapePoint shapePoint : shapePoints) {
+					assertTrue(lastSeq < shapePoint.getPointSequence()
+							.getSequence());
+					lastSeq = shapePoint.getPointSequence().getSequence();
+					assertEquals(shapeId, shapePoint.getShapeId());
+				}
+			});
 		}
 	}
 

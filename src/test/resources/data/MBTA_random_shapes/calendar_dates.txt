@@ -1,0 +1,4 @@
+service_id,date,exception_type
+MartinLutherKingDay-WashingtonsBirthday,20200127,2
+MartinLutherKingDay-WashingtonsBirthday,20200203,2
+MartinLutherKingDay-WashingtonsBirthday,20200210,2

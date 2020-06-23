@@ -1,0 +1,5 @@
+route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed,route_pattern_id
+214216,BUS12020-hbq10ns1-Wdy-02,42759331,Houghs Neck via Germantown,,0,Q230-89,2160080,1,1,214216-2-0
+214216,MartinLutherKingDay-WashingtonsBirthday,42755227,Houghs Neck via McGrath & Germantown,,0,Q240-86,2160081,1,1,214216-4-0
+215,BUS12020-hbq10ns1-Wdy-02,42759201,Quincy Center,,0,Q215-29,2150095,1,1,215-1-0
+215,WinterSunday,42756023,Quincy Center,,0,Q215-9,2150097,1,1,215-3-0

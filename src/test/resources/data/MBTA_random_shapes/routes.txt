@@ -1,0 +1,3 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,direction0_name,direction1_name,line_id,listed_route,route_fare_class
+214216,1,214/216,Houghs Neck - Quincy Center via Germantown,Local Bus,3,,FFC72C,000000,52141,Outbound,Inbound,line-214216,1,Local Bus
+215,1,215,Quincy Center - Ashmont via West Quincy,Local Bus,3,https://www.mbta.com/schedules/215,FFC72C,000000,52150,Outbound,Inbound,line-215,,Local Bus

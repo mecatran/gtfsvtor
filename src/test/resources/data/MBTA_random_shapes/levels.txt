@@ -1,0 +1,71 @@
+level_id,level_index,level_name
+level_-0.1_landing,-0.10000000,Landing
+level_-0.5_landing,-0.50000000,Landing
+level_-0.5_lobby,-0.50000000,Lobby
+level_-0.5_passageway,-0.50000000,Passageway
+level_-0.5_platform,-0.50000000,Platform
+level_-0.9_lobby,-0.89999998,Lobby
+level_-1.5_in_street,-1.50000000,On street
+level_-1.5_landing,-1.50000000,Landing
+level_-1.5_lobby,-1.50000000,Lobby
+level_-1_alewife_platform,-1.00000000,Alewife platform
+level_-1_concourse,-1.00000000,Concourse
+level_-1_cr_platform,-1.00000000,Commuter Rail platform
+level_-1_green_platform,-1.00000000,Green Line platforms
+level_-1_ground,-1.00000000,Street
+level_-1_in_street,-1.00000000,On street
+level_-1_landing,-1.00000000,Landing
+level_-1_lechmere_platform,-1.00000000,Lechmere platform
+level_-1_lobby,-1.00000000,Lobby
+level_-1_orange_platform,-1.00000000,Orange Line platforms
+level_-1_passageway,-1.00000000,Passageway
+level_-1_platform,-1.00000000,Platform
+level_-1_red_platform,-1.00000000,Red Line platforms
+level_-1_rlsl_lobby,-1.00000000,"Red Line, Silver Line lobby"
+level_-1_up_busway,-1.00000000,Upper Busway
+level_-1_up_platform,-1.00000000,Upper platforms
+level_-2_blue_platform,-2.00000000,Blue Line platforms
+level_-2_low_busway,-2.00000000,Lower Busway
+level_-2_low_platform,-2.00000000,Lower platforms
+level_-2_oak_grove_platform,-2.00000000,Oak Grove platform
+level_-2_passageway,-2.00000000,Passageway
+level_-2_platform,-2.00000000,Platform
+level_-2_red_platform,-2.00000000,Red Line platforms
+level_-2_silver_platform,-2.00000000,Silver Line platforms
+level_-2_southbound_platform,-2.00000000,Ashmont/Braintree platform
+level_-3_red_platform,-3.00000000,Red Line platforms
+level_-3_southbound_platform,-3.00000000,Ashmont/Braintree platform
+level_-4_alewife_platform,-4.00000000,Alewife platform
+level_0.5_cr_platform,0.50000000,Commuter Rail platform
+level_0.5_ground,0.50000000,Street
+level_0.5_landing,0.50000000,Landing
+level_0.5_lobby,0.50000000,Lobby
+level_0_building,0.00000000,Building access
+level_0_cr_platform,0.00000000,Commuter Rail platform
+level_0_orange_platform,0.00000000,Orange Line platforms
+level_0_platform,0.00000000,Platform
+level_0_red_platform,0.00000000,Red Line platforms
+level_1_bridge,1.00000000,Bridge
+level_1_cr_platform,1.00000000,Commuter Rail platform
+level_1_ground,1.00000000,Street
+level_1_in_street,1.00000000,On street
+level_1_lobby,1.00000000,Lobby
+level_1_orange_platform,1.00000000,Orange Line platforms
+level_1_platform,1.00000000,Platform
+level_1_red_platform,1.00000000,Red Line platforms
+level_2_bridge,2.00000000,Bridge
+level_2_platform,2.00000000,Platform
+level_2_plaza,2.00000000,Plaza
+level_3_garage,3.00000000,Garage 3
+level_beacon_st,1.00000000,Beacon Street
+level_boylston_st,-1.00000000,Boylston Street
+level_columbia_rd,1.00000000,Columbia Road
+level_congress_st,0.00000000,Congress Street
+level_ground,0.00000000,Street
+level_hyde_park_ave,-1.00000000,Hyde Park Avenue
+level_in_street,0.00000000,On street
+level_independence_ave,4.00000000,Independence Avenue
+level_logan_arrivals,0.00000000,Arrivals
+level_median,0.00000000,Street median
+level_washington_st,0.00000000,Washington Street
+level_wtc_ave,1.00000000,World Trade Center Avenue
