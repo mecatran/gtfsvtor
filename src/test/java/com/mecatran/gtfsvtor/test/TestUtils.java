@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.beust.jcommander.JCommander;
 import com.mecatran.gtfsvtor.cmdline.CmdLineArgs;
+import com.mecatran.gtfsvtor.cmdline.CmdLineArgs.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
 import com.mecatran.gtfsvtor.dao.impl.PackingShapePointsDao;
@@ -58,6 +59,7 @@ public class TestUtils {
 	public static class TestScenario {
 		public String gtfsFileOrDirectory;
 		public int maxStopTimesInterleaving = 3;
+		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 
 		public TestScenario() {
 		}
@@ -73,8 +75,10 @@ public class TestUtils {
 			CmdLineArgs cmdLineArgs = new CmdLineArgs();
 			JCommander jcmd = JCommander.newBuilder().addObject(cmdLineArgs)
 					.build();
-			jcmd.parse(new String[] { "--maxStopTimesInterleaving",
-					"" + maxStopTimesInterleaving });
+			jcmd.parse(new String[] { //
+					"--maxStopTimesInterleaving",
+					Integer.toString(maxStopTimesInterleaving),
+					"--stopTimesMode", stopTimesDaoMode.toString() });
 			return cmdLineArgs;
 		}
 	}

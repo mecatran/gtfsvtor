@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import com.mecatran.gtfsvtor.cmdline.CmdLineArgs.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
@@ -1279,29 +1280,35 @@ public class TestGtfs {
 
 	@Test
 	public void testInterleavedStopTimes() {
-		for (int max = 3; max < 20; max += 3) {
-			// Having a small max interleaving factor will force overflow
-			// Check that this will work anyway
-			TestScenario scenario = new TestScenario("interleaved_stoptimes");
-			scenario.maxStopTimesInterleaving = max;
-			TestBundle tb = runScenario(scenario);
-			assertEquals(0, tb.issuesCountOfSeverities(
-					ReportIssueSeverity.ERROR, ReportIssueSeverity.CRITICAL));
-			assertEquals(20, tb.dao.getStopTimesCount());
-			for (int i = 1; i <= 10; i++) {
-				GtfsTrip.Id tripId = GtfsTrip.id("AB" + i);
-				List<GtfsStopTime> stopTimes = tb.dao.getTripAndTimes(tripId)
-						.getStopTimes();
-				assertEquals(2, stopTimes.size());
-				assertEquals(1,
-						stopTimes.get(0).getStopSequence().getSequence());
-				assertEquals(2,
-						stopTimes.get(1).getStopSequence().getSequence());
-				assertEquals(tripId, stopTimes.get(0).getTripId());
-				assertEquals(
-						i <= 5 ? GtfsStop.id("BEATTY_AIRPORT")
-								: GtfsStop.id("BULLFROG"),
-						stopTimes.get(0).getStopId());
+		for (StopTimesDaoMode daoMode : Arrays.asList(StopTimesDaoMode.AUTO,
+				StopTimesDaoMode.PACKED, StopTimesDaoMode.UNSORTED)) {
+			for (int max = 3; max < 20; max += 3) {
+				// Having a small max interleaving factor will force overflow
+				// Check that this will work anyway
+				TestScenario scenario = new TestScenario(
+						"interleaved_stoptimes");
+				scenario.maxStopTimesInterleaving = max;
+				scenario.stopTimesDaoMode = daoMode;
+				TestBundle tb = runScenario(scenario);
+				assertEquals(0,
+						tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR,
+								ReportIssueSeverity.CRITICAL));
+				assertEquals(20, tb.dao.getStopTimesCount());
+				for (int i = 1; i <= 10; i++) {
+					GtfsTrip.Id tripId = GtfsTrip.id("AB" + i);
+					List<GtfsStopTime> stopTimes = tb.dao
+							.getTripAndTimes(tripId).getStopTimes();
+					assertEquals(2, stopTimes.size());
+					assertEquals(1,
+							stopTimes.get(0).getStopSequence().getSequence());
+					assertEquals(2,
+							stopTimes.get(1).getStopSequence().getSequence());
+					assertEquals(tripId, stopTimes.get(0).getTripId());
+					assertEquals(
+							i <= 5 ? GtfsStop.id("BEATTY_AIRPORT")
+									: GtfsStop.id("BULLFROG"),
+							stopTimes.get(0).getStopId());
+				}
 			}
 		}
 	}
