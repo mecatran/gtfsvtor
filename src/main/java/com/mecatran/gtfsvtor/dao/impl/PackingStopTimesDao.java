@@ -12,9 +12,6 @@ import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTrip.Id;
 import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
-import com.mecatran.gtfsvtor.model.impl.PackedStopPattern;
-import com.mecatran.gtfsvtor.model.impl.PackedStopTimes;
-import com.mecatran.gtfsvtor.model.impl.PackedTimePattern;
 import com.mecatran.gtfsvtor.utils.GenericInterner;
 
 public class PackingStopTimesDao implements StopTimesDao,

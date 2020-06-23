@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.model.impl;
+package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.Arrays;
 

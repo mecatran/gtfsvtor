@@ -11,6 +11,8 @@ import java.util.Random;
 import org.junit.Test;
 
 import com.mecatran.gtfsvtor.dao.impl.GtfsIdIndexer;
+import com.mecatran.gtfsvtor.dao.impl.PackedStopTimes;
+import com.mecatran.gtfsvtor.dao.impl.PackedUnsortedStopTimes;
 import com.mecatran.gtfsvtor.dao.impl.PackingStopTimesDao;
 import com.mecatran.gtfsvtor.dao.impl.PackingUnsortedStopTimesDao;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;

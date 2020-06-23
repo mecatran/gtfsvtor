@@ -1,23 +1,23 @@
-package com.mecatran.gtfsvtor.model.impl;
+package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.Arrays;
 
-public class PackedTimePattern {
+public class PackedUnsortedTimePattern {
 
-	private byte[] tdata;
+	private long[] tdata;
 	private int hashcode;
 
-	public PackedTimePattern(byte[] tdata) {
+	public PackedUnsortedTimePattern(long[] tdata) {
 		this.tdata = tdata;
 		this.hashcode = Arrays.hashCode(tdata);
 	}
 
-	public byte[] getTData() {
+	public long[] getTData() {
 		return tdata;
 	}
 
 	public int getTDataSize() {
-		return tdata.length * 1;
+		return tdata.length * 8;
 	}
 
 	@Override
@@ -31,9 +31,9 @@ public class PackedTimePattern {
 			return false;
 		if (another == this)
 			return true;
-		if (!(another instanceof PackedTimePattern))
+		if (!(another instanceof PackedUnsortedTimePattern))
 			return false;
-		PackedTimePattern other = (PackedTimePattern) another;
+		PackedUnsortedTimePattern other = (PackedUnsortedTimePattern) another;
 		return Arrays.equals(tdata, other.tdata);
 	}
 }

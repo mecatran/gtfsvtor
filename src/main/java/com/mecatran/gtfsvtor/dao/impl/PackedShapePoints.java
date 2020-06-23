@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.model.impl;
+package com.mecatran.gtfsvtor.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
+import com.mecatran.gtfsvtor.model.impl.SimpleGtfsShapePoint;
+import com.mecatran.gtfsvtor.model.impl.SimpleGtfsShapePoint.Builder;
 
 public class PackedShapePoints {
 

@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import com.mecatran.gtfsvtor.dao.ShapePointsDao;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
-import com.mecatran.gtfsvtor.model.impl.PackedShapePoints;
 
 public class PackingShapePointsDao implements ShapePointsDao,
 		ListPacker.PackerUnpacker<GtfsShape.Id, GtfsShapePoint, PackedShapePoints> {

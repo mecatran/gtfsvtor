@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.mecatran.gtfsvtor.dao.impl.PackedShapePoints;
 import com.mecatran.gtfsvtor.dao.impl.PackingShapePointsDao;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
