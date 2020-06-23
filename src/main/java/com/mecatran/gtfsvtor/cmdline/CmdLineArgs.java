@@ -1,12 +1,9 @@
 package com.mecatran.gtfsvtor.cmdline;
 
 import com.beust.jcommander.Parameter;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
 
-public class CmdLineArgs {
-
-	public enum StopTimesDaoMode {
-		AUTO, PACKED, UNSORTED
-	}
+public class CmdLineArgs implements GtfsVtorOptions {
 
 	@Parameter(names = { "-h",
 			"--help" }, description = "Display this help and exit")
@@ -79,47 +76,57 @@ public class CmdLineArgs {
 		return listValidators;
 	}
 
+	@Override
 	public boolean isVerbose() {
 		return verbose;
 	}
 
+	@Override
 	public boolean isPrintIssues() {
 		return printIssues;
 	}
 
+	@Override
 	public String getConfigFile() {
 		return configFile;
 	}
 
+	@Override
 	public String getOutputReportFile() {
 		return outputReportFile;
 	}
 
+	@Override
 	public int getMaxIssuesPerCategoryLimit() {
 		return maxIssuesPerCategoryLimit;
 	}
 
+	@Override
 	public int getNumThreads() {
 		return numThreads;
 	}
 
+	@Override
 	public int getMaxStopTimeInterleaving() {
 		return maxStopTimesInterleaving;
 	}
 
+	@Override
 	public int getMaxShapePointsInterleaving() {
 		return maxShapePointsInterleaving;
 	}
 
+	@Override
 	public StopTimesDaoMode getStopTimesDaoMode() {
 		return stopTimesDaoMode;
 	}
 
-	@Deprecated
+	@Override
 	public boolean isDisableShapePointsPacking() {
 		return disableShapePointsPacking;
 	}
 
+	@Override
 	public String getGtfsFile() {
 		return gtfsFile;
 	}

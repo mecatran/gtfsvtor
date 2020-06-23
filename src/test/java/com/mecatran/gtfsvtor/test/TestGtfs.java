@@ -1,7 +1,6 @@
 package com.mecatran.gtfsvtor.test;
 
 import static com.mecatran.gtfsvtor.test.TestUtils.loadAndValidate;
-import static com.mecatran.gtfsvtor.test.TestUtils.runScenario;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import com.mecatran.gtfsvtor.cmdline.CmdLineArgs.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
@@ -28,6 +26,7 @@ import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex.ProjectedPoint;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsBlockId;
@@ -1289,7 +1288,7 @@ public class TestGtfs {
 						"interleaved_stoptimes");
 				scenario.maxStopTimesInterleaving = max;
 				scenario.stopTimesDaoMode = daoMode;
-				TestBundle tb = runScenario(scenario);
+				TestBundle tb = scenario.run();
 				assertEquals(0,
 						tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR,
 								ReportIssueSeverity.CRITICAL));

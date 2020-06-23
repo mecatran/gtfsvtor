@@ -3,7 +3,7 @@ package com.mecatran.gtfsvtor.lib;
 import java.io.File;
 import java.io.IOException;
 
-import com.mecatran.gtfsvtor.cmdline.CmdLineArgs;
+import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
 import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
 import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
@@ -26,12 +26,12 @@ import com.mecatran.gtfsvtor.validation.impl.DefaultValidatorConfig;
 
 public class GtfsVtor {
 
-	// TODO Create a dedicated config for the use as a lib
-	private CmdLineArgs args;
+	private GtfsVtorOptions options;
 	private InMemoryReportLog report;
+	private IndexedReadOnlyDao dao;
 
-	public GtfsVtor(CmdLineArgs cmdLineArgs) {
-		this.args = cmdLineArgs;
+	public GtfsVtor(GtfsVtorOptions options) {
+		this.options = options;
 	}
 
 	public void validate() throws IOException {
@@ -40,10 +40,10 @@ public class GtfsVtor {
 		// TODO Use the lib in the unit-tests
 
 		DefaultValidatorConfig config = new DefaultValidatorConfig();
-		if (args.getConfigFile() != null) {
-			File propFile = new File(args.getConfigFile());
+		if (options.getConfigFile() != null) {
+			File propFile = new File(options.getConfigFile());
 			if (propFile.exists() && propFile.canRead()) {
-				if (args.isVerbose()) {
+				if (options.isVerbose()) {
 					System.out.println(
 							"Loading config from " + propFile.getName());
 				}
@@ -54,24 +54,26 @@ public class GtfsVtor {
 		}
 		// TODO Add remaining cmd line args to config
 
-		report = new InMemoryReportLog().withPrintIssues(args.isPrintIssues());
+		report = new InMemoryReportLog()
+				.withPrintIssues(options.isPrintIssues());
 		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
-				.autoGuess(args.getGtfsFile(), report);
+				.autoGuess(options.getGtfsFile(), report);
 		if (inputStreamSource != null) {
 			NamedTabularDataSource dataSource = new CsvDataSource(
 					inputStreamSource);
-			InMemoryDao dao = new InMemoryDao(args.getStopTimesDaoMode(),
-					args.getMaxStopTimeInterleaving(),
-					args.isDisableShapePointsPacking(),
-					args.getMaxShapePointsInterleaving())
-							.withVerbose(args.isVerbose());
+			InMemoryDao dao = new InMemoryDao(options.getStopTimesDaoMode(),
+					options.getMaxStopTimeInterleaving(),
+					options.isDisableShapePointsPacking(),
+					options.getMaxShapePointsInterleaving())
+							.withVerbose(options.isVerbose());
+			this.dao = dao;
 
 			DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
 					config);
 			DefaultGtfsTableSchema tableSchema = new DefaultGtfsTableSchema();
 			DefaultObjectBuilderFactory objBldFactory = new DefaultObjectBuilderFactory()
-					.withSmallShapePoint(args.isDisableShapePointsPacking()
-							|| args.getMaxShapePointsInterleaving() > 1000);
+					.withSmallShapePoint(options.isDisableShapePointsPacking()
+							|| options.getMaxShapePointsInterleaving() > 1000);
 			GtfsDataLoader loader = new GtfsDataLoader(dataSource, tableSchema,
 					objBldFactory);
 
@@ -80,9 +82,9 @@ public class GtfsVtor {
 					defStreamingValidator));
 			long end = System.currentTimeMillis();
 			System.gc();
-			if (args.isVerbose()) {
+			if (options.isVerbose()) {
 				Runtime runtime = Runtime.getRuntime();
-				System.out.println("Loaded '" + args.getGtfsFile() + "' in "
+				System.out.println("Loaded '" + options.getGtfsFile() + "' in "
 						+ (end - start) + "ms. Used memory: ~"
 						+ (runtime.totalMemory() - runtime.freeMemory())
 								/ (1024 * 1024)
@@ -92,26 +94,35 @@ public class GtfsVtor {
 			DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
 					report, config);
 			DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
-					.withVerbose(args.isVerbose())
-					.withNumThreads(args.getNumThreads());
+					.withVerbose(options.isVerbose())
+					.withNumThreads(options.getNumThreads());
 			daoValidator.validate(context);
 			DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
-					config).withVerbose(args.isVerbose());
+					config).withVerbose(options.isVerbose());
 			tripTimesValidator.scanValidate(context);
 
 			SourceInfoDataReloader sourceInfoReloader = new SourceInfoDataReloader(
-					dataSource).withVerbose(args.isVerbose());
+					dataSource).withVerbose(options.isVerbose());
 			sourceInfoReloader.loadSourceInfos(report);
 		}
 
-		ReportFormatter formatter = new HtmlReportFormatter(
-				args.getOutputReportFile(),
-				args.getMaxIssuesPerCategoryLimit());
-		formatter.format(report);
-		System.out.println("Report output to " + args.getOutputReportFile());
+		// TODO Auto-guess output format from file?
+		// TODO Ability to format to output stream
+		if (options.getOutputReportFile() != null) {
+			ReportFormatter formatter = new HtmlReportFormatter(
+					options.getOutputReportFile(),
+					options.getMaxIssuesPerCategoryLimit());
+			formatter.format(report);
+			System.out.println(
+					"Report output to " + options.getOutputReportFile());
+		}
 	}
 
 	public ReviewReport getReviewReport() {
 		return report;
+	}
+
+	public IndexedReadOnlyDao getDao() {
+		return dao;
 	}
 }

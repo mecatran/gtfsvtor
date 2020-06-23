@@ -1,36 +1,16 @@
 package com.mecatran.gtfsvtor.test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.beust.jcommander.JCommander;
-import com.mecatran.gtfsvtor.cmdline.CmdLineArgs;
-import com.mecatran.gtfsvtor.cmdline.CmdLineArgs.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
-import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
-import com.mecatran.gtfsvtor.dao.impl.PackingShapePointsDao;
-import com.mecatran.gtfsvtor.dao.impl.PackingStopTimesDao;
-import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
-import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
-import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
-import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
-import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
-import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
-import com.mecatran.gtfsvtor.loader.schema.DefaultGtfsTableSchema;
-import com.mecatran.gtfsvtor.model.factory.DefaultObjectBuilderFactory;
-import com.mecatran.gtfsvtor.model.impl.TestPackedShapePoints;
-import com.mecatran.gtfsvtor.model.impl.TestPackedStopTimes;
+import com.mecatran.gtfsvtor.lib.GtfsVtor;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
-import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
-import com.mecatran.gtfsvtor.validation.DaoValidator;
-import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
-import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
-import com.mecatran.gtfsvtor.validation.DefaultTripTimesValidator;
-import com.mecatran.gtfsvtor.validation.impl.DefaultDaoValidatorContext;
-import com.mecatran.gtfsvtor.validation.impl.DefaultValidatorConfig;
 
 public class TestUtils {
 
@@ -56,7 +36,7 @@ public class TestUtils {
 		}
 	}
 
-	public static class TestScenario {
+	public static class TestScenario implements GtfsVtorOptions {
 		public String gtfsFileOrDirectory;
 		public int maxStopTimesInterleaving = 3;
 		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
@@ -70,90 +50,41 @@ public class TestUtils {
 					+ localGtfsFileOrDirectory;
 		}
 
-		public CmdLineArgs getCmdLineArgs() {
-			// TODO This is a ugly hack. Make this better
-			CmdLineArgs cmdLineArgs = new CmdLineArgs();
-			JCommander jcmd = JCommander.newBuilder().addObject(cmdLineArgs)
-					.build();
-			jcmd.parse(new String[] { //
-					"--maxStopTimesInterleaving",
-					Integer.toString(maxStopTimesInterleaving),
-					"--stopTimesMode", stopTimesDaoMode.toString() });
-			return cmdLineArgs;
+		public TestBundle run() {
+			TestBundle ret = new TestBundle();
+			GtfsVtorOptions options = getOptions();
+			GtfsVtor gtfsvtor = new GtfsVtor(options);
+			try {
+				gtfsvtor.validate();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			ret.report = gtfsvtor.getReviewReport();
+			ret.dao = gtfsvtor.getDao();
+			return ret;
+		}
+
+		public GtfsVtorOptions getOptions() {
+			return this;
+		}
+
+		@Override
+		public int getMaxStopTimeInterleaving() {
+			return maxStopTimesInterleaving;
+		}
+
+		@Override
+		public StopTimesDaoMode getStopTimesDaoMode() {
+			return stopTimesDaoMode;
+		}
+
+		@Override
+		public String getGtfsFile() {
+			return gtfsFileOrDirectory;
 		}
 	}
 
 	public static TestBundle loadAndValidate(String localGtfsFileOrDirectory) {
-		return runScenario(new TestScenario(localGtfsFileOrDirectory));
-	}
-
-	@Deprecated
-	public static TestBundle loadAndValidate(String gtfsFileOrDirectory,
-			String base) {
-		TestScenario scenario = new TestScenario();
-		scenario.gtfsFileOrDirectory = base + gtfsFileOrDirectory;
-		return runScenario(scenario);
-	}
-
-	// TODO Make a test runner class, not a static method
-	// Or even better, re-use the lib
-	public static TestBundle runScenario(TestScenario scenario) {
-		InMemoryReportLog report = new InMemoryReportLog()
-				.withPrintIssues(true);
-		TestBundle ret = new TestBundle();
-		ret.report = report;
-		CmdLineArgs args = scenario.getCmdLineArgs();
-		NamedInputStreamSource inputStreamSource = NamedInputStreamSource
-				.autoGuess(scenario.gtfsFileOrDirectory, report);
-		if (inputStreamSource == null) {
-			return ret;
-		}
-		// TODO Add config configuration from args
-		DefaultValidatorConfig config = new DefaultValidatorConfig();
-		NamedTabularDataSource dataSource = new CsvDataSource(
-				inputStreamSource);
-		InMemoryDao dao = new InMemoryDao(args.getStopTimesDaoMode(),
-				args.getMaxStopTimeInterleaving(),
-				args.isDisableShapePointsPacking(),
-				args.getMaxShapePointsInterleaving()).withVerbose(true);
-		PackingStopTimesDao
-				.setAssertListener(TestPackedStopTimes::assertStopTimes);
-		PackingShapePointsDao
-				.setAssertListener(TestPackedShapePoints::assertShapePoints);
-
-		DefaultStreamingValidator streamingValidator = new DefaultStreamingValidator(
-				config);
-		DefaultGtfsTableSchema tableSchema = new DefaultGtfsTableSchema();
-		DefaultObjectBuilderFactory objBldFactory = new DefaultObjectBuilderFactory()
-				.withSmallShapePoint(args.isDisableShapePointsPacking()
-						|| args.getMaxShapePointsInterleaving() > 1000);
-		GtfsDataLoader loader = new GtfsDataLoader(dataSource, tableSchema,
-				objBldFactory);
-		loader.load(new DefaultDataLoaderContext(dao, dao, report,
-				streamingValidator));
-
-		DaoValidator.Context context = new DefaultDaoValidatorContext(dao,
-				report, config);
-		DefaultDaoValidator daoValidator = new DefaultDaoValidator(config)
-				.withVerbose(true);
-		daoValidator.validate(context);
-		DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
-				config).withVerbose(true);
-		tripTimesValidator.scanValidate(context);
-
-		SourceInfoDataReloader sourceInfoReloader = new SourceInfoDataReloader(
-				dataSource).withVerbose(true);
-		sourceInfoReloader.loadSourceInfos(report);
-
-		System.out.println(String.format(
-				"Validation result for '%s': %d INFO, %d WARNING, %d ERROR, %d CRITICAL",
-				scenario.gtfsFileOrDirectory,
-				report.issuesCountOfSeverity(ReportIssueSeverity.INFO),
-				report.issuesCountOfSeverity(ReportIssueSeverity.WARNING),
-				report.issuesCountOfSeverity(ReportIssueSeverity.ERROR),
-				report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL)));
-
-		ret.dao = dao;
-		return ret;
+		return new TestScenario(localGtfsFileOrDirectory).run();
 	}
 }
