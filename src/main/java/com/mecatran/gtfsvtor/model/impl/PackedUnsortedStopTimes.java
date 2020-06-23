@@ -13,6 +13,16 @@ import com.mecatran.gtfsvtor.model.GtfsTimepoint;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 
+/**
+ * A list of stop times packed in dedicated arrays.
+ * 
+ * This implementation is a bit more memory-intensive than the other packed
+ * "default" implementation (PackedStopTimes), but can adapt to random stop
+ * times (stop times can be added at almost no-cost any time).
+ * 
+ * At the end of loading, we post-process the packed data to sort entries and
+ * intern common time / stop structures.
+ */
 public class PackedUnsortedStopTimes {
 
 	public interface Context {
@@ -20,6 +30,12 @@ public class PackedUnsortedStopTimes {
 		public int indexStopId(GtfsStop.Id stopId);
 
 		public GtfsStop.Id getStopIdIndex(int stopIdIndex);
+
+		public PackedUnsortedTimePattern intern(
+				PackedUnsortedTimePattern tData);
+
+		public PackedUnsortedStopPattern intern(
+				PackedUnsortedStopPattern sData);
 	}
 
 	private static final int INITIAL_SIZE = 10;
@@ -57,6 +73,7 @@ public class PackedUnsortedStopTimes {
 	private static final int STOPSEQ_SHIFT = 32;
 
 	private int size;
+	private int baseTime;
 	private long[] tdata; // times data
 	private long[] sdata; // stop and seq data
 	private float[] pdata; // shape dist data (can be null)
@@ -72,13 +89,13 @@ public class PackedUnsortedStopTimes {
 		}
 		long tdata = 0L;
 		GtfsLogicalTime arrTime = stopTime.getArrivalTime();
-		tdata = setData(tdata, ARRTIME_MASK, ARRTIME_SHIFT,
-				arrTime == null ? NULL_TIME
-						: arrTime.getSecondSinceMidnight() + TIME_SHIFT);
+		tdata = setData(tdata, ARRTIME_MASK, ARRTIME_SHIFT, arrTime == null
+				? NULL_TIME
+				: arrTime.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
 		GtfsLogicalTime depTime = stopTime.getDepartureTime();
-		tdata = setData(tdata, DEPTIME_MASK, DEPTIME_SHIFT,
-				depTime == null ? NULL_TIME
-						: depTime.getSecondSinceMidnight() + TIME_SHIFT);
+		tdata = setData(tdata, DEPTIME_MASK, DEPTIME_SHIFT, depTime == null
+				? NULL_TIME
+				: depTime.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
 		GtfsDropoffType dropoff = stopTime.getDropoffType().orElse(null);
 		tdata = setData(tdata, DROPOFF_MASK, DROPOFF_SHIFT,
 				dropoff == null ? NULL_DROPOFF : dropoff.getValue());
@@ -116,7 +133,7 @@ public class PackedUnsortedStopTimes {
 				this.hdata = new String[this.tdata.length];
 				// Default to null
 			}
-			this.hdata[size] = stopHeadsign;
+			this.hdata[size] = stopHeadsign.intern();
 		}
 
 		size++;
@@ -144,12 +161,30 @@ public class PackedUnsortedStopTimes {
 	}
 
 	public void sort(Context context) {
-		// TODO Implement tdata, sdata interning
 		List<GtfsStopTime> stopTimes = getStopTimes(null, context);
 		Collections.sort(stopTimes, GtfsStopTime.STOP_SEQ_COMPARATOR);
+		// Compute baseTime : the first defined time.
+		// If not found, fallback to 0. Whatever value is fine.
+		for (GtfsStopTime stopTime : stopTimes) {
+			if (stopTime.getArrivalTime() != null) {
+				baseTime = stopTime.getArrivalTime().getSecondSinceMidnight();
+				break;
+			}
+			if (stopTime.getDepartureTime() != null) {
+				baseTime = stopTime.getDepartureTime().getSecondSinceMidnight();
+				break;
+			}
+		}
+		if (baseTime < 0)
+			baseTime = 0;
 		allocate(stopTimes.size());
 		size = 0;
 		stopTimes.forEach(st -> addStopTime(context, st));
+		this.tdata = context.intern(new PackedUnsortedTimePattern(tdata))
+				.getTData();
+		this.sdata = context.intern(new PackedUnsortedStopPattern(sdata))
+				.getSData();
+		// TODO Intern shape dist and headsign, if needed
 	}
 
 	/*
@@ -174,11 +209,11 @@ public class PackedUnsortedStopTimes {
 			int arr = getData(tdata, ARRTIME_MASK, ARRTIME_SHIFT);
 			if (arr != NULL_TIME)
 				builder.withArrivalTime(
-						GtfsLogicalTime.getTime(arr - TIME_SHIFT));
+						GtfsLogicalTime.getTime(arr - TIME_SHIFT + baseTime));
 			int dep = getData(tdata, DEPTIME_MASK, DEPTIME_SHIFT);
 			if (dep != NULL_TIME)
 				builder.withDepartureTime(
-						GtfsLogicalTime.getTime(dep - TIME_SHIFT));
+						GtfsLogicalTime.getTime(dep - TIME_SHIFT + baseTime));
 			int dropoff = getData(tdata, DROPOFF_MASK, DROPOFF_SHIFT);
 			if (dropoff != NULL_DROPOFF)
 				builder.withDropoffType(GtfsDropoffType.fromValue(dropoff));
@@ -207,6 +242,14 @@ public class PackedUnsortedStopTimes {
 			ret.add(builder.build());
 		}
 		return ret;
+	}
+
+	public int getShapeDistDataSize() {
+		return pdata == null ? 0 : pdata.length * 4;
+	}
+
+	public int getHeadsignDataSize() {
+		return hdata == null ? 0 : hdata.length * 4;
 	}
 
 	private void allocate(int n) {
