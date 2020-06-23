@@ -14,6 +14,15 @@ import com.mecatran.gtfsvtor.model.GtfsTimepoint;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 
+/**
+ * A list of stop times packed into two dedicated structures (times delta and
+ * stop id and sequence). The packing algorithm rely on varying byte-length
+ * delta encodings with bits packing.
+ * 
+ * The implementation rely on the caller to provide a full list of ordered stop
+ * times at construction. Hence this implementation is not optimal in the case
+ * we have stop times in random order.
+ */
 public class PackedStopTimes {
 
 	public interface Context {
@@ -454,6 +463,11 @@ public class PackedStopTimes {
 		byte[] sdata2 = new byte[si];
 		System.arraycopy(tdata, 0, tdata2, 0, tdata2.length);
 		System.arraycopy(sdata, 0, sdata2, 0, sdata2.length);
+		if (headsigns != null) {
+			for (int i = 0; i < headsigns.size(); i++) {
+				headsigns.set(i, headsigns.get(i).intern());
+			}
+		}
 		this.timeData = context.intern(new PackedTimePattern(tdata2));
 		this.stopData = context
 				.intern(new PackedStopPattern(sdata2, headsigns));
