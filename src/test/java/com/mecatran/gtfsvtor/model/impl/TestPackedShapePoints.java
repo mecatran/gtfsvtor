@@ -11,16 +11,23 @@ import java.util.List;
 import org.junit.Test;
 
 import com.mecatran.gtfsvtor.dao.impl.PackedShapePoints;
+import com.mecatran.gtfsvtor.dao.impl.PackedUnsortedShapePoints;
 import com.mecatran.gtfsvtor.dao.impl.PackingShapePointsDao;
+import com.mecatran.gtfsvtor.dao.impl.PackingUnsortedShapePointsDao;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
 
 public class TestPackedShapePoints {
 
+	private static class PackingBundle {
+		private PackedShapePoints.Context spContext = new PackingShapePointsDao.DefaultContext();
+		private PackedUnsortedShapePoints.Context uspContext = new PackingUnsortedShapePointsDao.DefaultContext();
+	}
+
 	@Test
 	public void testSample() throws ParseException {
-		PackedShapePoints.Context ctx = new PackingShapePointsDao.DefaultContext();
+		PackingBundle pb = new PackingBundle();
 		List<GtfsShapePoint> shapePoints = new ArrayList<>();
 
 		// Simple basic test
@@ -41,12 +48,12 @@ public class TestPackedShapePoints {
 		shapePoints.add(shapePoint("S1", 20001, -45.1234567, 0.001));
 		shapePoints.add(shapePoint("S1", 20002, -45.4999999, 0.002001));
 		shapePoints.add(shapePoint("S1", 20002, -45.4999999, 0.0030011));
-		testList(ctx, shapePoints);
+		testList(pb, shapePoints);
 	}
 
 	@Test
 	public void testDeltas() throws ParseException {
-		PackedShapePoints.Context ctx = new PackingShapePointsDao.DefaultContext();
+		PackingBundle pb = new PackingBundle();
 		for (double delta : Arrays.asList(0., 0.0000001, 0.000001, 0.0000015,
 				0.00001, 0.0001, 0.001, 0.01, 0.1, 0.111, 1.0, 10., 20., 180.,
 				360.)) {
@@ -70,7 +77,7 @@ public class TestPackedShapePoints {
 							base - delta * sign));
 					shapePoints.add(shapePoint("S1", 2, lat2, lon2,
 							base + delta * sign));
-					testList(ctx, shapePoints);
+					testList(pb, shapePoints);
 				}
 			}
 		}
@@ -78,7 +85,7 @@ public class TestPackedShapePoints {
 
 	@Test
 	public void testSeqDeltas() throws ParseException {
-		PackedShapePoints.Context ctx = new PackingShapePointsDao.DefaultContext();
+		PackingBundle pb = new PackingBundle();
 		for (int delta : Arrays.asList(0, 1, 100, 1000, 10000, 100000,
 				1000000)) {
 			for (int base : Arrays.asList(-100000, -100, 0, 1, 10000, 100000,
@@ -86,7 +93,7 @@ public class TestPackedShapePoints {
 				List<GtfsShapePoint> shapePoints = new ArrayList<>();
 				shapePoints.add(shapePoint("S1", base, 0.0, 0.0));
 				shapePoints.add(shapePoint("S1", base + delta, 1.0, 0.0));
-				testList(ctx, shapePoints);
+				testList(pb, shapePoints);
 			}
 		}
 	}
@@ -107,13 +114,21 @@ public class TestPackedShapePoints {
 		return bld.build();
 	}
 
-	private void testList(PackedShapePoints.Context context,
-			List<GtfsShapePoint> shapePoints) {
-		GtfsShape.Id shapeId = shapePoints.get(0).getShapeId();
-		PackedShapePoints psp = new PackedShapePoints(context, shapePoints);
+	private void testList(PackingBundle pb,
+			List<GtfsShapePoint> shapePointsRef) {
+		GtfsShape.Id shapeId = shapePointsRef.get(0).getShapeId();
+
+		PackedShapePoints psp = new PackedShapePoints(pb.spContext,
+				shapePointsRef);
+		List<GtfsShapePoint> shapePoints1 = psp.getShapePoints(shapeId,
+				pb.spContext);
+		assertShapePoints(shapePointsRef, shapePoints1);
+
+		PackedUnsortedShapePoints pusp = new PackedUnsortedShapePoints();
+		shapePointsRef.forEach(sp -> pusp.addShapePoint(pb.uspContext, sp));
 		List<GtfsShapePoint> shapePoints2 = psp.getShapePoints(shapeId,
-				context);
-		assertShapePoints(shapePoints, shapePoints2);
+				pb.spContext);
+		assertShapePoints(shapePointsRef, shapePoints2);
 	}
 
 	public static void assertShapePoints(List<GtfsShapePoint> shapePoints1,

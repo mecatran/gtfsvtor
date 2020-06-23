@@ -7,7 +7,6 @@ import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
 import com.mecatran.gtfsvtor.model.impl.SimpleGtfsShapePoint;
-import com.mecatran.gtfsvtor.model.impl.SimpleGtfsShapePoint.Builder;
 
 public class PackedShapePoints {
 

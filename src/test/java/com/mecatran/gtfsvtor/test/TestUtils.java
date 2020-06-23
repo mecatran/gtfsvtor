@@ -39,6 +39,7 @@ public class TestUtils {
 	public static class TestScenario implements GtfsVtorOptions {
 		public String gtfsFileOrDirectory;
 		public int maxStopTimesInterleaving = 3;
+		public int maxShapePointsInterleaving = 3;
 		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 		public ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
 
@@ -72,6 +73,11 @@ public class TestUtils {
 		@Override
 		public int getMaxStopTimeInterleaving() {
 			return maxStopTimesInterleaving;
+		}
+
+		@Override
+		public int getMaxShapePointsInterleaving() {
+			return maxShapePointsInterleaving;
 		}
 
 		@Override

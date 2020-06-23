@@ -4,6 +4,7 @@ import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.impl.SimpleGtfsShapePoint;
 import com.mecatran.gtfsvtor.model.impl.SmallGtfsShapePoint;
 
+@Deprecated
 public class DefaultObjectBuilderFactory implements ObjectBuilderFactory {
 
 	private boolean smallShapePoint = false;

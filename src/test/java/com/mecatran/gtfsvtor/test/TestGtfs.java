@@ -1425,7 +1425,7 @@ public class TestGtfs {
 	}
 
 	@Test
-	public void testGoodWithVariousStopTimeDaoMode() {
+	public void testGoodFeedWithVariousStopTimeDaoMode() {
 		for (StopTimesDaoMode daoMode : Arrays.asList(StopTimesDaoMode.AUTO,
 				StopTimesDaoMode.PACKED, StopTimesDaoMode.UNSORTED)) {
 			for (String file : Arrays.asList("good_feed", "good_feed.zip")) {
@@ -1439,11 +1439,25 @@ public class TestGtfs {
 	}
 
 	@Test
-	public void testRandomShapesWithVariousShapeDaoMode() {
-		for (ShapePointsDaoMode daoMode : Arrays
-				.asList(ShapePointsDaoMode.PACKED, ShapePointsDaoMode.SIMPLE)) {
+	public void testGoodFeedWithVariousShapePointDaoMode() {
+		for (ShapePointsDaoMode daoMode : Arrays.asList(
+				ShapePointsDaoMode.PACKED, ShapePointsDaoMode.UNSORTED)) {
+			for (String file : Arrays.asList("good_feed", "good_feed.zip")) {
+				TestScenario testScenario = new TestScenario(file);
+				testScenario.maxShapePointsInterleaving = 3;
+				testScenario.shapePointsDaoMode = daoMode;
+				TestBundle goodFile = testScenario.run();
+				testGoodDao(goodFile.dao);
+			}
+		}
+	}
+
+	@Test
+	public void testRandomShapesWithVariousShapePointDaoMode() {
+		for (ShapePointsDaoMode daoMode : Arrays.asList(
+				ShapePointsDaoMode.UNSORTED, ShapePointsDaoMode.PACKED)) {
 			TestScenario testScenario = new TestScenario("MBTA_random_shapes");
-			testScenario.maxStopTimesInterleaving = 5;
+			testScenario.maxShapePointsInterleaving = 5;
 			testScenario.shapePointsDaoMode = daoMode;
 			TestBundle tb = testScenario.run();
 			tb.dao.getShapeIds().forEach(shapeId -> {
