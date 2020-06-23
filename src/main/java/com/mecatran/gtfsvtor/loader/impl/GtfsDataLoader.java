@@ -169,30 +169,14 @@ public class GtfsDataLoader implements DataLoader {
 
 		private DataTable dataTable;
 		private DataRow row;
-		private ReportSink reportSink;
-		private AppendableDao appendableDao;
-		private ReadOnlyDao readOnlyDao;
 		private DataLoader.Context context;
 		private ObjectBuilderFactory builderFactory;
-
-		// TODO Remove this
-		@Deprecated
-		private DataLoaderContext(DataTable dataTable, ReportSink reportSink,
-				ReadOnlyDao readOnlyDao) {
-			this.dataTable = dataTable;
-			this.reportSink = reportSink;
-			this.readOnlyDao = readOnlyDao;
-		}
 
 		private DataLoaderContext(DataTable dataTable,
 				DataLoader.Context context,
 				ObjectBuilderFactory builderFactory) {
 			this.dataTable = dataTable;
 			this.context = context;
-			// TODO Save context instead of all fields
-			this.reportSink = context.getReportSink();
-			this.appendableDao = context.getAppendableDao();
-			this.readOnlyDao = context.getReadOnlyDao();
 			this.builderFactory = builderFactory;
 		}
 
@@ -200,9 +184,10 @@ public class GtfsDataLoader implements DataLoader {
 			this.row = row;
 			int numberOfHeaderColumns = dataTable.getColumnHeaders().size();
 			if (row.getRecordCount() != numberOfHeaderColumns) {
-				reportSink.report(new InconsistentNumberOfFieldsWarning(
-						row.getSourceRef(), row.getRecordCount(),
-						numberOfHeaderColumns));
+				context.getReportSink()
+						.report(new InconsistentNumberOfFieldsWarning(
+								row.getSourceRef(), row.getRecordCount(),
+								numberOfHeaderColumns));
 			}
 		}
 
@@ -221,17 +206,17 @@ public class GtfsDataLoader implements DataLoader {
 
 		@Override
 		public ReportSink getReportSink() {
-			return reportSink;
+			return context.getReportSink();
 		}
 
 		@Override
 		public ReadOnlyDao getPartialDao() {
-			return readOnlyDao;
+			return context.getReadOnlyDao();
 		}
 
 		@Override
 		public AppendableDao getAppendableDao() {
-			return appendableDao;
+			return context.getAppendableDao();
 		}
 
 		@Override
