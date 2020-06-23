@@ -15,7 +15,7 @@ public class PackedShapePoints {
 	}
 
 	/*
-	 * Since we only have a pointer, we could have saved off one object, but
+	 * Since we only have a pointer, we could have saved off one object, by
 	 * storing the data directly. One day maybe.
 	 */
 	private byte[] data;
