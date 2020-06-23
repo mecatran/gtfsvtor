@@ -10,7 +10,9 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import com.mecatran.gtfsvtor.dao.impl.GtfsIdIndexer;
 import com.mecatran.gtfsvtor.dao.impl.PackingStopTimesDao;
+import com.mecatran.gtfsvtor.dao.impl.PackingUnsortedStopTimesDao;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -21,15 +23,21 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 
 public class TestPackedStopTimes {
 
+	private static class PackingBundle {
+		private PackingStopTimesDao.DefaultContext psContext = new PackingStopTimesDao.DefaultContext();
+		private PackedUnsortedStopTimes.Context pusContext = new PackingUnsortedStopTimesDao.DefaultContext(
+				new GtfsIdIndexer.GtfsStopIdIndexer());
+	}
+
 	@Test
 	public void testSample() throws ParseException {
-		PackingStopTimesDao.DefaultContext ctx = new PackingStopTimesDao.DefaultContext();
+		PackingBundle pb = new PackingBundle();
 		List<GtfsStopTime> stopTimes = new ArrayList<>();
 
 		// Simple basic test
 		stopTimes.add(
 				stopTime("T1", 0, "S1", 0, "8:00:00", 0, "8:00:00", 0.0, null));
-		testList(ctx, stopTimes);
+		testList(pb, stopTimes);
 
 		// Same values, deltas = 0
 		stopTimes.add(
@@ -58,27 +66,27 @@ public class TestPackedStopTimes {
 		// Negative deltas
 		stopTimes.add(stopTime("T1", 100, "S1", 0, "8:00:30", 0, "8:00:00",
 				10.0, null));
-		testList(ctx, stopTimes);
+		testList(pb, stopTimes);
 
 		// Null values
 		stopTimes.add(stopTime("T1", 100, null, null, (String) null, null,
 				(String) null, null, null));
-		testList(ctx, stopTimes);
+		testList(pb, stopTimes);
 
 		// Large delta, with headsign
 		stopTimes.add(stopTime("T1", 123456789, "S4", 1, "28:56:12", 1,
 				"37:45:23", 10000000.0, "Headsign 1"));
-		testList(ctx, stopTimes);
+		testList(pb, stopTimes);
 
 		// Same headsign as before, large negative delta
 		stopTimes.add(stopTime("T1", 123456790, "S5", 0, "4:00:00", 1,
 				"4:00:00", 123.45, "Headsign 1"));
-		testList(ctx, stopTimes);
+		testList(pb, stopTimes);
 	}
 
 	@Test
 	public void testTimesDeltas() throws ParseException {
-		PackingStopTimesDao.DefaultContext ctx = new PackingStopTimesDao.DefaultContext();
+		PackingBundle pb = new PackingBundle();
 		for (int base = 0; base < 24 * 60 * 60; base += 23597) {
 			for (int delta = -24 * 60 * 60; delta < 72 * 60 * 60; delta++) {
 				List<GtfsStopTime> stopTimes = new ArrayList<>();
@@ -86,32 +94,32 @@ public class TestPackedStopTimes {
 						stopTime("T1", 1, "S1", 0, base, 0, base, null, null));
 				stopTimes.add(stopTime("T1", 2, "S2", 0, base + delta, 0,
 						base + delta, null, null));
-				testList(ctx, stopTimes);
+				testList(pb, stopTimes);
 				stopTimes = new ArrayList<>();
 				stopTimes.add(
 						stopTime("T1", 1, "S1", 0, base, 0, base, null, null));
 				stopTimes.add(stopTime("T1", 2, "S2", 0, base, 0, base + delta,
 						null, null));
-				testList(ctx, stopTimes);
+				testList(pb, stopTimes);
 			}
 		}
 	}
 
 	@Test
 	public void testHeadsigns() throws ParseException {
-		PackingStopTimesDao.DefaultContext ctx = new PackingStopTimesDao.DefaultContext();
+		PackingBundle pb = new PackingBundle();
 		Random rand = new Random(42L);
 		List<GtfsStopTime> stopTimes = new ArrayList<>();
 		for (int i = 0; i < 10000; i++) {
 			stopTimes.add(stopTime("T1", i, "S" + i, 0, "8:00:00", 0, "8:00:30",
 					i * 10.0, "Headsign #" + rand.nextInt(1000)));
 		}
-		testList(ctx, stopTimes);
+		testList(pb, stopTimes);
 	}
 
 	@Test
 	public void testRandom() throws ParseException {
-		PackingStopTimesDao.DefaultContext ctx = new PackingStopTimesDao.DefaultContext();
+		PackingBundle pb = new PackingBundle();
 		Random rand = new Random(42L);
 		for (int i = 0; i < 10000; i++) {
 			List<GtfsStopTime> stopTimes = new ArrayList<>();
@@ -144,7 +152,7 @@ public class TestPackedStopTimes {
 				sd += rand.nextFloat() * 20.0;
 				seq += rand.nextInt(10);
 			}
-			testList(ctx, stopTimes);
+			testList(pb, stopTimes);
 		}
 	}
 
@@ -189,12 +197,22 @@ public class TestPackedStopTimes {
 		return builder.build();
 	}
 
-	private void testList(PackedStopTimes.Context context,
-			List<GtfsStopTime> stopTimes1) {
-		GtfsTrip.Id tripId = stopTimes1.get(0).getTripId();
-		PackedStopTimes pst = new PackedStopTimes(context, stopTimes1);
-		List<GtfsStopTime> stopTimes2 = pst.getStopTimes(tripId, context);
-		assertStopTimes(stopTimes1, stopTimes2);
+	private void testList(PackingBundle pb, List<GtfsStopTime> stopTimesRef) {
+		GtfsTrip.Id tripId = stopTimesRef.get(0).getTripId();
+
+		PackedStopTimes pst = new PackedStopTimes(pb.psContext, stopTimesRef);
+		List<GtfsStopTime> stopTimes1 = pst.getStopTimes(tripId, pb.psContext);
+		assertStopTimes(stopTimesRef, stopTimes1);
+
+		PackedUnsortedStopTimes pust = new PackedUnsortedStopTimes();
+		stopTimesRef.forEach(st -> pust.addStopTime(pb.pusContext, st));
+		List<GtfsStopTime> stopTimes2 = pust.getStopTimes(tripId,
+				pb.pusContext);
+		assertStopTimes(stopTimesRef, stopTimes2);
+		pust.sort(pb.pusContext);
+		List<GtfsStopTime> stopTimes3 = pust.getStopTimes(tripId,
+				pb.pusContext);
+		assertStopTimes(stopTimesRef, stopTimes3);
 	}
 
 	public static void assertStopTimes(List<GtfsStopTime> stopTimes1,
