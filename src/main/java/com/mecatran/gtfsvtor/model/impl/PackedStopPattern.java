@@ -23,6 +23,10 @@ public class PackedStopPattern {
 		return sdata;
 	}
 
+	public int getSDataSize() {
+		return sdata.length * 1;
+	}
+
 	public List<String> getHeadsigns() {
 		return headsigns;
 	}

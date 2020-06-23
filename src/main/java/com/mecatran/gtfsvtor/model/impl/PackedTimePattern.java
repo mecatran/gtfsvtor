@@ -16,6 +16,10 @@ public class PackedTimePattern {
 		return tdata;
 	}
 
+	public int getTDataSize() {
+		return tdata.length * 1;
+	}
+
 	@Override
 	public int hashCode() {
 		return hashcode;
