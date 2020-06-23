@@ -89,8 +89,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public InMemoryDao(boolean disableStopTimesPackingDao,
 			int maxStopTimesInterleaving, boolean disableShapePointsPackingDao,
 			int maxShapePointsInterleaving) {
+		// TODO Implement auto-switch
 		stopTimesDao = disableStopTimesPackingDao
-				? new InMemorySimpleStopTimesDao()
+				? new PackingUnsortedStopTimesDao(
+						new GtfsIdIndexer.GtfsStopIdIndexer())
 				: new PackingStopTimesDao(maxStopTimesInterleaving);
 		shapePointsDao = disableShapePointsPackingDao
 				? new InMemorySimpleShapePointsDao()
