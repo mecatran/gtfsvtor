@@ -20,6 +20,7 @@ public class AutoSwitchStopTimesDao implements StopTimesDao {
 	private PackingStopTimesDao pstDao;
 	private PackingUnsortedStopTimesDao pustDao;
 	private StopTimesDao currentDao;
+	private boolean verbose = false;
 
 	public AutoSwitchStopTimesDao(int maxInterleaving,
 			GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer) {
@@ -57,12 +58,20 @@ public class AutoSwitchStopTimesDao implements StopTimesDao {
 		return currentDao.getStopTimesOfTrip(tripId, trip);
 	}
 
+	@Override
+	public StopTimesDao withVerbose(boolean verbose) {
+		this.verbose = verbose;
+		currentDao.withVerbose(verbose);
+		return this;
+	}
+
 	private boolean handleOverflow(int n) {
 		System.out.println(
 				"Interleaving stop times overflow detected. Switching to relevant DAO implementation to better handle this.\nThis will increase memory consumption, though.");
 		pstDao.withVerbose(false);
 		pstDao.close();
-		pustDao = new PackingUnsortedStopTimesDao(stopIdIndexer);
+		pustDao = new PackingUnsortedStopTimesDao(stopIdIndexer)
+				.withVerbose(verbose);
 		// Copy over
 		pstDao.getStopTimes().forEach(pustDao::addStopTime);
 		System.out.println(
