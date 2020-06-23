@@ -1279,7 +1279,7 @@ public class TestGtfs {
 
 	@Test
 	public void testInterleavedStopTimes() {
-		for (int max = 5; max < 20; max += 3) {
+		for (int max = 3; max < 20; max += 3) {
 			// Having a small max interleaving factor will force overflow
 			// Check that this will work anyway
 			TestScenario scenario = new TestScenario("interleaved_stoptimes");
@@ -1287,6 +1287,22 @@ public class TestGtfs {
 			TestBundle tb = runScenario(scenario);
 			assertEquals(0, tb.issuesCountOfSeverities(
 					ReportIssueSeverity.ERROR, ReportIssueSeverity.CRITICAL));
+			assertEquals(20, tb.dao.getStopTimesCount());
+			for (int i = 1; i <= 10; i++) {
+				GtfsTrip.Id tripId = GtfsTrip.id("AB" + i);
+				List<GtfsStopTime> stopTimes = tb.dao.getTripAndTimes(tripId)
+						.getStopTimes();
+				assertEquals(2, stopTimes.size());
+				assertEquals(1,
+						stopTimes.get(0).getStopSequence().getSequence());
+				assertEquals(2,
+						stopTimes.get(1).getStopSequence().getSequence());
+				assertEquals(tripId, stopTimes.get(0).getTripId());
+				assertEquals(
+						i <= 5 ? GtfsStop.id("BEATTY_AIRPORT")
+								: GtfsStop.id("BULLFROG"),
+						stopTimes.get(0).getStopId());
+			}
 		}
 	}
 

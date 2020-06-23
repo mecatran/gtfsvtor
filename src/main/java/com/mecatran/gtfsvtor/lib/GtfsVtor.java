@@ -60,7 +60,7 @@ public class GtfsVtor {
 		if (inputStreamSource != null) {
 			NamedTabularDataSource dataSource = new CsvDataSource(
 					inputStreamSource);
-			InMemoryDao dao = new InMemoryDao(args.isDisableStopTimePacking(),
+			InMemoryDao dao = new InMemoryDao(args.getStopTimesDaoMode(),
 					args.getMaxStopTimeInterleaving(),
 					args.isDisableShapePointsPacking(),
 					args.getMaxShapePointsInterleaving())

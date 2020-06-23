@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class ListPacker<U, V, W> {
@@ -30,6 +31,7 @@ public class ListPacker<U, V, W> {
 	private int nInterleave = 0;
 	private PackerUnpacker<U, V, W> packerUnpacker;
 	private int elemSize = 0;
+	private Function<Integer, Boolean> interleavingOverflowCallback;
 
 	public ListPacker(PackerUnpacker<U, V, W> packerUnpacker, int maxOpened) {
 		this.packerUnpacker = packerUnpacker;
@@ -55,7 +57,14 @@ public class ListPacker<U, V, W> {
 		return this;
 	}
 
+	public ListPacker<U, V, W> withInterleavingOverflowCallback(
+			Function<Integer, Boolean> callback) {
+		this.interleavingOverflowCallback = callback;
+		return this;
+	}
+
 	public void push(U id, V e) {
+		boolean callCallback = false;
 		OpenedItem<V> opened = openedItems.get(id);
 		if (opened == null) {
 			W closed = packedItems.remove(id);
@@ -63,7 +72,8 @@ public class ListPacker<U, V, W> {
 				opened = new OpenedItem<>(packerUnpacker.unpack(id, closed));
 				openedItems.put(id, opened);
 				if (nInterleave == 0) {
-					System.out.println("Interleaving overflow detected!");
+					// Only call the overflow callback once
+					callCallback = true;
 				}
 				nInterleave++;
 			} else {
@@ -74,13 +84,16 @@ public class ListPacker<U, V, W> {
 		}
 		opened.list.add(e);
 		elemSize++;
+		if (callCallback && interleavingOverflowCallback != null)
+			interleavingOverflowCallback.apply(0);
+
 	}
 
 	public void close() {
 		openedItems.forEach((id, opened) -> packedItems.put(id,
 				packerUnpacker.pack(id, opened.list)));
 		openedItems.clear();
-		if (nInterleave > 0) {
+		if (nInterleave > 0 && interleavingOverflowCallback == null) {
 			System.out.println("Warning: " + nInterleave
 					+ " interleaved items have been seen.\n"
 					+ "Using our current packing implementation, this works but highly inefficient.\n"
@@ -100,11 +113,7 @@ public class ListPacker<U, V, W> {
 		return packedItems.get(id);
 	}
 
-	public Stream<W> all() {
-		return packedItems.values().stream();
-	}
-
-	public Stream<U> keys() {
-		return packedItems.keySet().stream();
+	public Stream<Map.Entry<U, W>> entries() {
+		return packedItems.entrySet().stream();
 	}
 }

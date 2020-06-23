@@ -3,6 +3,8 @@ package com.mecatran.gtfsvtor.dao.impl;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.dao.StopTimesDao;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -24,11 +26,15 @@ public class PackingStopTimesDao implements StopTimesDao,
 	}
 
 	public static class DefaultContext implements PackedStopTimes.Context {
-		private GtfsIdIndexer<String, GtfsStop, GtfsStop.Id> stopIdIndexer = new GtfsIdIndexer<>();
+		private GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer;
 		private GenericInterner<PackedTimePattern> tDataInterner = new GenericInterner<>(
 				true);
 		private GenericInterner<PackedStopPattern> sDataInterner = new GenericInterner<>(
 				true);
+
+		public DefaultContext(GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer) {
+			this.stopIdIndexer = stopIdIndexer;
+		}
 
 		@Override
 		public int indexStopId(GtfsStop.Id stopId) {
@@ -52,17 +58,25 @@ public class PackingStopTimesDao implements StopTimesDao,
 	}
 
 	private ListPacker<GtfsTrip.Id, GtfsStopTime, PackedStopTimes> listPacker;
-	private DefaultContext context = new DefaultContext();
+	private DefaultContext context;
 	private static AssertListener assertListener = null;
 	private boolean verbose = false;
 	private boolean closed = false;
 
-	public PackingStopTimesDao(int maxInterleaving) {
+	public PackingStopTimesDao(int maxInterleaving,
+			GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer) {
 		this.listPacker = new ListPacker<>(this, maxInterleaving);
+		this.context = new DefaultContext(stopIdIndexer);
 	}
 
 	public PackingStopTimesDao withVerbose(boolean verbose) {
 		this.verbose = verbose;
+		return this;
+	}
+
+	public PackingStopTimesDao withInterleavingOverflowCallback(
+			Function<Integer, Boolean> callback) {
+		this.listPacker.withInterleavingOverflowCallback(callback);
 		return this;
 	}
 
@@ -93,6 +107,12 @@ public class PackingStopTimesDao implements StopTimesDao,
 		List<GtfsStopTime> stopTimes = pst == null ? Collections.emptyList()
 				: pst.getStopTimes(tripId, context);
 		return new GtfsTripAndTimes(trip, stopTimes);
+	}
+
+	public Stream<GtfsStopTime> getStopTimes() {
+		closeIfNeeded();
+		return listPacker.entries().flatMap(
+				e -> e.getValue().getStopTimes(e.getKey(), context).stream());
 	}
 
 	@Override

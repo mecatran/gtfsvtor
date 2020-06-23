@@ -56,7 +56,7 @@ public class PackingShapePointsDao implements ShapePointsDao,
 	@Override
 	public Stream<GtfsShape.Id> getShapeIds() {
 		closeIfNeeded();
-		return listPacker.keys();
+		return listPacker.entries().map(e -> e.getKey());
 	}
 
 	@Override
@@ -112,8 +112,8 @@ public class PackingShapePointsDao implements ShapePointsDao,
 			long nShapePoints = listPacker.itemsCount();
 			long nShapes = listPacker.groupCount();
 			long shapeBytes = nShapes * 8; // 1 pointer
-			long dataBytes = listPacker.all().mapToInt(psp -> psp.getDataSize())
-					.sum();
+			long dataBytes = listPacker.entries()
+					.mapToInt(e -> e.getValue().getDataSize()).sum();
 			long totalBytes = shapeBytes + dataBytes;
 			System.out.println(String.format(Locale.US,
 					"Packed %d points, %d shapes (%dk) in (%dk)", nShapePoints,

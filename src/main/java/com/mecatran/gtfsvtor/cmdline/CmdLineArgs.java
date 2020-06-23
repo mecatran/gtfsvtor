@@ -4,6 +4,10 @@ import com.beust.jcommander.Parameter;
 
 public class CmdLineArgs {
 
+	public enum StopTimesDaoMode {
+		AUTO, PACKED, UNSORTED
+	}
+
 	@Parameter(names = { "-h",
 			"--help" }, description = "Display this help and exit")
 	private boolean help = false;
@@ -40,7 +44,7 @@ public class CmdLineArgs {
 			+ "Max number of interleaved trips in stop_times.txt "
 			+ "(number of concurrent 'opened' trips). "
 			+ "Use/increase this option if you have lots of unordered trips in stop_times.txt, "
-			+ "to improve loading performances.")
+			+ "to improve loading performances, or use UNSORTED stopTimesDao mode.")
 	private int maxStopTimesInterleaving = 100;
 
 	@Parameter(names = { "--maxShapePointsInterleaving" }, description = ""
@@ -50,11 +54,9 @@ public class CmdLineArgs {
 			+ "to improve loading performances.")
 	private int maxShapePointsInterleaving = 100;
 
-	@Parameter(names = { "--disableStopTimesPacking" }, description = ""
-			+ "Disable stop times packing DAO. "
-			+ "Useful for totally unsorted stop_times.txt file. "
-			+ "Warning: this will increase memory usage a lot.")
-	private boolean disableStopTimesPacking = false;
+	@Parameter(names = { "--stopTimesDao" }, description = ""
+			+ "Stop time DAO implementation to use. ")
+	private StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 
 	@Parameter(names = { "--disableShapePointsPacking" }, description = ""
 			+ "Disable shape points packing DAO. "
@@ -105,8 +107,8 @@ public class CmdLineArgs {
 		return maxShapePointsInterleaving;
 	}
 
-	public boolean isDisableStopTimePacking() {
-		return disableStopTimesPacking;
+	public StopTimesDaoMode getStopTimesDaoMode() {
+		return stopTimesDaoMode;
 	}
 
 	public boolean isDisableShapePointsPacking() {

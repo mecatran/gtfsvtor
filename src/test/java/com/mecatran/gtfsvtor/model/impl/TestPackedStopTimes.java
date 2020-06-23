@@ -24,7 +24,8 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 public class TestPackedStopTimes {
 
 	private static class PackingBundle {
-		private PackingStopTimesDao.DefaultContext psContext = new PackingStopTimesDao.DefaultContext();
+		private PackingStopTimesDao.DefaultContext psContext = new PackingStopTimesDao.DefaultContext(
+				new GtfsIdIndexer.GtfsStopIdIndexer());
 		private PackedUnsortedStopTimes.Context pusContext = new PackingUnsortedStopTimesDao.DefaultContext(
 				new GtfsIdIndexer.GtfsStopIdIndexer());
 	}

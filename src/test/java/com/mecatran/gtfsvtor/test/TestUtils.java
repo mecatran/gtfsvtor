@@ -108,7 +108,7 @@ public class TestUtils {
 		DefaultValidatorConfig config = new DefaultValidatorConfig();
 		NamedTabularDataSource dataSource = new CsvDataSource(
 				inputStreamSource);
-		InMemoryDao dao = new InMemoryDao(args.isDisableStopTimePacking(),
+		InMemoryDao dao = new InMemoryDao(args.getStopTimesDaoMode(),
 				args.getMaxStopTimeInterleaving(),
 				args.isDisableShapePointsPacking(),
 				args.getMaxShapePointsInterleaving()).withVerbose(true);

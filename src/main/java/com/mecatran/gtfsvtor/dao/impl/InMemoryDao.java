@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
+import com.mecatran.gtfsvtor.cmdline.CmdLineArgs.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.dao.AppendableDao;
 import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
@@ -52,6 +53,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Set<GtfsZone.Id> zoneIds = new HashSet<>();
 	private Map<GtfsCalendar.Id, GtfsCalendar> calendars = new HashMap<>();
 	private Map<GtfsTrip.Id, GtfsTrip> trips = new HashMap<>();
+	private GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer = new GtfsIdIndexer.GtfsStopIdIndexer();
 	private StopTimesDao stopTimesDao;
 	private ShapePointsDao shapePointsDao;
 	private ListMultimap<GtfsTrip.Id, GtfsFrequency> frequencies = ArrayListMultimap
@@ -86,14 +88,22 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private LinearGeometryIndex linearGeometryIndex = null;
 	private boolean verbose = false;
 
-	public InMemoryDao(boolean disableStopTimesPackingDao,
+	public InMemoryDao(StopTimesDaoMode stopTimesDaoMode,
 			int maxStopTimesInterleaving, boolean disableShapePointsPackingDao,
 			int maxShapePointsInterleaving) {
-		// TODO Implement auto-switch
-		stopTimesDao = disableStopTimesPackingDao
-				? new PackingUnsortedStopTimesDao(
-						new GtfsIdIndexer.GtfsStopIdIndexer())
-				: new PackingStopTimesDao(maxStopTimesInterleaving);
+		switch (stopTimesDaoMode) {
+		case AUTO:
+			stopTimesDao = new AutoSwitchStopTimesDao(
+					maxShapePointsInterleaving, stopIdIndexer);
+			break;
+		case PACKED:
+			stopTimesDao = new PackingStopTimesDao(maxShapePointsInterleaving,
+					stopIdIndexer);
+			break;
+		case UNSORTED:
+			stopTimesDao = new PackingUnsortedStopTimesDao(stopIdIndexer);
+			break;
+		}
 		shapePointsDao = disableShapePointsPackingDao
 				? new InMemorySimpleShapePointsDao()
 				: new PackingShapePointsDao(maxShapePointsInterleaving);

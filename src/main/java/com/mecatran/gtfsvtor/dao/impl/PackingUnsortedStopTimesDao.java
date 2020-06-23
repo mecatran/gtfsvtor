@@ -18,6 +18,7 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 	private Map<GtfsTrip.Id, PackedUnsortedStopTimes> stopTimes = new HashMap<>();
 	private PackedUnsortedStopTimes.Context context;
 	private int nStopTimes = 0;
+	@SuppressWarnings("unused")
 	private boolean verbose = false;
 	private boolean closed = false;
 
@@ -83,6 +84,7 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 		if (closed)
 			return;
 		stopTimes.values().forEach(st -> st.sort(context));
+		// TODO Print memory usage statistics in verbose mode
 		closed = true;
 	}
 }
