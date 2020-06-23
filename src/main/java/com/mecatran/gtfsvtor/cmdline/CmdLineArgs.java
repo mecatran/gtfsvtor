@@ -42,9 +42,10 @@ public class CmdLineArgs {
 
 	@Parameter(names = { "--maxStopTimesInterleaving" }, description = ""
 			+ "Max number of interleaved trips in stop_times.txt "
-			+ "(number of concurrent 'opened' trips). "
-			+ "Use/increase this option if you have lots of unordered trips in stop_times.txt, "
-			+ "to improve loading performances, or use UNSORTED stopTimesDao mode.")
+			+ "(number of concurrent 'opened' trips) in PACKED stop time mode. "
+			+ "Increase this option if you have some data not ordered by trip ID, "
+			+ "but still want to use PACKED mode, to improve loading performances. "
+			+ "Otherwise, use --stopTimesMode UNSORTED or AUTO option.")
 	private int maxStopTimesInterleaving = 100;
 
 	@Parameter(names = { "--maxShapePointsInterleaving" }, description = ""
@@ -54,12 +55,15 @@ public class CmdLineArgs {
 			+ "to improve loading performances.")
 	private int maxShapePointsInterleaving = 100;
 
-	@Parameter(names = { "--stopTimesDao" }, description = ""
-			+ "Stop time DAO implementation to use. ")
+	@Parameter(names = { "--stopTimesMode" }, description = ""
+			+ "Stop time DAO implementation to use. "
+			+ "PACKED: Optimized for memory, but can be slower if stop_times.txt are not sorted by trip ID. "
+			+ "UNSORTED: Work best for stop_times.txt unsorted by trip ID, but uses more memory. "
+			+ "AUTO: Start in PACKED mode, then switch to UNSORTED mode if required. ")
 	private StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 
 	@Parameter(names = { "--disableShapePointsPacking" }, description = ""
-			+ "Disable shape points packing DAO. "
+			+ "DEPRECATED. Disable shape points packing DAO. "
 			+ "Useful for totally unsorted shapes.txt file. "
 			+ "Notice: this will increase memory usage slightly.")
 	private boolean disableShapePointsPacking = false;
@@ -111,6 +115,7 @@ public class CmdLineArgs {
 		return stopTimesDaoMode;
 	}
 
+	@Deprecated
 	public boolean isDisableShapePointsPacking() {
 		return disableShapePointsPacking;
 	}
