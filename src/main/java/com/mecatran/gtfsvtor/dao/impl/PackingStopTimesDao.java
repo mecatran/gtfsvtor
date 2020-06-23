@@ -149,27 +149,41 @@ public class PackingStopTimesDao implements StopTimesDao,
 		if (verbose) {
 			long nStopTimes = listPacker.itemsCount();
 			long nTrips = listPacker.groupCount();
+			long nTimePatterns = context.tDataInterner.size();
+			long nStopPatterns = context.sDataInterner.size();
 			long tripBytes = nTrips * (3 * 8); // 2 pointers, one int
 			long tDataBytes = context.tDataInterner.all()
-					.mapToInt(ptp -> ptp.getTData().length).sum();
+					.mapToInt(ptp -> ptp.getTDataSize()).sum();
 			long sDataBytes = context.sDataInterner.all()
-					.mapToInt(ptp -> ptp.getSData().length
+					.mapToInt(ptp -> ptp.getSDataSize()
 							+ (ptp.getHeadsigns() == null ? 0
 									: ptp.getHeadsigns().stream()
 											.mapToInt(s -> s.length()).sum()))
 					.sum();
 			long totalBytes = tripBytes + tDataBytes + sDataBytes;
+
+			System.out.println(
+					"------[ Packing sorted stop times crude memory stats ]-----");
+			System.out.println(
+					"       What          |    Count   | Total (kB) | Per item  ");
+			System.out.println(
+					"---------------------+------------+------------+-----------");
 			System.out.println(String.format(Locale.US,
-					"Packed %d stop times, %d trips (%dk) in %d time patterns (%dk), %d stop patterns (%dk)",
-					nStopTimes, nTrips, tripBytes / 1024,
-					context.tDataInterner.size(), tDataBytes / 1024,
-					context.sDataInterner.size(), sDataBytes / 1024));
+					"%20s | %10d | %10d | %10.2f", "Stop times", nStopTimes,
+					totalBytes / 1024, totalBytes * 1. / nStopTimes));
 			System.out.println(String.format(Locale.US,
-					"Total %dk. Avg bytes: %.2f per stop time, %.2f per trip, %.2f per time pattern, %.2f per stop pattern",
-					totalBytes / 1024, totalBytes * 1.0 / nStopTimes,
-					totalBytes * 1.0 / nTrips,
-					tDataBytes * 1.0 / context.tDataInterner.size(),
-					sDataBytes * 1.0 / context.sDataInterner.size()));
+					"%20s | %10d | %10d | %10.2f", "Trips", nTrips,
+					tripBytes / 1024, tripBytes * 1. / nTrips));
+			System.out.println(
+					String.format(Locale.US, "%20s | %10d | %10d | %10.2f",
+							"Time patterns", nTimePatterns, tDataBytes / 1024,
+							tDataBytes * 1. / nTimePatterns));
+			System.out.println(
+					String.format(Locale.US, "%20s | %10d | %10d | %10.2f",
+							"Stop patterns", nStopPatterns, sDataBytes / 1024,
+							sDataBytes * 1. / nStopPatterns));
+			System.out.println(
+					"---------------------+------------+------------+-----------");
 		}
 		closed = true;
 	}
