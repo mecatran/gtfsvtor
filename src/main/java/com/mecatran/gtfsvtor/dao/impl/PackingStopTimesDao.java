@@ -70,7 +70,7 @@ public class PackingStopTimesDao implements StopTimesDao,
 	public void addStopTime(GtfsStopTime stopTime) {
 		if (closed)
 			throw new RuntimeException(
-					"Cannot re-open a closed InMemorySimpleStopTimesDao. Implement this if needed.");
+					"Cannot re-open a closed PackingStopTimesDao. Implement this if needed.");
 		GtfsTrip.Id tripId = stopTime.getTripId();
 		listPacker.push(tripId, stopTime);
 	}
