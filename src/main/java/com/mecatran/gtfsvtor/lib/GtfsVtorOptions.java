@@ -47,7 +47,7 @@ public interface GtfsVtorOptions {
 	}
 
 	public default ShapePointsDaoMode getShapePointsDaoMode() {
-		return ShapePointsDaoMode.PACKED;
+		return ShapePointsDaoMode.AUTO;
 	}
 
 	public String getGtfsFile();

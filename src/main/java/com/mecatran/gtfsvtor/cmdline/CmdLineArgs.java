@@ -63,7 +63,7 @@ public class CmdLineArgs implements GtfsVtorOptions {
 			+ "Shape points DAO implementation to use. "
 			+ "PACKED: Optimized for memory, but can be slower if shapes.txt are not sorted by shape ID. "
 			+ "SIMPLE: Work for all situations, but uses more memory. ")
-	private ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
+	private ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.AUTO;
 
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
