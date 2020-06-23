@@ -20,6 +20,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
  * TODO Remove this class, should not be needed anymore (see
  * PackedUnsortedStopTimes)
  */
+@Deprecated
 public class SmallGtfsStopTime implements GtfsStopTime {
 
 	// 24 bits (0..16777215) -> arrival time, ie 4660 h
@@ -113,6 +114,7 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 		this.data |= val;
 	}
 
+	@Deprecated
 	public static class Builder implements GtfsStopTime.Builder {
 		private SmallGtfsStopTime stopTime;
 		private StopIdSeqAndHeadsign.Builder stopStuffBuilder;
