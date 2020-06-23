@@ -5,6 +5,7 @@ import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
+import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime;
 
 @TableDescriptorPolicy(objectClass = GtfsStopTime.class, tableName = GtfsStopTime.TABLE_NAME, mandatory = true, mandatoryColumns = {
 		"trip_id", "arrival_time", "departure_time", "stop_id",
@@ -13,8 +14,7 @@ public class GtfsStopTimeTableDescriptor implements GtfsTableDescriptor {
 
 	@Override
 	public GtfsObject<?> parseAndSave(DataRowConverter erow, Context context) {
-		GtfsStopTime.Builder builder = context.getBuilderFactory()
-				.getStopTimeBuilder();
+		GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
 		builder.withTripId(GtfsTrip.id(erow.getString("trip_id")))
 				.withArrivalTime(erow.getLogicalTime("arrival_time", false))
 				.withDepartureTime(erow.getLogicalTime("departure_time", false))

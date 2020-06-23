@@ -16,6 +16,9 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
  * stop ID/seq/headsign/shapedist) and a long (times, flags), thus only three
  * 64bits values on most machines (or maybe even 32bits for both pointers with
  * compressed OOP trick, if the heap is less than 32G), plus object overhead.
+ *
+ * TODO Remove this class, should not be needed anymore (see
+ * PackedUnsortedStopTimes)
  */
 public class SmallGtfsStopTime implements GtfsStopTime {
 

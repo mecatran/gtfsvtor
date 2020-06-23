@@ -122,9 +122,7 @@ public class TestUtils {
 		DefaultGtfsTableSchema tableSchema = new DefaultGtfsTableSchema();
 		DefaultObjectBuilderFactory objBldFactory = new DefaultObjectBuilderFactory()
 				.withSmallShapePoint(args.isDisableShapePointsPacking()
-						|| args.getMaxShapePointsInterleaving() > 1000)
-				.withSmallStopTime(args.isDisableStopTimePacking()
-						|| args.getMaxStopTimeInterleaving() > 1000);
+						|| args.getMaxShapePointsInterleaving() > 1000);
 		GtfsDataLoader loader = new GtfsDataLoader(dataSource, tableSchema,
 				objBldFactory);
 		loader.load(new DefaultDataLoaderContext(dao, dao, report,
