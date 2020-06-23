@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.dao.ShapePointsDao;
@@ -34,6 +35,12 @@ public class PackingShapePointsDao implements ShapePointsDao,
 
 	public PackingShapePointsDao withVerbose(boolean verbose) {
 		this.verbose = verbose;
+		return this;
+	}
+
+	public PackingShapePointsDao withInterleavingOverflowCallback(
+			Function<Integer, Boolean> callback) {
+		this.listPacker.withInterleavingOverflowCallback(callback);
 		return this;
 	}
 
@@ -114,13 +121,21 @@ public class PackingShapePointsDao implements ShapePointsDao,
 			long dataBytes = listPacker.entries()
 					.mapToInt(e -> e.getValue().getDataSize()).sum();
 			long totalBytes = shapeBytes + dataBytes;
+
+			System.out.println(
+					"---[ Packing sorted shape points crude memory stats ]---");
+			System.out.println(
+					"       What       |    Count   | Total (kB) | Per item  ");
+			System.out.println(
+					"------------------+------------+------------+-----------");
 			System.out.println(String.format(Locale.US,
-					"Packed %d points, %d shapes (%dk) in (%dk)", nShapePoints,
-					nShapes, shapeBytes / 1024, dataBytes / 1024));
+					"%17s | %10d | %10d | %10.2f", "Shape points", nShapePoints,
+					totalBytes / 1024, totalBytes * 1. / nShapePoints));
 			System.out.println(String.format(Locale.US,
-					"Total %dk. Avg bytes: %.2f per shape point, %.2f per shape",
-					totalBytes / 1024, totalBytes * 1.0 / nShapePoints,
-					totalBytes * 1.0 / nShapes));
+					"%17s | %10d | %10d | %10.2f", "Shapes", nShapes,
+					shapeBytes / 1024, totalBytes * 1. / nShapes));
+			System.out.println(
+					"------------------+------------+------------+-----------");
 		}
 		closed = true;
 	}

@@ -81,13 +81,20 @@ public class PackingUnsortedShapePointsDao implements ShapePointsDao {
 			long dataBytes = shapePoints.entrySet().stream()
 					.mapToInt(e -> e.getValue().getDataSize()).sum();
 			long totalBytes = shapeBytes + dataBytes;
+			System.out.println(
+					"--[ Packing unsorted shape points crude memory stats ]--");
+			System.out.println(
+					"       What       |    Count   | Total (kB) | Per item  ");
+			System.out.println(
+					"------------------+------------+------------+-----------");
 			System.out.println(String.format(Locale.US,
-					"Packed %d points, %d shapes (%dk) in (%dk)", nShapePoints,
-					nShapes, shapeBytes / 1024, dataBytes / 1024));
+					"%17s | %10d | %10d | %10.2f", "Shape points", nShapePoints,
+					totalBytes / 1024, totalBytes * 1. / nShapePoints));
 			System.out.println(String.format(Locale.US,
-					"Total %dk. Avg bytes: %.2f per shape point, %.2f per shape",
-					totalBytes / 1024, totalBytes * 1.0 / nShapePoints,
-					totalBytes * 1.0 / nShapes));
+					"%17s | %10d | %10d | %10.2f", "Shapes", nShapes,
+					shapeBytes / 1024, totalBytes * 1. / nShapes));
+			System.out.println(
+					"------------------+------------+------------+-----------");
 		}
 		closed = true;
 	}

@@ -7,8 +7,7 @@ public interface GtfsVtorOptions {
 	}
 
 	public enum ShapePointsDaoMode {
-		// TODO Add AUTO mode
-		PACKED, UNSORTED
+		AUTO, PACKED, UNSORTED
 	}
 
 	public default boolean isVerbose() {

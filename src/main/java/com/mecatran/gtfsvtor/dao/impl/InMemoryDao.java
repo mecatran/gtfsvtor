@@ -106,6 +106,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			break;
 		}
 		switch (shapePointsDaoMode) {
+		case AUTO:
+			shapePointsDao = new AutoSwitchShapePointDao(
+					maxShapePointsInterleaving);
+			break;
 		case PACKED:
 			shapePointsDao = new PackingShapePointsDao(
 					maxShapePointsInterleaving);
