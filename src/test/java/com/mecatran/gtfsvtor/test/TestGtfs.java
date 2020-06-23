@@ -1440,7 +1440,7 @@ public class TestGtfs {
 
 	@Test
 	public void testGoodFeedWithVariousShapePointDaoMode() {
-		for (ShapePointsDaoMode daoMode : Arrays.asList(
+		for (ShapePointsDaoMode daoMode : Arrays.asList(ShapePointsDaoMode.AUTO,
 				ShapePointsDaoMode.PACKED, ShapePointsDaoMode.UNSORTED)) {
 			for (String file : Arrays.asList("good_feed", "good_feed.zip")) {
 				TestScenario testScenario = new TestScenario(file);
@@ -1454,10 +1454,10 @@ public class TestGtfs {
 
 	@Test
 	public void testRandomShapesWithVariousShapePointDaoMode() {
-		for (ShapePointsDaoMode daoMode : Arrays.asList(
+		for (ShapePointsDaoMode daoMode : Arrays.asList(ShapePointsDaoMode.AUTO,
 				ShapePointsDaoMode.UNSORTED, ShapePointsDaoMode.PACKED)) {
 			TestScenario testScenario = new TestScenario("MBTA_random_shapes");
-			testScenario.maxShapePointsInterleaving = 5;
+			testScenario.maxShapePointsInterleaving = 3;
 			testScenario.shapePointsDaoMode = daoMode;
 			TestBundle tb = testScenario.run();
 			tb.dao.getShapeIds().forEach(shapeId -> {
@@ -1471,6 +1471,9 @@ public class TestGtfs {
 					assertEquals(shapeId, shapePoint.getShapeId());
 				}
 			});
+			assertEquals(1649, tb.dao.getShapeIds().flatMap(
+					shapeId -> tb.dao.getPointsOfShape(shapeId).stream())
+					.count());
 		}
 	}
 
