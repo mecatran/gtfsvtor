@@ -319,10 +319,11 @@ public class TestGtfs {
 	@Test
 	public void testGood() {
 		/* Basic DAO testing for a known good and simple feed */
-		TestBundle goodFile = loadAndValidate("good_feed");
-		testGoodDao(goodFile.dao);
-		TestBundle goodZip = loadAndValidate("good_feed.zip");
-		testGoodDao(goodZip.dao);
+		for (String file : Arrays.asList("good_feed", "good_feed.zip")) {
+			TestScenario testScenario = new TestScenario(file);
+			TestBundle goodFile = testScenario.run();
+			testGoodDao(goodFile.dao);
+		}
 	}
 
 	@Test
@@ -1419,6 +1420,20 @@ public class TestGtfs {
 				.issuesOfCategory(UnusedObjectWarning.class);
 		// agency may not be refered, if feed contains only a single agency
 		assertEquals(0, uows.size());
+	}
+
+	@Test
+	public void testGoodWithVariousStopTimeDaoMode() {
+		for (StopTimesDaoMode daoMode : Arrays.asList(StopTimesDaoMode.AUTO,
+				StopTimesDaoMode.PACKED, StopTimesDaoMode.UNSORTED)) {
+			for (String file : Arrays.asList("good_feed", "good_feed.zip")) {
+				TestScenario testScenario = new TestScenario(file);
+				testScenario.maxStopTimesInterleaving = 5;
+				testScenario.stopTimesDaoMode = daoMode;
+				TestBundle goodFile = testScenario.run();
+				testGoodDao(goodFile.dao);
+			}
+		}
 	}
 
 	@Test

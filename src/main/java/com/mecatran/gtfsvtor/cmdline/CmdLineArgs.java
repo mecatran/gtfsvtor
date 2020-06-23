@@ -53,17 +53,17 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	private int maxShapePointsInterleaving = 100;
 
 	@Parameter(names = { "--stopTimesMode" }, description = ""
-			+ "Stop time DAO implementation to use. "
+			+ "Stop times DAO implementation to use. "
 			+ "PACKED: Optimized for memory, but can be slower if stop_times.txt are not sorted by trip ID. "
 			+ "UNSORTED: Work best for stop_times.txt unsorted by trip ID, but uses more memory. "
 			+ "AUTO: Start in PACKED mode, then switch to UNSORTED mode if required. ")
 	private StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 
-	@Parameter(names = { "--disableShapePointsPacking" }, description = ""
-			+ "DEPRECATED. Disable shape points packing DAO. "
-			+ "Useful for totally unsorted shapes.txt file. "
-			+ "Notice: this will increase memory usage slightly.")
-	private boolean disableShapePointsPacking = false;
+	@Parameter(names = { "--shapePointsMode" }, description = ""
+			+ "Shape points DAO implementation to use. "
+			+ "PACKED: Optimized for memory, but can be slower if shapes.txt are not sorted by shape ID. "
+			+ "SIMPLE: Work for all situations, but uses more memory. ")
+	private ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
 
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
@@ -122,8 +122,8 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	}
 
 	@Override
-	public boolean isDisableShapePointsPacking() {
-		return disableShapePointsPacking;
+	public ShapePointsDaoMode getShapePointsDaoMode() {
+		return shapePointsDaoMode;
 	}
 
 	@Override

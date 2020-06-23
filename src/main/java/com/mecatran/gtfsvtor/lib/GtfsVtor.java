@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
 import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
@@ -63,7 +64,7 @@ public class GtfsVtor {
 					inputStreamSource);
 			InMemoryDao dao = new InMemoryDao(options.getStopTimesDaoMode(),
 					options.getMaxStopTimeInterleaving(),
-					options.isDisableShapePointsPacking(),
+					options.getShapePointsDaoMode(),
 					options.getMaxShapePointsInterleaving())
 							.withVerbose(options.isVerbose());
 			this.dao = dao;
@@ -72,7 +73,8 @@ public class GtfsVtor {
 					config);
 			DefaultGtfsTableSchema tableSchema = new DefaultGtfsTableSchema();
 			DefaultObjectBuilderFactory objBldFactory = new DefaultObjectBuilderFactory()
-					.withSmallShapePoint(options.isDisableShapePointsPacking()
+					.withSmallShapePoint(options
+							.getShapePointsDaoMode() == ShapePointsDaoMode.SIMPLE
 							|| options.getMaxShapePointsInterleaving() > 1000);
 			GtfsDataLoader loader = new GtfsDataLoader(dataSource, tableSchema,
 					objBldFactory);

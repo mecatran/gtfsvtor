@@ -6,6 +6,10 @@ public interface GtfsVtorOptions {
 		AUTO, PACKED, UNSORTED
 	}
 
+	public enum ShapePointsDaoMode {
+		SIMPLE, PACKED
+	}
+
 	public default boolean isVerbose() {
 		return false;
 	}
@@ -42,9 +46,8 @@ public interface GtfsVtorOptions {
 		return StopTimesDaoMode.AUTO;
 	}
 
-	@Deprecated
-	public default boolean isDisableShapePointsPacking() {
-		return false;
+	public default ShapePointsDaoMode getShapePointsDaoMode() {
+		return ShapePointsDaoMode.PACKED;
 	}
 
 	public String getGtfsFile();

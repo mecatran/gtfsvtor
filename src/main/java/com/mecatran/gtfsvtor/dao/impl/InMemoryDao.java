@@ -18,6 +18,7 @@ import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.dao.ShapePointsDao;
 import com.mecatran.gtfsvtor.dao.StopTimesDao;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
@@ -89,7 +90,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private boolean verbose = false;
 
 	public InMemoryDao(StopTimesDaoMode stopTimesDaoMode,
-			int maxStopTimesInterleaving, boolean disableShapePointsPackingDao,
+			int maxStopTimesInterleaving, ShapePointsDaoMode shapePointsDaoMode,
 			int maxShapePointsInterleaving) {
 		switch (stopTimesDaoMode) {
 		case AUTO:
@@ -104,9 +105,15 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			stopTimesDao = new PackingUnsortedStopTimesDao(stopIdIndexer);
 			break;
 		}
-		shapePointsDao = disableShapePointsPackingDao
-				? new InMemorySimpleShapePointsDao()
-				: new PackingShapePointsDao(maxShapePointsInterleaving);
+		switch (shapePointsDaoMode) {
+		case SIMPLE:
+			shapePointsDao = new InMemorySimpleShapePointsDao();
+			break;
+		case PACKED:
+			shapePointsDao = new PackingShapePointsDao(
+					maxShapePointsInterleaving);
+			break;
+		}
 	}
 
 	public InMemoryDao withVerbose(boolean verbose) {
