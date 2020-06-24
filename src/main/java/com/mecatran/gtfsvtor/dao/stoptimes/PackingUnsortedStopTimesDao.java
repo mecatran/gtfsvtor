@@ -92,8 +92,10 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 	public GtfsTripAndTimes getStopTimesOfTrip(Id tripId, GtfsTrip trip) {
 		closeIfNeeded();
 		PackedUnsortedStopTimes pst = stopTimes.get(tripId);
-		return new GtfsTripAndTimes(trip, pst == null ? Collections.emptyList()
-				: pst.getStopTimes(tripId, context));
+		return new GtfsTripAndTimes(trip,
+				pst == null ? Collections.emptyList()
+						: pst.getStopTimes(tripId, context),
+				pst == null ? null : pst.getStopPatternKey());
 	}
 
 	private void closeIfNeeded() {

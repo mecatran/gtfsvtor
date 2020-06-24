@@ -104,7 +104,8 @@ public class PackingStopTimesDao implements StopTimesDao,
 		PackedStopTimes pst = listPacker.get(tripId);
 		List<GtfsStopTime> stopTimes = pst == null ? Collections.emptyList()
 				: pst.getStopTimes(tripId, context);
-		return new GtfsTripAndTimes(trip, stopTimes);
+		return new GtfsTripAndTimes(trip, stopTimes,
+				pst == null ? null : pst.getStopPatternKey());
 	}
 
 	public Stream<GtfsStopTime> getStopTimes() {

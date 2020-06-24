@@ -14,7 +14,6 @@ import com.mecatran.gtfsvtor.model.GtfsTimepoint;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime;
-import com.mecatran.gtfsvtor.model.impl.SimpleGtfsStopTime.Builder;
 
 /**
  * A list of stop times packed into two dedicated structures (times delta and
@@ -869,5 +868,9 @@ public class PackedStopTimes {
 		}
 
 		return stopTimes;
+	}
+
+	public Object getStopPatternKey() {
+		return stopData;
 	}
 }

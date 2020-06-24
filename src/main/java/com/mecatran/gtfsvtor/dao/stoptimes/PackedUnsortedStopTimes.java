@@ -74,8 +74,10 @@ public class PackedUnsortedStopTimes {
 	private static final int STOPSEQ_SHIFT = 32;
 
 	private int baseTime;
-	private PackedUnsortedTimePattern timeData; // times data
-	private PackedUnsortedStopPattern stopData; // stop, seq and shape data
+	// times data
+	private PackedUnsortedTimePattern timeData;
+	// stop, seq, shape dist and headsign data
+	private PackedUnsortedStopPattern stopData;
 
 	public PackedUnsortedStopTimes() {
 		allocate(INITIAL_SIZE);
@@ -188,6 +190,10 @@ public class PackedUnsortedStopTimes {
 			ret.add(builder.build());
 		}
 		return ret;
+	}
+
+	public Object getStopPatternKey() {
+		return stopData;
 	}
 
 	private void allocate(int n) {
