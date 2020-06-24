@@ -28,18 +28,10 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 	// You are not allowed to build a date
 	private GtfsLogicalDate(int year, int month, int day, int julianDay) {
 		// Check if calendar is valid first, otherwise doom will ensue
-		GregorianCalendar cal = calendarForYmd(year, month, day);
-		int year2 = cal.get(Calendar.YEAR);
-		int month2 = cal.get(Calendar.MONTH) + 1;
-		int day2 = cal.get(Calendar.DAY_OF_MONTH);
-		if (year != year2 || month2 != month || day2 != day) {
-			throw new IllegalArgumentException(String.format(
-					"Invalid date: %04d-%02d-%02d (did you mean %04d-%02d-%02d ?)",
-					year, month, day, year2, month2, day2));
-		}
-		this.year = year2;
-		this.month = month2;
-		this.day = day2;
+		checkDateIsValid(year, month, day);
+		this.year = year;
+		this.month = month;
+		this.day = day;
 		this.julianDay = julianDay;
 	}
 
@@ -48,7 +40,7 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 	}
 
 	/**
-	 * Build a date from GTFS format.
+	 * Build a date from GTFS format. Check date consistency.
 	 */
 	public static GtfsLogicalDate parseFromYYYYMMDD(String yyyymmdd)
 			throws ParseException {
@@ -76,15 +68,22 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 			throw new ParseException("Invalid format for " + yyyymmdd, 6);
 		}
 		try {
-			return getDate(year, month, day);
+			return getDate(year, month, day, true);
 		} catch (IllegalArgumentException e) {
 			throw new ParseException(e.getMessage(), 0);
 		}
 	}
 
 	public static GtfsLogicalDate getDate(int year, int month, int day) {
+		return getDate(year, month, day, false);
+	}
+
+	private static GtfsLogicalDate getDate(int year, int month, int day,
+			boolean checkDateIsValid) {
 		int julianDay = computeJulianDay(year, month, day);
-		// TODO synchronize CACHE?
+		if (checkDateIsValid) {
+			checkDateIsValid(year, month, day);
+		}
 		return CACHE.computeIfAbsent(julianDay,
 				jd -> new GtfsLogicalDate(year, month, day, jd));
 	}
@@ -165,7 +164,20 @@ public class GtfsLogicalDate implements Comparable<GtfsLogicalDate> {
 		return jdn;
 	}
 
-	private GregorianCalendar calendarForYmd(int year, int month, int day) {
+	private static void checkDateIsValid(int year, int month, int day) {
+		GregorianCalendar cal = calendarForYmd(year, month, day);
+		int year2 = cal.get(Calendar.YEAR);
+		int month2 = cal.get(Calendar.MONTH) + 1;
+		int day2 = cal.get(Calendar.DAY_OF_MONTH);
+		if (year != year2 || month2 != month || day2 != day) {
+			throw new IllegalArgumentException(String.format(
+					"Invalid date: %04d-%02d-%02d (did you mean %04d-%02d-%02d ?)",
+					year, month, day, year2, month2, day2));
+		}
+	}
+
+	private static GregorianCalendar calendarForYmd(int year, int month,
+			int day) {
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month - 1);

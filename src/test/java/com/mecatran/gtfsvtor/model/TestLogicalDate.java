@@ -87,4 +87,17 @@ public class TestLogicalDate {
 		GtfsLogicalDate.parseFromYYYYMMDD("20200230");
 	}
 
+	@Test(expected = ParseException.class)
+	public void testJulianDayParseConflict() throws ParseException {
+		GtfsLogicalDate.clearCache();
+		// Just make sure the two dates will map to the same julian day
+		int jday1 = GtfsLogicalDate.computeJulianDay(2007, 31, 8);
+		int jday2 = GtfsLogicalDate.computeJulianDay(2009, 7, 11);
+		assertEquals(jday1, jday2);
+		// The second date SHOULD throw a parse exception
+		// Even if a new date instance is not built due to cache
+		GtfsLogicalDate.parseFromYYYYMMDD("20090711");
+		GtfsLogicalDate.parseFromYYYYMMDD("20073108");
+	}
+
 }
