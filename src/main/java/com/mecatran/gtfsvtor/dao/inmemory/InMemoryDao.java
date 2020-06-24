@@ -386,15 +386,9 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public synchronized LinearGeometryIndex getLinearGeometryIndex() {
 		// Lazy create the index
 		if (linearGeometryIndex == null) {
-			long start = System.currentTimeMillis();
 			InMemoryLinearGeometryIndex imlgi = new InMemoryLinearGeometryIndex(
-					this);
+					this, verbose);
 			linearGeometryIndex = imlgi;
-			long end = System.currentTimeMillis();
-			if (verbose) {
-				System.out.println("Linear-indexed " + imlgi.getPatternCount()
-						+ " shape.patterns in " + (end - start) + "ms");
-			}
 		}
 		return linearGeometryIndex;
 	}

@@ -115,24 +115,34 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 	private List<ProjectedShapePatternImpl> patternIndexes = new ArrayList<>();
 	private int nPatterns = 0;
 
-	public InMemoryLinearGeometryIndex(IndexedReadOnlyDao dao) {
+	public InMemoryLinearGeometryIndex(IndexedReadOnlyDao dao,
+			boolean verbose) {
+		long start = System.currentTimeMillis();
 		Map<Object, ProjectedShapePatternImpl> patternIndexesByPattern = new HashMap<>();
 		dao.getTripsAndTimes().forEach(tripTimes -> {
 			GtfsTrip trip = tripTimes.getTrip();
-			List<GtfsStopTime> stopTimes = tripTimes.getStopTimes();
 			Object tripKey = computeTripKey(trip,
 					tripTimes.getStopPatternKey());
 			ProjectedShapePatternImpl patternIndex = patternIndexesByPattern
 					.get(tripKey);
 			if (patternIndex == null) {
+				List<GtfsStopTime> stopTimes = tripTimes.getStopTimes();
 				patternIndex = computePatternIndex(trip, stopTimes, dao);
 				patternIndexesByPattern.put(tripKey, patternIndex);
 				patternIndexes.add(patternIndex);
+				if (verbose && nPatterns % 500 == 0) {
+					System.out.print("Linear-indexing " + nPatterns + "...\r");
+				}
 				nPatterns++;
 			}
 			patternIndexByTrips.put(trip.getId(), patternIndex);
 			patternIndex.tripIds.add(trip.getId());
 		});
+		long end = System.currentTimeMillis();
+		if (verbose) {
+			System.out.println("Linear-indexed " + nPatterns
+					+ " shape.patterns in " + (end - start) + "ms");
+		}
 	}
 
 	int getPatternCount() {
@@ -531,6 +541,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		LocalMin min = null;
 		double bestMinDist = Double.MAX_VALUE;
 		double minDist = Double.MAX_VALUE;
+		// TODO Handle the case where stop has no coordinates
 		GeoCoordinates p = stop.getCoordinates();
 		double cosLat = Math.cos(Math.toRadians(p.getLat()));
 		for (int segIndex = 0; segIndex < shapePoints.size() - 1; segIndex++) {
