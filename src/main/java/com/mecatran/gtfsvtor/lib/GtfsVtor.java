@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
-import com.mecatran.gtfsvtor.dao.impl.InMemoryDao;
+import com.mecatran.gtfsvtor.dao.inmemory.InMemoryDao;
 import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
 import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;

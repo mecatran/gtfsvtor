@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.packing;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

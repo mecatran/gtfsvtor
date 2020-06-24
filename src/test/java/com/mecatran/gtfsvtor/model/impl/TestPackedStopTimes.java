@@ -10,11 +10,11 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import com.mecatran.gtfsvtor.dao.impl.GtfsIdIndexer;
-import com.mecatran.gtfsvtor.dao.impl.PackedStopTimes;
-import com.mecatran.gtfsvtor.dao.impl.PackedUnsortedStopTimes;
-import com.mecatran.gtfsvtor.dao.impl.PackingStopTimesDao;
-import com.mecatran.gtfsvtor.dao.impl.PackingUnsortedStopTimesDao;
+import com.mecatran.gtfsvtor.dao.packing.GtfsIdIndexer;
+import com.mecatran.gtfsvtor.dao.stoptimes.PackedStopTimes;
+import com.mecatran.gtfsvtor.dao.stoptimes.PackedUnsortedStopTimes;
+import com.mecatran.gtfsvtor.dao.stoptimes.PackingStopTimesDao;
+import com.mecatran.gtfsvtor.dao.stoptimes.PackingUnsortedStopTimesDao;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;

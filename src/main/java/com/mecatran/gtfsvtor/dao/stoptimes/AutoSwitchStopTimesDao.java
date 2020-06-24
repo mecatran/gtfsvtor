@@ -1,6 +1,6 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.stoptimes;
 
-import com.mecatran.gtfsvtor.dao.StopTimesDao;
+import com.mecatran.gtfsvtor.dao.packing.GtfsIdIndexer;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTrip.Id;

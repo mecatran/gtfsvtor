@@ -1,10 +1,9 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.shapepoints;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.mecatran.gtfsvtor.dao.ShapePointsDao;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 

@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.inmemory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,8 +16,15 @@ import com.mecatran.gtfsvtor.dao.CalendarIndex;
 import com.mecatran.gtfsvtor.dao.DaoSpatialIndex;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
-import com.mecatran.gtfsvtor.dao.ShapePointsDao;
-import com.mecatran.gtfsvtor.dao.StopTimesDao;
+import com.mecatran.gtfsvtor.dao.packing.GtfsIdIndexer;
+import com.mecatran.gtfsvtor.dao.shapepoints.AutoSwitchShapePointDao;
+import com.mecatran.gtfsvtor.dao.shapepoints.PackingShapePointsDao;
+import com.mecatran.gtfsvtor.dao.shapepoints.PackingUnsortedShapePointsDao;
+import com.mecatran.gtfsvtor.dao.shapepoints.ShapePointsDao;
+import com.mecatran.gtfsvtor.dao.stoptimes.AutoSwitchStopTimesDao;
+import com.mecatran.gtfsvtor.dao.stoptimes.PackingStopTimesDao;
+import com.mecatran.gtfsvtor.dao.stoptimes.PackingUnsortedStopTimesDao;
+import com.mecatran.gtfsvtor.dao.stoptimes.StopTimesDao;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.model.GtfsAgency;

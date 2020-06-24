@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.stoptimes;
 
 import java.util.Arrays;
 import java.util.List;

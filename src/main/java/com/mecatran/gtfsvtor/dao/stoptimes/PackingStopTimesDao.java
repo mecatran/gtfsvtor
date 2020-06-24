@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.stoptimes;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,7 +6,8 @@ import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import com.mecatran.gtfsvtor.dao.StopTimesDao;
+import com.mecatran.gtfsvtor.dao.packing.GtfsIdIndexer;
+import com.mecatran.gtfsvtor.dao.packing.ListPacker;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;

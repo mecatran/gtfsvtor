@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.dao;
+package com.mecatran.gtfsvtor.dao.stoptimes;
 
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;

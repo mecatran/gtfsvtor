@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.mecatran.gtfsvtor.dao.impl.PackedShapePoints;
-import com.mecatran.gtfsvtor.dao.impl.PackedUnsortedShapePoints;
-import com.mecatran.gtfsvtor.dao.impl.PackingShapePointsDao;
-import com.mecatran.gtfsvtor.dao.impl.PackingUnsortedShapePointsDao;
+import com.mecatran.gtfsvtor.dao.shapepoints.PackedShapePoints;
+import com.mecatran.gtfsvtor.dao.shapepoints.PackedUnsortedShapePoints;
+import com.mecatran.gtfsvtor.dao.shapepoints.PackingShapePointsDao;
+import com.mecatran.gtfsvtor.dao.shapepoints.PackingUnsortedShapePointsDao;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;

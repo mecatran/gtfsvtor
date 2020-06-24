@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.shapepoints;
 
 import java.util.ArrayList;
 import java.util.List;

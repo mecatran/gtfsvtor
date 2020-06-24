@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.dao.impl;
+package com.mecatran.gtfsvtor.dao.inmemory;
 
 import java.util.List;
 import java.util.Optional;
