@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.loader.DataRow;
+import com.mecatran.gtfsvtor.loader.TableSourceInfo;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 
 public class UnivocityCsvDataRow implements DataRow {
@@ -33,13 +34,14 @@ public class UnivocityCsvDataRow implements DataRow {
 
 	@Override
 	public DataObjectSourceInfo getSourceInfo() {
-		List<String> headerColumns = csvDataTable.getColumnHeaders();
+		TableSourceInfo tableSourceInfo = csvDataTable.getTableSourceInfo();
+		List<String> headerColumns = tableSourceInfo.getHeaderColumns();
 		List<String> fields = new ArrayList<>(headerColumns.size());
 		for (String field : record) {
-			fields.add(field);
+			fields.add(field == null ? null : field.intern());
 		}
-		return new DataObjectSourceInfoImpl(csvDataTable.getTableSourceInfo(),
-				fields, csvDataTable.getCurrentLineNumber());
+		return new DataObjectSourceInfoImpl(tableSourceInfo, fields,
+				csvDataTable.getCurrentLineNumber());
 	}
 
 	@Override

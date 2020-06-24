@@ -39,6 +39,7 @@ public class UnivocityCsvDataTable implements DataTable, Closeable {
 	// TODO Enable this option
 	private boolean checkRecordConsistent = false;
 	private boolean emptyFile = false;
+	private TableSourceInfo tableSourceInfo = null;
 
 	public static DataTable.Factory factory() {
 		return (tableName, inputStream) -> new UnivocityCsvDataTable(tableName,
@@ -163,8 +164,12 @@ public class UnivocityCsvDataTable implements DataTable, Closeable {
 	}
 
 	@Override
-	public TableSourceInfo getTableSourceInfo() {
-		return new TableSourceInfoImpl(tableName, getColumnHeaders());
+	public synchronized TableSourceInfo getTableSourceInfo() {
+		if (tableSourceInfo == null) {
+			tableSourceInfo = new TableSourceInfoImpl(tableName,
+					getColumnHeaders());
+		}
+		return tableSourceInfo;
 	}
 
 	@Override
