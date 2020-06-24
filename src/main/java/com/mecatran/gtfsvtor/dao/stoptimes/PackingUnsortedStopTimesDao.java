@@ -96,13 +96,13 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 		return new DeferredGtfsTripAndTimes(trip) {
 
 			@Override
-			public List<GtfsStopTime> getStopTimes() {
+			public List<GtfsStopTime> loadStopTimes() {
 				return pst == null ? Collections.emptyList()
 						: pst.getStopTimes(tripId, context);
 			}
 
 			@Override
-			public Object getStopPatternKey() {
+			public Object loadStopPatternKey() {
 				return pst == null ? null : pst.getStopPatternKey();
 			}
 		};
