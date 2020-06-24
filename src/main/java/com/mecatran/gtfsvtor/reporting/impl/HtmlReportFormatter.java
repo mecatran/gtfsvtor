@@ -24,6 +24,7 @@ import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.CategoryCounter;
 import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesCategory;
 import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesSubCategory;
+import com.mecatran.gtfsvtor.utils.SystemEnvironment;
 
 public class HtmlReportFormatter implements ReportFormatter {
 
@@ -239,7 +240,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 
 	private void formatFooter() throws IOException {
 		html.hr();
-		Date now = new Date();
+		Date now = SystemEnvironment.now();
 		Calendar cal = GregorianCalendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
 		html.p().classAttr("comments").text(String.format(
