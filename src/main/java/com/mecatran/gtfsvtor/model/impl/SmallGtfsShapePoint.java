@@ -6,6 +6,10 @@ import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
 
+/**
+ * TODO - Remove this class, it is not used anymore.
+ */
+@Deprecated
 public class SmallGtfsShapePoint implements GtfsShapePoint {
 
 	private GtfsShape.Id shapeId; // Will be interned
@@ -60,6 +64,7 @@ public class SmallGtfsShapePoint implements GtfsShapePoint {
 				+ (p == null ? "?" : p.getLon()) + "}";
 	}
 
+	@Deprecated
 	public static class Builder implements GtfsShapePoint.Builder {
 		private SmallGtfsShapePoint point;
 

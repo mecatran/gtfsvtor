@@ -7,7 +7,6 @@ import java.util.Set;
 import com.mecatran.gtfsvtor.dao.AppendableDao;
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
 import com.mecatran.gtfsvtor.model.GtfsObject;
-import com.mecatran.gtfsvtor.model.factory.ObjectBuilderFactory;
 import com.mecatran.gtfsvtor.utils.Annotations;
 
 public interface GtfsTableDescriptor {
@@ -17,8 +16,6 @@ public interface GtfsTableDescriptor {
 		public AppendableDao getAppendableDao();
 
 		public AppendableDao.SourceContext getSourceContext();
-
-		public ObjectBuilderFactory getBuilderFactory();
 	}
 
 	public default String getTableName() {

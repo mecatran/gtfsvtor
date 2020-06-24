@@ -12,7 +12,6 @@ import com.mecatran.gtfsvtor.loader.impl.DefaultDataLoaderContext;
 import com.mecatran.gtfsvtor.loader.impl.GtfsDataLoader;
 import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader;
 import com.mecatran.gtfsvtor.loader.schema.DefaultGtfsTableSchema;
-import com.mecatran.gtfsvtor.model.factory.DefaultObjectBuilderFactory;
 import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.impl.HtmlReportFormatter;
@@ -71,11 +70,7 @@ public class GtfsVtor {
 			DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
 					config);
 			DefaultGtfsTableSchema tableSchema = new DefaultGtfsTableSchema();
-			DefaultObjectBuilderFactory objBldFactory = new DefaultObjectBuilderFactory()
-					.withSmallShapePoint(
-							options.getMaxShapePointsInterleaving() > 1000);
-			GtfsDataLoader loader = new GtfsDataLoader(dataSource, tableSchema,
-					objBldFactory);
+			GtfsDataLoader loader = new GtfsDataLoader(dataSource, tableSchema);
 
 			long start = System.currentTimeMillis();
 			loader.load(new DefaultDataLoaderContext(dao, dao, report,

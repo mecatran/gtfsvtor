@@ -18,7 +18,6 @@ import com.mecatran.gtfsvtor.loader.schema.GtfsTableDescriptor;
 import com.mecatran.gtfsvtor.loader.schema.GtfsTableSchema;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsObject;
-import com.mecatran.gtfsvtor.model.factory.ObjectBuilderFactory;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
@@ -36,13 +35,11 @@ public class GtfsDataLoader implements DataLoader {
 
 	private NamedTabularDataSource dataSource;
 	private GtfsTableSchema tableSchema;
-	private ObjectBuilderFactory builderFactory;
 
 	public GtfsDataLoader(NamedTabularDataSource dataSource,
-			GtfsTableSchema tableSchema, ObjectBuilderFactory builderFactory) {
+			GtfsTableSchema tableSchema) {
 		this.dataSource = dataSource;
 		this.tableSchema = tableSchema;
-		this.builderFactory = builderFactory;
 	}
 
 	@Override
@@ -68,8 +65,7 @@ public class GtfsDataLoader implements DataLoader {
 			return;
 		loadedTables.add(tableName); // This is a bit hackish
 
-		DataLoaderContext sourceContext = new DataLoaderContext(table, context,
-				builderFactory);
+		DataLoaderContext sourceContext = new DataLoaderContext(table, context);
 		Class<? extends GtfsObject<?>> objClass = tableDescriptor
 				.getObjectClass();
 
@@ -170,14 +166,11 @@ public class GtfsDataLoader implements DataLoader {
 		private DataTable dataTable;
 		private DataRow row;
 		private DataLoader.Context context;
-		private ObjectBuilderFactory builderFactory;
 
 		private DataLoaderContext(DataTable dataTable,
-				DataLoader.Context context,
-				ObjectBuilderFactory builderFactory) {
+				DataLoader.Context context) {
 			this.dataTable = dataTable;
 			this.context = context;
-			this.builderFactory = builderFactory;
 		}
 
 		private void setAndValidateRow(DataRow row) {
@@ -222,11 +215,6 @@ public class GtfsDataLoader implements DataLoader {
 		@Override
 		public SourceContext getSourceContext() {
 			return this;
-		}
-
-		@Override
-		public ObjectBuilderFactory getBuilderFactory() {
-			return builderFactory;
 		}
 	}
 }

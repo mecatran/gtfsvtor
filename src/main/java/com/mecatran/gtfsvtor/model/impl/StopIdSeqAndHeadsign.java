@@ -16,6 +16,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
  * often use the same values; stop headsign are often null, shape dist traveled
  * are often not specified.
  */
+@Deprecated
 public class StopIdSeqAndHeadsign {
 
 	/* Denormalize the encapsulated values a bit */

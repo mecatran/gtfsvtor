@@ -19,14 +19,11 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 public class SimpleGtfsStopTime implements GtfsStopTime {
 
 	private GtfsTrip.Id tripId;
-	// TODO Associate the values (departure/arrival) and cache
 	private GtfsLogicalTime departureTime;
 	private GtfsLogicalTime arrivalTime;
-	// TODO Associate the values (stopid/sequence/headsign) and cache
 	private GtfsStop.Id stopId;
 	private GtfsTripStopSequence stopSequence;
 	private String stopHeadsign;
-	// TODO Associate the values (pickup/dropoff/timepoint) and cache
 	private GtfsPickupType pickupType;
 	private GtfsDropoffType dropoffType;
 	private Double shapeDistTraveled;
