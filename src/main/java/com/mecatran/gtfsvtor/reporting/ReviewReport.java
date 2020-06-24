@@ -8,15 +8,14 @@ import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 public interface ReviewReport {
 
 	/**
-	 * @return A stream of all report items, in the order they were added to the
-	 *         report sink.
+	 * @return A stream of all report items, in the order they were reported.
 	 */
 	public Stream<ReportIssue> getReportIssues();
 
 	/**
 	 * @param reportClass
-	 * @return The list of report items, in the order they were added to the
-	 *         report sink.
+	 * @return A stream of report items of the given class, in the order they
+	 *         were reported.
 	 */
 	public <T extends ReportIssue> Stream<T> getReportIssues(
 			Class<T> reportClass);
@@ -28,6 +27,8 @@ public interface ReviewReport {
 	public int issuesCountOfSeverity(ReportIssueSeverity severity);
 
 	/**
+	 * @param ref The ref to load source info from.
+	 * @return The source info containing the source fields.
 	 */
 	public DataObjectSourceInfo getSourceInfo(DataObjectSourceRef ref);
 

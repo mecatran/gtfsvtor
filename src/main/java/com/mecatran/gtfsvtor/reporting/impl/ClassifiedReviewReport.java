@@ -17,6 +17,10 @@ import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
 
+/**
+ * TODO Configure this with a IssueCategorizer, which would sort issues per
+ * categories (that is, compute a category for each issue).
+ */
 public class ClassifiedReviewReport {
 
 	public static class CategoryCounter implements Comparable<CategoryCounter> {
