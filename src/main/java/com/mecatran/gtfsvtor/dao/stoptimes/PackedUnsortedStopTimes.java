@@ -73,21 +73,15 @@ public class PackedUnsortedStopTimes {
 	private static final long STOPSEQ_MASK = 0xFFFFFFFF00000000L;
 	private static final int STOPSEQ_SHIFT = 32;
 
-	private int size;
 	private int baseTime;
-	private long[] tdata; // times data
-	private long[] sdata; // stop and seq data
-	private float[] pdata; // shape dist data (can be null)
-	private String[] hdata; // headsigns (can be null)
+	private PackedUnsortedTimePattern timeData; // times data
+	private PackedUnsortedStopPattern stopData; // stop, seq and shape data
 
 	public PackedUnsortedStopTimes() {
 		allocate(INITIAL_SIZE);
 	}
 
 	public void addStopTime(Context context, GtfsStopTime stopTime) {
-		if (size == tdata.length) {
-			grow();
-		}
 		long tdata = 0L;
 		GtfsLogicalTime arrTime = stopTime.getArrivalTime();
 		tdata = setData(tdata, ARRTIME_MASK, ARRTIME_SHIFT, arrTime == null
@@ -106,7 +100,7 @@ public class PackedUnsortedStopTimes {
 		GtfsTimepoint timepoint = stopTime.getTimepoint().orElse(null);
 		tdata = setData(tdata, TIMEPOINT_MASK, TIMEPOINT_SHIFT,
 				timepoint == null ? NULL_TIMEPOINT : timepoint.getValue());
-		this.tdata[size] = tdata;
+		timeData.addTData(tdata);
 
 		long sdata = 0L;
 		int stopIndex = stopTime.getStopId() == null ? NULL_STOPIDX
@@ -114,51 +108,9 @@ public class PackedUnsortedStopTimes {
 		sdata = setData(sdata, STOPIDX_MASK, STOPIDX_SHIFT, stopIndex);
 		sdata = setData(sdata, STOPSEQ_MASK, STOPSEQ_SHIFT,
 				stopTime.getStopSequence().getSequence());
-		this.sdata[size] = sdata;
-
 		Double shapeDistTraveled = stopTime.getShapeDistTraveled();
-		if (shapeDistTraveled != null) {
-			if (this.pdata == null) {
-				this.pdata = new float[this.tdata.length];
-				for (int i = 0; i < size; i++)
-					this.pdata[i] = Float.NaN;
-			}
-			this.pdata[size] = shapeDistTraveled.floatValue();
-		} else if (this.pdata != null) {
-			this.pdata[size] = Float.NaN;
-		}
-
 		String stopHeadsign = stopTime.getStopHeadsign();
-		if (stopHeadsign != null) {
-			if (this.hdata == null) {
-				this.hdata = new String[this.tdata.length];
-				// Default to null
-			}
-			this.hdata[size] = stopHeadsign.intern();
-		}
-
-		size++;
-	}
-
-	private void grow() {
-		// Make this 2 a parameter? Use previous trips to get more insight?
-		int len = tdata.length * 2;
-		long[] tdata2 = new long[len];
-		System.arraycopy(tdata, 0, tdata2, 0, tdata.length);
-		tdata = tdata2;
-		long[] sdata2 = new long[len];
-		System.arraycopy(sdata, 0, sdata2, 0, sdata.length);
-		sdata = sdata2;
-		if (pdata != null) {
-			float[] pdata2 = new float[len];
-			System.arraycopy(pdata, 0, pdata2, 0, pdata.length);
-			pdata = pdata2;
-		}
-		if (hdata != null) {
-			String[] hdata2 = new String[len];
-			System.arraycopy(hdata, 0, hdata2, 0, hdata.length);
-			hdata = hdata2;
-		}
+		stopData.addData(sdata, shapeDistTraveled, stopHeadsign);
 	}
 
 	public void sort(Context context) {
@@ -179,13 +131,9 @@ public class PackedUnsortedStopTimes {
 		if (baseTime < 0)
 			baseTime = 0;
 		allocate(stopTimes.size());
-		size = 0;
 		stopTimes.forEach(st -> addStopTime(context, st));
-		this.tdata = context.intern(new PackedUnsortedTimePattern(tdata))
-				.getTData();
-		this.sdata = context.intern(new PackedUnsortedStopPattern(sdata))
-				.getSData();
-		// TODO Intern shape dist and headsign, if needed
+		this.timeData = context.intern(timeData);
+		this.stopData = context.intern(stopData);
 	}
 
 	/*
@@ -202,11 +150,12 @@ public class PackedUnsortedStopTimes {
 	 */
 	public List<GtfsStopTime> getStopTimes(GtfsTrip.Id tripId,
 			Context context) {
-		List<GtfsStopTime> ret = new ArrayList<>(size);
-		for (int i = 0; i < size; i++) {
+		List<GtfsStopTime> ret = new ArrayList<>(timeData.size());
+		for (int i = 0; i < timeData.size(); i++) {
 			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
 			builder.withTripId(tripId);
-			long tdata = this.tdata[i];
+
+			long tdata = timeData.getTData(i);
 			int arr = getData(tdata, ARRTIME_MASK, ARRTIME_SHIFT);
 			if (arr != NULL_TIME)
 				builder.withArrivalTime(
@@ -224,7 +173,8 @@ public class PackedUnsortedStopTimes {
 			int timepoint = getData(tdata, TIMEPOINT_MASK, TIMEPOINT_SHIFT);
 			if (timepoint != NULL_TIMEPOINT)
 				builder.withTimepoint(GtfsTimepoint.fromValue(timepoint));
-			long sdata = this.sdata[i];
+
+			long sdata = stopData.getSData(i);
 			int stopIndex = getData(sdata, STOPIDX_MASK, STOPIDX_SHIFT);
 			if (stopIndex != NULL_STOPIDX) {
 				builder.withStopId(context.getStopIdIndex(stopIndex));
@@ -232,32 +182,17 @@ public class PackedUnsortedStopTimes {
 			int stopseq = getData(sdata, STOPSEQ_MASK, STOPSEQ_SHIFT);
 			builder.withStopSequence(
 					GtfsTripStopSequence.fromSequence(stopseq));
-			if (this.pdata != null) {
-				float shapeDist = this.pdata[i];
-				if (!Float.isNaN(shapeDist))
-					builder.withShapeDistTraveled(Double.valueOf(shapeDist));
-			}
-			if (this.hdata != null) {
-				builder.withStopHeadsign(this.hdata[i]);
-			}
+			builder.withShapeDistTraveled(stopData.getShapeDist(i));
+			builder.withStopHeadsign(stopData.getHeadsign(i));
+
 			ret.add(builder.build());
 		}
 		return ret;
 	}
 
-	public int getShapeDistDataSize() {
-		return pdata == null ? 0 : pdata.length * 4;
-	}
-
-	public int getHeadsignDataSize() {
-		return hdata == null ? 0 : hdata.length * 4;
-	}
-
 	private void allocate(int n) {
-		tdata = new long[n];
-		sdata = new long[n];
-		pdata = null;
-		hdata = null;
+		timeData = new PackedUnsortedTimePattern(n);
+		stopData = new PackedUnsortedStopPattern(n);
 	}
 
 	private final int getData(long data, long mask, int shift) {

@@ -105,22 +105,13 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 			long nTrips = stopTimes.size();
 			long nTimePatterns = context.tDataInterner.size();
 			long nStopPatterns = context.sDataInterner.size();
-			long nShapeDist = stopTimes.values().stream()
-					.filter(psp -> psp.getShapeDistDataSize() > 0).count();
-			long nHeadsigns = stopTimes.values().stream()
-					.filter(psp -> psp.getHeadsignDataSize() > 0).count();
 			// 2 ints and 4 pointers, assume JVM does not pack 32 bits ints
 			long tripBytes = nTrips * (6 * 8);
 			long tDataBytes = context.tDataInterner.all()
-					.mapToInt(psp -> psp.getTDataSize()).sum();
+					.mapToInt(psp -> psp.getDataSize()).sum();
 			long sDataBytes = context.sDataInterner.all()
-					.mapToInt(psp -> psp.getSDataSize()).sum();
-			long pDataBytes = stopTimes.values().stream()
-					.mapToInt(psp -> psp.getShapeDistDataSize()).sum();
-			long hDataBytes = stopTimes.values().stream()
-					.mapToInt(psp -> psp.getHeadsignDataSize()).sum();
-			long totalBytes = tripBytes + tDataBytes + sDataBytes + pDataBytes
-					+ hDataBytes;
+					.mapToInt(psp -> psp.getDataSize()).sum();
+			long totalBytes = tripBytes + tDataBytes + sDataBytes;
 			System.out.println(
 					"-----[ Packing unsorted stop times crude memory stats ]----");
 			System.out.println(
@@ -141,12 +132,6 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 					String.format(Locale.US, "%20s | %10d | %10d | %10.2f",
 							"Stop patterns", nStopPatterns, sDataBytes / 1024,
 							sDataBytes * 1. / nStopPatterns));
-			System.out.println(String.format(Locale.US,
-					"%20s | %10d | %10d | %10.2f", "Shape distance", nShapeDist,
-					pDataBytes / 1024, pDataBytes * 1. / nShapeDist));
-			System.out.println(String.format(Locale.US,
-					"%20s | %10d | %10d | %10.2f", "Stop headsigns", nHeadsigns,
-					hDataBytes / 1024, hDataBytes * 1. / nHeadsigns));
 			System.out.println(
 					"---------------------+------------+------------+-----------");
 		}
