@@ -131,7 +131,7 @@ public class DataRowConverter {
 
 	public GtfsLogicalDate getLogicalDate(String field, boolean mandatory) {
 		return getTypeFromString(GtfsLogicalDate.class, field, mandatory,
-				"time (HH:MM:SS)", GtfsLogicalDate::parseFromYYYYMMDD);
+				"date (YYYYMMDD)", GtfsLogicalDate::parseFromYYYYMMDD);
 	}
 
 	public GtfsLogicalTime getLogicalTime(String field, boolean mandatory) {
