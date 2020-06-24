@@ -1,7 +1,8 @@
 package com.mecatran.gtfsvtor.reporting.impl;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -26,20 +27,21 @@ import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesSubCate
 
 public class HtmlReportFormatter implements ReportFormatter {
 
+	private OutputStream outputStream;
 	private Writer writer;
 	private Html html;
 	private int maxIssuesPerCategory;
 
-	// TODO Option to output to any output stream
-	public HtmlReportFormatter(String outfileFile, int maxIssuesPerCategory)
-			throws IOException {
-		writer = new FileWriter(outfileFile);
-		html = new Html(writer);
+	public HtmlReportFormatter(OutputStream outputStream,
+			int maxIssuesPerCategory) {
+		this.outputStream = outputStream;
 		this.maxIssuesPerCategory = maxIssuesPerCategory;
 	}
 
 	@Override
 	public void format(ReviewReport report) throws IOException {
+		writer = new OutputStreamWriter(outputStream);
+		html = new Html(writer);
 		ClassifiedReviewReport clsReport = new ClassifiedReviewReport(report,
 				maxIssuesPerCategory);
 		formatHeader();
@@ -49,6 +51,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 		}
 		formatFooter();
 		writer.close();
+		outputStream.close();
 	}
 
 	private void formatCategory(ReviewReport report, IssuesCategory category)

@@ -1,5 +1,9 @@
 package com.mecatran.gtfsvtor.cmdline;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 import com.beust.jcommander.Parameter;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
 
@@ -26,8 +30,8 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	private String configFile = null;
 
 	@Parameter(names = { "-o",
-			"--output" }, description = "Validation report output file")
-	private String outputReportFile = "validation-results.html";
+			"--output" }, description = "HTML Validation report output file")
+	private String htmlReportFile = "validation-results.html";
 
 	@Parameter(names = { "-l",
 			"--limit" }, description = "Limit number of issues per category")
@@ -92,8 +96,8 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	}
 
 	@Override
-	public String getOutputReportFile() {
-		return outputReportFile;
+	public OutputStream getHtmlOutputStream() throws IOException {
+		return new FileOutputStream(htmlReportFile);
 	}
 
 	@Override

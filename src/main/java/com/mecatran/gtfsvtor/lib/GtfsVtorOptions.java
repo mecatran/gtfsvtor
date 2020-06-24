@@ -1,5 +1,8 @@
 package com.mecatran.gtfsvtor.lib;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 public interface GtfsVtorOptions {
 
 	public enum StopTimesDaoMode {
@@ -22,8 +25,8 @@ public interface GtfsVtorOptions {
 		return null;
 	}
 
-	public default String getOutputReportFile() {
-		return "validation-results.html";
+	public default OutputStream getHtmlOutputStream() throws IOException {
+		return null;
 	}
 
 	public default int getMaxIssuesPerCategoryLimit() {

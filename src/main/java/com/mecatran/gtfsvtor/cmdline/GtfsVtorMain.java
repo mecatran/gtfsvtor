@@ -52,9 +52,9 @@ public class GtfsVtorMain {
 		}
 
 		long start = System.currentTimeMillis();
-		GtfsVtor gtfsVtor = new GtfsVtor(cmdLineArgs);
-		gtfsVtor.validate();
-		ReviewReport report = gtfsVtor.getReviewReport();
+		GtfsVtor gtfsvtor = new GtfsVtor(cmdLineArgs);
+		gtfsvtor.validate();
+		ReviewReport report = gtfsvtor.getReviewReport();
 		long end = System.currentTimeMillis();
 		System.out.println(String.format(
 				"Validation done in %d ms: %d INFO, %d WARNING, %d ERROR, %d CRITICAL",
