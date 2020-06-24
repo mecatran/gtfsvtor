@@ -102,10 +102,18 @@ public class PackingStopTimesDao implements StopTimesDao,
 	public GtfsTripAndTimes getStopTimesOfTrip(Id tripId, GtfsTrip trip) {
 		closeIfNeeded();
 		PackedStopTimes pst = listPacker.get(tripId);
-		List<GtfsStopTime> stopTimes = pst == null ? Collections.emptyList()
-				: pst.getStopTimes(tripId, context);
-		return new GtfsTripAndTimes(trip, stopTimes,
-				pst == null ? null : pst.getStopPatternKey());
+		return new DeferredGtfsTripAndTimes(trip) {
+			@Override
+			public List<GtfsStopTime> getStopTimes() {
+				return pst == null ? Collections.emptyList()
+						: pst.getStopTimes(tripId, context);
+			}
+
+			@Override
+			public Object getStopPatternKey() {
+				return pst == null ? null : pst.getStopPatternKey();
+			}
+		};
 	}
 
 	public Stream<GtfsStopTime> getStopTimes() {

@@ -1,32 +1,16 @@
 package com.mecatran.gtfsvtor.model;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  * A simple holder for a trip, it's associated list of stop times, and a pattern
  * key.
  */
-public class GtfsTripAndTimes {
+public interface GtfsTripAndTimes {
 
-	private GtfsTrip trip;
-	private List<GtfsStopTime> stopTimes;
-	private Object stopPatternKey;
+	public GtfsTrip getTrip();
 
-	public GtfsTripAndTimes(GtfsTrip trip, List<GtfsStopTime> stopTimes,
-			Object stopPatternKey) {
-		this.trip = trip;
-		this.stopTimes = Collections.unmodifiableList(stopTimes);
-		this.stopPatternKey = stopPatternKey;
-	}
-
-	public GtfsTrip getTrip() {
-		return trip;
-	}
-
-	public List<GtfsStopTime> getStopTimes() {
-		return stopTimes;
-	}
+	public List<GtfsStopTime> getStopTimes();
 
 	/**
 	 * @return An opaque object that is guaranteed to be distinct (in regard to
@@ -37,7 +21,5 @@ public class GtfsTripAndTimes {
 	 *         stop pattern + shape dist, if the stop sequence or headsigns. are
 	 *         different
 	 */
-	public Object getStopPatternKey() {
-		return stopPatternKey;
-	}
+	public Object getStopPatternKey();
 }

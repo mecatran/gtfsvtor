@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.dao.stoptimes;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -92,10 +93,19 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 	public GtfsTripAndTimes getStopTimesOfTrip(Id tripId, GtfsTrip trip) {
 		closeIfNeeded();
 		PackedUnsortedStopTimes pst = stopTimes.get(tripId);
-		return new GtfsTripAndTimes(trip,
-				pst == null ? Collections.emptyList()
-						: pst.getStopTimes(tripId, context),
-				pst == null ? null : pst.getStopPatternKey());
+		return new DeferredGtfsTripAndTimes(trip) {
+
+			@Override
+			public List<GtfsStopTime> getStopTimes() {
+				return pst == null ? Collections.emptyList()
+						: pst.getStopTimes(tripId, context);
+			}
+
+			@Override
+			public Object getStopPatternKey() {
+				return pst == null ? null : pst.getStopPatternKey();
+			}
+		};
 	}
 
 	private void closeIfNeeded() {
