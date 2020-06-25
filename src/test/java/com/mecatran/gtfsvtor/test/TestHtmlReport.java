@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import org.junit.Test;
@@ -44,7 +45,9 @@ public class TestHtmlReport {
 
 	private void testHtmlReport(String gtfs, String refReportFile)
 			throws IOException {
+		/* Force tests to be consistent across platforms */
 		SystemEnvironment.setFakedNow(fakedNow);
+		Locale.setDefault(Locale.US);
 		TestScenario testScenario = new TestScenario(gtfs);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		testScenario.htmlOutputStream = out;
