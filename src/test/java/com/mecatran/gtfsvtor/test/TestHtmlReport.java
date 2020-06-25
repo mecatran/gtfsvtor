@@ -1,15 +1,21 @@
 package com.mecatran.gtfsvtor.test;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import org.junit.Test;
 
+import com.github.difflib.DiffUtils;
+import com.github.difflib.algorithm.DiffException;
+import com.github.difflib.patch.AbstractDelta;
+import com.github.difflib.patch.Patch;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mecatran.gtfsvtor.test.TestUtils.TestScenario;
@@ -22,17 +28,18 @@ public class TestHtmlReport {
 
 	// Set to true will reset the references data
 	// If you use this, please make sure the delta are expected before
+	// Never commit with value true
 	private boolean reset = false;
 
 	@Test
 	public void testVeryBad() throws IOException {
 		// This fails, why?
-		// testHtmlReport("verybad", "reports/verybad.html");
+		testHtmlReport("verybad", "verybad.html");
 	}
 
 	@Test
 	public void testGood() throws IOException {
-		testHtmlReport("good_feed", "reports/good_feed.html");
+		testHtmlReport("good_feed", "good_feed.html");
 	}
 
 	private void testHtmlReport(String gtfs, String refReportFile)
@@ -46,37 +53,60 @@ public class TestHtmlReport {
 		compareDataToReference(html, refReportFile);
 	}
 
-	private void compareDataToReference(String data,
-			String referenceResourceName) throws IOException {
+	private void compareDataToReference(String genData, String refResourceName)
+			throws IOException {
 		if (reset) {
-			System.out.println(
-					"Regenerating non-regression test reference for resource: "
-							+ referenceResourceName);
-			saveResourceAsString(referenceResourceName, data);
+			System.out.println(String.format(
+					"Regenerating non-regression test reference for resource (%s)",
+					refResourceName));
+			saveResourceAsString(refResourceName, genData);
 		} else {
-			String refData = loadResourceAsString(referenceResourceName);
-			if (!Objects.equals(refData, data)) {
-				String resourceNameV2 = referenceResourceName + ".v2";
-				saveResourceAsString(resourceNameV2, data);
-				assertFalse(referenceResourceName
-						+ ": data differs. Inspect the difference with "
-						+ resourceNameV2
-						+ " file and regenerate, or fix your code accordingly.",
-						true);
+			String refData = loadResourceAsString(refResourceName);
+			if (!Objects.equals(refData, genData)) {
+				String genResourceName = refResourceName + ".new";
+				String message = String.format(
+						"Output differs between reference data (%s) and generated data (%s).\n"
+								+ "Inspect the difference, and either regenerate the reference if this is expected, "
+								+ "or fix your code if not.",
+						refResourceName, genResourceName);
+				System.err.println(message);
+				System.err.println(
+						"Below a list of delta between the two versions:");
+				saveResourceAsString(genResourceName, genData);
+				try {
+					List<String> refLines = Arrays.asList(refData.split("\\R"));
+					List<String> genlines = Arrays.asList(genData.split("\\R"));
+					Patch<String> patch = DiffUtils.diff(refLines, genlines);
+					for (AbstractDelta<String> delta : patch.getDeltas()) {
+						// Simulate kind of unified diff
+						System.err.println(String.format("@@ -%d,%d  +%d,%d @@",
+								delta.getSource().getPosition(),
+								delta.getSource().getLines().size(),
+								delta.getTarget().getPosition(),
+								delta.getTarget().getLines().size()));
+						delta.getSource().getLines()
+								.forEach(l -> System.err.println("- " + l));
+						delta.getTarget().getLines()
+								.forEach(l -> System.err.println("+ " + l));
+					}
+				} catch (DiffException e) {
+					throw new RuntimeException(e);
+				}
+				fail(message);
 			}
 		}
 	}
 
 	private String loadResourceAsString(String resourceName)
 			throws IOException {
-		File file = new File("src/test/resources/data/" + resourceName);
+		File file = new File("src/test/resources/reports/" + resourceName);
 		String text = Files.asCharSource(file, Charsets.UTF_8).read();
 		return text;
 	}
 
 	private void saveResourceAsString(String resourceName, String data)
 			throws IOException {
-		File file = new File("src/test/resources/data/" + resourceName);
+		File file = new File("src/test/resources/reports/" + resourceName);
 		Files.asCharSink(file, Charsets.UTF_8).write(data);
 	}
 }

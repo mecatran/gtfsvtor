@@ -44,6 +44,7 @@ public class TestUtils {
 		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 		public ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
 		public OutputStream htmlOutputStream = null;
+		public String configFile = "src/test/resources/configs/def.properties";
 
 		public TestScenario() {
 		}
@@ -90,6 +91,11 @@ public class TestUtils {
 		@Override
 		public ShapePointsDaoMode getShapePointsDaoMode() {
 			return shapePointsDaoMode;
+		}
+
+		@Override
+		public String getConfigFile() {
+			return configFile;
 		}
 
 		@Override
