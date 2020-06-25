@@ -32,6 +32,7 @@ To use it:
 - Unzip the file somewhere
 - Run gtfsvtor:
 
+
     ./gtfsvtor/bin/gtfsvtor --help
     ./gtfsvtor/bin/gtfsvtor [options] <GTFS file>
 
