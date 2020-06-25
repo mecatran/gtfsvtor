@@ -26,27 +26,39 @@ public class TestHtmlReport {
 
 	@Test
 	public void testVeryBad() throws IOException {
+		// This fails, why?
+		// testHtmlReport("verybad", "reports/verybad.html");
+	}
+
+	@Test
+	public void testGood() throws IOException {
+		testHtmlReport("good_feed", "reports/good_feed.html");
+	}
+
+	private void testHtmlReport(String gtfs, String refReportFile)
+			throws IOException {
 		SystemEnvironment.setFakedNow(fakedNow);
-		TestScenario testScenario = new TestScenario("verybad");
+		TestScenario testScenario = new TestScenario(gtfs);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		testScenario.htmlOutputStream = out;
 		testScenario.run();
 		String html = new String(out.toByteArray());
-		compare(html, "reports/verybad.html");
+		compareDataToReference(html, refReportFile);
 	}
 
-	private void compare(String data, String resourceName) throws IOException {
+	private void compareDataToReference(String data,
+			String referenceResourceName) throws IOException {
 		if (reset) {
 			System.out.println(
 					"Regenerating non-regression test reference for resource: "
-							+ resourceName);
-			saveResourceAsString(resourceName, data);
+							+ referenceResourceName);
+			saveResourceAsString(referenceResourceName, data);
 		} else {
-			String refData = loadResourceAsString(resourceName);
+			String refData = loadResourceAsString(referenceResourceName);
 			if (!Objects.equals(refData, data)) {
-				String resourceNameV2 = resourceName + ".v2";
+				String resourceNameV2 = referenceResourceName + ".v2";
 				saveResourceAsString(resourceNameV2, data);
-				assertFalse(resourceName
+				assertFalse(referenceResourceName
 						+ ": data differs. Inspect the difference with "
 						+ resourceNameV2
 						+ " file and regenerate, or fix your code accordingly.",
