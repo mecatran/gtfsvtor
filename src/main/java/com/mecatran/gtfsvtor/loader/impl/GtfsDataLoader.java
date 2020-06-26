@@ -115,11 +115,11 @@ public class GtfsDataLoader implements DataLoader {
 		for (String unknownColumn : table.getUnreadColumnHeaders()) {
 			reportSink.report(new UnrecognizedColumnInfo(
 					new DataObjectSourceRef(table.getTableName(), 1L),
-					unknownColumn));
+					unknownColumn), table.getSourceInfo());
 			if (unknownColumn.chars().anyMatch(c -> c == 0xFFFD || c == 0)) {
 				reportSink.report(new InvalidEncodingError(
 						new DataObjectSourceRef(table.getTableName(), 1L),
-						unknownColumn, unknownColumn));
+						unknownColumn, unknownColumn), table.getSourceInfo());
 			}
 		}
 		try {
