@@ -3,13 +3,14 @@ package com.mecatran.gtfsvtor.reporting.impl;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.loader.TableSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
-import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.reporting.SourceInfoFactory;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
 
@@ -49,21 +50,22 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 		return sb.toString();
 	}
 
-	/*
-	 * TODO We source info loading post-poned, we cannot have a full formatter
-	 * context at the time an issue is reported. In order to fully print an
-	 * issue with source info, delegate the console printing of issue at a later
-	 * stage.
-	 */
-	public static String format(ReviewReport report, ReportIssue issue) {
+	public static String format(Optional<SourceInfoFactory> sourceInfoFactory,
+			ReportIssue issue) {
 		PlainTextIssueFormatter fmt = new PlainTextIssueFormatter();
 		issue.format(fmt);
 		StringBuffer sb = new StringBuffer();
 		sb.append("\n");
-		if (report != null) {
+		/*
+		 * As we have some source info loading post-poned (dao validators), we
+		 * cannot use the code below. If we have it, print it, otherwise only
+		 * print the reference. TODO Remove the code? It is currently not
+		 * usable.
+		 */
+		if (sourceInfoFactory.isPresent()) {
 			for (SourceRefWithFields siwf : issue.getSourceRefs()) {
-				DataObjectSourceInfo dosi = report
-						.getSourceInfo(siwf.getSourceRef());
+				DataObjectSourceInfo dosi = sourceInfoFactory.get()
+						.getSourceInfo(siwf.getSourceRef()).get();
 				TableSourceInfo tsi = dosi.getTable();
 				int nCols = tsi.getHeaderColumns().size();
 				List<String> fields = dosi.getFields();
@@ -117,7 +119,7 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 				}
 			}
 		} else {
-			issue.getSourceRefs().stream()
+			issue.getSourceRefs()
 					.forEach(refwf -> sb.append(refwf.toString()).append("\n"));
 		}
 		String severity = issue.getSeverity().toString();

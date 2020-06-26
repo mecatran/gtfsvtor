@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
@@ -35,17 +36,13 @@ public class SourceInfoDataReloader implements SourceInfoFactory {
 	}
 
 	@Override
-	public DataObjectSourceInfo getSourceInfo(DataObjectSourceRef ref) {
+	public Optional<DataObjectSourceInfo> getSourceInfo(
+			DataObjectSourceRef ref) {
 		if (!sourceRefsToLoad.get(ref.getTableName()).isEmpty()) {
 			reloadSourceInfos(ref.getTableName());
 		}
 		DataObjectSourceInfo info = sourceInfos.get(ref);
-		if (info == null) {
-			// TODO Accept this and return dummy source info
-			throw new IllegalArgumentException(
-					"Source info not found for " + ref);
-		}
-		return info;
+		return Optional.ofNullable(info);
 	}
 
 	@Override

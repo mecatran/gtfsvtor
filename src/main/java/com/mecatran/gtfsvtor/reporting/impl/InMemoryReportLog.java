@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -77,8 +78,13 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 						.forEach(ref -> sourceInfoFactory
 								.registerSourceRef(ref));
 				if (printIssues) {
-					System.err.println(
-							PlainTextIssueFormatter.format(null, issue));
+					/*
+					 * Do *not* provide the sourceInfoFactory to the formatter.
+					 * With lazy-loading, this will work, but will be highly
+					 * inefficient.
+					 */
+					System.err.println(PlainTextIssueFormatter
+							.format(Optional.empty(), issue));
 				}
 			}
 		}
@@ -132,6 +138,9 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 
 	@Override
 	public DataObjectSourceInfo getSourceInfo(DataObjectSourceRef ref) {
-		return sourceInfoFactory.getSourceInfo(ref);
+		// TODO Accept this and return dummy source info?
+		return sourceInfoFactory.getSourceInfo(ref)
+				.orElseThrow(() -> new IllegalArgumentException(
+						"Source info not found for " + ref));
 	}
 }
