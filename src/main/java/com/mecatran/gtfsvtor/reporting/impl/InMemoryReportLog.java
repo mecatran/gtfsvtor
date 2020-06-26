@@ -3,26 +3,23 @@ package com.mecatran.gtfsvtor.reporting.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-import com.mecatran.gtfsvtor.loader.impl.SourceInfoDataReloader.PostLoadable;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.reporting.SourceInfoFactory;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
-public class InMemoryReportLog
-		implements ReportSink, ReviewReport, PostLoadable {
+public class InMemoryReportLog implements ReportSink, ReviewReport {
 
 	private List<ReportIssue> reportItems = new ArrayList<>();
 	private ListMultimap<Class<? extends ReportIssue>, ReportIssue> reportIssuesByType = ArrayListMultimap
@@ -41,10 +38,15 @@ public class InMemoryReportLog
 	 */
 	private int maxIssuesPerCategory = Integer.MAX_VALUE;
 	private boolean printIssues = false;
-	private Map<DataObjectSourceRef, DataObjectSourceInfo> loadedSourceInfos = new HashMap<>();
-	private Set<DataObjectSourceRef> unloadedSourceRefs = new HashSet<>();
+	private SourceInfoFactory sourceInfoFactory;
 
 	public InMemoryReportLog() {
+	}
+
+	public InMemoryReportLog withSourceInfoFactory(
+			SourceInfoFactory sourceInfoFactory) {
+		this.sourceInfoFactory = sourceInfoFactory;
+		return this;
 	}
 
 	public InMemoryReportLog withPrintIssues(boolean printIssues) {
@@ -69,11 +71,11 @@ public class InMemoryReportLog
 				reportItems.add(issue);
 				reportIssuesByType.put(issue.getClass(), issue);
 				reportIssuesBySeverity.put(issue.getSeverity(), issue);
-				/* Add each new unknown source info ref as unloaded */
+				/* Register each source ref to load */
 				issue.getSourceRefs().stream()
 						.map(refwf -> refwf.getSourceRef())
-						.filter(ref -> !loadedSourceInfos.containsKey(ref))
-						.forEach(unloadedSourceRefs::add);
+						.forEach(ref -> sourceInfoFactory
+								.registerSourceRef(ref));
 				if (printIssues) {
 					System.err.println(
 							PlainTextIssueFormatter.format(null, issue));
@@ -104,10 +106,7 @@ public class InMemoryReportLog
 				throw new IllegalArgumentException("Ref #" + i + " " + ref
 						+ " does not match info " + info + "!");
 			}
-			loadedSourceInfos.put(ref, info);
-			// This line should not be necessary,
-			// but just in case...
-			unloadedSourceRefs.remove(ref);
+			sourceInfoFactory.registerSourceInfo(ref, info);
 		}
 		this.report(issue);
 	}
@@ -133,24 +132,6 @@ public class InMemoryReportLog
 
 	@Override
 	public DataObjectSourceInfo getSourceInfo(DataObjectSourceRef ref) {
-		// TODO In case the source info is not found, return a dummy info
-		DataObjectSourceInfo info = loadedSourceInfos.get(ref);
-		if (info == null) {
-			throw new IllegalArgumentException(
-					"Source info not found for " + ref);
-		}
-		return info;
-	}
-
-	@Override
-	public Stream<DataObjectSourceRef> getSourceRefsToPostLoad() {
-		return unloadedSourceRefs.stream();
-	}
-
-	@Override
-	public void addSourceInfo(DataObjectSourceRef ref,
-			DataObjectSourceInfo info) {
-		loadedSourceInfos.put(ref, info);
-		unloadedSourceRefs.remove(ref);
+		return sourceInfoFactory.getSourceInfo(ref);
 	}
 }

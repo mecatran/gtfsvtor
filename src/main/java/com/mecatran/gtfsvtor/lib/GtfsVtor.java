@@ -72,6 +72,13 @@ public class GtfsVtor {
 		if (inputStreamSource != null) {
 			NamedTabularDataSource dataSource = new CsvDataSource(
 					inputStreamSource);
+
+			// Register dataSource as source info factory
+			imReport.withSourceInfoFactory(
+					new SourceInfoDataReloader(dataSource)
+							.withVerbose(options.isVerbose()));
+
+			// Create the DAO
 			InMemoryDao imDao = new InMemoryDao(options.getStopTimesDaoMode(),
 					options.getMaxStopTimeInterleaving(),
 					options.getShapePointsDaoMode(),
@@ -80,7 +87,7 @@ public class GtfsVtor {
 			this.woDao = imDao;
 			this.roDao = imDao;
 
-			// Load data
+			// Load data, stream-validate along the way
 			DefaultStreamingValidator defStreamingValidator = new DefaultStreamingValidator(
 					config);
 			DefaultGtfsTableSchema tableSchema = new DefaultGtfsTableSchema();
@@ -110,12 +117,6 @@ public class GtfsVtor {
 			DefaultTripTimesValidator tripTimesValidator = new DefaultTripTimesValidator(
 					config).withVerbose(options.isVerbose());
 			tripTimesValidator.scanValidate(context);
-
-			// Reload source info
-			// TODO Enable/disable if needed
-			SourceInfoDataReloader sourceInfoReloader = new SourceInfoDataReloader(
-					dataSource).withVerbose(options.isVerbose());
-			sourceInfoReloader.loadSourceInfos(imReport);
 		}
 
 		// Generate report
