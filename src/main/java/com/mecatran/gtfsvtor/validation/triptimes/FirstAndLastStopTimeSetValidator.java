@@ -9,7 +9,6 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.FirstOrLastStopTimeMissingError;
-import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DaoValidator.Context;
 import com.mecatran.gtfsvtor.validation.TripTimesValidator;
 

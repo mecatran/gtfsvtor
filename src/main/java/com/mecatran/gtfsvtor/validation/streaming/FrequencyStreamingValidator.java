@@ -1,7 +1,5 @@
 package com.mecatran.gtfsvtor.validation.streaming;
 
-import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkNonNull;
-
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsTrip;

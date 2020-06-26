@@ -2,7 +2,6 @@ package com.mecatran.gtfsvtor.reporting.issues;
 
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
-import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;

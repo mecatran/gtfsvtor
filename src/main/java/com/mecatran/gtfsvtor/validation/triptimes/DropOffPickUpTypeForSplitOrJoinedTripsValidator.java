@@ -92,7 +92,6 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 	}
 
 	private void processTripsOfRoute(Context context) {
-		IndexedReadOnlyDao dao = context.getDao();
 		ReportSink reportSink = context.getReportSink();
 
 		// validate that of split trains, at least one has dop-off none set

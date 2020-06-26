@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
-
 public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "routes.txt";

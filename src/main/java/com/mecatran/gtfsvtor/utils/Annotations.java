@@ -3,8 +3,6 @@ package com.mecatran.gtfsvtor.utils;
 import java.lang.annotation.Annotation;
 import java.util.function.Function;
 
-import com.mecatran.gtfsvtor.loader.schema.TableDescriptorPolicy;
-
 public class Annotations {
 
 	public static <TA extends Annotation, TR, TO> TR getAnnotation(

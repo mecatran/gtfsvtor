@@ -8,7 +8,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.dao.packing.ListPacker;
-import com.mecatran.gtfsvtor.dao.packing.ListPacker.PackerUnpacker;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 
