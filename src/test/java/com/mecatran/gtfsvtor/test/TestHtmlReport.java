@@ -34,7 +34,6 @@ public class TestHtmlReport {
 
 	@Test
 	public void testVeryBad() throws IOException {
-		// This fails, why?
 		testHtmlReport("verybad", "verybad.html");
 	}
 
