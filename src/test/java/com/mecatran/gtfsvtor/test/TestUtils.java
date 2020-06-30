@@ -27,9 +27,11 @@ public class TestUtils {
 
 		public long issuesCountOfSeverities(ReportIssueSeverity... severities) {
 			return Arrays.asList(severities).stream().distinct()
-					.mapToInt(s -> report.issuesCountOfSeverity(s)).sum();
+					.mapToInt(s -> report.issuesCountOfSeverity(s).totalCount())
+					.sum();
 		}
 
+		// TODO Rename this method to "issuesOfType"
 		public <T extends ReportIssue> List<T> issuesOfCategory(
 				Class<T> reportClass) {
 			return report.getReportIssues(reportClass)

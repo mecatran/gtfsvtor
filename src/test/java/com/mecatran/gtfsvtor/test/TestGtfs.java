@@ -1361,10 +1361,9 @@ public class TestGtfs {
 	@Test
 	public void testAachener74431429() {
 		TestBundle tb = loadAndValidate("aachener_74431429");
+		assertEquals(0, tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR));
 		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
-		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
+				tb.issuesCountOfSeverities(ReportIssueSeverity.CRITICAL));
 		List<TooFastTravelIssue> tftis = tb
 				.issuesOfCategory(TooFastTravelIssue.class);
 		assertEquals(0, tftis.size());
@@ -1378,12 +1377,11 @@ public class TestGtfs {
 	public void testAachener73069683() {
 		TestBundle tb = loadAndValidate("aachener_73069683");
 		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.WARNING));
+				tb.issuesCountOfSeverities(ReportIssueSeverity.WARNING));
 		// One error: stop too far from projected shape.
-		assertEquals(1,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.ERROR));
+		assertEquals(1, tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR));
 		assertEquals(0,
-				tb.report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL));
+				tb.issuesCountOfSeverities(ReportIssueSeverity.CRITICAL));
 
 		List<StopTooFarFromShapeIssue> stfs = tb
 				.issuesOfCategory(StopTooFarFromShapeIssue.class);

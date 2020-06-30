@@ -3,116 +3,35 @@ package com.mecatran.gtfsvtor.reporting.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
+import com.mecatran.gtfsvtor.reporting.ReportIssueCategory;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.reporting.ReviewReport.IssueCount;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.utils.MiscUtils;
+import com.mecatran.gtfsvtor.utils.Pair;
 
 /**
- * TODO Configure this with a IssueCategorizer, which would sort issues per
- * categories (that is, compute a category for each issue).
  */
 public class ClassifiedReviewReport {
 
-	public static class CategoryCounter implements Comparable<CategoryCounter> {
-
-		private String categoryName;
-		private ReportIssueSeverity severity;
-		private int maxCount;
-		private int totalCount;
-		private int displayedCount;
-
-		private CategoryCounter() {
-		}
-
-		private CategoryCounter(String categoryName,
-				ReportIssueSeverity severity, int maxCount) {
-			this.categoryName = categoryName;
-			this.severity = severity;
-			this.maxCount = maxCount;
-		}
-
-		private static CategoryCounter merge(CategoryCounter cc1,
-				CategoryCounter cc2) {
-			if (!Objects.equals(cc1.categoryName, cc2.categoryName)
-					|| !Objects.equals(cc1.severity, cc2.severity))
-				throw new IllegalArgumentException(
-						"Cannot merge CategoryCounter with different names or severity");
-			CategoryCounter cc = new CategoryCounter();
-			cc.severity = cc1.severity;
-			cc.categoryName = cc1.categoryName;
-			cc.maxCount = cc1.maxCount + cc2.maxCount;
-			cc.totalCount = cc1.totalCount + cc2.totalCount;
-			cc.displayedCount = cc1.displayedCount + cc2.displayedCount;
-			return cc;
-		}
-
-		private boolean inc() {
-			this.totalCount++;
-			this.displayedCount++;
-			if (this.displayedCount > this.maxCount) {
-				this.displayedCount = this.maxCount;
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		private Object getCategoryKey() {
-			return getCategoryKey(severity, categoryName);
-		}
-
-		private static Object getCategoryKey(ReportIssueSeverity severity,
-				String categoryName) {
-			return Arrays.asList(severity, categoryName);
-		}
-
-		public String getCategoryName() {
-			return categoryName;
-		}
-
-		public ReportIssueSeverity getSeverity() {
-			return severity;
-		}
-
-		public int getTotalCount() {
-			return totalCount;
-		}
-
-		public int getDisplayedCount() {
-			return displayedCount;
-		}
-
-		public boolean isTruncated() {
-			return displayedCount != totalCount;
-		}
-
-		@Override
-		public int compareTo(CategoryCounter o) {
-			// Order by severity, then category name
-			String a = severity.ordinal() + ":" + categoryName;
-			String b = o.severity.ordinal() + ":" + o.categoryName;
-			return a.compareTo(b);
-		}
-	}
-
-	public static class IssuesSubCategory
-			implements Comparable<IssuesSubCategory> {
+	public static class IssuesSubGroup implements Comparable<IssuesSubGroup> {
 
 		private List<DataObjectSourceRef> sourceRefs;
 		private List<ReportIssue> issues = new ArrayList<>();
 		private Map<String, ReportIssueSeverity> fieldSeverities = new HashMap<>();
 
-		private IssuesSubCategory(List<DataObjectSourceRef> sourceRefs) {
+		private IssuesSubGroup(List<DataObjectSourceRef> sourceRefs) {
 			this.sourceRefs = sourceRefs;
 		}
 
@@ -158,132 +77,121 @@ public class ClassifiedReviewReport {
 		}
 
 		@Override
-		public int compareTo(IssuesSubCategory o) {
+		public int compareTo(IssuesSubGroup o) {
 			return MiscUtils.listCompare(this.sourceRefs, o.sourceRefs);
 		}
 	}
 
-	public static class IssuesCategory implements Comparable<IssuesCategory> {
+	public static class IssuesGroup implements Comparable<IssuesGroup> {
 
-		private String categoryName;
-		private int maxIssues;
-		private Map<List<DataObjectSourceRef>, IssuesSubCategory> subCatMap = new HashMap<>();
-		private Map<Object, CategoryCounter> categoryCounters = new HashMap<>();
-		private Map<ReportIssueSeverity, CategoryCounter> severityCounters = new HashMap<>();
-		private List<IssuesSubCategory> subCategories;
+		private String groupName;
+		private boolean displayCategoryCounter;
+		private Map<List<DataObjectSourceRef>, IssuesSubGroup> subGroupMap = new HashMap<>();
+		private Map<ReportIssueSeverity, AtomicInteger> severityCounter = new HashMap<>();
+		private Map<ReportIssueCategory, AtomicInteger> categoryCounter = new HashMap<>();
+		private List<IssuesSubGroup> subGroups;
 
-		public IssuesCategory(String categoryName, int maxIssues) {
-			this.categoryName = categoryName;
-			this.maxIssues = maxIssues;
+		public IssuesGroup(String groupName, boolean displayCategoryCounters) {
+			this.groupName = groupName;
+			this.displayCategoryCounter = displayCategoryCounters;
 		}
 
-		public String getCategoryName() {
-			return categoryName;
+		public String getGroupName() {
+			return groupName;
 		}
 
 		public void addIssue(ReportIssue issue) {
 			ReportIssueSeverity severity = issue.getSeverity();
-			severityCounters.computeIfAbsent(severity,
-					key -> new CategoryCounter(severity.toString(), severity,
-							Integer.MAX_VALUE))
-					.inc();
-			String categoryName = issue.getCategoryName();
-			Object key = CategoryCounter.getCategoryKey(severity, categoryName);
-			boolean overflow = categoryCounters.computeIfAbsent(key,
-					k -> new CategoryCounter(categoryName, severity, maxIssues))
-					.inc();
-			if (overflow)
-				return;
-			subCatMap.computeIfAbsent(
+			ReportIssueCategory category = issue.getCategory();
+			severityCounter
+					.computeIfAbsent(severity, key -> new AtomicInteger())
+					.addAndGet(1);
+			categoryCounter
+					.computeIfAbsent(category, cat -> new AtomicInteger())
+					.addAndGet(1);
+			subGroupMap.computeIfAbsent(
 					issue.getSourceRefs().stream()
 							.map(SourceRefWithFields::getSourceRef)
 							.collect(Collectors.toList()),
-					k -> new IssuesSubCategory(k)).addIssue(issue);
+					k -> new IssuesSubGroup(k)).addIssue(issue);
 		}
 
 		private void sortAndIndex() {
-			subCategories = subCatMap.values().stream()
+			subGroups = subGroupMap.values().stream()
 					.collect(Collectors.toList());
-			subCategories.forEach(IssuesSubCategory::sortAndIndex);
-			Collections.sort(subCategories);
+			subGroups.forEach(IssuesSubGroup::sortAndIndex);
+			Collections.sort(subGroups);
 		}
 
-		public List<IssuesSubCategory> getSubCategories() {
-			return subCategories;
+		public List<IssuesSubGroup> getSubGroups() {
+			return subGroups;
 		}
 
-		public List<CategoryCounter> getSeverityCounters() {
-			return severityCounters.values().stream().sorted()
-					.collect(Collectors.toList());
-		}
-
-		public List<CategoryCounter> getCategoryCounters() {
-			return categoryCounters.values().stream().sorted()
+		public List<Pair<ReportIssueSeverity, Integer>> getSeverityCounters() {
+			return severityCounter.entrySet().stream()
+					.map(kv -> new Pair<>(kv.getKey(), kv.getValue().get()))
+					.sorted(Comparator.comparing(e -> e.getFirst()))
 					.collect(Collectors.toList());
 		}
 
-		public List<CategoryCounter> getCategoryCountersToDisplay() {
-			return categoryCounters.values().stream()
-					.filter(cc -> !cc.getCategoryName().equals(categoryName))
-					.sorted().collect(Collectors.toList());
+		public boolean isDisplayCategoryCounters() {
+			return displayCategoryCounter;
+		}
+
+		public List<Pair<ReportIssueCategory, Integer>> getCategoryCounters() {
+			return categoryCounter.entrySet().stream()
+					.map(kv -> new Pair<>(kv.getKey(), kv.getValue().get()))
+					.sorted(Comparator.comparing(e -> e.getFirst()))
+					.collect(Collectors.toList());
 		}
 
 		@Override
-		public int compareTo(IssuesCategory o) {
-			return categoryName.compareTo(o.getCategoryName());
+		public int compareTo(IssuesGroup o) {
+			return groupName.compareTo(o.getGroupName());
 		}
 	}
 
-	// List of category of issues
-	private List<IssuesCategory> categories;
+	private ReviewReport report;
+	private List<IssuesGroup> groups;
 
-	public ClassifiedReviewReport(ReviewReport report,
-			int maxIssuePerCategory) {
-		Map<String, IssuesCategory> catMap = new HashMap<>();
+	public ClassifiedReviewReport(ReviewReport report) {
+		this.report = report;
+		Map<String, IssuesGroup> catMap = new HashMap<>();
 		report.getReportIssues().forEach(issue -> {
-			String categoryName = getCategoryName(issue);
-			catMap.computeIfAbsent(categoryName,
-					k -> new IssuesCategory(categoryName, maxIssuePerCategory))
+			Pair<String, Boolean> groupInfo = getGroupInfo(issue);
+			catMap.computeIfAbsent(groupInfo.getFirst(),
+					k -> new IssuesGroup(groupInfo.getFirst(),
+							groupInfo.getSecond()))
 					.addIssue(issue);
 		});
-		categories = catMap.values().stream().collect(Collectors.toList());
-		categories.forEach(IssuesCategory::sortAndIndex);
-		Collections.sort(categories);
+		groups = catMap.values().stream().collect(Collectors.toList());
+		groups.forEach(IssuesGroup::sortAndIndex);
+		Collections.sort(groups);
 	}
 
-	private String getCategoryName(ReportIssue issue) {
+	private Pair<String, Boolean> getGroupInfo(ReportIssue issue) {
 		List<SourceRefWithFields> sourceInfos = issue.getSourceRefs();
 		if (sourceInfos.isEmpty()) {
-			// Issues w/o source info: use the issue class as category
-			return issue.getCategoryName();
+			// Issues w/o source info: use the issue category as group name
+			return new Pair<>(issue.getCategoryName(), false);
 		} else {
-			// Issues w source info: use the FIRST table name as category
-			return sourceInfos.get(0).getSourceRef().getTableName();
+			// Issues w source info: use the FIRST table name as group name
+			return new Pair<>(sourceInfos.get(0).getSourceRef().getTableName(),
+					true);
 		}
 	}
 
-	public List<IssuesCategory> getCategories() {
-		return categories;
+	public Stream<IssuesGroup> getGroups() {
+		return groups.stream();
 	}
 
-	public List<CategoryCounter> getSeverityCounters() {
-		return getCounters(cat -> cat.getSeverityCounters());
+	public Stream<Pair<ReportIssueSeverity, IssueCount>> getSeverityCounters() {
+		return Arrays.stream(ReportIssueSeverity.values())
+				.map(sev -> new Pair<>(sev, report.issuesCountOfSeverity(sev)));
 	}
 
-	public List<CategoryCounter> getCategoryCounters() {
-		return getCounters(cat -> cat.getCategoryCounters());
-	}
-
-	private List<CategoryCounter> getCounters(
-			Function<? super IssuesCategory, List<CategoryCounter>> func) {
-		// Java 8 streams are cool, but is this very readable?
-		return categories.stream()
-				// Merge lists
-				.flatMap(cat -> func.apply(cat).stream())
-				// Collect and merge by category key
-				.collect(Collectors.toMap(c -> c.getCategoryKey(), c -> c,
-						(c1, c2) -> CategoryCounter.merge(c1, c2)))
-				// Sort
-				.values().stream().sorted().collect(Collectors.toList());
+	public Stream<Pair<ReportIssueCategory, IssueCount>> getCategoryCounters() {
+		return report.getCategories().sorted()
+				.map(cat -> new Pair<>(cat, report.issuesCountOfCategory(cat)));
 	}
 }

@@ -49,6 +49,10 @@ public interface ReportIssue {
 				this.getClass().getSimpleName());
 	}
 
+	public default ReportIssueCategory getCategory() {
+		return ReportIssueCategory.create(getSeverity(), getCategoryName());
+	}
+
 	public static Comparator<ReportIssue> makeComparator() {
 		return new Comparator<ReportIssue>() {
 			@Override

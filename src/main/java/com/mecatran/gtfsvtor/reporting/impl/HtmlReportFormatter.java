@@ -19,11 +19,13 @@ import com.googlecode.jatl.Html;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
+import com.mecatran.gtfsvtor.reporting.ReportIssueCategory;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
-import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.CategoryCounter;
-import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesCategory;
-import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesSubCategory;
+import com.mecatran.gtfsvtor.reporting.ReviewReport.IssueCount;
+import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesGroup;
+import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesSubGroup;
+import com.mecatran.gtfsvtor.utils.Pair;
 import com.mecatran.gtfsvtor.utils.SystemEnvironment;
 
 public class HtmlReportFormatter implements ReportFormatter {
@@ -31,72 +33,64 @@ public class HtmlReportFormatter implements ReportFormatter {
 	private OutputStream outputStream;
 	private Writer writer;
 	private Html html;
-	private int maxIssuesPerCategory;
 
-	public HtmlReportFormatter(OutputStream outputStream,
-			int maxIssuesPerCategory) {
+	public HtmlReportFormatter(OutputStream outputStream) {
 		this.outputStream = outputStream;
-		this.maxIssuesPerCategory = maxIssuesPerCategory;
 	}
 
 	@Override
 	public void format(ReviewReport report) throws IOException {
 		writer = new OutputStreamWriter(outputStream);
 		html = new Html(writer);
-		ClassifiedReviewReport clsReport = new ClassifiedReviewReport(report,
-				maxIssuesPerCategory);
+		ClassifiedReviewReport clsReport = new ClassifiedReviewReport(report);
 		formatHeader();
-		formatSummary(clsReport);
-		for (IssuesCategory category : clsReport.getCategories()) {
-			formatCategory(report, category);
+		formatSummary(report);
+		for (IssuesGroup group : clsReport.getGroups()
+				.collect(Collectors.toList())) {
+			formatGroup(report, group);
 		}
 		formatFooter();
 		writer.close();
 		outputStream.close();
 	}
 
-	private void formatCategory(ReviewReport report, IssuesCategory category)
+	private void formatGroup(ReviewReport report, IssuesGroup group)
 			throws IOException {
 		html.h2();
-		html.text(category.getCategoryName());
-		for (CategoryCounter cc : category.getSeverityCounters()) {
+		html.text(group.getGroupName());
+		for (Pair<ReportIssueSeverity, Integer> count : group
+				.getSeverityCounters()) {
 			html.span().classAttr("smaller");
-			html.text(" - " + cc.getTotalCount());
-			html.span().classAttr("badge " + cc.getSeverity().toString())
-					.text(cc.getCategoryName()).end();
+			html.text(" - " + count.getSecond());
+			html.span().classAttr("badge " + count.getFirst().toString())
+					.text(count.getFirst().toString()).end();
 			html.end(); // span
 		}
 		html.end(); // h2;
 
-		List<CategoryCounter> ccList = category.getCategoryCountersToDisplay();
-		if (!ccList.isEmpty()) {
+		if (group.isDisplayCategoryCounters()) {
 			html.ul();
-			for (CategoryCounter cc : ccList) {
+			for (Pair<ReportIssueCategory, Integer> count : group
+					.getCategoryCounters()) {
+				ReportIssueCategory category = count.getFirst();
 				html.li();
-				html.text("" + cc.getTotalCount());
+				html.text("" + count.getSecond());
 				html.span()
-						.classAttr(
-								"smaller badge " + cc.getSeverity().toString())
-						.text(cc.getSeverity().toString()).end();
-				html.text(cc.getCategoryName());
-				if (cc.isTruncated()) {
-					html.span().classAttr("comments")
-							.text(" (of which only the first "
-									+ cc.getDisplayedCount()
-									+ " are displayed)")
-							.end();
-				}
+						.classAttr("smaller badge "
+								+ category.getSeverity().toString())
+						.text(category.getSeverity().toString()).end();
+				html.text(category.getCategoryName());
 				html.end(); // li
 			}
 			html.end(); // ul
 		}
-		for (IssuesSubCategory subCategory : category.getSubCategories()) {
+		for (IssuesSubGroup subCategory : group.getSubGroups()) {
 			formatSubCategory(report, subCategory);
 		}
 	}
 
 	private void formatSubCategory(ReviewReport report,
-			IssuesSubCategory subCategory) throws IOException {
+			IssuesSubGroup subCategory) throws IOException {
 		html.div().classAttr("subcategory");
 		if (!subCategory.getSourceRefs().isEmpty()) {
 			formatSourceInfos(report, subCategory);
@@ -106,7 +100,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 	}
 
 	private void formatSourceInfos(ReviewReport report,
-			IssuesSubCategory subCategory) throws IOException {
+			IssuesSubGroup subCategory) throws IOException {
 		String lastTableName = null;
 		boolean inTable = false;
 		for (int sourceRefIndex = 0; sourceRefIndex < subCategory
@@ -209,32 +203,36 @@ public class HtmlReportFormatter implements ReportFormatter {
 		html.end(); // style
 	}
 
-	private void formatSummary(ClassifiedReviewReport clsReport)
-			throws IOException {
+	private void formatSummary(ReviewReport report) throws IOException {
 		html.h1().classAttr("logo image").text("GTFS validation report");
-		for (CategoryCounter cc : clsReport.getSeverityCounters()) {
-			html.span().classAttr("xsmaller");
-			html.text(" - " + cc.getTotalCount() + " ");
-			html.span().classAttr("badge " + cc.getSeverity().toString())
-					.text(cc.getCategoryName()).end();
-			html.end();
+		for (ReportIssueSeverity severity : ReportIssueSeverity.values()) {
+			int totalCount = report.issuesCountOfSeverity(severity)
+					.totalCount();
+			if (totalCount > 0) {
+				html.span().classAttr("xsmaller");
+				html.text(" - " + totalCount + " ");
+				html.span().classAttr("badge " + severity.toString())
+						.text(severity.name()).end();
+				html.end();
+			}
 		}
 		html.end(); // h1
 
 		html.ul();
-		for (CategoryCounter cc : clsReport.getCategoryCounters()) {
+		report.getCategories().forEach(category -> {
+			ReportIssueSeverity severity = category.getSeverity();
+			IssueCount count = report.issuesCountOfCategory(category);
 			html.li();
-			html.text(cc.getTotalCount() + " ");
-			html.span()
-					.classAttr("smaller badge " + cc.getSeverity().toString())
-					.text(cc.getSeverity().toString()).end();
-			html.text(cc.getCategoryName());
-			if (cc.isTruncated()) {
+			html.text(count.totalCount() + " ");
+			html.span().classAttr("smaller badge " + severity.toString())
+					.text(severity.toString()).end();
+			html.text(category.getCategoryName());
+			if (count.reportedCount() != count.totalCount()) {
 				html.span().classAttr("comments").text(" (of which "
-						+ cc.getDisplayedCount() + " are displayed)").end();
+						+ count.reportedCount() + " are displayed)").end();
 			}
 			html.end(); // li
-		}
+		});
 		html.end(); // ul
 	}
 

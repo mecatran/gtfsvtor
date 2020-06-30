@@ -62,6 +62,8 @@ public class GtfsVtor {
 
 		// Create report log
 		InMemoryReportLog imReport = new InMemoryReportLog()
+				.withMaxIssuesPerCategory(
+						options.getMaxIssuesPerCategoryLimit())
 				.withPrintIssues(options.isPrintIssues());
 		this.reportSink = imReport;
 		this.reviewReport = imReport;
@@ -132,7 +134,7 @@ public class GtfsVtor {
 		OutputStream htmlOutputStream = options.getHtmlOutputStream();
 		if (htmlOutputStream != null) {
 			ReportFormatter htmlFormatter = new HtmlReportFormatter(
-					htmlOutputStream, options.getMaxIssuesPerCategoryLimit());
+					htmlOutputStream);
 			formatters.add(htmlFormatter);
 		}
 

@@ -59,9 +59,13 @@ public class GtfsVtorMain {
 		System.out.println(String.format(
 				"Validation done in %d ms: %d INFO, %d WARNING, %d ERROR, %d CRITICAL",
 				end - start,
-				report.issuesCountOfSeverity(ReportIssueSeverity.INFO),
-				report.issuesCountOfSeverity(ReportIssueSeverity.WARNING),
-				report.issuesCountOfSeverity(ReportIssueSeverity.ERROR),
-				report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL)));
+				report.issuesCountOfSeverity(ReportIssueSeverity.INFO)
+						.totalCount(),
+				report.issuesCountOfSeverity(ReportIssueSeverity.WARNING)
+						.totalCount(),
+				report.issuesCountOfSeverity(ReportIssueSeverity.ERROR)
+						.totalCount(),
+				report.issuesCountOfSeverity(ReportIssueSeverity.CRITICAL)
+						.totalCount()));
 	}
 }
