@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.reporting.impl;
+package com.mecatran.gtfsvtor.reporting.html;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,8 +23,8 @@ import com.mecatran.gtfsvtor.reporting.ReportIssueCategory;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.ReviewReport.IssueCount;
-import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesGroup;
-import com.mecatran.gtfsvtor.reporting.impl.ClassifiedReviewReport.IssuesSubGroup;
+import com.mecatran.gtfsvtor.reporting.html.ClassifiedReviewReport.IssuesGroup;
+import com.mecatran.gtfsvtor.reporting.html.ClassifiedReviewReport.IssuesSubGroup;
 import com.mecatran.gtfsvtor.utils.Pair;
 import com.mecatran.gtfsvtor.utils.SystemEnvironment;
 

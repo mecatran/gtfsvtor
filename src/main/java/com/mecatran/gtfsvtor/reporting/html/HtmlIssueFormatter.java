@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.reporting.impl;
+package com.mecatran.gtfsvtor.reporting.html;
 
 import java.text.MessageFormat;
 

@@ -19,7 +19,7 @@ import com.mecatran.gtfsvtor.loader.schema.DefaultGtfsTableSchema;
 import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
-import com.mecatran.gtfsvtor.reporting.impl.HtmlReportFormatter;
+import com.mecatran.gtfsvtor.reporting.html.HtmlReportFormatter;
 import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
