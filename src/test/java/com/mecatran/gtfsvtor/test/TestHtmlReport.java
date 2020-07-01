@@ -33,25 +33,31 @@ public class TestHtmlReport {
 
 	@Test
 	public void testVeryBadHtml() throws IOException {
-		testHtmlReport("verybad", "verybad.html");
+		testHtmlReport("verybad.html", "verybad");
 	}
 
 	@Test
 	public void testVeryBadJson() throws IOException {
-		testJsonReport("verybad", "verybad.json");
+		testJsonReport("verybad.json", "verybad");
 	}
 
 	@Test
 	public void testGoodHtml() throws IOException {
-		testHtmlReport("good_feed", "good_feed.html");
+		testHtmlReport("good_feed.html", "good_feed");
 	}
 
 	@Test
 	public void testGoodJson() throws IOException {
-		testJsonReport("good_feed", "good_feed.json");
+		testJsonReport("good_feed.json", "good_feed");
 	}
 
-	private void testHtmlReport(String gtfs, String refReportFile)
+	@Test
+	public void testJsonAppend() throws IOException {
+		testJsonReportAppend("good_feed_append.json", "good_feed",
+				"does_not_exists", "verybad");
+	}
+
+	private void testHtmlReport(String refReportFile, String gtfs)
 			throws IOException {
 		/* Force tests to be consistent across platforms */
 		SystemEnvironment.setFakedNow(fakedNow);
@@ -63,7 +69,7 @@ public class TestHtmlReport {
 		compareDataToReference(html, refReportFile);
 	}
 
-	private void testJsonReport(String gtfs, String refReportFile)
+	private void testJsonReport(String refReportFile, String gtfs)
 			throws IOException {
 		/* Force tests to be consistent across platforms */
 		SystemEnvironment.setFakedNow(fakedNow);
@@ -72,6 +78,29 @@ public class TestHtmlReport {
 		testScenario.jsonDataIO = new TestDataIO();
 		testScenario.run();
 		String json = new String(testScenario.jsonDataIO.getData());
+		compareDataToReference(json, refReportFile);
+	}
+
+	private void testJsonReportAppend(String refReportFile, String... gtfsList)
+			throws IOException {
+
+		Locale.setDefault(Locale.US);
+		long timestamp = fakedNow.getTime();
+
+		TestScenario previousScenario = null;
+		for (String gtfs : gtfsList) {
+			/* Force tests to be consistent across platforms */
+			SystemEnvironment.setFakedNow(new Date(timestamp));
+			timestamp += 7 * 24 * 60 * 60 * 1000L;
+			TestScenario testScenario = new TestScenario(gtfs);
+			testScenario.jsonDataIO = new TestDataIO(
+					previousScenario == null ? null
+							: previousScenario.jsonDataIO.getData());
+			testScenario.run();
+			previousScenario = testScenario;
+		}
+
+		String json = new String(previousScenario.jsonDataIO.getData());
 		compareDataToReference(json, refReportFile);
 	}
 
