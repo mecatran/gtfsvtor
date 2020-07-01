@@ -141,7 +141,8 @@ public class GtfsVtor {
 		// JSON format
 		NamedDataIO jsonDataIO = options.getJsonDataIO();
 		if (jsonDataIO != null) {
-			ReportFormatter jsonFormatter = new JsonReportFormatter(jsonDataIO);
+			ReportFormatter jsonFormatter = new JsonReportFormatter(jsonDataIO)
+					.withInputFileName(options.getGtfsFile());
 			formatters.add(jsonFormatter);
 		}
 

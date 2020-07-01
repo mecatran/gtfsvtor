@@ -27,16 +27,23 @@ public class JsonReport {
 		public List<JsonCategoryCount> categories = new ArrayList<>();
 	}
 
+	public static class JsonValidatorInfo {
+		public String name;
+		public String version;
+		public String buildDate;
+		public String buildRev;
+		public String copyrights;
+	}
+
+	public static class JsonInputDataInfo {
+		public String filename;
+	}
+
 	public static class JsonValidationRun {
 
 		public Date timestamp;
-		public String validator;
-		public String validatorVersion;
-		public String validatorBuildDate;
-		public String validatorBuildRev;
-		public String copyrights;
-		public String inputDataName;
-
+		public JsonInputDataInfo input;
+		public JsonValidatorInfo validator;
 		public JsonSummary summary;
 	}
 

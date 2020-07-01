@@ -17,15 +17,23 @@ import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.ReviewReport.IssueCount;
 import com.mecatran.gtfsvtor.reporting.json.model.JsonReport;
+import com.mecatran.gtfsvtor.reporting.json.model.JsonReport.JsonInputDataInfo;
 import com.mecatran.gtfsvtor.reporting.json.model.JsonReport.JsonValidationRun;
+import com.mecatran.gtfsvtor.reporting.json.model.JsonReport.JsonValidatorInfo;
 import com.mecatran.gtfsvtor.utils.SystemEnvironment;
 
 public class JsonReportFormatter implements ReportFormatter {
 
 	private NamedDataIO dataIO;
+	private String inputFilename;
 
 	public JsonReportFormatter(NamedDataIO dataIO) {
 		this.dataIO = dataIO;
+	}
+
+	public JsonReportFormatter withInputFileName(String filename) {
+		this.inputFilename = filename;
+		return this;
 	}
 
 	@Override
@@ -63,16 +71,20 @@ public class JsonReportFormatter implements ReportFormatter {
 	}
 
 	private JsonValidationRun convert(ReviewReport report) {
-		ManifestReader mfr = new ManifestReader(GtfsVtorMain.class);
+
 		JsonValidationRun run = new JsonValidationRun();
 		run.timestamp = SystemEnvironment.now();
-		run.validator = "GTFSVTOR";
-		run.validatorVersion = mfr.getApplicationVersion();
-		run.validatorBuildDate = mfr.getApplicationBuildDate();
-		run.validatorBuildRev = mfr.getApplicationBuildRevision();
-		run.copyrights = "Copyright (c) Mecatran";
-		// TODO Provide input data name
-		run.inputDataName = "?";
+
+		run.validator = new JsonValidatorInfo();
+		ManifestReader mfr = new ManifestReader(GtfsVtorMain.class);
+		run.validator.name = "GTFSVTOR";
+		run.validator.version = mfr.getApplicationVersion();
+		run.validator.buildDate = mfr.getApplicationBuildDate();
+		run.validator.buildRev = mfr.getApplicationBuildRevision();
+		run.validator.copyrights = "Copyright (c) Mecatran";
+
+		run.input = new JsonInputDataInfo();
+		run.input.filename = inputFilename;
 
 		run.summary = new JsonReport.JsonSummary();
 		run.summary.severities = Arrays.stream(ReportIssueSeverity.values())

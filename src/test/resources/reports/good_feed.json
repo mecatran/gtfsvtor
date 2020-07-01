@@ -2,12 +2,16 @@
   "dataVersion" : "1.0",
   "reports" : [ {
     "timestamp" : 1577836800000,
-    "validator" : "GTFSVTOR",
-    "validatorVersion" : "dev",
-    "validatorBuildDate" : "now",
-    "validatorBuildRev" : "dev",
-    "copyrights" : "Copyright (c) Mecatran",
-    "inputDataName" : "?",
+    "input" : {
+      "filename" : "src/test/resources/data/good_feed"
+    },
+    "validator" : {
+      "name" : "GTFSVTOR",
+      "version" : "dev",
+      "buildDate" : "now",
+      "buildRev" : "dev",
+      "copyrights" : "Copyright (c) Mecatran"
+    },
     "summary" : {
       "severities" : [ {
         "severity" : "INFO",
