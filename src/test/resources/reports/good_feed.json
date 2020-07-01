@@ -1,0 +1,37 @@
+{
+  "dataVersion" : "1.0",
+  "reports" : [ {
+    "timestamp" : 1577836800000,
+    "validator" : "GTFSVTOR",
+    "validatorVersion" : "dev",
+    "validatorBuildDate" : "now",
+    "validatorBuildRev" : "dev",
+    "copyrights" : "Copyright (c) Mecatran",
+    "inputDataName" : "?",
+    "summary" : {
+      "severities" : [ {
+        "severity" : "INFO",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "totalCount" : 0,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "totalCount" : 0,
+        "reportedCount" : 0
+      }, {
+        "severity" : "CRITICAL",
+        "totalCount" : 0,
+        "reportedCount" : 0
+      } ],
+      "categories" : [ {
+        "severity" : "INFO",
+        "categoryName" : "Statistics",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      } ]
+    }
+  } ]
+}

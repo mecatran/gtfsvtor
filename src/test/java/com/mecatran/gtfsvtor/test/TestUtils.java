@@ -46,6 +46,7 @@ public class TestUtils {
 		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 		public ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
 		public OutputStream htmlOutputStream = null;
+		public OutputStream jsonOutputStream = null;
 		public String configFile = "src/test/resources/configs/def.properties";
 
 		public TestScenario() {
@@ -103,6 +104,11 @@ public class TestUtils {
 		@Override
 		public OutputStream getHtmlOutputStream() throws IOException {
 			return htmlOutputStream;
+		}
+
+		@Override
+		public OutputStream getJsonOutputStream() throws IOException {
+			return jsonOutputStream;
 		}
 
 		@Override

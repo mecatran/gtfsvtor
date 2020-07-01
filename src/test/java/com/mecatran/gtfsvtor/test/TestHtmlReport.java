@@ -33,13 +33,23 @@ public class TestHtmlReport {
 	private boolean reset = false;
 
 	@Test
-	public void testVeryBad() throws IOException {
+	public void testVeryBadHtml() throws IOException {
 		testHtmlReport("verybad", "verybad.html");
 	}
 
 	@Test
-	public void testGood() throws IOException {
+	public void testVeryBadJson() throws IOException {
+		testJsonReport("verybad", "verybad.json");
+	}
+
+	@Test
+	public void testGoodHtml() throws IOException {
 		testHtmlReport("good_feed", "good_feed.html");
+	}
+
+	@Test
+	public void testGoodJson() throws IOException {
+		testJsonReport("good_feed", "good_feed.json");
 	}
 
 	private void testHtmlReport(String gtfs, String refReportFile)
@@ -53,6 +63,19 @@ public class TestHtmlReport {
 		testScenario.run();
 		String html = new String(out.toByteArray());
 		compareDataToReference(html, refReportFile);
+	}
+
+	private void testJsonReport(String gtfs, String refReportFile)
+			throws IOException {
+		/* Force tests to be consistent across platforms */
+		SystemEnvironment.setFakedNow(fakedNow);
+		Locale.setDefault(Locale.US);
+		TestScenario testScenario = new TestScenario(gtfs);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		testScenario.jsonOutputStream = out;
+		testScenario.run();
+		String json = new String(out.toByteArray());
+		compareDataToReference(json, refReportFile);
 	}
 
 	private void compareDataToReference(String genData, String refResourceName)
