@@ -240,6 +240,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 		html.hr();
 		Date now = SystemEnvironment.now();
 		Calendar cal = GregorianCalendar.getInstance();
+		cal.setTime(now);
 		int year = cal.get(Calendar.YEAR);
 		html.p().classAttr("comments").text(String.format(
 				"Validation done at %s by GTFSVTOR - Copyright (c) %d Mecatran",
