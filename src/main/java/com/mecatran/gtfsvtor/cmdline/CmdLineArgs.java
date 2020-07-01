@@ -28,7 +28,7 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	private String configFile = null;
 
 	@Parameter(names = { "-o",
-			"--output" }, description = "HTML validation report output file")
+			"--htmlOutput" }, description = "HTML validation report output file")
 	private String htmlReportFile = "validation-results.html";
 
 	@Parameter(names = {
@@ -36,7 +36,7 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	private String jsonReportFile = null;
 
 	@Parameter(names = {
-			"--append" }, description = "Append JSON validation run to existing report, if any")
+			"--jsonAppend" }, description = "Append JSON validation run to existing report, if any")
 	private boolean appendMode = false;
 
 	@Parameter(names = { "-l",
