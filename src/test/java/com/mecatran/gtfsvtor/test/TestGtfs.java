@@ -1494,19 +1494,40 @@ public class TestGtfs {
 
 	@Test
 	public void testLoadingAll2() {
-		// Just check if it does not throw an exception
-		// File base = new File("xdata");
-		// for (String file : base.list()) {
-		// if (file.endsWith("transilien-sncf_207.gtfs.zip")) {
-		// System.out.println("===================================");
-		// System.out.println("Loading and testing: " + file);
-		// TestScenario scenario = new TestScenario();
-		// scenario.gtfsFileOrDirectory = "xdata/" + file;
-		// scenario.htmlOutputFile = "xdata/"
-		// + file.substring(0, file.length() - 9) + ".html";
-		// scenario.run();
-		// System.out.println("-----------------------------------");
-		// }
-		// }
+		/*
+		 * This test will load all "*.gtfs.zip" file in the xdata/ subdirectory,
+		 * and run a standard validation if the corresponding *.html file does
+		 * not exists, to check if an exception is not thrown. With the current
+		 * committed code this will not do anything; if you want to bulk-test
+		 * extra data (see TransitFeedsRepositoryDownloader class) this
+		 * unit-test may be useful: just place some GTFS in xdata and run.
+		 */
+		File base = new File("xdata");
+		if (!base.isDirectory()) {
+			System.out.println(
+					"Directory " + base + " does not exists, skipping test.");
+			return;
+		}
+		int nSkip = 0, nRun = 0;
+		for (String file : base.list()) {
+			if (!file.endsWith(".gtfs.zip"))
+				continue;
+			String outHtml = "xdata/" + file.substring(0, file.length() - 9)
+					+ ".html";
+			if (new File(outHtml).exists()) {
+				nSkip++;
+				continue;
+			}
+			System.out.println("===================================");
+			System.out.println("Loading and testing: " + file);
+			TestScenario scenario = new TestScenario();
+			scenario.gtfsFileOrDirectory = "xdata/" + file;
+			scenario.htmlOutputFile = outHtml;
+			scenario.run();
+			System.out.println("-----------------------------------");
+			nRun++;
+		}
+		System.out.println(
+				String.format("Validated %d GTFS, skipped %d.", nRun, nSkip));
 	}
 }
