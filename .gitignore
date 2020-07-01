@@ -1,6 +1,7 @@
 build
 bin
 validation-results.html
+validation-results.json
 .classpath
 .gradle
 .project
