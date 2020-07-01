@@ -13,9 +13,11 @@ import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.NamedDataIO;
 public class FileDataIO implements NamedDataIO {
 
 	private String filename;
+	private boolean allowRead = false;
 
-	public FileDataIO(String filename) {
+	public FileDataIO(String filename, boolean allowRead) {
 		this.filename = filename;
+		this.allowRead = allowRead;
 	}
 
 	@Override
@@ -25,6 +27,8 @@ public class FileDataIO implements NamedDataIO {
 
 	@Override
 	public Optional<InputStream> getInputStream() throws IOException {
+		if (!allowRead)
+			return Optional.empty();
 		File file = new File(filename);
 		if (!file.canRead())
 			return Optional.empty();

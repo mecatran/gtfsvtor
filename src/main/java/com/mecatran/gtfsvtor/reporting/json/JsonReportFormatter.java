@@ -1,8 +1,10 @@
 package com.mecatran.gtfsvtor.reporting.json;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,8 +32,28 @@ public class JsonReportFormatter implements ReportFormatter {
 	public void format(ReviewReport report) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		// TODO Implement append mode: read previous values
-		JsonReport jreport = new JsonReport();
+		JsonReport jreport;
+		Optional<InputStream> inopt = dataIO.getInputStream();
+		if (inopt.isPresent()) {
+			try {
+				/*
+				 * TODO Please note that we reload everything into memory. Is
+				 * there a way to just append json data w/o reading the whole
+				 * thing? We do not care about the previous data.
+				 */
+				System.out.println("Reading previous JSON report from "
+						+ dataIO.getName());
+				// Read previous values in append mode
+				jreport = mapper.readValue(inopt.get(), JsonReport.class);
+			} catch (IOException e) {
+				System.err.println("Cannot read previous report "
+						+ dataIO.getName() + ": " + e);
+				// Ignore, fallback
+				jreport = new JsonReport();
+			}
+		} else {
+			jreport = new JsonReport();
+		}
 		JsonValidationRun run = convert(report);
 		jreport.reports.add(run);
 		OutputStream out = dataIO.getOutputStream();

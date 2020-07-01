@@ -32,8 +32,12 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	private String htmlReportFile = "validation-results.html";
 
 	@Parameter(names = {
-			"--jsonOutput" }, description = "JSON validation report output file")
+			"--jsonOutput" }, description = "JSON validation report (summary only for now) output file")
 	private String jsonReportFile = null;
+
+	@Parameter(names = {
+			"--append" }, description = "Append JSON validation run to existing report, if any")
+	private boolean appendMode = false;
 
 	@Parameter(names = { "-l",
 			"--limit" }, description = "Limit number of issues per category")
@@ -99,12 +103,12 @@ public class CmdLineArgs implements GtfsVtorOptions {
 
 	@Override
 	public NamedDataIO getHtmlDataIO() throws IOException {
-		return new FileDataIO(htmlReportFile);
+		return new FileDataIO(htmlReportFile, false);
 	}
 
 	@Override
 	public NamedDataIO getJsonDataIO() throws IOException {
-		return new FileDataIO(jsonReportFile);
+		return new FileDataIO(jsonReportFile, appendMode);
 	}
 
 	@Override
