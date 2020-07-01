@@ -21,6 +21,7 @@ import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
 import com.mecatran.gtfsvtor.reporting.html.HtmlReportFormatter;
 import com.mecatran.gtfsvtor.reporting.impl.InMemoryReportLog;
+import com.mecatran.gtfsvtor.reporting.json.JsonReportFormatter;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultDaoValidator;
 import com.mecatran.gtfsvtor.validation.DefaultStreamingValidator;
@@ -136,6 +137,14 @@ public class GtfsVtor {
 			ReportFormatter htmlFormatter = new HtmlReportFormatter(
 					htmlOutputStream);
 			formatters.add(htmlFormatter);
+		}
+
+		// JSON format
+		OutputStream jsonOutputStream = options.getJsonOutputStream();
+		if (jsonOutputStream != null) {
+			ReportFormatter jsonFormatter = new JsonReportFormatter(
+					jsonOutputStream);
+			formatters.add(jsonFormatter);
 		}
 
 		return formatters;

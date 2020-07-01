@@ -29,6 +29,10 @@ public interface GtfsVtorOptions {
 		return null;
 	}
 
+	public default OutputStream getJsonOutputStream() throws IOException {
+		return null;
+	}
+
 	public default int getMaxIssuesPerCategoryLimit() {
 		return 100;
 	}
