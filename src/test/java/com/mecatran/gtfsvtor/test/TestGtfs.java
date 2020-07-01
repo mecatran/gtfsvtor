@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1406,6 +1407,12 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testTransilienTinyTrip() {
+		// Just check that a tiny trip does not throws a NPE
+		TestBundle tb = loadAndValidate("transilien_tinytrip");
+	}
+
+	@Test
 	public void testSingleAgency() {
 		TestBundle tb = loadAndValidate("single_agency");
 		List<MissingMandatoryValueError> mmvs = tb
@@ -1490,10 +1497,16 @@ public class TestGtfs {
 		// Just check if it does not throw an exception
 		// File base = new File("xdata");
 		// for (String file : base.list()) {
+		// if (file.endsWith("transilien-sncf_207.gtfs.zip")) {
 		// System.out.println("===================================");
 		// System.out.println("Loading and testing: " + file);
-		// TestBundle tb = loadAndValidate(file, "xdata/");
+		// TestScenario scenario = new TestScenario();
+		// scenario.gtfsFileOrDirectory = "xdata/" + file;
+		// scenario.htmlOutputFile = "xdata/"
+		// + file.substring(0, file.length() - 9) + ".html";
+		// scenario.run();
 		// System.out.println("-----------------------------------");
+		// }
 		// }
 	}
 }

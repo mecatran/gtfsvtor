@@ -1,0 +1,3 @@
+stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,location_type,parent_station,wheelchair_boarding,platform_code
+StopArea:DUA8738642,,MAISONS LAFFITTE,,48.94566600,2.14429100,,,1,,0,
+StopPoint:DUA8738642,,MAISONS LAFFITTE,,48.94591300,2.14464800,,,0,StopArea:DUA8738642,0,

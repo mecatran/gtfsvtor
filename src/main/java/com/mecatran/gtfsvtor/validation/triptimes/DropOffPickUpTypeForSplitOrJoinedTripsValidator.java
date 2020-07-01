@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -80,10 +81,12 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 		// match so we collect all split/joined trips by a key representing
 		// their first/last to stops and service id.
 		List<GtfsStopTime> stopTimes = tripAndTimes.getStopTimes();
-		Object tripStartKey = computeTripKey(trip, stopTimes);
-		tripsPerStartKey.put(tripStartKey, trip.getId());
-		Object tripEndKey = computeTripKey(trip, Lists.reverse(stopTimes));
-		tripsPerEndKey.put(tripEndKey, trip.getId());
+		Optional<Object> tripStartKey = computeTripKey(trip, stopTimes);
+		if (tripStartKey.isPresent())
+			tripsPerStartKey.put(tripStartKey.get(), trip.getId());
+		Optional<Object> tripEndKey = computeTripKey(trip, Lists.reverse(stopTimes));
+		if (tripEndKey.isPresent())
+			tripsPerEndKey.put(tripEndKey.get(), trip.getId());
 	}
 
 	@Override
@@ -216,9 +219,11 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 	 * @param stopTimes stopTimes list to compute trip key from
 	 * @return trip key
 	 */
-	private Object computeTripKey(GtfsTrip trip, List<GtfsStopTime> stopTimes) {
+	private Optional<Object> computeTripKey(GtfsTrip trip, List<GtfsStopTime> stopTimes) {
 		// Store references only to save space
 		// No need to store route, as we process trips route by route
+		if (stopTimes.size() < 2)
+			return Optional.empty();
 		List<Object> retval = new ArrayList<>();
 		for (GtfsStopTime stopTime : stopTimes.subList(0, 2)) {
 			/*
@@ -231,6 +236,6 @@ public class DropOffPickUpTypeForSplitOrJoinedTripsValidator
 			retval.add(stopTime.getStopId());
 		}
 		retval.add(trip.getServiceId());
-		return retval;
+		return Optional.of(retval);
 	}
 }

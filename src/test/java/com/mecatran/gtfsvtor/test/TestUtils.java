@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.mecatran.gtfsvtor.cmdline.FileDataIO;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.lib.GtfsVtor;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
@@ -44,6 +45,7 @@ public class TestUtils {
 		public int maxShapePointsInterleaving = 3;
 		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 		public ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
+		public String htmlOutputFile = null;
 		public TestDataIO htmlDataIO = null;
 		public TestDataIO jsonDataIO = null;
 		public String configFile = "src/test/resources/configs/def.properties";
@@ -102,6 +104,8 @@ public class TestUtils {
 
 		@Override
 		public NamedDataIO getHtmlDataIO() throws IOException {
+			if (htmlOutputFile != null)
+				return new FileDataIO(htmlOutputFile, false);
 			return htmlDataIO;
 		}
 

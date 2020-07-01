@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order
+DUA800854042,DUA854,L,Gare St-Lazare - Versailles R. Droite / Cergy Le Haut / Noisy le-Roi / St-Germain-en-Laye GC,,2,,7577C0,FFFFFF,
