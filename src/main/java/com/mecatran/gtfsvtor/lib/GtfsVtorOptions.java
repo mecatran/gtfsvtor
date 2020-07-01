@@ -32,16 +32,16 @@ public interface GtfsVtorOptions {
 		return false;
 	}
 
-	public default String getConfigFile() {
-		return null;
+	public default Optional<String> getConfigFile() {
+		return Optional.empty();
 	}
 
-	public default NamedDataIO getHtmlDataIO() throws IOException {
-		return null;
+	public default Optional<NamedDataIO> getHtmlDataIO() throws IOException {
+		return Optional.empty();
 	}
 
-	public default NamedDataIO getJsonDataIO() throws IOException {
-		return null;
+	public default Optional<NamedDataIO> getJsonDataIO() throws IOException {
+		return Optional.empty();
 	}
 
 	public default int getMaxIssuesPerCategoryLimit() {

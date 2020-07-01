@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.mecatran.gtfsvtor.dao.AppendableDao;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
@@ -47,8 +48,8 @@ public class GtfsVtor {
 
 		// Load configuration
 		DefaultValidatorConfig config = new DefaultValidatorConfig();
-		if (options.getConfigFile() != null) {
-			File propFile = new File(options.getConfigFile());
+		if (options.getConfigFile().isPresent()) {
+			File propFile = new File(options.getConfigFile().get());
 			if (propFile.exists() && propFile.canRead()) {
 				if (options.isVerbose()) {
 					System.out.println(
@@ -132,17 +133,18 @@ public class GtfsVtor {
 		List<ReportFormatter> formatters = new ArrayList<>();
 
 		// HTML format
-		NamedDataIO htmlDataIO = options.getHtmlDataIO();
-		if (htmlDataIO != null) {
-			ReportFormatter htmlFormatter = new HtmlReportFormatter(htmlDataIO);
+		Optional<NamedDataIO> htmlDataIO = options.getHtmlDataIO();
+		if (htmlDataIO.isPresent()) {
+			ReportFormatter htmlFormatter = new HtmlReportFormatter(
+					htmlDataIO.get());
 			formatters.add(htmlFormatter);
 		}
 
 		// JSON format
-		NamedDataIO jsonDataIO = options.getJsonDataIO();
-		if (jsonDataIO != null) {
-			ReportFormatter jsonFormatter = new JsonReportFormatter(jsonDataIO)
-					.withInputFileName(options.getGtfsFile());
+		Optional<NamedDataIO> jsonDataIO = options.getJsonDataIO();
+		if (jsonDataIO.isPresent()) {
+			ReportFormatter jsonFormatter = new JsonReportFormatter(
+					jsonDataIO.get()).withInputFileName(options.getGtfsFile());
 			formatters.add(jsonFormatter);
 		}
 

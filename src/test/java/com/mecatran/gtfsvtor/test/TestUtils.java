@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.test;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.mecatran.gtfsvtor.cmdline.FileDataIO;
@@ -98,20 +99,21 @@ public class TestUtils {
 		}
 
 		@Override
-		public String getConfigFile() {
-			return configFile;
+		public Optional<String> getConfigFile() {
+			return Optional.ofNullable(configFile);
 		}
 
 		@Override
-		public NamedDataIO getHtmlDataIO() throws IOException {
+		public Optional<NamedDataIO> getHtmlDataIO() throws IOException {
 			if (htmlOutputFile != null)
-				return new FileDataIO(htmlOutputFile, false);
-			return htmlDataIO;
+				return Optional.of(new FileDataIO(htmlOutputFile, false));
+			else
+				return Optional.ofNullable(htmlDataIO);
 		}
 
 		@Override
-		public NamedDataIO getJsonDataIO() throws IOException {
-			return jsonDataIO;
+		public Optional<NamedDataIO> getJsonDataIO() throws IOException {
+			return Optional.ofNullable(jsonDataIO);
 		}
 
 		@Override

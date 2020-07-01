@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.cmdline;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import com.beust.jcommander.Parameter;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
@@ -27,8 +28,9 @@ public class CmdLineArgs implements GtfsVtorOptions {
 			"--config" }, description = "Configuration file to load (properties file)")
 	private String configFile = null;
 
-	@Parameter(names = { "-o",
-			"--htmlOutput" }, description = "HTML validation report output file")
+	@Parameter(names = { "-o", "--htmlOutput" }, description = ""
+			+ "HTML validation report output file. "
+			+ "Use --htmlOutput '' to disable HTML output generation.")
 	private String htmlReportFile = "validation-results.html";
 
 	@Parameter(names = {
@@ -97,18 +99,22 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	}
 
 	@Override
-	public String getConfigFile() {
-		return configFile;
+	public Optional<String> getConfigFile() {
+		return Optional.ofNullable(configFile);
 	}
 
 	@Override
-	public NamedDataIO getHtmlDataIO() throws IOException {
-		return new FileDataIO(htmlReportFile, false);
+	public Optional<NamedDataIO> getHtmlDataIO() throws IOException {
+		return htmlReportFile == null || htmlReportFile.isEmpty()
+				? Optional.empty()
+				: Optional.of(new FileDataIO(htmlReportFile, false));
 	}
 
 	@Override
-	public NamedDataIO getJsonDataIO() throws IOException {
-		return new FileDataIO(jsonReportFile, appendMode);
+	public Optional<NamedDataIO> getJsonDataIO() throws IOException {
+		return jsonReportFile == null || jsonReportFile.isEmpty()
+				? Optional.empty()
+				: Optional.of(new FileDataIO(jsonReportFile, appendMode));
 	}
 
 	@Override
