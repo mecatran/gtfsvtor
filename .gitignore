@@ -5,4 +5,4 @@ validation-results.html
 .gradle
 .project
 .settings
-src/test/resources/xdata
+xdata

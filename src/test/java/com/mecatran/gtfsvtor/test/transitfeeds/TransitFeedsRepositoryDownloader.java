@@ -22,9 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mecatran.gtfsvtor.test.transitfeeds.TransitFeedsResponse.TransitFeed;
 
 /**
- * List and download locally in src/test/resources/xdata all GTFS from
- * transitfeeds.com (aka OpenMobilityData), for further bulk testing on diverse
- * GTFS data.
+ * List and download locally in xdata folder all GTFS from transitfeeds.com (aka
+ * OpenMobilityData), for further bulk testing on diverse GTFS data.
  */
 public class TransitFeedsRepositoryDownloader {
 
@@ -47,8 +46,8 @@ public class TransitFeedsRepositoryDownloader {
 		List<TransitFeedsInfo> feedInfos = listFeedInfos();
 		System.out.println("Downloaded " + feedInfos.size() + " feed infos:");
 		for (TransitFeedsInfo feedInfo : feedInfos) {
-			Path out = Paths.get("src/test/resources/xdata/"
-					+ feedInfo.id.replace("/", "_") + ".gtfs.zip");
+			Path out = Paths.get(
+					"xdata/" + feedInfo.id.replace("/", "_") + ".gtfs.zip");
 			if (out.toFile().exists()) {
 				System.out.println("Skipping " + feedInfo.id);
 			} else {
