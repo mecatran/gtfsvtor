@@ -2,13 +2,13 @@ package com.mecatran.gtfsvtor.lib;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.mecatran.gtfsvtor.dao.AppendableDao;
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.inmemory.InMemoryDao;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.NamedDataIO;
 import com.mecatran.gtfsvtor.loader.NamedInputStreamSource;
 import com.mecatran.gtfsvtor.loader.NamedTabularDataSource;
 import com.mecatran.gtfsvtor.loader.impl.CsvDataSource;
@@ -132,18 +132,16 @@ public class GtfsVtor {
 		List<ReportFormatter> formatters = new ArrayList<>();
 
 		// HTML format
-		OutputStream htmlOutputStream = options.getHtmlOutputStream();
-		if (htmlOutputStream != null) {
-			ReportFormatter htmlFormatter = new HtmlReportFormatter(
-					htmlOutputStream);
+		NamedDataIO htmlDataIO = options.getHtmlDataIO();
+		if (htmlDataIO != null) {
+			ReportFormatter htmlFormatter = new HtmlReportFormatter(htmlDataIO);
 			formatters.add(htmlFormatter);
 		}
 
 		// JSON format
-		OutputStream jsonOutputStream = options.getJsonOutputStream();
-		if (jsonOutputStream != null) {
-			ReportFormatter jsonFormatter = new JsonReportFormatter(
-					jsonOutputStream);
+		NamedDataIO jsonDataIO = options.getJsonDataIO();
+		if (jsonDataIO != null) {
+			ReportFormatter jsonFormatter = new JsonReportFormatter(jsonDataIO);
 			formatters.add(jsonFormatter);
 		}
 

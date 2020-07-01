@@ -1,8 +1,6 @@
 package com.mecatran.gtfsvtor.cmdline;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.beust.jcommander.Parameter;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
@@ -100,13 +98,13 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	}
 
 	@Override
-	public OutputStream getHtmlOutputStream() throws IOException {
-		return new FileOutputStream(htmlReportFile);
+	public NamedDataIO getHtmlDataIO() throws IOException {
+		return new FileDataIO(htmlReportFile);
 	}
 
 	@Override
-	public OutputStream getJsonOutputStream() throws IOException {
-		return new FileOutputStream(jsonReportFile);
+	public NamedDataIO getJsonDataIO() throws IOException {
+		return new FileDataIO(jsonReportFile);
 	}
 
 	@Override

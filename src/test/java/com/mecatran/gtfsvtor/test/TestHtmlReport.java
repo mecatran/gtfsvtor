@@ -2,7 +2,6 @@ package com.mecatran.gtfsvtor.test;
 
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
@@ -58,10 +57,9 @@ public class TestHtmlReport {
 		SystemEnvironment.setFakedNow(fakedNow);
 		Locale.setDefault(Locale.US);
 		TestScenario testScenario = new TestScenario(gtfs);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		testScenario.htmlOutputStream = out;
+		testScenario.htmlDataIO = new TestDataIO();
 		testScenario.run();
-		String html = new String(out.toByteArray());
+		String html = new String(testScenario.htmlDataIO.getData());
 		compareDataToReference(html, refReportFile);
 	}
 
@@ -71,10 +69,9 @@ public class TestHtmlReport {
 		SystemEnvironment.setFakedNow(fakedNow);
 		Locale.setDefault(Locale.US);
 		TestScenario testScenario = new TestScenario(gtfs);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		testScenario.jsonOutputStream = out;
+		testScenario.jsonDataIO = new TestDataIO();
 		testScenario.run();
-		String json = new String(out.toByteArray());
+		String json = new String(testScenario.jsonDataIO.getData());
 		compareDataToReference(json, refReportFile);
 	}
 

@@ -1,7 +1,6 @@
 package com.mecatran.gtfsvtor.reporting.html;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 
 import com.googlecode.jatl.Html;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.NamedDataIO;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
@@ -30,17 +30,17 @@ import com.mecatran.gtfsvtor.utils.SystemEnvironment;
 
 public class HtmlReportFormatter implements ReportFormatter {
 
-	private OutputStream outputStream;
+	private NamedDataIO dataIO;
 	private Writer writer;
 	private Html html;
 
-	public HtmlReportFormatter(OutputStream outputStream) {
-		this.outputStream = outputStream;
+	public HtmlReportFormatter(NamedDataIO dataIO) {
+		this.dataIO = dataIO;
 	}
 
 	@Override
 	public void format(ReviewReport report) throws IOException {
-		writer = new OutputStreamWriter(outputStream);
+		writer = new OutputStreamWriter(dataIO.getOutputStream());
 		html = new Html(writer);
 		ClassifiedReviewReport clsReport = new ClassifiedReviewReport(report);
 		formatHeader();
@@ -51,7 +51,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 		}
 		formatFooter();
 		writer.close();
-		outputStream.close();
+		System.out.println("HTML report output to " + dataIO.getName());
 	}
 
 	private void formatGroup(ReviewReport report, IssuesGroup group)

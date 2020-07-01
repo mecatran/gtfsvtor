@@ -3,13 +3,13 @@ package com.mecatran.gtfsvtor.reporting.json;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mecatran.gtfsvtor.cmdline.GtfsVtorMain;
 import com.mecatran.gtfsvtor.cmdline.ManifestReader;
+import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.NamedDataIO;
 import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
@@ -20,10 +20,10 @@ import com.mecatran.gtfsvtor.utils.SystemEnvironment;
 
 public class JsonReportFormatter implements ReportFormatter {
 
-	private OutputStream outputStream;
+	private NamedDataIO dataIO;
 
-	public JsonReportFormatter(OutputStream outputStream) {
-		this.outputStream = outputStream;
+	public JsonReportFormatter(NamedDataIO dataIO) {
+		this.dataIO = dataIO;
 	}
 
 	@Override
@@ -34,8 +34,10 @@ public class JsonReportFormatter implements ReportFormatter {
 		JsonReport jreport = new JsonReport();
 		JsonValidationRun run = convert(report);
 		jreport.reports.add(run);
-		mapper.writeValue(outputStream, jreport);
-		outputStream.close();
+		OutputStream out = dataIO.getOutputStream();
+		mapper.writeValue(out, jreport);
+		out.close();
+		System.out.println("JSON report output to " + dataIO.getName());
 	}
 
 	private JsonValidationRun convert(ReviewReport report) {

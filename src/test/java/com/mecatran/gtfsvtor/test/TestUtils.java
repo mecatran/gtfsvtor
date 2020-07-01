@@ -1,7 +1,6 @@
 package com.mecatran.gtfsvtor.test;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,8 +44,8 @@ public class TestUtils {
 		public int maxShapePointsInterleaving = 3;
 		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 		public ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
-		public OutputStream htmlOutputStream = null;
-		public OutputStream jsonOutputStream = null;
+		public TestDataIO htmlDataIO = null;
+		public TestDataIO jsonDataIO = null;
 		public String configFile = "src/test/resources/configs/def.properties";
 
 		public TestScenario() {
@@ -102,13 +101,13 @@ public class TestUtils {
 		}
 
 		@Override
-		public OutputStream getHtmlOutputStream() throws IOException {
-			return htmlOutputStream;
+		public NamedDataIO getHtmlDataIO() throws IOException {
+			return htmlDataIO;
 		}
 
 		@Override
-		public OutputStream getJsonOutputStream() throws IOException {
-			return jsonOutputStream;
+		public NamedDataIO getJsonDataIO() throws IOException {
+			return jsonDataIO;
 		}
 
 		@Override
