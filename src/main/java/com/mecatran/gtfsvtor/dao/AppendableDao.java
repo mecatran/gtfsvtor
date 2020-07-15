@@ -16,6 +16,7 @@ import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
+import com.mecatran.gtfsvtor.model.GtfsTranslation;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 
@@ -63,6 +64,9 @@ public interface AppendableDao {
 	public void addFareRule(GtfsFareRule fareRule, SourceContext sourceContext);
 
 	public void addLevel(GtfsLevel level, SourceContext sourceContext);
+
+	public void addTranslation(GtfsTranslation translation,
+			SourceContext sourceContext);
 
 	public void close();
 }

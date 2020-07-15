@@ -23,6 +23,7 @@ import com.mecatran.gtfsvtor.model.GtfsShapePointSequence;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTimepoint;
 import com.mecatran.gtfsvtor.model.GtfsTransferType;
+import com.mecatran.gtfsvtor.model.GtfsTranslationTable;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.model.GtfsWheelchairAccess;
@@ -242,6 +243,11 @@ public class DataRowConverter {
 	public GtfsDirectionality getDirectionality(String field) {
 		return getTypeFromInteger(GtfsDirectionality.class, field, true,
 				"directionality (0, 1)", GtfsDirectionality::fromValue);
+	}
+
+	public GtfsTranslationTable getTranslationTable(String field) {
+		return getTypeFromString(GtfsTranslationTable.class, field, true,
+				"Table name (w/o .txt)", GtfsTranslationTable::fromValue);
 	}
 
 	@FunctionalInterface

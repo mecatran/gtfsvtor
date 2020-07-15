@@ -1,0 +1,4 @@
+table_name,field_name,language,translation,record_id,record_sub_id,field_value
+routes,route_long_name,fr,Aéroport vers la Grosse Grenouille,AB,,,
+routes,route_long_name,fr,Aéroport vers Grenouille,AB,,,
+stop,stop_long_name,zz,Foobar,XX,,,

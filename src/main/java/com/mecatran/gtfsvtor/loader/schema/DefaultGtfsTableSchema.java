@@ -25,7 +25,8 @@ public class DefaultGtfsTableSchema implements GtfsTableSchema {
 				new GtfsTransferTableDescriptor(), // ref stops, routes, trips
 				new GtfsPathwayTableDescriptor(), // ref stops
 				new GtfsFareAttributeTableDescriptor(), // ref agencies
-				new GtfsFareRuleTableDescriptor() // ref fare, routes, zones
+				new GtfsFareRuleTableDescriptor(), // ref fare, routes, zones
+				new GtfsTranslationTableDescriptor() // ref a lot of other tables
 		);
 	}
 

@@ -1,8 +1,8 @@
 package com.mecatran.gtfsvtor.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
@@ -90,9 +90,9 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 			super(id);
 		}
 
-		private static Map<String, Id> CACHE = new HashMap<>();
+		private static ConcurrentMap<String, Id> CACHE = new ConcurrentHashMap<>();
 
-		private static synchronized Id build(String id) {
+		private static Id build(String id) {
 			return CACHE.computeIfAbsent(id, Id::new);
 		}
 

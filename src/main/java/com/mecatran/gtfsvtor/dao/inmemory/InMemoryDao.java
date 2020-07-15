@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -44,9 +45,12 @@ import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
+import com.mecatran.gtfsvtor.model.GtfsTranslation;
+import com.mecatran.gtfsvtor.model.GtfsTranslationTable;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 import com.mecatran.gtfsvtor.model.GtfsZone;
+import com.mecatran.gtfsvtor.model.impl.InternedGtfsTranslation;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MultipleFeedInfoError;
@@ -74,6 +78,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private ListMultimap<GtfsFareAttribute.Id, GtfsFareRule> fareRules = ArrayListMultimap
 			.create();
 	private Map<GtfsLevel.Id, GtfsLevel> levels = new HashMap<>();
+	private Map<GtfsTranslation.Id, GtfsTranslation> translations = new HashMap<>();
 	private Multimap<GtfsAgency.Id, GtfsRoute> routesPerAgency = ArrayListMultimap
 			.create();
 	private Multimap<GtfsRoute.Id, GtfsTrip> tripsPerRoute = ArrayListMultimap
@@ -287,6 +292,28 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public GtfsLevel getLevel(GtfsLevel.Id levelId) {
 		return levels.get(levelId);
+	}
+
+	@Override
+	public Stream<GtfsTranslation> getTranslations() {
+		return translations.values().stream();
+	}
+
+	@Override
+	public GtfsTranslation getTranslation(GtfsTranslationTable tableName,
+			String fieldName, Locale language, String fieldValue) {
+		GtfsTranslation.Id id = InternedGtfsTranslation.id(tableName, fieldName,
+				language, fieldValue);
+		return translations.get(id);
+	}
+
+	@Override
+	public GtfsTranslation getTranslation(GtfsTranslationTable tableName,
+			String fieldName, Locale language, String recordId,
+			String recordSubId) {
+		GtfsTranslation.Id id = InternedGtfsTranslation.id(tableName, fieldName,
+				language, recordId, recordSubId);
+		return translations.get(id);
 	}
 
 	@Override
@@ -714,6 +741,33 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		levels.put(level.getId(), level);
+	}
+
+	@Override
+	public void addTranslation(GtfsTranslation translation,
+			SourceContext sourceContext) {
+		// Do not add translation w/o ID
+		if (translation.getTableName() == null
+				|| translation.getFieldName() == null
+				|| translation.getLanguage() == null) {
+			sourceContext.getReportSink().report(
+					new MissingObjectIdError(sourceContext.getSourceRef(),
+							"table_name", "field_name", "language"),
+					sourceContext.getSourceInfo());
+			return;
+		}
+		GtfsTranslation existingTranslation = translations
+				.get(translation.getId());
+		if (existingTranslation != null) {
+			sourceContext.getReportSink().report(
+					new DuplicatedObjectIdError(sourceContext.getSourceRef(),
+							existingTranslation.getId(), "table_name",
+							"field_name", "language", "record_id",
+							"record_sub_id", "field_value"),
+					sourceContext.getSourceInfo());
+			return;
+		}
+		translations.put(translation.getId(), translation);
 	}
 
 	@Override

@@ -93,11 +93,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
-        "totalCount" : 104,
+        "totalCount" : 107,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 121,
+        "totalCount" : 124,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -157,7 +157,7 @@
       }, {
         "severity" : "WARNING",
         "categoryName" : "Inconsistent number of fields",
-        "totalCount" : 48,
+        "totalCount" : 51,
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
@@ -297,6 +297,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Duplicated ID stop_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID table_name, field_name, language, record_id, record_sub_id, field_value",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
@@ -496,6 +501,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Invalid table_name format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Invalid to_stop_id reference",
         "totalCount" : 3,
         "reportedCount" : 0
@@ -647,7 +657,7 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Missing object ID",
-        "totalCount" : 3,
+        "totalCount" : 4,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",

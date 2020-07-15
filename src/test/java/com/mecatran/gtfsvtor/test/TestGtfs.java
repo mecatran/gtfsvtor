@@ -57,6 +57,8 @@ import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTransferType;
+import com.mecatran.gtfsvtor.model.GtfsTranslation;
+import com.mecatran.gtfsvtor.model.GtfsTranslationTable;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
@@ -317,6 +319,18 @@ public class TestGtfs {
 		for (GtfsFareRule prule : prules) {
 			assertNotNull(prule.getRouteId());
 		}
+
+		assertEquals(5L, dao.getTranslations().count());
+		GtfsTranslation tabfr = dao.getTranslation(GtfsTranslationTable.ROUTES,
+				"route_long_name", Locale.FRENCH, "AB", null);
+		assertEquals("Aéroport vers la Grosse Grenouille",
+				tabfr.getTranslation());
+		GtfsTranslation tabde = dao.getTranslation(GtfsTranslationTable.ROUTES,
+				"route_long_name", Locale.GERMAN, "AB", null);
+		assertEquals("Flughafen Nach Ochsenfrosch", tabde.getTranslation());
+		GtfsTranslation tsfr = dao.getTranslation(GtfsTranslationTable.STOPS,
+				"stop_name", Locale.FRENCH, "Nye County Airport (Demo)");
+		assertEquals("Aéroport du Comté de Nye (Démo)", tsfr.getTranslation());
 	}
 
 	@Test
