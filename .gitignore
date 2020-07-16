@@ -1,9 +1,9 @@
-build
-bin
-validation-results.html
-validation-results.json
-.classpath
+/build
+/bin
+/validation-results.html
+/validation-results.json
+/.classpath
 .gradle
-.project
-.settings
-xdata
+/.project
+/.settings
+/xdata
