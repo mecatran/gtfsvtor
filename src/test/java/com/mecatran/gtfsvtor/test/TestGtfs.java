@@ -293,11 +293,11 @@ public class TestGtfs {
 		Collection<GtfsTransfer> transfers = dao.getTransfers()
 				.collect(Collectors.toList());
 		assertEquals(2, transfers.size());
-		GtfsTransfer t1 = dao.getTransfer(GtfsStop.id("NADAV"),
-				GtfsStop.id("NANAA"), null, null, null, null);
+		GtfsTransfer t1 = dao.getTransfer(
+				GtfsTransfer.id(GtfsStop.id("NADAV"), GtfsStop.id("NANAA")));
 		assertEquals(GtfsTransferType.NONE, t1.getNonNullType());
-		GtfsTransfer t2 = dao.getTransfer(GtfsStop.id("EMSI"),
-				GtfsStop.id("NANAA"), null, null, null, null);
+		GtfsTransfer t2 = dao.getTransfer(
+				GtfsTransfer.id(GtfsStop.id("EMSI"), GtfsStop.id("NANAA")));
 		assertEquals(GtfsTransferType.TIMED, t2.getNonNullType());
 		assertEquals(Integer.valueOf(1200), t2.getMinTransferTime());
 

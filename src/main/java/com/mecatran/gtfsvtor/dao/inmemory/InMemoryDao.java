@@ -56,7 +56,6 @@ import com.mecatran.gtfsvtor.model.impl.InternedGtfsTranslation;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingObjectIdError;
 import com.mecatran.gtfsvtor.reporting.issues.MultipleFeedInfoError;
-import com.mecatran.gtfsvtor.utils.Sextet;
 
 public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 
@@ -74,7 +73,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			.create();
 	private Multimap<GtfsCalendar.Id, GtfsCalendarDate> calendarDates = ArrayListMultimap
 			.create();
-	private Map<Sextet<GtfsStop.Id, GtfsStop.Id, GtfsRoute.Id, GtfsRoute.Id, GtfsTrip.Id, GtfsTrip.Id>, GtfsTransfer> transfers = new HashMap<>();
+	private Map<GtfsTransfer.Id, GtfsTransfer> transfers = new HashMap<>();
 	private Map<GtfsPathway.Id, GtfsPathway> pathways = new HashMap<>();
 	private Map<GtfsFareAttribute.Id, GtfsFareAttribute> fareAttributes = new HashMap<>();
 	private ListMultimap<GtfsFareAttribute.Id, GtfsFareRule> fareRules = ArrayListMultimap
@@ -247,18 +246,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
-	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
-			GtfsStop.Id toStopId) {
-		return getTransfer(fromStopId, toStopId, null, null, null, null);
-	}
-
-	@Override
-	public GtfsTransfer getTransfer(GtfsStop.Id fromStopId,
-			GtfsStop.Id toStopId, GtfsRoute.Id fromRouteId,
-			GtfsRoute.Id toRouteId, GtfsTrip.Id fromTripId,
-			GtfsTrip.Id toTripId) {
-		return transfers.get(new Sextet<>(fromStopId, toStopId, fromRouteId,
-				toRouteId, fromTripId, toTripId));
+	public GtfsTransfer getTransfer(GtfsTransfer.Id transferId) {
+		return transfers.get(transferId);
 	}
 
 	@Override
@@ -691,21 +680,16 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 							"to_stop_id"));
 			return;
 		}
-		GtfsTransfer existingTransfer = getTransfer(transfer.getFromStopId(),
-				transfer.getToStopId(), transfer.getFromRouteId(),
-				transfer.getToRouteId(), transfer.getFromTripId(),
-				transfer.getToTripId());
+		GtfsTransfer existingTransfer = getTransfer(transfer.getId());
 		if (existingTransfer != null) {
 			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
 					sourceContext.getSourceRef(), existingTransfer.getId(),
-					"from_stop_id", "to_stop_id"));
+					"from_stop_id", "to_stop_id", "from_route_id",
+					"to_route_id", "from_trip_id", "to_trip_id"));
 			return;
 		}
-		Sextet<GtfsStop.Id, GtfsStop.Id, GtfsRoute.Id, GtfsRoute.Id, GtfsTrip.Id, GtfsTrip.Id> id = new Sextet<>(
-				transfer.getFromStopId(), transfer.getToStopId(),
-				transfer.getFromRouteId(), transfer.getToRouteId(),
-				transfer.getFromTripId(), transfer.getToTripId());
-		transfers.put(id, transfer);
+
+		transfers.put(transfer.getId(), transfer);
 		// TODO Should we index on from/to stop IDs?
 	}
 

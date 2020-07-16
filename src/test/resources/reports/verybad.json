@@ -207,7 +207,7 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "categoryName" : "Duplicated ID from_stop_id, to_stop_id",
+        "categoryName" : "Duplicated ID from_stop_id, to_stop_id, from_route_id, to_route_id, from_trip_id, to_trip_id",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
