@@ -1,0 +1,4 @@
+level_id,level_index,level_name
+level_0,0.0,Ground level
+level_1,1.0,Mezzanine
+level_2,2.0,On top

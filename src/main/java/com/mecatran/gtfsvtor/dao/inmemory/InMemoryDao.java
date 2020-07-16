@@ -700,10 +700,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		GtfsFareAttribute existingFare = getFareAttribute(
 				fareAttribute.getId());
 		if (existingFare != null) {
-			sourceContext.getReportSink().report(
-					new DuplicatedObjectIdError(sourceContext.getSourceRef(),
-							existingFare.getId(), "fare_id"),
-					sourceContext.getSourceInfo());
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							existingFare.getSourceRef(),
+							sourceContext.getSourceRef(), existingFare.getId(),
+							"fare_id"), null, sourceContext.getSourceInfo());
 			return;
 		}
 		fareAttributes.put(fareAttribute.getId(), fareAttribute);
@@ -734,10 +735,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		}
 		GtfsLevel existingLevel = getLevel(level.getId());
 		if (existingLevel != null) {
-			sourceContext.getReportSink().report(
-					new DuplicatedObjectIdError(sourceContext.getSourceRef(),
-							existingLevel.getId(), "level_id"),
-					sourceContext.getSourceInfo());
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							existingLevel.getSourceRef(),
+							sourceContext.getSourceRef(), existingLevel.getId(),
+							"level_id"), null, sourceContext.getSourceInfo());
 			return;
 		}
 		levels.put(level.getId(), level);
@@ -759,11 +761,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		GtfsTranslation existingTranslation = translations
 				.get(translation.getId());
 		if (existingTranslation != null) {
-			sourceContext.getReportSink().report(
-					new DuplicatedObjectIdError(sourceContext.getSourceRef(),
-							existingTranslation.getId(), "table_name",
-							"field_name", "language", "record_id",
-							"record_sub_id", "field_value"),
+			sourceContext.getReportSink().report(new DuplicatedObjectIdError(
+					existingTranslation.getSourceRef(),
+					sourceContext.getSourceRef(), existingTranslation.getId(),
+					"table_name", "field_name", "language", "record_id",
+					"record_sub_id", "field_value"), null,
 					sourceContext.getSourceInfo());
 			return;
 		}

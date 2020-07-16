@@ -1,4 +1,5 @@
 level_id,level_index,level_name
 level_0,0.0,Ground floor
 level_1,1,Mezzanine
+level_1,2,Mezzanine 2
 level_99,,

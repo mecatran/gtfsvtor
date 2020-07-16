@@ -23,7 +23,7 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 124,
+        "totalCount" : 125,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -208,6 +208,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Duplicated ID from_stop_id, to_stop_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID level_id",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {

@@ -1,0 +1,8 @@
+table_name,field_name,language,translation,record_id,record_sub_id,field_value
+routes,route_long_name,fr,Aéroport vers la Grosse Grenouille,AB,,
+routes,route_long_name,de,Flughafen Nach Ochsenfrosch,AB,,
+routes,route_long_name,fr,Aéroport vers Grosse Grenouille,AB,,
+routes,route_long_name,fr,La Grosse Grenouille vers Hôtel du Ruisseau de la Fournaise,BFC,,
+stop,stop_name,fr,Aéroport du Comté de Nye (Démo),BEATTY_AIRPORT,,
+stops,stop_name,fr,Aéroport du Comté de Nye (Démo),BEATTY_AEROPORT,,
+stops,stop_long_name,fr,Aéroport du Comté de Nye (Démo),,,Nye County Airport (Demo)

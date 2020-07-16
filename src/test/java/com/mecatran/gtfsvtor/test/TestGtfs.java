@@ -63,6 +63,7 @@ import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 import com.mecatran.gtfsvtor.model.GtfsTripDirectionId;
 import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
+import com.mecatran.gtfsvtor.model.impl.InternedGtfsTranslation;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
@@ -1293,6 +1294,22 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("different_station_too_close");
 		assertEquals(1, tb
 				.issuesCountOfCategory(DifferentStationTooCloseWarning.class));
+	}
+
+	@Test
+	public void testInvalidTranslations() {
+		TestBundle tb = loadAndValidate("invalid_translations");
+		assertEquals(1,
+				tb.issuesCountOfCategory(DuplicatedObjectIdError.class));
+		DuplicatedObjectIdError doid = tb
+				.issuesOfCategory(DuplicatedObjectIdError.class).get(0);
+		assertEquals(
+				InternedGtfsTranslation.id(GtfsTranslationTable.ROUTES,
+						"route_long_name", Locale.FRENCH, "AB", null),
+				doid.getDuplicatedId().getInternalId());
+		assertEquals(1,
+				tb.issuesCountOfCategory(InvalidFieldFormatError.class));
+		assertEquals(1, tb.issuesCountOfCategory(MissingObjectIdError.class));
 	}
 
 	@Test
