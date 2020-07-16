@@ -23,8 +23,9 @@ except the two tables `translations.txt` and `attributions.txt`.
 Not all validation rules of the legacy feedvalidator.py are implemented, however.
 See the [TODO](TODO) file to check the few missing rules.
 
-You can browse this [example report](https://mecatran.github.io/gtfsvtor/validation-results.html)
+You can browse this [HTML example report](https://mecatran.github.io/gtfsvtor/validation-results.html)
 to see the validation result of the "verybad" dataset.
+Also see this [JSON example report summary](https://raw.githubusercontent.com/mecatran/gtfsvtor/master/docs/validation-results.json).
 
 To use it:
 
@@ -32,9 +33,10 @@ To use it:
 - Unzip the file somewhere
 - Run gtfsvtor:
 
-
+```
     ./gtfsvtor/bin/gtfsvtor --help
     ./gtfsvtor/bin/gtfsvtor [options] <GTFS file>
+```
 
 On Windows, use the provided `gtfsvtor.bat` file instead.
 
