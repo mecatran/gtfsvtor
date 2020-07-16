@@ -1,0 +1,656 @@
+{
+  "dataVersion" : "1.0",
+  "reports" : [ {
+    "timestamp" : 1594914955399,
+    "input" : {
+      "filename" : "src/test/resources/data/verybad"
+    },
+    "validator" : {
+      "name" : "GTFSVTOR",
+      "version" : "dev",
+      "buildDate" : "now",
+      "buildRev" : "dev",
+      "copyrights" : "Copyright (c) Mecatran"
+    },
+    "summary" : {
+      "severities" : [ {
+        "severity" : "INFO",
+        "totalCount" : 6,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "totalCount" : 109,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "totalCount" : 125,
+        "reportedCount" : 0
+      }, {
+        "severity" : "CRITICAL",
+        "totalCount" : 0,
+        "reportedCount" : 0
+      } ],
+      "categories" : [ {
+        "severity" : "INFO",
+        "categoryName" : "Statistics",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "INFO",
+        "categoryName" : "Stops too close",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "INFO",
+        "categoryName" : "Unknown file",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "INFO",
+        "categoryName" : "Unrecognized column extra_field",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "INFO",
+        "categoryName" : "Unrecognized column fancy_extra_field",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "INFO",
+        "categoryName" : "Unrecognized column feed_contact_name",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Color contrast",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Different station too close",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Duplicated rules in fare",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Empty calendar",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Expired feed",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Inconsistent number of fields",
+        "totalCount" : 51,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Invalid min_transfer_time value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Invalid route_desc/route_long_name value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Invalid route_short_name format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Invalid route_short_name/route_long_name value",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Invalid stop_desc/stop_name value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Overlapping trip in block",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Similar colors",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Stop too far from shape",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Stops too close",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Too fast travel",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Too fast walking speed",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Too many days w/o service",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Too many stops with identical time",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused agency",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused calendar",
+        "totalCount" : 4,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused calendar date",
+        "totalCount" : 5,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused level",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused route",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused shape",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused station",
+        "totalCount" : 4,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused stop",
+        "totalCount" : 6,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Useless calendar date",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Useless min_transfer_time value",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Useless timepoint",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID fare_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID from_stop_id, to_stop_id, from_route_id, to_route_id, from_trip_id, to_trip_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID level_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID pathway_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID route_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID stop_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID table_name, field_name, language, record_id, record_sub_id, field_value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID trip_id",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated column agency_url",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated stop sequence",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "First stop time missing",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid agency_email format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid agency_id reference",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid agency_lang format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid agency_timezone format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid agency_url format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid currency_type format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid date format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid date value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid default_lang format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid direction_id format",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid end_date value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid end_time format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid end_time value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid fare_id reference",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid feed_end_date value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid from_stop_id reference",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid from_stop_id/to_stop_id value",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid location_type format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid min_transfer_time format",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid min_transfer_time value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid monday/tuesday/wednesday/thursday/friday/saturday/sunday value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid parent_station reference",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid pathway_mode format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid payment_method format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid price format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid route_id reference",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid route_text_color format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid route_url format",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid service_id reference",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid start_date value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid start_time format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid station(1) parent type",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid stop_lat/stop_lon coordinate",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid stop_timezone value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid stop_url format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid table_name format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid to_stop_id reference",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid transfer_duration format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid transfer_type format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid traversal_time format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid trip_id reference",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid zone_id reference",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Last stop time missing",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory agency_name column",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory agency_name value",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory arrival_time value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory currency_type value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory departure_time value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory end_time value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory feed_lang value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory from_stop_id value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory headway_secs value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory is_bidirectional column",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory is_bidirectional value",
+        "totalCount" : 4,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory level_index value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory parent_station value",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory pathway_mode value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory payment_method value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory price value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory route_type value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory service_id value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory start_time value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory stop_lat value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory stop_lon value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory to_stop_id value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory transfer_type value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing object ID",
+        "totalCount" : 4,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Multiple feed info",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Non increasing shape dist traveled",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Stop too close to origin",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Stop too far from shape",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Time travel",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Time travel at stop",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Too fast travel",
+        "totalCount" : 6,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Wrong pathway stop type",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Wrong time stop type",
+        "totalCount" : 5,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Wrong transfer stop type",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      } ]
+    }
+  } ]
+}
