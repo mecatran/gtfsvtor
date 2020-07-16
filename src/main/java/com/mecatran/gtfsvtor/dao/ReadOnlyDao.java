@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.dao;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
@@ -11,6 +12,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
+import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -97,6 +99,9 @@ public interface ReadOnlyDao {
 	public GtfsTranslation getTranslation(GtfsTranslationTable tableName,
 			String fieldName, Locale language, String recordId,
 			String recordSubId);
+
+	public GtfsObject<?> getObject(GtfsTranslationTable table, String recordId,
+			Optional<String> recordSubId);
 
 	public int getStopTimesCount();
 

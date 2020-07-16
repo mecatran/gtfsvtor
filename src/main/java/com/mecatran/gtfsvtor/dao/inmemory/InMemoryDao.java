@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -37,6 +38,7 @@ import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
+import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
@@ -314,6 +316,48 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		GtfsTranslation.Id id = InternedGtfsTranslation.id(tableName, fieldName,
 				language, recordId, recordSubId);
 		return translations.get(id);
+	}
+
+	@Override
+	public GtfsObject<?> getObject(GtfsTranslationTable table, String recordId,
+			Optional<String> recordSubId) {
+		switch (table) {
+		case FEED_INFO:
+			return getFeedInfo();
+		case AGENCY:
+			return getAgency(GtfsAgency.id(recordId));
+		case STOPS:
+			return getStop(GtfsStop.id(recordId));
+		case ROUTES:
+			return getRoute(GtfsRoute.id(recordId));
+		case TRIPS:
+			return getTrip(GtfsTrip.id(recordId));
+		case PATHWAYS:
+			return getPathway(GtfsPathway.id(recordId));
+		case STOP_TIMES:
+			if (!recordSubId.isPresent())
+				return null;
+			int seq;
+			try {
+				seq = Integer.parseInt(recordSubId.get());
+			} catch (NumberFormatException e) {
+				// Hide this, rely on the caller to check
+				return null;
+			}
+			GtfsTripAndTimes tt = getTripAndTimes(GtfsTrip.id(recordId));
+			if (tt == null)
+				return null;
+			return tt.getStopTimes().stream()
+					.filter(st -> st.getStopSequence().getSequence() == seq)
+					.findFirst().orElse(null);
+		case LEVELS:
+			return getLevel(GtfsLevel.id(recordId));
+		case ATTRIBUTIONS:
+			// TODO
+			return null;
+		default:
+			throw new RuntimeException("Unhandled table: " + table);
+		}
 	}
 
 	@Override
@@ -751,10 +795,13 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		// Do not add translation w/o ID
 		if (translation.getTableName() == null
 				|| translation.getFieldName() == null
-				|| translation.getLanguage() == null) {
+				|| translation.getLanguage() == null
+				|| !(translation.getFieldValue().isPresent()
+						|| translation.getRecordId().isPresent())) {
 			sourceContext.getReportSink().report(
 					new MissingObjectIdError(sourceContext.getSourceRef(),
-							"table_name", "field_name", "language"),
+							"table_name", "field_name", "language", "record_id",
+							"record_sub_id", "field_value"),
 					sourceContext.getSourceInfo());
 			return;
 		}

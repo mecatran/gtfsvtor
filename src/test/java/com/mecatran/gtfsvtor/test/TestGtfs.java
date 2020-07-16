@@ -1307,9 +1307,11 @@ public class TestGtfs {
 				InternedGtfsTranslation.id(GtfsTranslationTable.ROUTES,
 						"route_long_name", Locale.FRENCH, "AB", null),
 				doid.getDuplicatedId().getInternalId());
+		assertEquals(3, tb.issuesCountOfCategory(MissingObjectIdError.class));
 		assertEquals(1,
 				tb.issuesCountOfCategory(InvalidFieldFormatError.class));
-		assertEquals(1, tb.issuesCountOfCategory(MissingObjectIdError.class));
+		assertEquals(3, tb.issuesCountOfCategory(InvalidFieldValueIssue.class));
+		assertEquals(1, tb.issuesCountOfCategory(InvalidReferenceError.class));
 	}
 
 	@Test

@@ -1,4 +1,5 @@
 table_name,field_name,language,translation,record_id,record_sub_id,field_value
+feed_info,feed_publisher,fr,Autorité de démo,1,,
 routes,route_long_name,fr,Aéroport vers la Grosse Grenouille,AB,,
 routes,route_long_name,de,Flughafen Nach Ochsenfrosch,AB,,
 routes,route_long_name,fr,Aéroport vers Grosse Grenouille,AB,,
@@ -6,3 +7,7 @@ routes,route_long_name,fr,La Grosse Grenouille vers Hôtel du Ruisseau de la Fou
 stop,stop_name,fr,Aéroport du Comté de Nye (Démo),BEATTY_AIRPORT,,
 stops,stop_name,fr,Aéroport du Comté de Nye (Démo),BEATTY_AEROPORT,,
 stops,stop_long_name,fr,Aéroport du Comté de Nye (Démo),,,Nye County Airport (Demo)
+stops,stop_name,fr,Hôtel & Casino de la Diligence,STAGECOACH,,Stagecoach Hotel & Casino (Demo)
+stops,stop_name,fr,Arrêt de bus,,,
+stop_times,stop_headsign,fr,Vers Nadav,CITY1,5,
+stop_times,stop_headsign,fr,Vers Nadav,,8,
