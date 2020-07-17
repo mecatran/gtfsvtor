@@ -35,33 +35,42 @@ public class IFOPTStopIDStreamingValidator
 		ReportSink reportSink = context.getReportSink();
 		GtfsStopType stopType = stop.getType();
 		String stopId = stop.getId().getInternalId();
-		if (stopType == GtfsStopType.STOP
-				&& !stopTypeStopIdPattern.matcher(stopId).matches()) {
-			reportSink.report(
-					new InvalidFieldFormatError(context.getSourceRef(),
-							"stop_id",
-							"stop_id does not conform to expected format",
-							stopTypeStopIdPattern.toString())
-									.withSeverity(ReportIssueSeverity.WARNING),
-					context.getSourceInfo());
-		} else if (stopType == GtfsStopType.STATION
-				&& !stationTypeStopIdPattern.matcher(stopId).matches()) {
-			reportSink.report(
-					new InvalidFieldFormatError(context.getSourceRef(),
-							"stop_id",
-							"stop_id does not conform to expected format",
-							stationTypeStopIdPattern.toString())
-									.withSeverity(ReportIssueSeverity.WARNING),
-					context.getSourceInfo());
-		} else if (stopType == GtfsStopType.ENTRANCE
-				&& !entranceTypeStopIdPattern.matcher(stopId).matches()) {
-			reportSink.report(
-					new InvalidFieldFormatError(context.getSourceRef(),
-							"stop_id",
-							"stop_id does not conform to expected format",
-							entranceTypeStopIdPattern.toString())
-									.withSeverity(ReportIssueSeverity.WARNING),
-					context.getSourceInfo());
+		switch (stopType) {
+		case STOP:
+			if (!stopTypeStopIdPattern.matcher(stopId).matches()) {
+				reportSink.report(
+						new InvalidFieldFormatError(context.getSourceRef(),
+								"stop_id", stopId,
+								stopTypeStopIdPattern.toString()).withSeverity(
+										ReportIssueSeverity.WARNING),
+						context.getSourceInfo());
+			}
+			break;
+		case STATION:
+			if (!stationTypeStopIdPattern.matcher(stopId).matches()) {
+				reportSink.report(
+						new InvalidFieldFormatError(context.getSourceRef(),
+								"stop_id", stopId,
+								stationTypeStopIdPattern.toString())
+										.withSeverity(
+												ReportIssueSeverity.WARNING),
+						context.getSourceInfo());
+			}
+			break;
+		case ENTRANCE:
+			if (!entranceTypeStopIdPattern.matcher(stopId).matches()) {
+				reportSink.report(
+						new InvalidFieldFormatError(context.getSourceRef(),
+								"stop_id", stopId,
+								entranceTypeStopIdPattern.toString())
+										.withSeverity(
+												ReportIssueSeverity.WARNING),
+						context.getSourceInfo());
+			}
+			break;
+		default:
+			// Do not check
+			break;
 		}
 	}
 }
