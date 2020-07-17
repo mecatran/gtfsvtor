@@ -60,6 +60,13 @@ public class TestUtils {
 					+ localGtfsFileOrDirectory;
 		}
 
+		public TestScenario(String localGtfsFileOrDirectory,
+				String localConfigFile) {
+			this.gtfsFileOrDirectory = "src/test/resources/data/"
+					+ localGtfsFileOrDirectory;
+			this.configFile = "src/test/resources/configs/" + localConfigFile;
+		}
+
 		public TestBundle run() {
 			TestBundle ret = new TestBundle();
 			GtfsVtorOptions options = getOptions();
@@ -124,5 +131,11 @@ public class TestUtils {
 
 	public static TestBundle loadAndValidate(String localGtfsFileOrDirectory) {
 		return new TestScenario(localGtfsFileOrDirectory).run();
+	}
+
+	public static TestBundle loadAndValidate(String localGtfsFileOrDirectory,
+			String localConfigFile) {
+		return new TestScenario(localGtfsFileOrDirectory, localConfigFile)
+				.run();
 	}
 }
