@@ -39,6 +39,8 @@ public interface DataTable extends Closeable, Iterable<DataRow> {
 
 	public List<String> getColumnHeaders();
 
+	public List<String> getRawColumnHeaders();
+
 	public Charset getCharset();
 
 	public boolean isEmpty();

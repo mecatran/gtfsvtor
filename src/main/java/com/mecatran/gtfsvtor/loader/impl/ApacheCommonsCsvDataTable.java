@@ -152,6 +152,15 @@ public class ApacheCommonsCsvDataTable implements DataTable {
 	}
 
 	@Override
+	public List<String> getRawColumnHeaders() {
+		/*
+		 * TODO Apache CSV parser does not seems to have a method to access raw
+		 * header name (the method getHeaderMapRaw() does not fit).
+		 */
+		return Collections.unmodifiableList(csvParser.getHeaderNames());
+	}
+
+	@Override
 	public Charset getCharset() {
 		return charset;
 	}

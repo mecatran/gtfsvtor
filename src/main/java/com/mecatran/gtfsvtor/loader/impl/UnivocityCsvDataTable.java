@@ -11,6 +11,7 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -192,7 +193,19 @@ public class UnivocityCsvDataTable implements DataTable, Closeable {
 				ret.add(header);
 			}
 		}
-		return ret;
+		return Collections.unmodifiableList(ret);
+	}
+
+	@Override
+	public List<String> getRawColumnHeaders() {
+		List<String> ret = new ArrayList<>();
+		String[] headers = csvParser.getContext().parsedHeaders();
+		if (headers != null) {
+			for (String header : headers) {
+				ret.add(header);
+			}
+		}
+		return Collections.unmodifiableList(ret);
 	}
 
 	@Override
