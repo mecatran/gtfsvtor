@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.loader.impl;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.mecatran.gtfsvtor.dao.AppendableDao;
@@ -26,6 +27,7 @@ import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.MissingMandatoryTableError;
+import com.mecatran.gtfsvtor.reporting.issues.SpaceInColumnWarning;
 import com.mecatran.gtfsvtor.reporting.issues.TableIOError;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
@@ -84,7 +86,7 @@ public class GtfsDataLoader implements DataLoader {
 			nObjects++;
 		}
 		System.out.println("Loaded  " + tableName + ": " + nObjects + " rows.");
-		checkMandatoryColumns(context.getReportSink(), table, tableDescriptor
+		checkColumns(context.getReportSink(), table, tableDescriptor
 				.getMandatoryColumns(nObjects).toArray(new String[0]));
 
 		closeTable(table, context.getReportSink());
@@ -137,10 +139,12 @@ public class GtfsDataLoader implements DataLoader {
 		}
 	}
 
-	private void checkMandatoryColumns(ReportSink reportSink, DataTable table,
-			String... columnHeaders) {
+	private void checkColumns(ReportSink reportSink, DataTable table,
+			String... mandatoryColumnHeaders) {
 		Set<String> headerSet = new HashSet<>();
-		for (String columnHeader : table.getColumnHeaders()) {
+		List<String> columnHeaders = table.getColumnHeaders();
+		List<String> rawColHeaders = table.getRawColumnHeaders();
+		for (String columnHeader : columnHeaders) {
 			if (headerSet.contains(columnHeader)) {
 				reportSink
 						.report(new DuplicatedColumnError(table.getSourceRef(),
@@ -149,11 +153,22 @@ public class GtfsDataLoader implements DataLoader {
 				headerSet.add(columnHeader);
 			}
 		}
-		for (String columnHeader : columnHeaders) {
+		for (String columnHeader : mandatoryColumnHeaders) {
 			if (!headerSet.contains(columnHeader)) {
 				reportSink.report(
 						new MissingMandatoryColumnError(table.getSourceRef(),
 								columnHeader),
+						table.getSourceInfo());
+			}
+		}
+		for (int i = 0; i < columnHeaders.size()
+				&& i < rawColHeaders.size(); i++) {
+			String columnHeader = columnHeaders.get(i);
+			String rawColHeader = rawColHeaders.get(i);
+			if (!columnHeader.equals(rawColHeader)) {
+				reportSink.report(
+						new SpaceInColumnWarning(table.getSourceRef(),
+								columnHeader, rawColHeader),
 						table.getSourceInfo());
 			}
 		}
