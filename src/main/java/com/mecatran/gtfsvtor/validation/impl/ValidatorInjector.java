@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -27,19 +28,20 @@ import com.mecatran.gtfsvtor.validation.TripTimesValidator;
 import com.mecatran.gtfsvtor.validation.ValidatorConfig;
 import com.mecatran.gtfsvtor.validation.dao.ReferencesValidator;
 import com.mecatran.gtfsvtor.validation.streaming.AgencyStreamingValidator;
+import com.mecatran.gtfsvtor.validation.streaming.ext.IFOPTStopIDStreamingValidator;
 import com.mecatran.gtfsvtor.validation.triptimes.OverlappingBlockIdValidator;
 
 public class ValidatorInjector<T> {
 
 	private Class<T> validatorClass;
 	private ClassLoader classLoader;
-	private Package pckge;
+	private Package[] pckges;
 
 	private ValidatorInjector(Class<T> validatorClass, ClassLoader classLoader,
-			Package pckge) {
+			Package... pckges) {
 		this.validatorClass = validatorClass;
 		this.classLoader = classLoader;
-		this.pckge = pckge;
+		this.pckges = pckges;
 	}
 
 	public static ValidatorInjector<DaoValidator> getDaoValidatorInjector() {
@@ -53,7 +55,8 @@ public class ValidatorInjector<T> {
 		ValidatorInjector<StreamingValidator<? extends GtfsObject<?>>> ret = new ValidatorInjector<>(
 				(Class<StreamingValidator<? extends GtfsObject<?>>>) (Class<?>) StreamingValidator.class,
 				DefaultStreamingValidator.class.getClassLoader(),
-				AgencyStreamingValidator.class.getPackage());
+				AgencyStreamingValidator.class.getPackage(),
+				IFOPTStopIDStreamingValidator.class.getPackage());
 		return ret;
 	}
 
@@ -127,22 +130,26 @@ public class ValidatorInjector<T> {
 		List<T> ret = new ArrayList<>();
 		try {
 			ClassPath cp = ClassPath.from(classLoader);
-			for (ClassInfo classInfo : cp.getTopLevelClasses(pckge.getName())) {
-				Class<?> clazz = classInfo.load();
-				if (validatorClass.isAssignableFrom(clazz)) {
-					try {
-						@SuppressWarnings("unchecked")
-						T validator = (T) clazz.getConstructor().newInstance();
-						ret.add(validator);
-					} catch (Exception e) {
-						// TODO Log
-						System.err.println("Cannot instantiate Validator "
-								+ clazz + ": " + e);
+			for (Package pckge : pckges) {
+				for (ClassInfo classInfo : cp
+						.getTopLevelClasses(pckge.getName())) {
+					Class<?> clazz = classInfo.load();
+					if (validatorClass.isAssignableFrom(clazz)) {
+						try {
+							@SuppressWarnings("unchecked")
+							T validator = (T) clazz.getConstructor()
+									.newInstance();
+							ret.add(validator);
+						} catch (Exception e) {
+							System.err.println("Cannot instantiate Validator "
+									+ clazz + ": " + e);
+						}
 					}
 				}
 			}
 		} catch (IOException e) {
-			System.err.println("Cannot scan package " + pckge);
+			System.err
+					.println("Cannot scan package " + Arrays.toString(pckges));
 		}
 		Collections.sort(ret, new Comparator<T>() {
 			@Override

@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.validation.streaming;
+package com.mecatran.gtfsvtor.validation.streaming.ext;
 
 import java.util.regex.Pattern;
 
