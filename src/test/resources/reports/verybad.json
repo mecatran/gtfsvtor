@@ -23,7 +23,7 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 125,
+        "totalCount" : 128,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -249,6 +249,11 @@
         "severity" : "ERROR",
         "categoryName" : "Duplicated stop sequence",
         "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Extra space in column header",
+        "totalCount" : 3,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",

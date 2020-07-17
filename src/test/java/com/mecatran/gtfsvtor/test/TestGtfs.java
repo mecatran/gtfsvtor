@@ -94,6 +94,7 @@ import com.mecatran.gtfsvtor.reporting.issues.NonIncreasingShapeDistTraveledErro
 import com.mecatran.gtfsvtor.reporting.issues.OverlappingBlockIdIssue;
 import com.mecatran.gtfsvtor.reporting.issues.RouteColorContrastIssue;
 import com.mecatran.gtfsvtor.reporting.issues.SimilarRouteColorWarning;
+import com.mecatran.gtfsvtor.reporting.issues.SpaceInColumnWarning;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseIssue;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooCloseToOriginError;
 import com.mecatran.gtfsvtor.reporting.issues.StopTooFarFromParentStationIssue;
@@ -1278,6 +1279,7 @@ public class TestGtfs {
 		assertEquals(0,
 				tb.issuesCountOfCategory(MissingMandatoryValueError.class));
 		assertEquals(0, tb.issuesCountOfCategory(MissingObjectIdError.class));
+		assertEquals(26, tb.issuesCountOfCategory(SpaceInColumnWarning.class));
 	}
 
 	@Test
