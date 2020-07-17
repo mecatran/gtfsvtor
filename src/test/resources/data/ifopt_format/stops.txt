@@ -1,0 +1,6 @@
+stop_id,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,stop_code,location_type,parent_station
+us:00001:000000001:1:airport,Nye County Airport (Demo),,36.868446,-116.784582,,,1235,0,us:00001:000000001
+us:00001:000000001,Nye County Airport (Demo),,36.868446,-116.784582,,,1235,1,
+us:00001:000000001:1:north,Nye County Airport (Entrance North),,36.868546,-116.784582,,,1236,2,us:00001:000000001
+us:00001:000000001:2:south,Nye County Airport (Entrance South),,36.868346,-116.784582,,,1237,2,us:00001:000000001
+US:FOOBAR;,Bullfrog (Demo),,36.88108,-116.81797,,,,,

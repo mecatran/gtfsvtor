@@ -1315,6 +1315,22 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testIfoptFormat() {
+		TestBundle tb = loadAndValidate("ifopt_format",
+				"ifopt_format.properties");
+		assertEquals(1,
+				tb.issuesCountOfCategory(InvalidFieldFormatError.class));
+		InvalidFieldFormatError iffe = tb
+				.issuesOfCategory(InvalidFieldFormatError.class).get(0);
+		assertEquals("US:FOOBAR;", iffe.getValue());
+		assertEquals(6L,
+				iffe.getSourceRefs().get(0).getSourceRef().getLineNumber());
+		assertEquals(0, tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR));
+		assertEquals(1,
+				tb.issuesCountOfSeverities(ReportIssueSeverity.WARNING));
+	}
+
+	@Test
 	public void testInterleavedStopTimes() {
 		for (StopTimesDaoMode daoMode : Arrays.asList(StopTimesDaoMode.AUTO,
 				StopTimesDaoMode.PACKED, StopTimesDaoMode.UNSORTED)) {
