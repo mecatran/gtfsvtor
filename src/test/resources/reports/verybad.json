@@ -19,11 +19,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
-        "totalCount" : 107,
+        "totalCount" : 110,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 128,
+        "totalCount" : 125,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -78,6 +78,11 @@
       }, {
         "severity" : "WARNING",
         "categoryName" : "Empty calendar",
+        "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Extra space in column header",
         "totalCount" : 3,
         "reportedCount" : 0
       }, {
@@ -249,11 +254,6 @@
         "severity" : "ERROR",
         "categoryName" : "Duplicated stop sequence",
         "totalCount" : 2,
-        "reportedCount" : 0
-      }, {
-        "severity" : "ERROR",
-        "categoryName" : "Extra space in column header",
-        "totalCount" : 3,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",

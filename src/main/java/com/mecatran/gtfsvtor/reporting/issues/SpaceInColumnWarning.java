@@ -10,7 +10,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Extra space in column header")
+@ReportIssuePolicy(severity = ReportIssueSeverity.WARNING, categoryName = "Extra space in column header")
 public class SpaceInColumnWarning implements ReportIssue {
 
 	private String columnName;
@@ -39,7 +39,7 @@ public class SpaceInColumnWarning implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
-		fmt.text("Column header {0} should not contain any space: \"{1}\"",
-				fmt.pre(columnName), fmt.pre(rawColumnName));
+		fmt.text("Column header should not contain any space: \"{0}\"",
+				fmt.pre(rawColumnName));
 	}
 }

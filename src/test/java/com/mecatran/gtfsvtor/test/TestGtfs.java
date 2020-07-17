@@ -66,6 +66,7 @@ import com.mecatran.gtfsvtor.model.GtfsTripStopSequence;
 import com.mecatran.gtfsvtor.model.impl.InternedGtfsTranslation;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
+import com.mecatran.gtfsvtor.reporting.issues.DeprecatedColumnWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentHeadsignsIssue;
 import com.mecatran.gtfsvtor.reporting.issues.DifferentStationTooCloseWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
@@ -461,6 +462,14 @@ public class TestGtfs {
 				dc.getSourceRefs().get(0).getSourceRef().getTableName());
 		assertTrue(dc.getSourceRefs().get(0).getFieldNames()
 				.contains("agency_url"));
+	}
+
+	@Test
+	public void testDeprecatedColumn() {
+		TestBundle tb = loadAndValidate("deprecated_column");
+		assertEquals(1,
+				tb.issuesCountOfCategory(DeprecatedColumnWarning.class));
+		assertEquals(2, tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR));
 	}
 
 	@Test
