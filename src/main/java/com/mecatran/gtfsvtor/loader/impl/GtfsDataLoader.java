@@ -20,6 +20,7 @@ import com.mecatran.gtfsvtor.loader.schema.GtfsTableSchema;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
+import com.mecatran.gtfsvtor.reporting.issues.DeprecatedColumnWarning;
 import com.mecatran.gtfsvtor.reporting.issues.DuplicatedColumnError;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
@@ -86,10 +87,11 @@ public class GtfsDataLoader implements DataLoader {
 			nObjects++;
 		}
 		System.out.println("Loaded  " + tableName + ": " + nObjects + " rows.");
-		checkColumns(context.getReportSink(), table, tableDescriptor
-				.getMandatoryColumns(nObjects).toArray(new String[0]));
-
-		closeTable(table, context.getReportSink());
+		checkColumns(context.getReportSink(), table,
+				tableDescriptor.getMandatoryColumns(nObjects),
+				tableDescriptor.getDeprecatedColumns(nObjects));
+		closeTable(table, context.getReportSink(),
+				tableDescriptor.getDeprecatedColumns(nObjects));
 	}
 
 	private DataTable getDataTable(String tableName, boolean mandatory,
@@ -109,12 +111,17 @@ public class GtfsDataLoader implements DataLoader {
 		}
 	}
 
-	private void closeTable(DataTable table, ReportSink reportSink) {
+	private void closeTable(DataTable table, ReportSink reportSink,
+			List<String> deprecatedColumns) {
 		if (table.isEmpty()) {
 			reportSink.report(new EmptyTableError(
 					table.getTableSourceInfo().getTableName()));
 		}
 		for (String unknownColumn : table.getUnreadColumnHeaders()) {
+			if (deprecatedColumns.contains(unknownColumn)) {
+				// O(n) but n is often 0, sometimes 1
+				continue;
+			}
 			reportSink.report(new UnrecognizedColumnInfo(
 					new DataObjectSourceRef(table.getTableName(), 1L),
 					unknownColumn), table.getSourceInfo());
@@ -140,7 +147,8 @@ public class GtfsDataLoader implements DataLoader {
 	}
 
 	private void checkColumns(ReportSink reportSink, DataTable table,
-			String... mandatoryColumnHeaders) {
+			List<String> mandatoryColumnHeaders,
+			List<String> deprecatedColumnHeaders) {
 		Set<String> headerSet = new HashSet<>();
 		List<String> columnHeaders = table.getColumnHeaders();
 		List<String> rawColHeaders = table.getRawColumnHeaders();
@@ -157,6 +165,14 @@ public class GtfsDataLoader implements DataLoader {
 			if (!headerSet.contains(columnHeader)) {
 				reportSink.report(
 						new MissingMandatoryColumnError(table.getSourceRef(),
+								columnHeader),
+						table.getSourceInfo());
+			}
+		}
+		for (String columnHeader : deprecatedColumnHeaders) {
+			if (headerSet.contains(columnHeader)) {
+				reportSink.report(
+						new DeprecatedColumnWarning(table.getSourceRef(),
 								columnHeader),
 						table.getSourceInfo());
 			}

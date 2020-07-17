@@ -18,4 +18,6 @@ public @interface TableDescriptorPolicy {
 	boolean mandatory() default false;
 
 	String[] mandatoryColumns() default {};
+
+	String[] deprecatedColumns() default {};
 }

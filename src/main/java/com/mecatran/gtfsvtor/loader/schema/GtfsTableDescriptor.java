@@ -42,6 +42,12 @@ public interface GtfsTableDescriptor {
 				TableDescriptorPolicy::mandatoryColumns));
 	}
 
+	public default List<String> getDeprecatedColumns(int nObjects) {
+		return Arrays.asList(Annotations.getAnnotation(
+				TableDescriptorPolicy.class, String[].class, this,
+				TableDescriptorPolicy::deprecatedColumns));
+	}
+
 	/**
 	 * Parse from a data table row, build the object, and save it to the DAO.
 	 * 

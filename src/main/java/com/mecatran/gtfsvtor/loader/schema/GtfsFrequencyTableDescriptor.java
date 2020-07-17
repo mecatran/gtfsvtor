@@ -6,7 +6,8 @@ import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
 
 @TableDescriptorPolicy(objectClass = GtfsFrequency.class, tableName = GtfsFrequency.TABLE_NAME, mandatory = false, mandatoryColumns = {
-		"trip_id", "start_time", "end_time", "headway_secs" })
+		"trip_id", "start_time", "end_time",
+		"headway_secs" }, deprecatedColumns = { "frequency" })
 public class GtfsFrequencyTableDescriptor implements GtfsTableDescriptor {
 
 	@Override
