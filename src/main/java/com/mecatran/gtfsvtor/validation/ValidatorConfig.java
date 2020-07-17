@@ -84,6 +84,8 @@ public interface ValidatorConfig {
 
 	public default Pattern getPattern(String key, Pattern defaultValue) {
 		String str = this.getString(key);
+		if (str == null || str.isEmpty())
+			return defaultValue;
 		try {
 			return Pattern.compile(str);
 		} catch (PatternSyntaxException e) {
