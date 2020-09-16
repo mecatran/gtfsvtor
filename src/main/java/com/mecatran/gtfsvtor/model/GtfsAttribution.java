@@ -50,12 +50,24 @@ public class GtfsAttribution
 		return Optional.ofNullable(isProducer);
 	}
 
+	public boolean getNonNullIsProducer() {
+		return isProducer == null ? false : isProducer;
+	}
+
 	public Optional<Boolean> getIsOperator() {
 		return Optional.ofNullable(isOperator);
 	}
 
+	public boolean getNonNullIsOperator() {
+		return isOperator == null ? false : isOperator;
+	}
+
 	public Optional<Boolean> getIsAuthority() {
 		return Optional.ofNullable(isAuthority);
+	}
+
+	public boolean getNonNullIsAuthority() {
+		return isAuthority == null ? false : isAuthority;
 	}
 
 	public Optional<String> getAttributionUrl() {
