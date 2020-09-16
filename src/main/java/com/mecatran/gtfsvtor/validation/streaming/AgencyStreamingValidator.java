@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.validation.streaming;
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkEmail;
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkLang;
 import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkUrl;
+import static com.mecatran.gtfsvtor.validation.impl.StreamingValidationUtils.checkPhone;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.validation.StreamingValidateType;
@@ -17,6 +18,7 @@ public class AgencyStreamingValidator
 			Context context) {
 		checkUrl(agency::getUrl, "agency_url", context);
 		checkEmail(agency::getEmail, "agency_email", context);
+		checkPhone(agency::getPhone, "agency_phone", context);
 		if (agency.getLang() != null) {
 			checkLang(() -> agency.getLang().getLanguage(), "agency_lang",
 					context);
