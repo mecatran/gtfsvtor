@@ -1,9 +1,9 @@
 {
   "dataVersion" : "1.0",
   "reports" : [ {
-    "timestamp" : 1594914955399,
+    "timestamp" : 1600258127814,
     "input" : {
-      "filename" : "src/test/resources/data/verybad"
+      "filename" : "src/test/resources/data/verybad/"
     },
     "validator" : {
       "name" : "GTFSVTOR",
@@ -19,11 +19,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
-        "totalCount" : 109,
+        "totalCount" : 112,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 125,
+        "totalCount" : 134,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -84,6 +84,11 @@
         "severity" : "WARNING",
         "categoryName" : "Expired feed",
         "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Extra space in column header",
+        "totalCount" : 3,
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
@@ -212,6 +217,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Duplicated ID attribution_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Duplicated ID fare_id",
         "totalCount" : 1,
         "reportedCount" : 0
@@ -273,7 +283,12 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Invalid agency_id reference",
-        "totalCount" : 3,
+        "totalCount" : 4,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid agency_id/route_id value",
+        "totalCount" : 1,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -288,6 +303,16 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Invalid agency_url format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid attribution_email format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid attribution_url format",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
@@ -349,6 +374,11 @@
         "severity" : "ERROR",
         "categoryName" : "Invalid from_stop_id/to_stop_id value",
         "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid is_operator format",
+        "totalCount" : 1,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -537,7 +567,17 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Missing mandatory is_producer/is_operator/is_authority value",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Missing mandatory level_index value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory organization_name value",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
