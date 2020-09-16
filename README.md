@@ -6,23 +6,28 @@ See the [LICENSE file](LICENSE) for more information.
 
 ![Java CI](https://github.com/mecatran/gtfsvtor/workflows/Java%20CI/badge.svg)
 
-Project goals
--------------
+Features and project goals
+--------------------------
 
 - Fast
-- Extensible
-- Extensive coverage
-- Backward-compatible with current "standard" validator
+- Memory-efficient, ability to process very large GTFS
+- Extensible, code easy to read and maintain
+- Extensive coverage of validation
+- Backward-compatible with the historical "python" validator
+- Various outputs (json, html...)
 
 How to use GTFSVTOR
 -------------------
 
-GTFSVTOR is still beta, but should be usable as-is.
-As the time of writing, all the tables and fields from the GTFS specifications are loaded,
-except the two tables `translations.txt` and `attributions.txt`.
-Not all validation rules of the legacy feedvalidator.py are implemented, however.
-See the [list of issues in github](https://github.com/mecatran/gtfsvtor/issues?q=is%3Aopen+is%3Aissue+label%3Abackward-compat)
-to check the few missing rules.
+GTFSVTOR is in a workable state.
+
+As the time of writing, all the tables and fields from the GTFS specifications are loaded.
+
+Almost all validation rules of the legacy feedvalidator.py are implemented.
+See the [list of issues in github](https://github.com/mecatran/gtfsvtor/issues?q=is%3Aopen+is%3Aissue+label%3Abackward-compat) to check the few missing rules.
+Other (new or refined) rules have also been added, aiming for backward-compatibility when possible.
+The most notable backward-incompability is the taking into account of exact shapes in computing too fast travels;
+however this change in behavior increase the accuracy and reliability of too fast travels validation.
 
 You can browse this [HTML example report](https://mecatran.github.io/gtfsvtor/validation-results.html)
 to see the validation result of the "verybad" dataset.
@@ -44,7 +49,7 @@ On Windows, use the provided `gtfsvtor.bat` file instead.
 Please note that a Java JRE is required to run the application.
 
 A sample config.properties file is included in the root of the project
-if you want to configure the validation.
+if you want to configure the validation (see [Configuration](#configuration) section below).
 
 For large GTFS, you can increase the default JVM heap size by setting
 the appropriate JVM options in the `GTFSVTOR_OPTS` variable:
@@ -92,13 +97,52 @@ you may place it besides the gtfs file and supply `-c config.properties` as addi
 Note that the timezone must be specified explicitly (via `-e TZ=<your timezone>`) to have correct timestamps 
 reported in the validation-results.html.
 
+Configuration
+-------------
+
+You can configure GTFSVTOR by editing a config file in the project root folder.
+You should specify which config file to load by using the `--config` command-line option.
+See the provided [config.properties](config.properties) example.
+
+You can disable a validator (or enable a validator disabled by default) by writing:
+
+    validator.SomeValidator.enabled = true
+    validator.SomeOtherValidator.enabled = false
+
+When `SomeValidator` is the class name of the validator to enable/disable.
+
+Use the `--listValidators` command-line option to list all validators and their options.
+
+To configure a validator option, write for example:
+
+    validator.CalendarValidator.expiredCutoffDate = 2020/12/31
+
+This example will configure the feed expiry cutoff date to the specified date
+(for information by default the default expiry date is "today").
+
+Bug tracking
+------------
+
+If you experience a bug, please create a ticket in the issue page of the GTFSVTOR github project [here](https://github.com/mecatran/gtfsvtor/issues/new).
+
+Please follow standard best-practices by providing:
+
+- A short summary of the bug
+- What is wrong
+- What is expected
+- The version of GTFSVTOR used
+- The options used (command-line options if any, config file if any)
+- A (minimal) example of (GTFS) data that experience the behavior (or a link to this data)
+- If relevant to the bug, your environment (JVM & OS type and version...)
+
+Create a distinct issue per different bug.
+
 Developer guide
 ---------------
 
 **TODO**
 
 - Code documentation
-- Configuration
 - Adding new validation rules
 - Using GTFSVTOR as a library
 
