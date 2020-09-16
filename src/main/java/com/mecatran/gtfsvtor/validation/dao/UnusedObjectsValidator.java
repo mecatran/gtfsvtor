@@ -21,16 +21,26 @@ public class UnusedObjectsValidator implements DaoValidator {
 		IndexedReadOnlyDao dao = context.getDao();
 		ReportSink reportSink = context.getReportSink();
 
-		/* Look for unused agencies */
+		/*
+		 * Look for unused agencies. Note that we consider an agency to be used
+		 * only if it own some routes. An agency can be referenced in
+		 * translations, attributions, fares... and still be considered as
+		 * "unused" (no routes).
+		 */
 		if (dao.getAgencies().count() > 1)
 			dao.getAgencies().forEach(agency -> {
 				if (dao.getRoutesOfAgency(agency.getId()).count() == 0) {
-					reportSink.report(new UnusedObjectWarning("agency",
-							agency.getId(), agency.getSourceRef(), "agency_id"));
+					reportSink.report(
+							new UnusedObjectWarning("agency", agency.getId(),
+									agency.getSourceRef(), "agency_id"));
 				}
 			});
 
-		/* Look for unused (empty) routes */
+		/*
+		 * Look for unused (empty) routes. Same comment apply to routes: a used
+		 * route must contain trips. A route referenced by attributions or other
+		 * tables but with no trips is considered unused.
+		 */
 		dao.getRoutes().forEach(route -> {
 			if (dao.getTripsOfRoute(route.getId()).count() == 0) {
 				reportSink.report(new UnusedObjectWarning("route",
