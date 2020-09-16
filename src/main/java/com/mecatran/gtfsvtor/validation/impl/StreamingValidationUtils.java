@@ -76,6 +76,11 @@ public class StreamingValidationUtils {
 				"RFC 2822 Email");
 	}
 
+	public static void checkPhone(FieldGetter<String> getter, String fieldName,
+			StreamingValidator.Context context) {
+		// TODO - phone validation rules
+	}
+
 	private static Set<String> LC_ISOLANG = Arrays
 			.asList(Locale.getISOLanguages()).stream().map(String::toLowerCase)
 			.collect(Collectors.toSet());
