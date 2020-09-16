@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.dao;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
@@ -66,6 +67,9 @@ public interface AppendableDao {
 	public void addLevel(GtfsLevel level, SourceContext sourceContext);
 
 	public void addTranslation(GtfsTranslation translation,
+			SourceContext sourceContext);
+
+	public void addAttribution(GtfsAttribution attribution,
 			SourceContext sourceContext);
 
 	public void close();

@@ -8,26 +8,43 @@ public class DefaultGtfsTableSchema implements GtfsTableSchema {
 	private List<GtfsTableDescriptor> tableDescriptors;
 
 	public DefaultGtfsTableSchema() {
-		// TODO Ability to configure list of tables to load
-		// TODO Table dependencies
+		// TODO Ability to configure list of tables to load?
+		// TODO Table dependencies?
 		tableDescriptors = Arrays.asList( //
-				new GtfsFeedInfoTableDescriptor(), //
+				//
+				new GtfsFeedInfoTableDescriptor(),
+				//
 				new GtfsAgencyTableDescriptor(), //
-				new GtfsRouteTableDescriptor(), // ref agencies
-				new GtfsLevelTableDescriptor(), //
-				new GtfsStopTableDescriptor(), // ref levels
-				new GtfsCalendarTableDescriptor(), //
-				new GtfsCalendarDateTableDescriptor(), //
-				new GtfsShapePointTableDescriptor(), //
-				new GtfsTripTableDescriptor(), // ref routes, calendars, shapes
-				new GtfsStopTimeTableDescriptor(), // ref trips, stops
-				new GtfsFrequencyTableDescriptor(), // ref trips
-				new GtfsTransferTableDescriptor(), // ref stops, routes, trips
-				new GtfsPathwayTableDescriptor(), // ref stops
-				new GtfsFareAttributeTableDescriptor(), // ref agencies
-				new GtfsFareRuleTableDescriptor(), // ref fare, routes, zones
-				new GtfsTranslationTableDescriptor() // ref a lot of other tables
-		);
+				// Route reference agencies
+				new GtfsRouteTableDescriptor(),
+				//
+				new GtfsLevelTableDescriptor(),
+				// Stop reference levels
+				new GtfsStopTableDescriptor(),
+				//
+				new GtfsCalendarTableDescriptor(),
+				//
+				new GtfsCalendarDateTableDescriptor(),
+				//
+				new GtfsShapePointTableDescriptor(),
+				// Trip reference routes, calendars, shapes
+				new GtfsTripTableDescriptor(),
+				// StopTime reference trips, stops
+				new GtfsStopTimeTableDescriptor(),
+				// Frequency reference trips
+				new GtfsFrequencyTableDescriptor(),
+				// Transfer reference stops, routes, trips
+				new GtfsTransferTableDescriptor(),
+				// Pathway reference stops
+				new GtfsPathwayTableDescriptor(),
+				// FareAttribute reference agencies
+				new GtfsFareAttributeTableDescriptor(),
+				// FareRule reference fare, routes, zones
+				new GtfsFareRuleTableDescriptor(),
+				// Translation reference a lot of other tables
+				new GtfsTranslationTableDescriptor(),
+				// Attribution reference agencies, routes, trips
+				new GtfsAttributionTableDescriptor());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.mecatran.gtfsvtor.dao.inmemory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +31,7 @@ import com.mecatran.gtfsvtor.dao.stoptimes.StopTimesDao;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
@@ -80,6 +82,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			.create();
 	private Map<GtfsLevel.Id, GtfsLevel> levels = new HashMap<>();
 	private Map<GtfsTranslation.Id, GtfsTranslation> translations = new HashMap<>();
+	private List<GtfsAttribution> attributions = new ArrayList<>();
+	private Map<GtfsAttribution.Id, GtfsAttribution> attributionsPerId = new HashMap<>();
 	private Multimap<GtfsAgency.Id, GtfsRoute> routesPerAgency = ArrayListMultimap
 			.create();
 	private Multimap<GtfsRoute.Id, GtfsTrip> tripsPerRoute = ArrayListMultimap
@@ -308,6 +312,16 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
+	public Stream<GtfsAttribution> getAttributions() {
+		return attributions.stream();
+	}
+
+	@Override
+	public GtfsAttribution getAttribution(GtfsAttribution.Id attributionId) {
+		return attributionsPerId.get(attributionId);
+	}
+
+	@Override
 	public GtfsObject<?> getObject(GtfsTranslationTable table, String recordId,
 			Optional<String> recordSubId) {
 		switch (table) {
@@ -342,8 +356,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		case LEVELS:
 			return getLevel(GtfsLevel.id(recordId));
 		case ATTRIBUTIONS:
-			// TODO
-			return null;
+			return getAttribution(GtfsAttribution.id(recordId));
 		default:
 			throw new RuntimeException("Unhandled table: " + table);
 		}
@@ -801,6 +814,29 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		translations.put(translation.getId(), translation);
+	}
+
+	@Override
+	public void addAttribution(GtfsAttribution attribution,
+			SourceContext sourceContext) {
+		// Always add to list even if ID collide (ID is optional)
+		attributions.add(attribution);
+		// Check for duplicated ID
+		Optional<GtfsAttribution.Id> oid = attribution.getId();
+		if (oid.isPresent()) {
+			GtfsAttribution existingAttribution = getAttribution(oid.get());
+			if (existingAttribution != null) {
+				sourceContext.getReportSink()
+						.report(new DuplicatedObjectIdError(
+								existingAttribution.getSourceRef(),
+								sourceContext.getSourceRef(), oid.get(),
+								"attribution_id"), null,
+								sourceContext.getSourceInfo());
+				return;
+			}
+			// Add to map
+			attributionsPerId.put(oid.get(), attribution);
+		}
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
@@ -93,6 +94,10 @@ public interface ReadOnlyDao {
 	public GtfsTranslation getTranslation(GtfsTranslationTable tableName,
 			String fieldName, Locale language, String recordId,
 			String recordSubId);
+
+	public Stream<GtfsAttribution> getAttributions();
+
+	public GtfsAttribution getAttribution(GtfsAttribution.Id attributionId);
 
 	public GtfsObject<?> getObject(GtfsTranslationTable table, String recordId,
 			Optional<String> recordSubId);
