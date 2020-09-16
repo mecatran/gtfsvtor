@@ -31,6 +31,7 @@ import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsBlockId;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
@@ -334,6 +335,18 @@ public class TestGtfs {
 		GtfsTranslation tsfr = dao.getTranslation(GtfsTranslationTable.STOPS,
 				"stop_name", Locale.FRENCH, "Nye County Airport (Demo)");
 		assertEquals("Aéroport du Comté de Nye (Démo)", tsfr.getTranslation());
+
+		assertEquals(2L, dao.getAttributions().count());
+		GtfsAttribution mecatran = dao
+				.getAttribution(GtfsAttribution.id("MECATRAN"));
+		assertNotNull(mecatran);
+		assertEquals("Mecatran SAS", mecatran.getOrganizationName());
+		assertEquals("https://www.mecatran.com/",
+				mecatran.getAttributionUrl().get());
+		assertEquals(GtfsAttribution.id("MECATRAN"), mecatran.getId().get());
+		assertTrue(mecatran.getIsProducer().get());
+		assertFalse(mecatran.getIsAuthority().isPresent());
+		assertFalse(mecatran.getIsOperator().isPresent());
 	}
 
 	@Test

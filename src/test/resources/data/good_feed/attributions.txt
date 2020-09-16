@@ -1,0 +1,3 @@
+attribution_id,agency_id,route_id,organization_name,is_producer,is_operator,attribution_url,attribution_email,attribution_phone
+MECATRAN,,,Mecatran SAS,1,,https://www.mecatran.com/,info@mecatran.com,
+,DTA,,Demo Operator,0,1,https://www.demotransitoperator.org/,info@demotransitoperator.org,+3312345678
