@@ -21,7 +21,8 @@ GTFSVTOR is still beta, but should be usable as-is.
 As the time of writing, all the tables and fields from the GTFS specifications are loaded,
 except the two tables `translations.txt` and `attributions.txt`.
 Not all validation rules of the legacy feedvalidator.py are implemented, however.
-See the [TODO](TODO) file to check the few missing rules.
+See the [list of issues in github](https://github.com/mecatran/gtfsvtor/issues?q=is%3Aopen+is%3Aissue+label%3Abackward-compat)
+to check the few missing rules.
 
 You can browse this [HTML example report](https://mecatran.github.io/gtfsvtor/validation-results.html)
 to see the validation result of the "verybad" dataset.
