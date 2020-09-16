@@ -1,0 +1,4 @@
+attribution_id,agency_id,route_id,organization_name,is_producer,is_operator,attribution_url,attribution_email,attribution_phone
+MECATRAN,,,Mecatran,1,,https://www.mecatran.com/,info@mecatran.com,
+MECATRAN,AGENCY,,Mecatran SAS,,false,https://www.mecatran.com/,info@mecatran.com,
+,DTA,BFC,,0,0,www.demotransitoperator.org,3312345678,info@demotransitoperator.org

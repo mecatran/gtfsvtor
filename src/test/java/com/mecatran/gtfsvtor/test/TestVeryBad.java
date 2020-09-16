@@ -21,7 +21,7 @@ public class TestVeryBad {
 		assertEquals(6, tb.issuesCountOfSeverities(ReportIssueSeverity.INFO));
 		assertEquals(110,
 				tb.issuesCountOfSeverities(ReportIssueSeverity.WARNING));
-		assertEquals(125,
+		assertEquals(134,
 				tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR));
 		assertEquals(0,
 				tb.issuesCountOfSeverities(ReportIssueSeverity.CRITICAL));
