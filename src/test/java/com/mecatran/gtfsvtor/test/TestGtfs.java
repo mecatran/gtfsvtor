@@ -303,6 +303,8 @@ public class TestGtfs {
 				GtfsTransfer.id(GtfsStop.id("EMSI"), GtfsStop.id("NANAA")));
 		assertEquals(GtfsTransferType.TIMED, t2.getNonNullType());
 		assertEquals(Integer.valueOf(1200), t2.getMinTransferTime());
+		assertEquals(2, t1.getSourceRef().getLineNumber());
+		assertEquals(3, t2.getSourceRef().getLineNumber());
 
 		assertEquals(2, dao.getPathways().count());
 		GtfsPathway p1 = dao.getPathway(GtfsPathway.id("p1"));
@@ -310,6 +312,7 @@ public class TestGtfs {
 				p1.getFromStopId());
 		assertEquals(GtfsStop.id("BEATTY_AIRPORT"), p1.getToStopId());
 		assertEquals(GtfsPathwayMode.WALKWAY, p1.getPathwayMode());
+		assertEquals(2, p1.getSourceRef().getLineNumber());
 
 		assertEquals(2, dao.getFareAttributes().count());
 		GtfsFareAttribute p = dao.getFareAttribute(GtfsFareAttribute.id("p"));
