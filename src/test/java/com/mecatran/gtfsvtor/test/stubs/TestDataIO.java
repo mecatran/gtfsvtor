@@ -1,4 +1,4 @@
-package com.mecatran.gtfsvtor.test;
+package com.mecatran.gtfsvtor.test.stubs;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.NamedDataIO;
 
-// TODO Move to stubs package
 public class TestDataIO implements NamedDataIO {
 
 	private ByteArrayOutputStream out = new ByteArrayOutputStream();

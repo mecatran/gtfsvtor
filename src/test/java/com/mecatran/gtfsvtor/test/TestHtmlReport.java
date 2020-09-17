@@ -19,6 +19,7 @@ import com.github.difflib.patch.Patch;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mecatran.gtfsvtor.test.TestUtils.TestScenario;
+import com.mecatran.gtfsvtor.test.stubs.TestDataIO;
 import com.mecatran.gtfsvtor.utils.SystemEnvironment;
 
 public class TestHtmlReport {

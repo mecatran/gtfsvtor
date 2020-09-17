@@ -13,6 +13,7 @@ import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReviewReport;
+import com.mecatran.gtfsvtor.test.stubs.TestDataIO;
 
 public class TestUtils {
 
