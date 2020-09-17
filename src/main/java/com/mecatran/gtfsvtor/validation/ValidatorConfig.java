@@ -124,6 +124,7 @@ public interface ValidatorConfig {
 		}
 	}
 
+	/* TODO Do we really need the validator object? The class may be enough. */
 	public default String getKey(Object validator) {
 		return getKey(validator, null);
 	}
