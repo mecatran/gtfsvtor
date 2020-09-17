@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.loader.schema;
 import java.util.Set;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsObject;
@@ -17,7 +18,7 @@ public class GtfsCalendarDateTableDescriptor implements GtfsTableDescriptor {
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
 				.withCalendarId(GtfsCalendar.id(erow.getString("service_id")))
-				.withDate(erow.getLogicalDate("date", true)).withExceptionType(
+				.withDate(erow.getLogicalDate("date", Requiredness.MANDATORY)).withExceptionType(
 						erow.getCalendarDateExceptionType("exception_type"));
 		GtfsCalendarDate calendarDate = builder.build();
 		context.getAppendableDao().addCalendarDate(calendarDate,

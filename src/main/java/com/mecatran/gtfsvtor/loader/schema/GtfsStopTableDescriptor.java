@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -18,10 +19,12 @@ public class GtfsStopTableDescriptor implements GtfsTableDescriptor {
 				context.getSourceContext().getSourceRef().getLineNumber())
 				.withType(erow.getStopType("location_type"))
 				.withCode(erow.getString("stop_code"))
-				.withName(erow.getString("stop_name", true))
+				.withName(erow.getString("stop_name", Requiredness.MANDATORY))
 				.withCoordinates(
-						erow.getDouble("stop_lat", null, Double.NaN, false),
-						erow.getDouble("stop_lon", null, Double.NaN, false))
+						erow.getDouble("stop_lat", null, Double.NaN,
+								Requiredness.OPTIONAL),
+						erow.getDouble("stop_lon", null, Double.NaN,
+								Requiredness.OPTIONAL))
 				.withParentId(GtfsStop.id(erow.getString("parent_station")))
 				.withDescription(erow.getString("stop_desc"))
 				.withZoneId(GtfsZone.id(erow.getString("zone_id")))

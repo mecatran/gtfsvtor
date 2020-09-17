@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 
@@ -18,10 +19,11 @@ public class GtfsAgencyTableDescriptor implements GtfsTableDescriptor {
 
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
-				.withName(erow.getString("agency_name", true))
-				.withUrl(erow.getString("agency_url", true))
-				.withTimezone(erow.getTimeZone("agency_timezone", true))
-				.withLang(erow.getLocale("agency_lang", false))
+				.withName(erow.getString("agency_name", Requiredness.MANDATORY))
+				.withUrl(erow.getString("agency_url", Requiredness.MANDATORY))
+				.withTimezone(erow.getTimeZone("agency_timezone",
+						Requiredness.MANDATORY))
+				.withLang(erow.getLocale("agency_lang", Requiredness.OPTIONAL))
 				.withPhone(erow.getString("agency_phone"))
 				.withFareUrl(erow.getString("agency_fare_url"))
 				.withEmail(erow.getString("agency_email"));

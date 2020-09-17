@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 
@@ -14,7 +15,8 @@ public class GtfsLevelTableDescriptor implements GtfsTableDescriptor {
 				erow.getString("level_id"));
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
-				.withIndex(erow.getDouble("level_index", true))
+				.withIndex(
+						erow.getDouble("level_index", Requiredness.MANDATORY))
 				.withName(erow.getString("level_name"));
 		GtfsLevel level = builder.build();
 		context.getAppendableDao().addLevel(level, context.getSourceContext());

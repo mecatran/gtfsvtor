@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
@@ -16,9 +17,12 @@ public class GtfsFrequencyTableDescriptor implements GtfsTableDescriptor {
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
 				.withTripId(GtfsTrip.id(erow.getString("trip_id")))
-				.withStartTime(erow.getLogicalTime("start_time", true))
-				.withEndTime(erow.getLogicalTime("end_time", true))
-				.withHeadwaySeconds(erow.getInteger("headway_secs", true))
+				.withStartTime(erow.getLogicalTime("start_time",
+						Requiredness.MANDATORY))
+				.withEndTime(
+						erow.getLogicalTime("end_time", Requiredness.MANDATORY))
+				.withHeadwaySeconds(
+						erow.getInteger("headway_secs", Requiredness.MANDATORY))
 				.withExactTimes(erow.getExactTimes("exact_times"));
 		GtfsFrequency frequency = builder.build();
 		context.getAppendableDao().addFrequency(frequency,

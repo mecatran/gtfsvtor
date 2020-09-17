@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
@@ -16,17 +17,18 @@ public class GtfsRouteTableDescriptor implements GtfsTableDescriptor {
 				erow.getString("route_id"));
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
-				.withAgencyId(
-						GtfsAgency.id(erow.getString("agency_id", null, false)))
-				.withType(GtfsRouteType
-						.fromValue(erow.getInteger("route_type", true)))
+				.withAgencyId(GtfsAgency.id(erow.getString("agency_id", null,
+						Requiredness.OPTIONAL)))
+				.withType(GtfsRouteType.fromValue(
+						erow.getInteger("route_type", Requiredness.MANDATORY)))
 				.withShortName(erow.getString("route_short_name"))
 				.withLongName(erow.getString("route_long_name"))
 				.withDescription(erow.getString("route_desc"))
 				.withUrl(erow.getString("route_url"))
 				.withColor(erow.getColor("route_color"))
 				.withTextColor(erow.getColor("route_text_color"))
-				.withSortOrder(erow.getInteger("route_sort_order", false));
+				.withSortOrder(erow.getInteger("route_sort_order",
+						Requiredness.OPTIONAL));
 		GtfsRoute route = builder.build();
 		context.getAppendableDao().addRoute(route, context.getSourceContext());
 		return route;

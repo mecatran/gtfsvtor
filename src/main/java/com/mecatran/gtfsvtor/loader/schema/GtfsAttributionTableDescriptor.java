@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsObject;
@@ -17,18 +18,25 @@ public class GtfsAttributionTableDescriptor implements GtfsTableDescriptor {
 				erow.getString("attribution_id"));
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
-				.withAgencyId(GtfsAgency.id(erow.getString("agency_id", false)))
-				.withRouteId(GtfsRoute.id(erow.getString("route_id", false)))
-				.withTripId(GtfsTrip.id(erow.getString("trip_id", false)))
+				.withAgencyId(GtfsAgency
+						.id(erow.getString("agency_id", Requiredness.OPTIONAL)))
+				.withRouteId(GtfsRoute
+						.id(erow.getString("route_id", Requiredness.OPTIONAL)))
+				.withTripId(GtfsTrip
+						.id(erow.getString("trip_id", Requiredness.OPTIONAL)))
 				.withOrganizationName(erow.getString("organization_name"))
-				.withIsProducer(erow.getBoolean("is_producer", false))
-				.withIsOperator(erow.getBoolean("is_operator", false))
-				.withIsAuthority(erow.getBoolean("is_authority", false))
-				.withAttributionUrl(erow.getString("attribution_url", false))
-				.withAttributionEmail(
-						erow.getString("attribution_email", false))
-				.withAttributionPhone(
-						erow.getString("attribution_phone", false));
+				.withIsProducer(
+						erow.getBoolean("is_producer", Requiredness.OPTIONAL))
+				.withIsOperator(
+						erow.getBoolean("is_operator", Requiredness.OPTIONAL))
+				.withIsAuthority(
+						erow.getBoolean("is_authority", Requiredness.OPTIONAL))
+				.withAttributionUrl(erow.getString("attribution_url",
+						Requiredness.OPTIONAL))
+				.withAttributionEmail(erow.getString("attribution_email",
+						Requiredness.OPTIONAL))
+				.withAttributionPhone(erow.getString("attribution_phone",
+						Requiredness.OPTIONAL));
 		GtfsAttribution attribution = builder.build();
 		context.getAppendableDao().addAttribution(attribution,
 				context.getSourceContext());

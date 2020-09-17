@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -20,11 +21,15 @@ public class GtfsPathwayTableDescriptor implements GtfsTableDescriptor {
 				.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
 				.withPathwayMode(erow.getPathwayMode("pathway_mode"))
 				.withBidirectional(erow.getDirectionality("is_bidirectional"))
-				.withLength(erow.getDouble("length", false))
-				.withTraversalTime(erow.getInteger("traversal_time", false))
-				.withStairCount(erow.getInteger("stair_count", false))
-				.withMaxSlope(erow.getDouble("max_slope", false))
-				.withMinWitdth(erow.getDouble("min_width", false))
+				.withLength(erow.getDouble("length", Requiredness.OPTIONAL))
+				.withTraversalTime(erow.getInteger("traversal_time",
+						Requiredness.OPTIONAL))
+				.withStairCount(
+						erow.getInteger("stair_count", Requiredness.OPTIONAL))
+				.withMaxSlope(
+						erow.getDouble("max_slope", Requiredness.OPTIONAL))
+				.withMinWitdth(
+						erow.getDouble("min_width", Requiredness.OPTIONAL))
 				.withSignpostedAs(erow.getString("signposted_as"))
 				.withReversedSignpostedAs(
 						erow.getString("reversed_signposted_as"));

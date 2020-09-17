@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
 import com.mecatran.gtfsvtor.model.GtfsObject;
@@ -15,13 +16,13 @@ public class GtfsFareAttributeTableDescriptor implements GtfsTableDescriptor {
 				erow.getString("fare_id"));
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
-				.withPrice(erow.getDouble("price", true))
+				.withPrice(erow.getDouble("price", Requiredness.MANDATORY))
 				.withCurrencyType(erow.getCurrency("currency_type"))
 				.withPaymentMethod(erow.getPaymentMethod("payment_method"))
 				.withTransfers(erow.getNumTransfers("transfers"))
 				.withAgencyId(GtfsAgency.id(erow.getString("agency_id")))
-				.withTransferDuration(
-						erow.getInteger("transfer_duration", false));
+				.withTransferDuration(erow.getInteger("transfer_duration",
+						Requiredness.OPTIONAL));
 		GtfsFareAttribute fareAttribute = builder.build();
 		context.getAppendableDao().addFareAttribute(fareAttribute,
 				context.getSourceContext());

@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 
@@ -16,11 +17,14 @@ public class GtfsFeedInfoTableDescriptor implements GtfsTableDescriptor {
 				context.getSourceContext().getSourceRef().getLineNumber())
 				.withFeedPublisherName(erow.getString("feed_publisher_name"))
 				.withFeedPublisherUrl(erow.getString("feed_publisher_url"))
-				.withFeedLang(erow.getLocale("feed_lang", true))
-				.withDefaultLang(erow.getLocale("default_lang", false))
-				.withFeedStartDate(
-						erow.getLogicalDate("feed_start_date", false))
-				.withFeedEndDate(erow.getLogicalDate("feed_end_date", false))
+				.withFeedLang(
+						erow.getLocale("feed_lang", Requiredness.MANDATORY))
+				.withDefaultLang(
+						erow.getLocale("default_lang", Requiredness.OPTIONAL))
+				.withFeedStartDate(erow.getLogicalDate("feed_start_date",
+						Requiredness.OPTIONAL))
+				.withFeedEndDate(erow.getLogicalDate("feed_end_date",
+						Requiredness.OPTIONAL))
 				.withFeedVersion(erow.getString("feed_version"))
 				.withFeedContactEmail(erow.getString("feed_contact_email"))
 				.withFeedContactUrl(erow.getString("feed_contact_url"));

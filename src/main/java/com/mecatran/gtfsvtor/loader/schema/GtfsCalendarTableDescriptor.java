@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 
@@ -15,15 +16,17 @@ public class GtfsCalendarTableDescriptor implements GtfsTableDescriptor {
 				erow.getString("service_id"));
 		builder.withSourceLineNumber(
 				context.getSourceContext().getSourceRef().getLineNumber())
-				.withDow(erow.getBoolean("monday", true),
-						erow.getBoolean("tuesday", true),
-						erow.getBoolean("wednesday", true),
-						erow.getBoolean("thursday", true),
-						erow.getBoolean("friday", true),
-						erow.getBoolean("saturday", true),
-						erow.getBoolean("sunday", true))
-				.withStartDate(erow.getLogicalDate("start_date", true))
-				.withEndDate(erow.getLogicalDate("end_date", true));
+				.withDow(erow.getBoolean("monday", Requiredness.MANDATORY),
+						erow.getBoolean("tuesday", Requiredness.MANDATORY),
+						erow.getBoolean("wednesday", Requiredness.MANDATORY),
+						erow.getBoolean("thursday", Requiredness.MANDATORY),
+						erow.getBoolean("friday", Requiredness.MANDATORY),
+						erow.getBoolean("saturday", Requiredness.MANDATORY),
+						erow.getBoolean("sunday", Requiredness.MANDATORY))
+				.withStartDate(erow.getLogicalDate("start_date",
+						Requiredness.MANDATORY))
+				.withEndDate(erow.getLogicalDate("end_date",
+						Requiredness.MANDATORY));
 		GtfsCalendar calendar = builder.build();
 		context.getAppendableDao().addCalendar(calendar,
 				context.getSourceContext());

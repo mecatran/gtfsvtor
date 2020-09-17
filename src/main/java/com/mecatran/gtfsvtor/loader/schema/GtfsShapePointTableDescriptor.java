@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
@@ -14,12 +15,13 @@ public class GtfsShapePointTableDescriptor implements GtfsTableDescriptor {
 	public GtfsObject<?> parseAndSave(DataRowConverter erow, Context context) {
 		GtfsShapePoint.Builder builder = new SimpleGtfsShapePoint.Builder();
 		builder.withShapeId(GtfsShape.id(erow.getString("shape_id")))
-				.withCoordinates(erow.getDouble("shape_pt_lat", true),
-						erow.getDouble("shape_pt_lon", true))
+				.withCoordinates(
+						erow.getDouble("shape_pt_lat", Requiredness.MANDATORY),
+						erow.getDouble("shape_pt_lon", Requiredness.MANDATORY))
 				.withPointSequence(
 						erow.getShapePointSequence("shape_pt_sequence"))
-				.withShapeDistTraveled(
-						erow.getDouble("shape_dist_traveled", false));
+				.withShapeDistTraveled(erow.getDouble("shape_dist_traveled",
+						Requiredness.OPTIONAL));
 		GtfsShapePoint shapePoint = builder.build();
 		context.getAppendableDao().addShapePoint(shapePoint,
 				context.getSourceContext());

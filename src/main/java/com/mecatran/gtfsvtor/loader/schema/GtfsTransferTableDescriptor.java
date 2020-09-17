@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
+import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -23,8 +24,8 @@ public class GtfsTransferTableDescriptor implements GtfsTableDescriptor {
 				.withFromTripId(GtfsTrip.id(erow.getString("from_trip_id")))
 				.withToTripId(GtfsTrip.id(erow.getString("to_trip_id")))
 				.withTransferType(erow.getTransferType("transfer_type"))
-				.withMinTransferTime(
-						erow.getInteger("min_transfer_time", false));
+				.withMinTransferTime(erow.getInteger("min_transfer_time",
+						Requiredness.OPTIONAL));
 		GtfsTransfer transfer = builder.build();
 		context.getAppendableDao().addTransfer(transfer,
 				context.getSourceContext());
