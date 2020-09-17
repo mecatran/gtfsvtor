@@ -14,7 +14,9 @@ public class GtfsTransferTableDescriptor implements GtfsTableDescriptor {
 	@Override
 	public GtfsObject<?> parseAndSave(DataRowConverter erow, Context context) {
 		GtfsTransfer.Builder builder = new GtfsTransfer.Builder();
-		builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
+		builder.withSourceLineNumber(
+				context.getSourceContext().getSourceRef().getLineNumber())
+				.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
 				.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
 				.withFromRouteId(GtfsRoute.id(erow.getString("from_route_id")))
 				.withToRouteId(GtfsRoute.id(erow.getString("to_route_id")))

@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
-public class GtfsTransfer implements GtfsObject<GtfsTransfer.Id> {
+public class GtfsTransfer
+		implements GtfsObject<GtfsTransfer.Id>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "transfers.txt";
 
@@ -14,8 +15,15 @@ public class GtfsTransfer implements GtfsObject<GtfsTransfer.Id> {
 	private GtfsTransferType transferType;
 	private Integer minTransferTime;
 
+	private long sourceLineNumber;
+
 	public GtfsTransfer.Id getId() {
 		return id;
+	}
+
+	@Override
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsStop.Id getFromStopId() {
@@ -206,6 +214,11 @@ public class GtfsTransfer implements GtfsObject<GtfsTransfer.Id> {
 		public Builder() {
 			transfer = new GtfsTransfer();
 			idBuilder = new Id.Builder();
+		}
+
+		public Builder withSourceLineNumber(long lineNumber) {
+			transfer.sourceLineNumber = lineNumber;
+			return this;
 		}
 
 		public Builder withFromStopId(GtfsStop.Id fromStopId) {
