@@ -3,7 +3,8 @@ package com.mecatran.gtfsvtor.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GtfsPathway implements GtfsObject<String> {
+public class GtfsPathway
+		implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "pathways.txt";
 
@@ -20,8 +21,15 @@ public class GtfsPathway implements GtfsObject<String> {
 	private String signpostedAs;
 	private String reversedSignpostedAs;
 
+	private long sourceLineNumber;
+
 	public GtfsPathway.Id getId() {
 		return id;
+	}
+
+	@Override
+	public DataObjectSourceRef getSourceRef() {
+		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
 	public GtfsStop.Id getFromStopId() {
@@ -102,6 +110,11 @@ public class GtfsPathway implements GtfsObject<String> {
 		public Builder(String id) {
 			pathway = new GtfsPathway();
 			pathway.id = id(id);
+		}
+
+		public Builder withSourceLineNumber(long lineNumber) {
+			pathway.sourceLineNumber = lineNumber;
+			return this;
 		}
 
 		public Builder withFromStopId(GtfsStop.Id fromStopId) {

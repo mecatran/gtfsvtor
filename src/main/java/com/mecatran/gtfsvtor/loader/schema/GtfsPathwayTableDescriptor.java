@@ -14,7 +14,9 @@ public class GtfsPathwayTableDescriptor implements GtfsTableDescriptor {
 	public GtfsObject<?> parseAndSave(DataRowConverter erow, Context context) {
 		GtfsPathway.Builder builder = new GtfsPathway.Builder(
 				erow.getString("pathway_id"));
-		builder.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
+		builder.withSourceLineNumber(
+				context.getSourceContext().getSourceRef().getLineNumber())
+				.withFromStopId(GtfsStop.id(erow.getString("from_stop_id")))
 				.withToStopId(GtfsStop.id(erow.getString("to_stop_id")))
 				.withPathwayMode(erow.getPathwayMode("pathway_mode"))
 				.withBidirectional(erow.getDirectionality("is_bidirectional"))
