@@ -134,38 +134,56 @@ public class TooFastTravelValidator implements TripTimesValidator {
 		return maxSpeedMps;
 	}
 
-	private double getMaxSpeedMps(int routeTypeCode, ValidatorConfig config) {
-		double maxSpeedKph;
-		switch (GtfsRouteType.mapExtendedToBaseRouteTypeCode(routeTypeCode)) {
+	double getMaxSpeedMps(int routeTypeCode, ValidatorConfig config) {
+		double defMaxSpeedKph;
+		int baseRouteTypeCode = GtfsRouteType
+				.mapExtendedToBaseRouteTypeCode(routeTypeCode);
+		switch (baseRouteTypeCode) {
 		default:
 		case GtfsRouteType.CABLE_CAR_CODE:
 		case GtfsRouteType.GONDOLA_CODE:
 		case GtfsRouteType.FUNICULAR_CODE:
-			maxSpeedKph = 50;
+			defMaxSpeedKph = 50;
 			break;
 		case GtfsRouteType.FERRY_CODE:
-			maxSpeedKph = 80;
+			defMaxSpeedKph = 80;
 			break;
 		case GtfsRouteType.TRAM_CODE:
 		case GtfsRouteType.BUS_CODE:
 		case GtfsRouteType.TROLLEYBUS_CODE:
-				maxSpeedKph = 100;
+			defMaxSpeedKph = 100;
 			break;
-	  case GtfsRouteType.INTERCITY_BUS_CODE:
-	  	// Note: not yet officially adopted routeType
-	  	maxSpeedKph = 120;
+		case GtfsRouteType.INTERCITY_BUS_CODE:
+			// Note: not yet officially adopted routeType
+			defMaxSpeedKph = 120;
 			break;
-	  case GtfsRouteType.MONORAIL_CODE:
-	  case GtfsRouteType.METRO_CODE:
-			maxSpeedKph = 150;
+		case GtfsRouteType.MONORAIL_CODE:
+		case GtfsRouteType.METRO_CODE:
+			defMaxSpeedKph = 150;
 			break;
 		case GtfsRouteType.RAIL_CODE:
-			maxSpeedKph = 300;
+			defMaxSpeedKph = 300;
 			break;
 		}
-		maxSpeedKph = config.getDouble(
-				config.getKey(this, "maxSpeedKph." + routeTypeCode),
-				maxSpeedKph);
+		/*
+		 * First look for a configured value for the exact type first. If
+		 * defined, take it.
+		 */
+		Double maxSpeedKph = config.getDouble(
+				config.getKey(this, "maxSpeedKph." + routeTypeCode), null);
+		if (maxSpeedKph == null && baseRouteTypeCode != routeTypeCode) {
+			/*
+			 * A configured value does not exist for the exact type. Look for
+			 * the equivalent base type in case we use extended type.
+			 */
+			maxSpeedKph = config.getDouble(
+					config.getKey(this, "maxSpeedKph." + baseRouteTypeCode),
+					null);
+		}
+		if (maxSpeedKph == null) {
+			/* No configured value, exact or base. Take the base default. */
+			maxSpeedKph = defMaxSpeedKph;
+		}
 		return maxSpeedKph / 3.6; // in m/s
 	}
 
