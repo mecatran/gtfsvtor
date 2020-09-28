@@ -6,6 +6,11 @@ See the [LICENSE file](LICENSE) for more information.
 
 ![Java CI](https://github.com/mecatran/gtfsvtor/workflows/Java%20CI/badge.svg)
 
+Online public validator
+-----------------------
+
+**New!** A free online validator is hosted here: [https://gtfsvtor.mecatran.com/](https://gtfsvtor.mecatran.com/).
+
 Features and project goals
 --------------------------
 
