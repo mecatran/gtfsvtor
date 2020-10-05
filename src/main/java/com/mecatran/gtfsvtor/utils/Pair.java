@@ -3,7 +3,6 @@ package com.mecatran.gtfsvtor.utils;
 import java.util.Objects;
 
 public class Pair<E1, E2> {
-	// implements Comparable<ComparablePair<E1, E2>> {
 
 	private E1 a;
 	private E2 b;
