@@ -180,7 +180,7 @@ public class GtfsDataLoader implements DataLoader {
 		for (int i = 0; i < columnHeaders.size()
 				&& i < rawColHeaders.size(); i++) {
 			String columnHeader = columnHeaders.get(i);
-			String rawColHeader = rawColHeaders.get(i);
+			String rawColHeader = rawColHeaders.get(i).replaceAll("\n|\r", "");
 			if (!columnHeader.equals(rawColHeader)) {
 				reportSink.report(
 						new SpaceInColumnWarning(table.getSourceRef(),
