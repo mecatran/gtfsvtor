@@ -1520,10 +1520,12 @@ public class TestGtfs {
 	public void testIncompleteShapes() {
 		TestBundle tb = loadAndValidate("incomplete_shapes");
 		LinearGeometryIndex lgi = tb.dao.getLinearGeometryIndex();
+
 		GtfsStop s1 = tb.dao.getStop(GtfsStop.id("S1"));
 		GtfsStop s2 = tb.dao.getStop(GtfsStop.id("S2"));
 		assertFalse(s2.getValidCoordinates().isPresent());
 		GtfsStop s3 = tb.dao.getStop(GtfsStop.id("S3"));
+
 		// T1 has shape and shape_dist_traveled
 		// T1 run S1-S2-S3, S2 having no coordinates
 		GtfsTripAndTimes t1 = tb.dao.getTripAndTimes(GtfsTrip.id("T1"));
@@ -1582,6 +1584,59 @@ public class TestGtfs {
 		assertFalse(lgi.getProjectedPoint(st32).get().getArcLengthMeters()
 				.isPresent());
 		assertTrue(lgi.getProjectedPoint(st33).isPresent());
+
+		// T4 has shape and shape_dist_traveled
+		// T4 run S1-SX-S3, SX being not present
+		GtfsTripAndTimes t4 = tb.dao.getTripAndTimes(GtfsTrip.id("T4"));
+		GtfsStopTime st41 = t4.getStopTimes().get(0);
+		GtfsStopTime st42 = t4.getStopTimes().get(1);
+		GtfsStopTime st43 = t4.getStopTimes().get(2);
+		assertEquals(lgi.getProjectedPoint(st41).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertFalse(lgi.getProjectedPoint(st42).get().getDistanceToShapeMeters()
+				.isPresent());
+		assertEquals(lgi.getProjectedPoint(st43).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		/* Same remark for SX than S2. */
+		assertEquals(d13, lgi.getLinearDistance(st41, st42).get()
+				+ lgi.getLinearDistance(st42, st43).get(), 1e-3);
+
+		// T5 has no shape - SX still is not present
+		GtfsTripAndTimes t5 = tb.dao.getTripAndTimes(GtfsTrip.id("T5"));
+		GtfsStopTime st51 = t5.getStopTimes().get(0);
+		GtfsStopTime st52 = t5.getStopTimes().get(1);
+		GtfsStopTime st53 = t5.getStopTimes().get(2);
+		GtfsStopTime st54 = t5.getStopTimes().get(3);
+		assertTrue(lgi.getProjectedPoint(st51).isPresent());
+		assertFalse(lgi.getProjectedPoint(st52).isPresent());
+		assertTrue(lgi.getProjectedPoint(st53).isPresent());
+		assertFalse(lgi.getLinearDistance(st51, st52).isPresent());
+		assertFalse(lgi.getLinearDistance(st52, st53).isPresent());
+		assertTrue(lgi.getLinearDistance(st53, st54).isPresent());
+
+		// T6 has shape w/o shape_dist_coordinates
+		GtfsTripAndTimes t6 = tb.dao.getTripAndTimes(GtfsTrip.id("T6"));
+		GtfsStopTime st61 = t6.getStopTimes().get(0);
+		GtfsStopTime st62 = t6.getStopTimes().get(1);
+		GtfsStopTime st63 = t6.getStopTimes().get(2);
+		GtfsStopTime st64 = t6.getStopTimes().get(3);
+		assertEquals(lgi.getProjectedPoint(st61).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertFalse(lgi.getProjectedPoint(st62).get().getDistanceToShapeMeters()
+				.isPresent());
+		assertEquals(lgi.getProjectedPoint(st63).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertEquals(lgi.getProjectedPoint(st64).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertTrue(lgi.getProjectedPoint(st61).isPresent());
+		assertTrue(lgi.getProjectedPoint(st62).isPresent());
+		assertFalse(lgi.getProjectedPoint(st62).get().getProjectedPoint()
+				.isPresent());
+		assertFalse(lgi.getProjectedPoint(st62).get().getDistanceToShapeMeters()
+				.isPresent());
+		assertFalse(lgi.getProjectedPoint(st62).get().getArcLengthMeters()
+				.isPresent());
+		assertTrue(lgi.getProjectedPoint(st63).isPresent());
 	}
 
 	@Test

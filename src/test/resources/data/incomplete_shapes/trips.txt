@@ -2,3 +2,6 @@ route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id
 R1,C1,T1,S1-S2-S3,0,,S1S2S3
 R1,C1,T2,S1-S2-S3-S4,0,,
 R1,C1,T3,S1-S2-S3-S4,0,,S1S2S3S4
+R1,C1,T4,S1-SX-S3,0,,S1S2S3
+R1,C1,T5,S1-SX-S3-S4,0,,
+R1,C1,T6,S1-SX-S3-S4,0,,S1S2S3S4

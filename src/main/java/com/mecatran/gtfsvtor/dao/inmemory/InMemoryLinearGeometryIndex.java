@@ -551,7 +551,8 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		LocalMin min = null;
 		double bestMinDist = Double.MAX_VALUE;
 		double minDist = Double.MAX_VALUE;
-		Optional<GeoCoordinates> op = stop.getValidCoordinates();
+		Optional<GeoCoordinates> op = stop == null ? Optional.empty()
+				: stop.getValidCoordinates();
 		if (!op.isPresent()) {
 			return Arrays.asList(new LocalMin(stopIndex, lastMin.segmentIndex,
 					lastMin.kSegment, Double.NaN, null));
