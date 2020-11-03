@@ -53,18 +53,20 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		}
 
 		@Override
-		public double getArcLengthMeters() {
-			return arcLengthMeters;
+		public Optional<Double> getArcLengthMeters() {
+			return Double.isNaN(arcLengthMeters) ? Optional.empty()
+					: Optional.of(arcLengthMeters);
 		}
 
 		@Override
-		public double getDistanceToShapeMeters() {
-			return distanceToShapeMeters;
+		public Optional<Double> getDistanceToShapeMeters() {
+			return Double.isNaN(distanceToShapeMeters) ? Optional.empty()
+					: Optional.of(distanceToShapeMeters);
 		}
 
 		@Override
-		public GeoCoordinates getProjectedPoint() {
-			return projectedPoint;
+		public Optional<GeoCoordinates> getProjectedPoint() {
+			return Optional.ofNullable(projectedPoint);
 		}
 
 		@Override
@@ -150,18 +152,18 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 	}
 
 	@Override
-	public ProjectedPoint getProjectedPoint(GtfsStopTime stopTime) {
+	public Optional<ProjectedPoint> getProjectedPoint(GtfsStopTime stopTime) {
 		ProjectedShapePatternImpl linearIndex = patternIndexByTrips
 				.get(stopTime.getTripId());
 		if (linearIndex == null)
-			return null;
+			return Optional.empty();
 		ProjectedPointImpl ppos = linearIndex.projections
 				.get(stopTime.getStopSequence());
-		return ppos;
+		return Optional.ofNullable(ppos);
 	}
 
 	@Override
-	public Double getLinearDistance(GtfsStopTime stopTime1,
+	public Optional<Double> getLinearDistance(GtfsStopTime stopTime1,
 			GtfsStopTime stopTime2) {
 		if (!stopTime1.getTripId().equals(stopTime2.getTripId()))
 			throw new IllegalArgumentException(
@@ -171,18 +173,16 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		ProjectedShapePatternImpl linearIndex = patternIndexByTrips
 				.get(stopTime1.getTripId());
 		if (linearIndex == null)
-			return null;
+			return Optional.empty();
 		ProjectedPointImpl ppos1 = linearIndex.projections
 				.get(stopTime1.getStopSequence());
 		ProjectedPointImpl ppos2 = linearIndex.projections
 				.get(stopTime2.getStopSequence());
 		if (ppos1 == null || ppos2 == null)
-			return null;
-		Double d1 = ppos1.arcLengthMeters;
-		Double d2 = ppos2.arcLengthMeters;
-		if (d1 == null || d2 == null)
-			return null;
-		return d2 - d1;
+			return Optional.empty();
+		double d1 = ppos1.arcLengthMeters;
+		double d2 = ppos2.arcLengthMeters;
+		return Optional.of(d2 - d1);
 	}
 
 	@Override
@@ -309,7 +309,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 				// Stops before the start of shape
 				double dap = stop == null
 						|| !stop.getValidCoordinates().isPresent()
-								? 0.
+								? Double.NaN
 								: Geodesics.distanceMeters(
 										stop.getValidCoordinates().get(),
 										a.getCoordinates());
@@ -332,7 +332,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 						pa.getLon() + (pb.getLon() - pa.getLon()) * k);
 				// Compute distance from stop to shape, if possible
 				double dpp = stop == null
-						|| !stop.getValidCoordinates().isPresent() ? 0.0
+						|| !stop.getValidCoordinates().isPresent() ? Double.NaN
 								: Geodesics.distanceMeters(
 										stop.getValidCoordinates().get(), pp);
 				patternIndex.projections.put(st.getStopSequence(),
@@ -354,7 +354,7 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 			GtfsStopTime st = stopTimes.get(stopIndex);
 			GtfsStop stop = dao.getStop(st.getStopId());
 			double dbp = stop == null || !stop.getValidCoordinates().isPresent()
-					? 0.
+					? Double.NaN
 					: Geodesics.distanceMeters(stop.getValidCoordinates().get(),
 							pb.getCoordinates());
 			patternIndex.projections.put(st.getStopSequence(),
@@ -425,17 +425,19 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 		// Compute all local minima from each point to the shape
 		List<List<LocalMin>> localMinsPerStop = new ArrayList<>();
 		LocalMin start = new LocalMin(-1, 0, 0.0, 0.0, null);
+		LocalMin lastMin = start;
 		localMinsPerStop.add(Arrays.asList(start));
 		for (int i = 0; i < stopTimes.size(); i++) {
 			GtfsStopTime stopTime = stopTimes.get(i);
 			GtfsStop stop = dao.getStop(stopTime.getStopId());
 			List<LocalMin> localMinsForStop = computeLocalMins(i, stop,
-					shapePoints);
+					shapePoints, lastMin);
 			if (_debug) {
 				System.out.println("Local mins for " + stop);
 				localMinsForStop.forEach(lm -> System.out.println("   " + lm));
 			}
 			localMinsPerStop.add(localMinsForStop);
+			lastMin = localMinsForStop.get(localMinsForStop.size() - 1);
 		}
 		LocalMin goal = new LocalMin(stopTimes.size(), Integer.MAX_VALUE, 1.0,
 				0.0, null);
@@ -454,8 +456,12 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 					.get(localMinsForStop.size() - 1);
 			if (maxForStop.compareTo(currentMax) < 0) {
 				// Add extra local min after maxForStop
-				double d2 = Geodesics.distanceMeters(currentMax.projectedPoint,
-						stop.getCoordinates());
+				// If a stop has no valid coordinates, assume dist=0
+				Optional<GeoCoordinates> oc = stop.getValidCoordinates();
+				double d2 = oc.isPresent() && currentMax.projectedPoint != null
+						? Geodesics.distanceMeters(currentMax.projectedPoint,
+								oc.get())
+						: 0.0;
 				LocalMin extraLocalMin = new LocalMin(i,
 						currentMax.segmentIndex, currentMax.kSegment, d2,
 						currentMax.projectedPoint);
@@ -480,8 +486,10 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 
 			@Override
 			public Iterable<TraverseInfo<LocalMin>> neighbors(LocalMin node) {
-				double cost = node.distanceToProjectedPointMeters
-						* node.distanceToProjectedPointMeters;
+				double cost = Double.isNaN(node.distanceToProjectedPointMeters)
+						? 0.0
+						: node.distanceToProjectedPointMeters
+								* node.distanceToProjectedPointMeters;
 				return localMinsPerStop.get(node.stopIndex + 2).stream()
 						.filter(lm -> lm.compareTo(node) >= 0)
 						.map(lm -> new TraverseInfo<>(lm, cost))
@@ -516,7 +524,9 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 					shapePoints.get(min.segmentIndex + 1).getCoordinates());
 			double segDst = segmentLinearDistanceMeters.get(min.segmentIndex);
 			pattern.projections.put(stopTime.getStopSequence(),
-					new ProjectedPointImpl(segDst + segLen * min.kSegment,
+					new ProjectedPointImpl(
+							min.projectedPoint == null ? Double.NaN
+									: segDst + segLen * min.kSegment,
 							min.distanceToProjectedPointMeters,
 							min.projectedPoint, true, stopTime.getStopId(),
 							stopTime.getStopSequence()));
@@ -536,13 +546,17 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 	 * we are using a fast version of the distance function.
 	 */
 	private List<LocalMin> computeLocalMins(int stopIndex, GtfsStop stop,
-			List<GtfsShapePoint> shapePoints) {
+			List<GtfsShapePoint> shapePoints, LocalMin lastMin) {
 		List<LocalMin> ret = new ArrayList<>();
 		LocalMin min = null;
 		double bestMinDist = Double.MAX_VALUE;
 		double minDist = Double.MAX_VALUE;
-		// TODO Handle the case where stop has no coordinates
-		GeoCoordinates p = stop.getCoordinates();
+		Optional<GeoCoordinates> op = stop.getValidCoordinates();
+		if (!op.isPresent()) {
+			return Arrays.asList(new LocalMin(stopIndex, lastMin.segmentIndex,
+					lastMin.kSegment, Double.NaN, null));
+		}
+		GeoCoordinates p = op.get();
 		double cosLat = Math.cos(Math.toRadians(p.getLat()));
 		for (int segIndex = 0; segIndex < shapePoints.size() - 1; segIndex++) {
 			GtfsShapePoint a = shapePoints.get(segIndex);

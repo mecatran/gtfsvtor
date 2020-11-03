@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.validation.dao;
 
+import java.util.Optional;
+
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex.ProjectedPoint;
@@ -27,7 +29,13 @@ public class StopTooFarFromShapeValidator implements DaoValidator {
 		lgi.getProjectedPatterns().filter(psp -> psp.getShapeId().isPresent())
 				.forEach(psp -> {
 					for (ProjectedPoint pp : psp.getProjectedPoints()) {
-						double dts = pp.getDistanceToShapeMeters();
+						Optional<Double> odts = pp.getDistanceToShapeMeters();
+						if (!odts.isPresent()) {
+							// In case of invalid stop or coordinate, do not
+							// report an issue
+							continue;
+						}
+						double dts = odts.get();
 						ReportIssueSeverity severity = null;
 						if (dts > maxDistanceMetersError) {
 							severity = ReportIssueSeverity.ERROR;
@@ -42,10 +50,9 @@ public class StopTooFarFromShapeValidator implements DaoValidator {
 						StopTooFarFromShapeIssue issue = new StopTooFarFromShapeIssue(
 								stop, pp.getStopSequence(),
 								psp.getShapeId().get(),
-								psp.getTripIds().iterator().next(),
-								pp.getDistanceToShapeMeters(),
-								pp.getArcLengthMeters(), pp.getProjectedPoint(),
-								severity);
+								psp.getTripIds().iterator().next(), dts,
+								pp.getArcLengthMeters().orElse(Double.NaN),
+								pp.getProjectedPoint().orElse(null), severity);
 						reportSink.report(issue);
 					}
 				});

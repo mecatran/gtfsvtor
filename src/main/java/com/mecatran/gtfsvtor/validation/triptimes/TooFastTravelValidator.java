@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.validation.triptimes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
 import com.mecatran.gtfsvtor.dao.LinearGeometryIndex;
@@ -62,51 +63,58 @@ public class TooFastTravelValidator implements TripTimesValidator {
 		ProjectedPoint lastValidProjectedPoint = null;
 		int sameTimeCounter = 1;
 		for (GtfsStopTime stopTime : stopTimes) {
-			ProjectedPoint projectedPoint = lgi.getProjectedPoint(stopTime);
+			Optional<ProjectedPoint> oProjectedPoint = lgi
+					.getProjectedPoint(stopTime);
 			GtfsLogicalTime arrivalTime = stopTime.getArrivalOrDepartureTime();
-			if (projectedPoint != null && arrivalTime != null) {
-				if (lastValidStopTime != null) {
-					double d = projectedPoint.getArcLengthMeters()
-							- lastValidProjectedPoint.getArcLengthMeters();
-					int t = arrivalTime.getSecondSinceMidnight()
-							- lastValidStopTime.getDepartureOrArrivalTime()
-									.getSecondSinceMidnight();
-					if (t < 0) {
-						// Time-travel
-						GtfsStop stop1 = dao
-								.getStop(lastValidStopTime.getStopId());
-						GtfsStop stop2 = dao.getStop(stopTime.getStopId());
-						reportSink.report(new TimeTravelError(route, trip,
-								lastValidStopTime, stop1, stopTime, stop2));
-					} else {
-						// Forward-time
-						if (t == 0) {
-							sameTimeCounter++;
-						} else {
-							if (sameTimeCounter > maxStopsWithSameTime) {
-								reportSink.report(
-										new TooManyStopWithSameTimeIssue(route,
-												trip, arrivalTime,
-												sameTimeCounter));
-							}
-							sameTimeCounter = 1;
-						}
-						double speedMps = d / (t + slackSec);
-						if (speedMps > maxSpeedMps) {
-							// Too fast travel
+			if (oProjectedPoint.isPresent() && arrivalTime != null) {
+				Optional<Double> oArcLen = oProjectedPoint.get()
+						.getArcLengthMeters();
+				if (oArcLen.isPresent()) {
+					if (lastValidStopTime != null) {
+						double d = oArcLen.get() - lastValidProjectedPoint
+								.getArcLengthMeters().get();
+						int t = arrivalTime.getSecondSinceMidnight()
+								- lastValidStopTime.getDepartureOrArrivalTime()
+										.getSecondSinceMidnight();
+						if (t < 0) {
+							// Time-travel
 							GtfsStop stop1 = dao
 									.getStop(lastValidStopTime.getStopId());
 							GtfsStop stop2 = dao.getStop(stopTime.getStopId());
-							ReportIssueSeverity severity = getSeverity(speedMps,
-									maxSpeedMps);
-							reportSink.report(new TooFastTravelIssue(route,
-									trip, lastValidStopTime, stop1, stopTime,
-									stop2, d, speedMps, maxSpeedMps, severity));
+							reportSink.report(new TimeTravelError(route, trip,
+									lastValidStopTime, stop1, stopTime, stop2));
+						} else {
+							// Forward-time
+							if (t == 0) {
+								sameTimeCounter++;
+							} else {
+								if (sameTimeCounter > maxStopsWithSameTime) {
+									reportSink.report(
+											new TooManyStopWithSameTimeIssue(
+													route, trip, arrivalTime,
+													sameTimeCounter));
+								}
+								sameTimeCounter = 1;
+							}
+							double speedMps = d / (t + slackSec);
+							if (speedMps > maxSpeedMps) {
+								// Too fast travel
+								GtfsStop stop1 = dao
+										.getStop(lastValidStopTime.getStopId());
+								GtfsStop stop2 = dao
+										.getStop(stopTime.getStopId());
+								ReportIssueSeverity severity = getSeverity(
+										speedMps, maxSpeedMps);
+								reportSink.report(new TooFastTravelIssue(route,
+										trip, lastValidStopTime, stop1,
+										stopTime, stop2, d, speedMps,
+										maxSpeedMps, severity));
+							}
 						}
 					}
+					lastValidStopTime = stopTime;
+					lastValidProjectedPoint = oProjectedPoint.get();
 				}
-				lastValidStopTime = stopTime;
-				lastValidProjectedPoint = projectedPoint;
 			}
 		}
 		if (sameTimeCounter > maxStopsWithSameTime) {

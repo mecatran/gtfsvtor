@@ -819,9 +819,8 @@ public class TestGtfs {
 		GtfsTrip city1 = tb.dao.getTrip(GtfsTrip.id("CITY1"));
 		List<GtfsStopTime> stopTimes = tb.dao.getTripAndTimes(city1.getId())
 				.getStopTimes();
-		assertEquals((double) 0.0,
-				lgi.getProjectedPoint(stopTimes.get(0)).getArcLengthMeters(),
-				1e-10);
+		assertEquals((double) 0.0, lgi.getProjectedPoint(stopTimes.get(0)).get()
+				.getArcLengthMeters().get(), 1e-10);
 		GtfsStop stop0 = tb.dao.getStop(stopTimes.get(0).getStopId());
 		GtfsStop stop1 = tb.dao.getStop(stopTimes.get(1).getStopId());
 		GtfsStop stop2 = tb.dao.getStop(stopTimes.get(2).getStopId());
@@ -829,21 +828,21 @@ public class TestGtfs {
 				stop1.getValidCoordinates().get());
 		double d12 = Geodesics.distanceMeters(stop1.getValidCoordinates().get(),
 				stop2.getValidCoordinates().get());
-		double l01 = lgi.getLinearDistance(stopTimes.get(0), stopTimes.get(1));
-		double l12 = lgi.getLinearDistance(stopTimes.get(1), stopTimes.get(2));
-		double l02 = lgi.getLinearDistance(stopTimes.get(0), stopTimes.get(2));
+		double l01 = lgi.getLinearDistance(stopTimes.get(0), stopTimes.get(1))
+				.get();
+		double l12 = lgi.getLinearDistance(stopTimes.get(1), stopTimes.get(2))
+				.get();
+		double l02 = lgi.getLinearDistance(stopTimes.get(0), stopTimes.get(2))
+				.get();
 		assertEquals(l02, l01 + l12, 1e-10);
-		assertEquals((double) 0.0,
-				lgi.getProjectedPoint(stopTimes.get(0)).getArcLengthMeters(),
-				1e-10);
+		assertEquals((double) 0.0, lgi.getProjectedPoint(stopTimes.get(0)).get()
+				.getArcLengthMeters().get(), 1e-10);
 		assertTrue(d01 <= l01);
 		assertTrue(d12 <= l12);
-		assertEquals((double) 1601.29,
-				lgi.getProjectedPoint(stopTimes.get(1)).getArcLengthMeters(),
-				1e-2);
-		assertEquals((double) 2204.38,
-				lgi.getProjectedPoint(stopTimes.get(2)).getArcLengthMeters(),
-				1e-2);
+		assertEquals((double) 1601.29, lgi.getProjectedPoint(stopTimes.get(1))
+				.get().getArcLengthMeters().get(), 1e-2);
+		assertEquals((double) 2204.38, lgi.getProjectedPoint(stopTimes.get(2))
+				.get().getArcLengthMeters().get(), 1e-2);
 
 		// Test spatial indexing
 		DaoSpatialIndex dsi = tb.dao.getSpatialIndex();
@@ -1016,15 +1015,15 @@ public class TestGtfs {
 				s1.getValidCoordinates().get());
 		double d12 = Geodesics.distanceMeters(s1.getValidCoordinates().get(),
 				s2.getValidCoordinates().get());
-		ProjectedPoint pp0 = lgi.getProjectedPoint(st0);
-		ProjectedPoint pp1 = lgi.getProjectedPoint(st1);
-		ProjectedPoint pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-2);
-		assertEquals(d01, pp1.getArcLengthMeters(), 1e-2);
-		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-2);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
+		ProjectedPoint pp0 = lgi.getProjectedPoint(st0).get();
+		ProjectedPoint pp1 = lgi.getProjectedPoint(st1).get();
+		ProjectedPoint pp2 = lgi.getProjectedPoint(st2).get();
+		assertEquals(0.0, pp0.getArcLengthMeters().get(), 1e-2);
+		assertEquals(d01, pp1.getArcLengthMeters().get(), 1e-2);
+		assertEquals(d01 + d12, pp2.getArcLengthMeters().get(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters().get(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters().get(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters().get(), 1e-2);
 
 		/* A simple one segment shape, reversed (S2->S1->SO) */
 		stopTimes = dao.getTripAndTimes(GtfsTrip.id("T2")).getStopTimes();
@@ -1034,21 +1033,21 @@ public class TestGtfs {
 		s0 = dao.getStop(st0.getStopId());
 		s1 = dao.getStop(st1.getStopId());
 		s2 = dao.getStop(st2.getStopId());
-		pp0 = lgi.getProjectedPoint(st0);
-		pp1 = lgi.getProjectedPoint(st1);
-		pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(d01 + d12, pp0.getArcLengthMeters(), 1e-2);
-		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-2);
-		assertEquals(d01 + d12, pp2.getArcLengthMeters(), 1e-2);
-		assertEquals(0, pp0.getDistanceToShapeMeters(), 1e-2);
-		assertEquals(d01, pp1.getDistanceToShapeMeters(), 1e-2);
-		assertEquals(d01 + d12, pp2.getDistanceToShapeMeters(), 1e-2);
+		pp0 = lgi.getProjectedPoint(st0).get();
+		pp1 = lgi.getProjectedPoint(st1).get();
+		pp2 = lgi.getProjectedPoint(st2).get();
+		assertEquals(d01 + d12, pp0.getArcLengthMeters().get(), 1e-2);
+		assertEquals(d01 + d12, pp1.getArcLengthMeters().get(), 1e-2);
+		assertEquals(d01 + d12, pp2.getArcLengthMeters().get(), 1e-2);
+		assertEquals(0, pp0.getDistanceToShapeMeters().get(), 1e-2);
+		assertEquals(d01, pp1.getDistanceToShapeMeters().get(), 1e-2);
+		assertEquals(d01 + d12, pp2.getDistanceToShapeMeters().get(), 1e-2);
 		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
-				pp0.getProjectedPoint()) < 1e-2);
+				pp0.getProjectedPoint().get()) < 1e-2);
 		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
-				pp1.getProjectedPoint()) < 1e-2);
+				pp1.getProjectedPoint().get()) < 1e-2);
 		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
-				pp2.getProjectedPoint()) < 1e-2);
+				pp2.getProjectedPoint().get()) < 1e-2);
 
 		/* A backtracing 2 segment shape (S1->S3->S2) */
 		stopTimes = dao.getTripAndTimes(GtfsTrip.id("T3")).getStopTimes();
@@ -1058,21 +1057,21 @@ public class TestGtfs {
 		s0 = dao.getStop(st0.getStopId());
 		s1 = dao.getStop(st1.getStopId());
 		s2 = dao.getStop(st2.getStopId());
-		pp0 = lgi.getProjectedPoint(st0);
-		pp1 = lgi.getProjectedPoint(st1);
-		pp2 = lgi.getProjectedPoint(st2);
-		assertEquals(0.0, pp0.getArcLengthMeters(), 1e-2);
-		assertEquals(d01 + d12, pp1.getArcLengthMeters(), 1e-2);
-		assertEquals(d01 + d12 + d12, pp2.getArcLengthMeters(), 1e-2);
-		assertEquals(0.0, pp0.getDistanceToShapeMeters(), 1e-2);
-		assertEquals(0.0, pp1.getDistanceToShapeMeters(), 0.2);
-		assertEquals(0.0, pp2.getDistanceToShapeMeters(), 0.4);
+		pp0 = lgi.getProjectedPoint(st0).get();
+		pp1 = lgi.getProjectedPoint(st1).get();
+		pp2 = lgi.getProjectedPoint(st2).get();
+		assertEquals(0.0, pp0.getArcLengthMeters().get(), 1e-2);
+		assertEquals(d01 + d12, pp1.getArcLengthMeters().get(), 1e-2);
+		assertEquals(d01 + d12 + d12, pp2.getArcLengthMeters().get(), 1e-2);
+		assertEquals(0.0, pp0.getDistanceToShapeMeters().get(), 1e-2);
+		assertEquals(0.0, pp1.getDistanceToShapeMeters().get(), 0.2);
+		assertEquals(0.0, pp2.getDistanceToShapeMeters().get(), 0.4);
 		assertTrue(Geodesics.distanceMeters(s0.getValidCoordinates().get(),
-				pp0.getProjectedPoint()) < 1);
+				pp0.getProjectedPoint().get()) < 1);
 		assertTrue(Geodesics.distanceMeters(s1.getValidCoordinates().get(),
-				pp1.getProjectedPoint()) < 1);
+				pp1.getProjectedPoint().get()) < 1);
 		assertTrue(Geodesics.distanceMeters(s2.getValidCoordinates().get(),
-				pp2.getProjectedPoint()) < 1);
+				pp2.getProjectedPoint().get()) < 1);
 	}
 
 	@Test
@@ -1408,15 +1407,16 @@ public class TestGtfs {
 		ProjectedPoint prevPp = null;
 		for (GtfsStopTime stopTime : stopTimes) {
 			GtfsStop stop = dao.getStop(stopTime.getStopId());
-			ProjectedPoint pp = lgi.getProjectedPoint(stopTime);
-			avgDist += pp.getDistanceToShapeMeters();
-			assertTrue(pp.getDistanceToShapeMeters() < 10.0);
+			ProjectedPoint pp = lgi.getProjectedPoint(stopTime).get();
+			avgDist += pp.getDistanceToShapeMeters().get();
+			assertTrue(pp.getDistanceToShapeMeters().get() < 10.0);
 			double d = Geodesics.fastDistanceMeters(
-					stop.getValidCoordinates().get(), pp.getProjectedPoint());
-			assertEquals(pp.getDistanceToShapeMeters(), d, 1e-4);
+					stop.getValidCoordinates().get(),
+					pp.getProjectedPoint().get());
+			assertEquals(pp.getDistanceToShapeMeters().get(), d, 1e-4);
 			if (prevStopTime != null) {
-				double ld = pp.getArcLengthMeters()
-						- prevPp.getArcLengthMeters();
+				double ld = pp.getArcLengthMeters().get()
+						- prevPp.getArcLengthMeters().get();
 				double sd = Geodesics.fastDistanceMeters(
 						prevStop.getValidCoordinates().get(),
 						stop.getValidCoordinates().get());
@@ -1447,7 +1447,8 @@ public class TestGtfs {
 		GtfsTripAndTimes trip = tb.dao.getTripAndTimes(GtfsTrip.id("74431429"));
 		List<GtfsStopTime> stopTimes = trip.getStopTimes();
 		assertEquals(439.81, tb.dao.getLinearGeometryIndex()
-				.getLinearDistance(stopTimes.get(12), stopTimes.get(13)), 1e-2);
+				.getLinearDistance(stopTimes.get(12), stopTimes.get(13)).get(),
+				1e-2);
 	}
 
 	@Test
@@ -1480,6 +1481,16 @@ public class TestGtfs {
 		List<StopTooCloseToOriginError> stctoes = tb
 				.issuesOfCategory(StopTooCloseToOriginError.class);
 		assertEquals(1, stctoes.size());
+		// This trip has invalid coordinates for the first stop
+		GtfsTripAndTimes tt = tb.dao
+				.getTripAndTimes(GtfsTrip.id("11.T0.0-104-j20-1.1.H"));
+		LinearGeometryIndex lgi = tb.dao.getLinearGeometryIndex();
+		assertEquals(5, tt.getStopTimes().size());
+		GtfsStopTime st0 = tt.getStopTimes().get(0);
+		assertFalse(lgi.getProjectedPoint(st0).get().getDistanceToShapeMeters()
+				.isPresent());
+		GtfsStop s0 = tb.dao.getStop(st0.getStopId());
+		assertFalse(s0.getValidCoordinates().isPresent());
 	}
 
 	@Test
@@ -1503,6 +1514,74 @@ public class TestGtfs {
 				.issuesOfCategory(UnusedObjectWarning.class);
 		// agency may not be refered, if feed contains only a single agency
 		assertEquals(0, uows.size());
+	}
+
+	@Test
+	public void testIncompleteShapes() {
+		TestBundle tb = loadAndValidate("incomplete_shapes");
+		LinearGeometryIndex lgi = tb.dao.getLinearGeometryIndex();
+		GtfsStop s1 = tb.dao.getStop(GtfsStop.id("S1"));
+		GtfsStop s2 = tb.dao.getStop(GtfsStop.id("S2"));
+		assertFalse(s2.getValidCoordinates().isPresent());
+		GtfsStop s3 = tb.dao.getStop(GtfsStop.id("S3"));
+		// T1 has shape and shape_dist_traveled
+		// T1 run S1-S2-S3, S2 having no coordinates
+		GtfsTripAndTimes t1 = tb.dao.getTripAndTimes(GtfsTrip.id("T1"));
+		GtfsStopTime st11 = t1.getStopTimes().get(0);
+		GtfsStopTime st12 = t1.getStopTimes().get(1);
+		GtfsStopTime st13 = t1.getStopTimes().get(2);
+		assertEquals(lgi.getProjectedPoint(st11).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertFalse(lgi.getProjectedPoint(st12).get().getDistanceToShapeMeters()
+				.isPresent());
+		assertEquals(lgi.getProjectedPoint(st13).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		double d13 = Geodesics.distanceMeters(s1.getValidCoordinates().get(),
+				s3.getValidCoordinates().get());
+		/*
+		 * S2 coordinates is not valid, but arc(S1->S2) + arc(S2->S3) =
+		 * dist(S1-S3), has we have shape_dist_traveled projected points are
+		 * correct.
+		 */
+		assertEquals(d13, lgi.getLinearDistance(st11, st12).get()
+				+ lgi.getLinearDistance(st12, st13).get(), 1e-3);
+
+		// T2 has no shape - S2 still have invalid coordinates
+		GtfsTripAndTimes t2 = tb.dao.getTripAndTimes(GtfsTrip.id("T2"));
+		GtfsStopTime st21 = t2.getStopTimes().get(0);
+		GtfsStopTime st22 = t2.getStopTimes().get(1);
+		GtfsStopTime st23 = t2.getStopTimes().get(2);
+		GtfsStopTime st24 = t2.getStopTimes().get(3);
+		assertTrue(lgi.getProjectedPoint(st21).isPresent());
+		assertFalse(lgi.getProjectedPoint(st22).isPresent());
+		assertTrue(lgi.getProjectedPoint(st23).isPresent());
+		assertFalse(lgi.getLinearDistance(st21, st22).isPresent());
+		assertFalse(lgi.getLinearDistance(st22, st23).isPresent());
+		assertTrue(lgi.getLinearDistance(st23, st24).isPresent());
+
+		// T3 has shape w/o shape_dist_coordinates
+		GtfsTripAndTimes t3 = tb.dao.getTripAndTimes(GtfsTrip.id("T3"));
+		GtfsStopTime st31 = t3.getStopTimes().get(0);
+		GtfsStopTime st32 = t3.getStopTimes().get(1);
+		GtfsStopTime st33 = t3.getStopTimes().get(2);
+		GtfsStopTime st34 = t3.getStopTimes().get(3);
+		assertEquals(lgi.getProjectedPoint(st31).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertFalse(lgi.getProjectedPoint(st32).get().getDistanceToShapeMeters()
+				.isPresent());
+		assertEquals(lgi.getProjectedPoint(st33).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertEquals(lgi.getProjectedPoint(st34).get()
+				.getDistanceToShapeMeters().get(), 0.0, 1e-3);
+		assertTrue(lgi.getProjectedPoint(st31).isPresent());
+		assertTrue(lgi.getProjectedPoint(st32).isPresent());
+		assertFalse(lgi.getProjectedPoint(st32).get().getProjectedPoint()
+				.isPresent());
+		assertFalse(lgi.getProjectedPoint(st32).get().getDistanceToShapeMeters()
+				.isPresent());
+		assertFalse(lgi.getProjectedPoint(st32).get().getArcLengthMeters()
+				.isPresent());
+		assertTrue(lgi.getProjectedPoint(st33).isPresent());
 	}
 
 	@Test
