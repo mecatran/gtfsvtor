@@ -90,14 +90,13 @@ Also GTFSVTOR has trip duplication detection enabled, whereas feedvalidator.py d
 Docker
 ------
 
-Run a dockerized GTFSVTOR from sources:
+Run a dockerized GTFSVTOR using the [`laurentgregoire/gtfsvtor` Docker image](https://hub.docker.com/r/laurentgregoire/gtfsvtor):
 
 ```sh
-docker build -t gtfsvtor:latest .
-docker run -rm -v <path_data_directory, e.g. $(PWD)>:/data -e TZ=Europe/Berlin gtfsvtor:latest <gtfs-file>
+docker run -rm -v <path_data_directory, e.g. $(PWD)>:/data -e TZ=Europe/Berlin laurentgregoire/gtfsvtor /data/<gtfs-file>
 ```
 
-GTFSVTOR is executed in the mounted data-dir. If you'd like to use a custom config.properties, 
+GTFSVTOR is executed in the mounted `/data` dir. If you'd like to use a custom config.properties, 
 you may place it besides the gtfs file and supply `-c config.properties` as additional parameters.
 Note that the timezone must be specified explicitly (via `-e TZ=<your timezone>`) to have correct timestamps 
 reported in the validation-results.html.
