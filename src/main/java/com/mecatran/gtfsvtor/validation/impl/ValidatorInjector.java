@@ -205,7 +205,7 @@ public class ValidatorInjector<T> {
 						|| fieldType.equals(Integer.class)) {
 					value = config.getLong(configKey, null);
 					if (value != null)
-						value = Integer.valueOf((int) value);
+						value = Integer.valueOf((int) (long) value);
 				} else if (fieldType.equals(boolean.class)
 						|| fieldType.equals(Boolean.class)) {
 					value = config.getBoolean(configKey, null);
