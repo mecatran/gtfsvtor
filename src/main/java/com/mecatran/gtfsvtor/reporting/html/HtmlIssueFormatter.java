@@ -4,14 +4,22 @@ import java.text.MessageFormat;
 
 import com.googlecode.jatl.MarkupUtils;
 import com.mecatran.gtfsvtor.model.GtfsColor;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 
 public class HtmlIssueFormatter implements IssueFormatter {
 
+	private FormattingOptions fmtOptions;
 	private StringBuffer sb = new StringBuffer();
 
-	public HtmlIssueFormatter() {
+	public HtmlIssueFormatter(FormattingOptions fmtOptions) {
+		this.fmtOptions = fmtOptions;
+	}
+
+	@Override
+	public FormattingOptions getFormattingOptions() {
+		return fmtOptions;
 	}
 
 	@Override
@@ -52,8 +60,9 @@ public class HtmlIssueFormatter implements IssueFormatter {
 		return sb.toString();
 	}
 
-	public static String format(ReportIssue issue) {
-		HtmlIssueFormatter fmt = new HtmlIssueFormatter();
+	public static String format(FormattingOptions fmtOptions,
+			ReportIssue issue) {
+		HtmlIssueFormatter fmt = new HtmlIssueFormatter(fmtOptions);
 		issue.format(fmt);
 		return fmt.getHtmlResult();
 	}

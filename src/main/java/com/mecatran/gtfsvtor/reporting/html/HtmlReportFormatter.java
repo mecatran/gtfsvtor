@@ -17,6 +17,7 @@ import org.apache.commons.io.IOUtils;
 import com.googlecode.jatl.Html;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.NamedDataIO;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions;
 import com.mecatran.gtfsvtor.reporting.ReportFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueCategory;
@@ -33,9 +34,12 @@ public class HtmlReportFormatter implements ReportFormatter {
 	private NamedDataIO dataIO;
 	private Writer writer;
 	private Html html;
+	private FormattingOptions fmtOptions;
 
-	public HtmlReportFormatter(NamedDataIO dataIO) {
+	public HtmlReportFormatter(NamedDataIO dataIO,
+			FormattingOptions fmtOptions) {
 		this.dataIO = dataIO;
+		this.fmtOptions = fmtOptions;
 	}
 
 	@Override
@@ -171,8 +175,8 @@ public class HtmlReportFormatter implements ReportFormatter {
 					.distinct().collect(Collectors.toList());
 			html.td().classAttr("fieldname").text(String.join(", ", fieldNames))
 					.end();
-			html.td().classAttr("issue").raw(HtmlIssueFormatter.format(issue))
-					.end();
+			html.td().classAttr("issue")
+					.raw(HtmlIssueFormatter.format(fmtOptions, issue)).end();
 			html.end();// tr
 		}
 		html.end(); // table

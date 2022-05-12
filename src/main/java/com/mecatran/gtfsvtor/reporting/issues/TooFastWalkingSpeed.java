@@ -65,11 +65,11 @@ public class TooFastWalkingSpeed
 	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text(
-				"Too fast transfer walking speed between stop {0} and stop {1} (distance {2}m): {3} > {4} m/s",
+				"Too fast transfer walking speed between stop {0} and stop {1} (distance {2}): {3} > {4}",
 				fmt.id(fromStop.getId()), fmt.id(toStop.getId()),
-				fmt.var(String.format("%.2f", distanceMeters)),
-				fmt.var(String.format("%.2f", speedMps)),
-				fmt.var(String.format("%.2f", maxSpeedMps)));
+				fmt.var(fmt.distance(distanceMeters)),
+				fmt.var(fmt.speed(speedMps)),
+				fmt.var(fmt.speed(maxSpeedMps)));
 	}
 
 	@Override

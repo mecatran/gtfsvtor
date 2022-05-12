@@ -86,10 +86,10 @@ public class StopTooFarFromShapeIssue implements ReportIssue {
 	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text(
-				"Stop at sequence {0} on examplar trip {1} is too far from computed projection point {2} on shape {3} (at arc-length {4}m): {5} away",
+				"Stop at sequence {0} on examplar trip {1} is too far from computed projection point {2} on shape {3} (at arc-length {4}): {5} away",
 				fmt.var(stopSequence.toString()), fmt.id(examplarTripId),
 				fmt.var(fmt.coordinates(projectedPoint)), fmt.id(shapeId),
-				fmt.var(String.format("%.2f", arcLengthMeters)),
+				fmt.var(fmt.distance(arcLengthMeters)),
 				fmt.var(fmt.distance(distanceMeters)));
 	}
 }

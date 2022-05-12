@@ -66,7 +66,8 @@ public class GtfsVtor {
 		InMemoryReportLog imReport = new InMemoryReportLog()
 				.withMaxIssuesPerCategory(
 						options.getMaxIssuesPerCategoryLimit())
-				.withPrintIssues(options.isPrintIssues());
+				.withPrintIssues(options.isPrintIssues())
+				.withFormattingOptions(options.getFormattingOptions());
 		this.reportSink = imReport;
 		this.reviewReport = imReport;
 
@@ -136,7 +137,7 @@ public class GtfsVtor {
 		Optional<NamedDataIO> htmlDataIO = options.getHtmlDataIO();
 		if (htmlDataIO.isPresent()) {
 			ReportFormatter htmlFormatter = new HtmlReportFormatter(
-					htmlDataIO.get());
+					htmlDataIO.get(), options.getFormattingOptions());
 			formatters.add(htmlFormatter);
 		}
 

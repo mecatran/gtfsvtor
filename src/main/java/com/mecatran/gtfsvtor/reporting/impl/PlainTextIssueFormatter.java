@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.loader.TableSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsColor;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions;
 import com.mecatran.gtfsvtor.reporting.IssueFormatter;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.SourceInfoFactory;
@@ -16,9 +17,16 @@ import com.mecatran.gtfsvtor.utils.MiscUtils;
 
 public class PlainTextIssueFormatter implements IssueFormatter {
 
+	private FormattingOptions fmtOptions;
 	private StringBuffer sb = new StringBuffer();
 
-	public PlainTextIssueFormatter() {
+	public PlainTextIssueFormatter(FormattingOptions fmtOptions) {
+		this.fmtOptions = fmtOptions;
+	}
+
+	@Override
+	public FormattingOptions getFormattingOptions() {
+		return fmtOptions;
 	}
 
 	@Override
@@ -50,9 +58,10 @@ public class PlainTextIssueFormatter implements IssueFormatter {
 		return sb.toString();
 	}
 
-	public static String format(Optional<SourceInfoFactory> sourceInfoFactory,
+	public static String format(FormattingOptions fmtOptions,
 			ReportIssue issue) {
-		PlainTextIssueFormatter fmt = new PlainTextIssueFormatter();
+		Optional<SourceInfoFactory> sourceInfoFactory = Optional.empty();
+		PlainTextIssueFormatter fmt = new PlainTextIssueFormatter(fmtOptions);
 		issue.format(fmt);
 		StringBuffer sb = new StringBuffer();
 		sb.append("\n");

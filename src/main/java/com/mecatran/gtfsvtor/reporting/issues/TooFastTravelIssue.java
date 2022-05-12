@@ -70,18 +70,17 @@ public class TooFastTravelIssue
 	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text(
-				"Too fast travel between stop {0} seq {1} @{2} and stop {3} seq {4} @{5} (distance {6}m), in trip {7} of route {8} {9}: {10} > {11} m/s",
+				"Too fast travel between stop {0} seq {1} @{2} and stop {3} seq {4} @{5} (distance {6}), in trip {7} of route {8} {9}: {10} > {11}",
 				fmt.id(stop1.getId()),
 				fmt.id(stopTime1.getStopSequence().toString()),
 				fmt.time(stopTime1.getDepartureOrArrivalTime()),
 				fmt.id(stop2.getId()),
 				fmt.id(stopTime2.getStopSequence().toString()),
 				fmt.time(stopTime2.getDepartureOrArrivalTime()),
-				fmt.var(String.format("%.2f", distanceMeters)),
+				fmt.var(fmt.distance(distanceMeters)),
 				fmt.id(trip.getId()), fmt.id(route.getId()),
-				fmt.var(route.getShortName()),
-				fmt.var(String.format("%.2f", speedMps)),
-				fmt.var(String.format("%.2f", maxSpeedMps)));
+				fmt.var(route.getShortName()), fmt.var(fmt.speed(speedMps)),
+				fmt.var(fmt.speed(maxSpeedMps)));
 	}
 
 	@Override

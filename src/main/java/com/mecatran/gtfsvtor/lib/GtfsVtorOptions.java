@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
 
+import com.mecatran.gtfsvtor.reporting.FormattingOptions;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions.SpeedUnit;
+
 public interface GtfsVtorOptions {
 
 	public interface NamedDataIO {
@@ -66,6 +69,10 @@ public interface GtfsVtorOptions {
 
 	public default ShapePointsDaoMode getShapePointsDaoMode() {
 		return ShapePointsDaoMode.AUTO;
+	}
+
+	public default FormattingOptions getFormattingOptions() {
+		return new FormattingOptions(SpeedUnit.MPS);
 	}
 
 	public String getGtfsFile();

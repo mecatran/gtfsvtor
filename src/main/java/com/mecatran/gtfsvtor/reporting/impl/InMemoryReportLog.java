@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions;
 import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssueCategory;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
@@ -57,6 +57,7 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 	private int maxIssuesPerCategory = Integer.MAX_VALUE;
 	private boolean printIssues = false;
 	private SourceInfoFactory sourceInfoFactory;
+	private FormattingOptions fmtOptions = new FormattingOptions();
 
 	public InMemoryReportLog() {
 	}
@@ -74,6 +75,12 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 
 	public InMemoryReportLog withMaxIssuesPerCategory(int maxIssues) {
 		this.maxIssuesPerCategory = maxIssues;
+		return this;
+	}
+
+	public InMemoryReportLog withFormattingOptions(
+			FormattingOptions fmtOptions) {
+		this.fmtOptions = fmtOptions;
 		return this;
 	}
 
@@ -142,8 +149,8 @@ public class InMemoryReportLog implements ReportSink, ReviewReport {
 					 * With lazy-loading, this will work, but will be highly
 					 * inefficient.
 					 */
-					System.err.println(PlainTextIssueFormatter
-							.format(Optional.empty(), issue));
+					System.err.println(
+							PlainTextIssueFormatter.format(fmtOptions, issue));
 				}
 			}
 			return keep;

@@ -9,6 +9,7 @@ import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsObject;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions.SpeedUnit;
 
 public interface IssueFormatter {
 
@@ -18,6 +19,9 @@ public interface IssueFormatter {
 	public default <U, V extends GtfsObject<U>> String id(GtfsId<U, V> id) {
 		return id(id == null ? "(null)" : id.getInternalId().toString());
 	}
+
+	/** Return the formatting options to use */
+	public FormattingOptions getFormattingOptions();
 
 	/** Format an object ID as a string */
 	public String id(String id);
@@ -65,5 +69,31 @@ public interface IssueFormatter {
 	public default String distance(Double distanceMeters) {
 		return distanceMeters == null ? "?"
 				: String.format(Locale.US, "%.2fm", distanceMeters);
+	}
+
+	/** Format a speed in mps, providing the output unit */
+	public default String speed(Double speedMps) {
+		if (speedMps == null)
+			return "?";
+		double converted;
+		String unitStr;
+		SpeedUnit speedUnit = getFormattingOptions().getSpeedUnit();
+		switch (speedUnit) {
+		case MPH:
+			converted = 2.236936 * speedMps;
+			unitStr = "mph";
+			break;
+		case KPH:
+			converted = 3.6 * speedMps;
+			unitStr = "km/h";
+			break;
+		case MPS:
+			converted = speedMps;
+			unitStr = "m/s";
+			break;
+		default:
+			throw new RuntimeException("Unknown speed unit: " + speedUnit);
+		}
+		return String.format(Locale.US, "%.2f %s", converted, unitStr);
 	}
 }

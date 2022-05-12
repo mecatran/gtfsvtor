@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.beust.jcommander.Parameter;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions;
+import com.mecatran.gtfsvtor.reporting.FormattingOptions.SpeedUnit;
 
 public class CmdLineArgs implements GtfsVtorOptions {
 
@@ -77,6 +79,13 @@ public class CmdLineArgs implements GtfsVtorOptions {
 			+ "SIMPLE: Work for all situations, but uses more memory. ")
 	private ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.AUTO;
 
+	@Parameter(names = { "--speedUnit" }, description = ""
+			+ "Speed unit to use in outputs. " //
+			+ "MPS: Meters per second. " //
+			+ "KPH: Kilometers per hour. " //
+			+ "MPH: Miles per hour. ")
+	private SpeedUnit speedUnit = SpeedUnit.MPS;
+
 	@Parameter(description = "<GTFS file to validate>")
 	private String gtfsFile;
 
@@ -145,6 +154,11 @@ public class CmdLineArgs implements GtfsVtorOptions {
 	@Override
 	public ShapePointsDaoMode getShapePointsDaoMode() {
 		return shapePointsDaoMode;
+	}
+
+	@Override
+	public FormattingOptions getFormattingOptions() {
+		return new FormattingOptions(speedUnit);
 	}
 
 	@Override
