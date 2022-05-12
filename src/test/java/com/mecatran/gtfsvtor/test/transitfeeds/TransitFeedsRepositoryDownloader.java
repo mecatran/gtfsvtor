@@ -16,6 +16,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -115,6 +116,7 @@ public class TransitFeedsRepositoryDownloader {
 		RequestConfig config = configBuilder.build();
 		HttpClientBuilder clientBuilder = HttpClients.custom();
 		clientBuilder.setDefaultRequestConfig(config);
+		clientBuilder.setRedirectStrategy(new LaxRedirectStrategy());
 		CloseableHttpClient client = clientBuilder.build();
 		URI uri = new URIBuilder(url).build();
 		HttpGet request = new HttpGet(uri);
