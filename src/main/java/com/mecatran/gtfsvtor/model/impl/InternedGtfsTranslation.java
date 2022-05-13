@@ -270,7 +270,7 @@ public class InternedGtfsTranslation implements GtfsTranslation {
 			}
 
 			private Builder withFieldName(String fieldName) {
-				this.translationRef.fieldName = fieldName.intern();
+				this.translationRef.fieldName = fieldName;
 				return this;
 			}
 
