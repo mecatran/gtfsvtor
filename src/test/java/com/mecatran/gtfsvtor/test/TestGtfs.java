@@ -391,7 +391,10 @@ public class TestGtfs {
 
 	@Test
 	public void testBadEol() {
-		// See TODO file for a list of issues to validate
+		// See following issues for missing things to validate:
+		// https://github.com/mecatran/gtfsvtor/issues/13
+		// https://github.com/mecatran/gtfsvtor/issues/14
+		@SuppressWarnings("unused")
 		TestBundle tb = loadAndValidate("bad_eol.zip");
 		// assertEquals(1,
 		// tb.report.getReportItems(GeneralIOError.class).size());
@@ -1497,6 +1500,7 @@ public class TestGtfs {
 	@Test
 	public void testTransilienTinyTrip() {
 		// Just check that a tiny trip does not throws a NPE
+		@SuppressWarnings("unused")
 		TestBundle tb = loadAndValidate("transilien_tinytrip");
 	}
 

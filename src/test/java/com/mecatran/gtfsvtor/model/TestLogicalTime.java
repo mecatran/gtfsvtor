@@ -9,8 +9,6 @@ import java.text.ParseException;
 
 import org.junit.Test;
 
-import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
-
 public class TestLogicalTime {
 
 	@Test
