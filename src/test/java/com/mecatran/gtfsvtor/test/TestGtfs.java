@@ -882,6 +882,7 @@ public class TestGtfs {
 				.issuesOfCategory(TooFastTravelIssue.class);
 		assertEquals(5, tfts.size());
 		TooFastTravelIssue tft0 = tfts.get(0);
+		assertEquals(GtfsTrip.id("AB1"), tft0.getTrip().getId());
 		assertEquals(GtfsStop.id("BEATTY_AIRPORT"), tft0.getStop1().getId());
 		assertEquals(GtfsStop.id("BULLFROG"), tft0.getStop2().getId());
 		assertEquals(ReportIssueSeverity.ERROR, tft0.getSeverity());
