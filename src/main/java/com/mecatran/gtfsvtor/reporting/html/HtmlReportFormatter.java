@@ -44,7 +44,8 @@ public class HtmlReportFormatter implements ReportFormatter {
 
 	@Override
 	public void format(ReviewReport report) throws IOException {
-		writer = new OutputStreamWriter(dataIO.getOutputStream());
+		writer = new OutputStreamWriter(dataIO.getOutputStream(),
+				StandardCharsets.UTF_8);
 		html = new Html(writer);
 		ClassifiedReviewReport clsReport = new ClassifiedReviewReport(report);
 		formatHeader();
@@ -205,6 +206,8 @@ public class HtmlReportFormatter implements ReportFormatter {
 		cssWriter.close();
 		html.raw(cssWriter.toString());
 		html.end(); // style
+		html.end(); // head
+		html.body();
 	}
 
 	private void formatSummary(ReviewReport report) throws IOException {
@@ -249,6 +252,7 @@ public class HtmlReportFormatter implements ReportFormatter {
 		html.p().classAttr("comments").text(String.format(
 				"Validation done at %s by GTFSVTOR - Copyright (c) %d Mecatran",
 				now, year)).end();
+		html.end(); // body
 		html.end(); // html
 	}
 
