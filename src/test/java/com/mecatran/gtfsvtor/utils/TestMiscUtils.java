@@ -1,10 +1,15 @@
 package com.mecatran.gtfsvtor.utils;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
 import org.junit.Test;
+
+import com.mecatran.gtfsvtor.reporting.FormattingOptions;
+import com.mecatran.gtfsvtor.reporting.IssueFormatter;
+import com.mecatran.gtfsvtor.reporting.impl.PlainTextIssueFormatter;
 
 public class TestMiscUtils {
 
@@ -36,5 +41,17 @@ public class TestMiscUtils {
 			String... expectedLines) {
 		List<String> lines = MiscUtils.wordProcessorSplit(longText, maxWidth);
 		assertArrayEquals(expectedLines, lines.toArray(new String[0]));
+	}
+
+	@Test
+	public void testDurationFormatting() {
+		FormattingOptions opts = new FormattingOptions();
+		IssueFormatter fmt = new PlainTextIssueFormatter(opts);
+		assertEquals("42s", fmt.durationSec(42));
+		assertEquals("-59s", fmt.durationSec(-59));
+		assertEquals("2m00s", fmt.durationSec(120));
+		assertEquals("-12m30s", fmt.durationSec(-750));
+		assertEquals("2m00s", fmt.durationSec(120));
+		assertEquals("2h23m00s", fmt.durationSec(8580));
 	}
 }

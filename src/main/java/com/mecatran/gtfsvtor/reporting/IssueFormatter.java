@@ -51,6 +51,25 @@ public interface IssueFormatter {
 				date.getDay());
 	}
 
+	/** Format a duration in sec */
+	public default String durationSec(Integer sec) {
+		if (sec == null)
+			return "--:--";
+		String sign = "";
+		if (sec < 0) {
+			sign = "-";
+			sec = -sec;
+		}
+		if (sec < 60) {
+			return String.format("%s%ds", sign, sec);
+		} else if (sec < 3600) {
+			return String.format("%s%dm%02ds", sign, sec / 60, sec % 60);
+		} else {
+			return String.format("%s%dh%02dm%02ds", sign, sec / 3600,
+					(sec % 3600) / 60, sec % 60);
+		}
+	}
+
 	/** Format coordinates */
 	public default String coordinates(GeoCoordinates p) {
 		if (p == null)
