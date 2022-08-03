@@ -1,0 +1,8 @@
+from_stop_id,to_stop_id,from_trip_id,to_trip_id,transfer_type,min_transfer_time
+,,AB1,AB3,4,
+,,AB1,AB3,4,
+,,AB1,AB3B,4,
+,,AB1,AB3C,4,
+,,AB1,AB4,5,
+BULLFROG,BEATTY_AIRPORT,,,5,
+

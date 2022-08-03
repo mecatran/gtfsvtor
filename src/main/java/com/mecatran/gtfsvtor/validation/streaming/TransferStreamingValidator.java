@@ -7,12 +7,12 @@ import java.util.Optional;
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.geospatial.GeoCoordinates;
 import com.mecatran.gtfsvtor.geospatial.Geodesics;
-import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTransferType;
+import com.mecatran.gtfsvtor.model.GtfsTrip;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidFieldValueIssue;
@@ -51,7 +51,7 @@ public class TransferStreamingValidator
 	public void validate(Class<? extends GtfsTransfer> clazz,
 			GtfsTransfer transfer, StreamingValidator.Context context) {
 		ReportSink reportSink = context.getReportSink();
-		// stop from / to ID is primary key and tested by DAO
+		// stop/route/trip from/to IDs are primary key and tested by DAO
 		if (transfer.getMinTransferTime() != null) {
 			checkFormat(transfer::getMinTransferTime, "min_transfer_time",
 					context, t -> t >= 0, "positive integer");
@@ -187,7 +187,7 @@ public class TransferStreamingValidator
 			}
 		}
 
-		// check from/to route reference
+		// check from/to trip reference
 		GtfsTrip fromTrip = null;
 		GtfsTrip toTrip = null;
 		if (transfer.getFromTripId() != null) {
@@ -210,6 +210,15 @@ public class TransferStreamingValidator
 								transfer.getToTripId().getInternalId(),
 								GtfsTrip.TABLE_NAME, "trip_id"),
 						context.getSourceInfo());
+			}
+		}
+		// Transfer type 4 & 5 MUST define from & to trip IDs
+		if (transfer.getNonNullType() == GtfsTransferType.TRIP_ALIGHT
+				|| transfer.getNonNullType() == GtfsTransferType.TRIP_IN_SEAT) {
+			if (transfer.getFromTripId() == null
+					|| transfer.getToTripId() == null) {
+				reportSink.report(new MissingMandatoryValueError(
+						context.getSourceRef(), "from_trip_id", "to_trip_id"));
 			}
 		}
 

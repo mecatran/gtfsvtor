@@ -107,6 +107,9 @@ import com.mecatran.gtfsvtor.reporting.issues.TimeTravelError;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastWalkingSpeed;
 import com.mecatran.gtfsvtor.reporting.issues.TooManyDaysWithoutServiceIssue;
+import com.mecatran.gtfsvtor.reporting.issues.TripTransferDifferentCalendarError;
+import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLargeDistanceError;
+import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLongDurationError;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
@@ -1727,6 +1730,23 @@ public class TestGtfs {
 		assertEquals(2, tb.dao.getStopsOfArea(GtfsArea.id("AREA1")).count());
 		assertEquals(1, tb.dao.getStopsOfArea(GtfsArea.id("AREA3")).count());
 		assertEquals(0, tb.dao.getStopsOfArea(GtfsArea.id("AREA4")).count());
+	}
+
+	@Test
+	public void testTripTransfers() {
+		TestBundle tb = loadAndValidate("trip_transfers_type_45");
+		List<DuplicatedObjectIdError> doie = tb
+				.issuesOfCategory(DuplicatedObjectIdError.class);
+		assertEquals(1, doie.size());
+		List<TripTransferTooLongDurationError> tttlde = tb
+				.issuesOfCategory(TripTransferTooLongDurationError.class);
+		assertEquals(1, tttlde.size());
+		List<TripTransferDifferentCalendarError> ttdce = tb
+				.issuesOfCategory(TripTransferDifferentCalendarError.class);
+		assertEquals(1, ttdce.size());
+		List<TripTransferTooLargeDistanceError> tttldse = tb
+				.issuesOfCategory(TripTransferTooLargeDistanceError.class);
+		assertEquals(1, tttldse.size());
 	}
 
 	@Test
