@@ -161,16 +161,18 @@ span.var {
 }
 
 		</style>
+	</head>
+	<body>
 		<h1 class="logo image">GTFS validation report
 			<span class="xsmaller"> - 6 
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="xsmaller"> - 112 
+			<span class="xsmaller"> - 111 
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="xsmaller"> - 134 
+			<span class="xsmaller"> - 152 
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -216,10 +218,6 @@ span.var {
 				<span class="smaller badge WARNING">WARNING
 				</span>Empty calendar
 			</li>
-			<li>1 
-				<span class="smaller badge WARNING">WARNING
-				</span>Expired feed
-			</li>
 			<li>3 
 				<span class="smaller badge WARNING">WARNING
 				</span>Extra space in column header
@@ -227,8 +225,6 @@ span.var {
 			<li>51 
 				<span class="smaller badge WARNING">WARNING
 				</span>Inconsistent number of fields
-				<span class="comments"> (of which 30 are displayed)
-				</span>
 			</li>
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
@@ -268,10 +264,6 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
-				</span>Too fast travel
-			</li>
-			<li>1 
-				<span class="smaller badge WARNING">WARNING
 				</span>Too fast walking speed
 			</li>
 			<li>2 
@@ -285,6 +277,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge WARNING">WARNING
 				</span>Unused agency
+			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused area
 			</li>
 			<li>4 
 				<span class="smaller badge WARNING">WARNING
@@ -325,6 +321,14 @@ span.var {
 			<li>2 
 				<span class="smaller badge WARNING">WARNING
 				</span>Useless timepoint
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id, stop_id
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -398,6 +402,10 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid agency_url format
 			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid area_id reference
+			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid attribution_email format
@@ -445,6 +453,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid feed_end_date value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid from_route_id reference
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -518,6 +530,10 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid station(1) parent type
 			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_id reference
+			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid stop_lat/stop_lon coordinate
@@ -533,6 +549,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid table_name format
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid to_route_id reference
 			</li>
 			<li>3 
 				<span class="smaller badge ERROR">ERROR
@@ -593,6 +613,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory from_stop_id value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory from_trip_id/to_trip_id value
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -662,7 +686,7 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory transfer_type value
 			</li>
-			<li>4 
+			<li>7 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing object ID
 			</li>
@@ -693,6 +717,10 @@ span.var {
 			<li>6 
 				<span class="smaller badge ERROR">ERROR
 				</span>Too fast travel
+			</li>
+			<li>6 
+				<span class="smaller badge ERROR">ERROR
+				</span>Trip transfer issues
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -729,24 +757,6 @@ span.var {
 					<td class="fieldname">
 					</td>
 					<td class="issue">Duplicated stop sequence <span class='var'>300</span> at stop <span class='id'>NANAA</span> and <span class='id'>STAGECOACH</span> in trip <span class='id'>CITY4</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<h2>Expired feed
-			<span class="smaller"> - 1
-				<span class="badge WARNING">WARNING
-				</span>
-			</span>
-		</h2>
-		<div class="subcategory">
-			<table class="issuelist">
-				<tr>
-					<td class="severity WARNING">WARNING
-					</td>
-					<td class="fieldname">
-					</td>
-					<td class="issue">Feed ending too soon or expired. Last date with service is 2011/12/31 < 2020/12/31
 					</td>
 				</tr>
 			</table>
@@ -818,7 +828,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Loaded 1 feed-info, 2 agencies, 8 routes, 21 stops, 6 calendars, 17 calendar dates, 15 trips, 42 stop times, 6 transfers, 3 pathways, 3 fare attributes, 8 fare rules, 1 translations
+					<td class="issue">Loaded 1 feed-info, 2 agencies, 8 routes, 21 stops, 6 calendars, 17 calendar dates, 15 trips, 42 stop times, 10 transfers, 3 pathways, 3 fare attributes, 8 fare rules, 1 translations
 					</td>
 				</tr>
 			</table>
@@ -836,16 +846,12 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Time-travel between stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @6:51:00 and stop <span class='id'>STAGECOACH</span> seq <span class='id'>500</span> @6:58:00, in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>, arrival before departure.
+					<td class="issue">Time-travel between stop <span class='id'>NANAA</span> <span class='var'>North Ave / N A Ave (Demo)</span> seq <span class='id'>400</span> @6:51:00 and stop <span class='id'>STAGECOACH</span> <span class='var'>Stagecoach Hotel &amp; Casino (Demo)</span> seq <span class='id'>500</span> @6:58:00, in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>, arrival before departure.
 					</td>
 				</tr>
 			</table>
 		</div>
 		<h2>Too fast travel
-			<span class="smaller"> - 1
-				<span class="badge WARNING">WARNING
-				</span>
-			</span>
 			<span class="smaller"> - 6
 				<span class="badge ERROR">ERROR
 				</span>
@@ -858,7 +864,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between stop <span class='id'>NADAV</span> seq <span class='id'>300</span> @10:00:00 and stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @10:00:00 (distance <span class='var'>64700.49</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1078.34</span> > <span class='var'>16.67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NADAV</span> <span class='var'>North Ave / D Ave N (Demo)</span> seq <span class='id'>300</span> @10:00:00 and stop <span class='id'>NANAA</span> <span class='var'>North Ave / N A Ave (Demo)</span> seq <span class='id'>400</span> @10:00:00 (distance <span class='var'>64700.49m</span>), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1078.34 m/s</span> > <span class='var'>27.78 m/s</span>
 					</td>
 				</tr>
 				<tr>
@@ -866,7 +872,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @10:00:00 and stop <span class='id'>STAGECOACH</span> seq <span class='id'>500</span> @10:00:00 (distance <span class='var'>63410.16</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1056.84</span> > <span class='var'>16.67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NANAA</span> <span class='var'>North Ave / N A Ave (Demo)</span> seq <span class='id'>400</span> @10:00:00 and stop <span class='id'>STAGECOACH</span> <span class='var'>Stagecoach Hotel &amp; Casino (Demo)</span> seq <span class='id'>500</span> @10:00:00 (distance <span class='var'>63410.16m</span>), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>1056.84 m/s</span> > <span class='var'>27.78 m/s</span>
 					</td>
 				</tr>
 				<tr>
@@ -874,7 +880,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between stop <span class='id'>NANAA</span> seq <span class='id'>5</span> @6:07:00 and stop <span class='id'>NADAV</span> seq <span class='id'>10</span> @6:14:00 (distance <span class='var'>64700.49</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>215.67</span> > <span class='var'>16.67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NANAA</span> <span class='var'>North Ave / N A Ave (Demo)</span> seq <span class='id'>5</span> @6:07:00 and stop <span class='id'>NADAV</span> <span class='var'>North Ave / D Ave N (Demo)</span> seq <span class='id'>10</span> @6:14:00 (distance <span class='var'>64700.49m</span>), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>215.67 m/s</span> > <span class='var'>27.78 m/s</span>
 					</td>
 				</tr>
 				<tr>
@@ -882,7 +888,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between stop <span class='id'>DADAN</span> seq <span class='id'>200</span> @7:35:00 and stop <span class='id'>NADAV</span> seq <span class='id'>300</span> @7:44:00 (distance <span class='var'>128711.55</span>m), in trip <span class='id'>CITY4</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>214.52</span> > <span class='var'>16.67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>DADAN</span> <span class='var'>Doing Ave / D Ave N (Demo)</span> seq <span class='id'>200</span> @7:35:00 and stop <span class='id'>NADAV</span> <span class='var'>North Ave / D Ave N (Demo)</span> seq <span class='id'>300</span> @7:44:00 (distance <span class='var'>128711.55m</span>), in trip <span class='id'>CITY4</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>214.52 m/s</span> > <span class='var'>27.78 m/s</span>
 					</td>
 				</tr>
 				<tr>
@@ -890,7 +896,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between stop <span class='id'>STAGECOACH</span> seq <span class='id'>0</span> @6:00:00 and stop <span class='id'>NANAA</span> seq <span class='id'>5</span> @6:07:00 (distance <span class='var'>63410.16</span>m), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>211.37</span> > <span class='var'>16.67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>STAGECOACH</span> <span class='var'>Stagecoach Hotel &amp; Casino (Demo)</span> seq <span class='id'>0</span> @6:00:00 and stop <span class='id'>NANAA</span> <span class='var'>North Ave / N A Ave (Demo)</span> seq <span class='id'>5</span> @6:07:00 (distance <span class='var'>63410.16m</span>), in trip <span class='id'>CITY1</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>211.37 m/s</span> > <span class='var'>27.78 m/s</span>
 					</td>
 				</tr>
 				<tr>
@@ -898,15 +904,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Too fast travel between stop <span class='id'>NADAV</span> seq <span class='id'>300</span> @6:44:00 and stop <span class='id'>NANAA</span> seq <span class='id'>400</span> @6:51:00 (distance <span class='var'>64700.49</span>m), in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>179.72</span> > <span class='var'>16.67</span> m/s
-					</td>
-				</tr>
-				<tr>
-					<td class="severity WARNING">WARNING
-					</td>
-					<td class="fieldname">
-					</td>
-					<td class="issue">Too fast travel between stop <span class='id'>STAGECOACH</span> seq <span class='id'>500</span> @10:00:00 and stop <span class='id'>EMSI</span> seq <span class='id'>600</span> @10:00:00 (distance <span class='var'>1450.76</span>m), in trip <span class='id'>CITY3</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>24.18</span> > <span class='var'>16.67</span> m/s
+					<td class="issue">Too fast travel between stop <span class='id'>NADAV</span> <span class='var'>North Ave / D Ave N (Demo)</span> seq <span class='id'>300</span> @6:44:00 and stop <span class='id'>NANAA</span> <span class='var'>North Ave / N A Ave (Demo)</span> seq <span class='id'>400</span> @6:51:00 (distance <span class='var'>64700.49m</span>), in trip <span class='id'>CITY2</span> of route <span class='id'>CITY</span> <span class='var'>Ō</span>: <span class='var'>179.72 m/s</span> > <span class='var'>27.78 m/s</span>
 					</td>
 				</tr>
 			</table>
@@ -1223,6 +1221,133 @@ span.var {
 					<td class="fieldname">agency_id
 					</td>
 					<td class="issue">Unused <span class='var'>agency</span> ID <span class='id'>DTA_UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>areas.txt
+			<span class="smaller"> - 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> - 2
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused area
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing object ID
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>area_name
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td>First Area
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td>Duplicated Area
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>AREA1</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>area_name
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L5
+					</td>
+					<td class="ERROR"/>
+					<td>Missing ID area
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Missing mandatory object ID
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>area_name
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td class="WARNING">AREA4
+					</td>
+					<td>Unused area
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Unused <span class='var'>area</span> ID <span class='id'>AREA4</span>
 					</td>
 				</tr>
 			</table>
@@ -3370,12 +3495,20 @@ span.var {
 			</table>
 		</div>
 		<h2>pathways.txt
+			<span class="smaller"> - 4
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
 			<span class="smaller"> - 12
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
 		</h2>
 		<ul>
+			<li>4
+				<span class="smaller badge WARNING">WARNING
+				</span>Inconsistent number of fields
+			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Duplicated ID pathway_id
@@ -3481,6 +3614,14 @@ span.var {
 			</table>
 			<table class="issuelist">
 				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>5</span> fields, expected <span class='var'>6</span> as defined in the header.
+					</td>
+				</tr>
+				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
 					<td class="fieldname">is_bidirectional
@@ -3525,6 +3666,14 @@ span.var {
 				</tr>
 			</table>
 			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>5</span> fields, expected <span class='var'>6</span> as defined in the header.
+					</td>
+				</tr>
 				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
@@ -3579,6 +3728,14 @@ span.var {
 				</tr>
 			</table>
 			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>5</span> fields, expected <span class='var'>6</span> as defined in the header.
+					</td>
+				</tr>
 				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
@@ -3645,6 +3802,14 @@ span.var {
 				</tr>
 			</table>
 			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>5</span> fields, expected <span class='var'>6</span> as defined in the header.
+					</td>
+				</tr>
 				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
@@ -4643,8 +4808,238 @@ span.var {
 				</tr>
 			</table>
 		</div>
+		<h2>stop_areas.txt
+			<span class="smaller"> - 7
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id, stop_id
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid area_id reference
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_id reference
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing object ID
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td class="ERROR">BEATTY_AIRPORT
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td class="ERROR">BEATTY_AIRPORT
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id, stop_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>{AREA1, BEATTY_AIRPORT}</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L5
+					</td>
+					<td>AREA1
+					</td>
+					<td class="ERROR">MISSING_STOP
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>MISSING_STOP</span>, it should reference an existing <span class='pre'>stop_id</span> in table <span class='pre'>stops.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L6
+					</td>
+					<td class="ERROR">AREA9
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>AREA9</span>, it should reference an existing <span class='pre'>area_id</span> in table <span class='pre'>areas.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td class="ERROR">AREA9
+					</td>
+					<td class="ERROR">MISSING_STOP
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>AREA9</span>, it should reference an existing <span class='pre'>area_id</span> in table <span class='pre'>areas.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>MISSING_STOP</span>, it should reference an existing <span class='pre'>stop_id</span> in table <span class='pre'>stops.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td class="ERROR"/>
+					<td class="ERROR">MISSING
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id, stop_id
+					</td>
+					<td class="issue">Missing mandatory object ID
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td class="ERROR">MISSING
+					</td>
+					<td class="ERROR"/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id, stop_id
+					</td>
+					<td class="issue">Missing mandatory object ID
+					</td>
+				</tr>
+			</table>
+		</div>
 		<h2>stop_times.txt
-			<span class="smaller"> - 28
+			<span class="smaller"> - 42
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
@@ -4654,7 +5049,7 @@ span.var {
 			</span>
 		</h2>
 		<ul>
-			<li>26
+			<li>40
 				<span class="smaller badge WARNING">WARNING
 				</span>Inconsistent number of fields
 			</li>
@@ -6428,6 +6823,586 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
+					<td class="linenr">L30
+					</td>
+					<td>AB3
+					</td>
+					<td>12:00:00
+					</td>
+					<td>12:00:00
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>1
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L31
+					</td>
+					<td>AB3
+					</td>
+					<td>12:07:00
+					</td>
+					<td>12:07:00
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L32
+					</td>
+					<td>BFC1
+					</td>
+					<td>8:20:00
+					</td>
+					<td>8:20:00
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>1
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L33
+					</td>
+					<td>BFC1
+					</td>
+					<td>9:20:00
+					</td>
+					<td>9:20:00
+					</td>
+					<td>FUR_CREEK_RES
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L34
+					</td>
+					<td>BFC2
+					</td>
+					<td>11:00:00
+					</td>
+					<td>11:00:00
+					</td>
+					<td>FUR_CREEK_RES
+					</td>
+					<td>1
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L35
+					</td>
+					<td>BFC2
+					</td>
+					<td>12:00:00
+					</td>
+					<td>12:00:00
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L36
+					</td>
+					<td>AAMV1
+					</td>
+					<td>8:00:00
+					</td>
+					<td>8:00:00
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>1
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L37
+					</td>
+					<td>AAMV1
+					</td>
+					<td>9:00:00
+					</td>
+					<td>9:00:00
+					</td>
+					<td>AMV
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L38
+					</td>
+					<td>AAMV2
+					</td>
+					<td>10:00:00
+					</td>
+					<td>10:00:00
+					</td>
+					<td>AMV
+					</td>
+					<td>1
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L39
+					</td>
+					<td>AAMV2
+					</td>
+					<td>11:00:00
+					</td>
+					<td>11:00:00
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
 					<td class="linenr">L40
 					</td>
 					<td>AAMV3
@@ -6448,11 +7423,193 @@ span.var {
 			</table>
 			<table class="issuelist">
 				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
 					<td class="fieldname">stop_id
 					</td>
 					<td class="issue">Wrong type <span class='pre'>STATION(1)</span> for stop <span class='id'>BEATTY_AIRPORT_STATION</span> <span class='var'>Nye County Airport (Demo)</span>, should be type <span class='pre'>STOP(0)</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L41
+					</td>
+					<td>AAMV3
+					</td>
+					<td>14:00:00
+					</td>
+					<td>14:00:00
+					</td>
+					<td>AMV
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L42
+					</td>
+					<td>AAMV4
+					</td>
+					<td>15:00:00
+					</td>
+					<td>15:00:00
+					</td>
+					<td>AMV
+					</td>
+					<td>1
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>trip_id
+						</td>
+						<td>arrival_time
+						</td>
+						<td>departure_time
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_sequence
+						</td>
+						<td>stop_headsign
+						</td>
+						<td>pickup_type
+						</td>
+						<td>drop_off_type
+						</td>
+						<td>shape_dist_traveled
+						</td>
+						<td>timepoint
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L43
+					</td>
+					<td>AAMV4
+					</td>
+					<td>16:00:00
+					</td>
+					<td>16:00:00
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>9</span> fields, expected <span class='var'>10</span> as defined in the header.
 					</td>
 				</tr>
 			</table>
@@ -6855,7 +8012,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070.29</span>m): <span class='var'>175732.33m</span> away
+					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070.29m</span>): <span class='var'>175732.33m</span> away
 					</td>
 				</tr>
 			</table>
@@ -7341,7 +8498,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB1</span> is too far from computed projection point <span class='var'>(36.881000,-116.817000)</span> on shape <span class='id'>SHAPE1</span> (at arc-length <span class='var'>3272.00</span>m): <span class='var'>86.73m</span> away
+					<td class="issue">Stop at sequence <span class='var'>2</span> on examplar trip <span class='id'>AB1</span> is too far from computed projection point <span class='var'>(36.881000,-116.817000)</span> on shape <span class='id'>SHAPE1</span> (at arc-length <span class='var'>3272.00m</span>): <span class='var'>86.73m</span> away
 					</td>
 				</tr>
 				<tr>
@@ -7349,7 +8506,7 @@ span.var {
 					</td>
 					<td class="fieldname">stop_lat, stop_lon
 					</td>
-					<td class="issue">Stop at sequence <span class='var'>1</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070.29</span>m): <span class='var'>178119.67m</span> away
+					<td class="issue">Stop at sequence <span class='var'>1</span> on examplar trip <span class='id'>AB2</span> is too far from computed projection point <span class='var'>(35.607494,-115.603321)</span> on shape <span class='id'>SHAPE3</span> (at arc-length <span class='var'>52070.29m</span>): <span class='var'>178119.67m</span> away
 					</td>
 				</tr>
 			</table>
@@ -8289,7 +9446,7 @@ span.var {
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> - 16
+			<span class="smaller"> - 25
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -8313,6 +9470,10 @@ span.var {
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid from_route_id reference
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid from_stop_id reference
 			</li>
 			<li>3
@@ -8327,6 +9488,10 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid min_transfer_time value
 			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid to_route_id reference
+			</li>
 			<li>3
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid to_stop_id reference
@@ -8337,11 +9502,19 @@ span.var {
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory from_trip_id/to_trip_id value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory transfer_type value
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing object ID
+			</li>
+			<li>6
+				<span class="smaller badge ERROR">ERROR
+				</span>Trip transfer issues
 			</li>
 			<li>2
 				<span class="smaller badge ERROR">ERROR
@@ -8358,6 +9531,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8371,6 +9552,10 @@ span.var {
 					</td>
 					<td class="ERROR">NANAA
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>3
 					</td>
 					<td/>
@@ -8397,6 +9582,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8410,6 +9603,10 @@ span.var {
 					</td>
 					<td class="ERROR">NANAA
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td>1200
@@ -8430,7 +9627,7 @@ span.var {
 					</td>
 					<td class="fieldname">from_stop_id, to_stop_id
 					</td>
-					<td class="issue">Too fast transfer walking speed between stop <span class='id'>EMSI</span> and stop <span class='id'>NANAA</span> (distance <span class='var'>63785.70</span>m): <span class='var'>48.32</span> > <span class='var'>2.00</span> m/s
+					<td class="issue">Too fast transfer walking speed between stop <span class='id'>EMSI</span> and stop <span class='id'>NANAA</span> (distance <span class='var'>63785.70m</span>): <span class='var'>48.32 m/s</span> > <span class='var'>2.00 m/s</span>
 					</td>
 				</tr>
 			</table>
@@ -8445,6 +9642,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8458,6 +9663,10 @@ span.var {
 					</td>
 					<td class="ERROR">BOGUS
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>1
 					</td>
 					<td class="WARNING">1200
@@ -8501,6 +9710,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8514,6 +9731,10 @@ span.var {
 					</td>
 					<td class="ERROR">TOOLARGE1
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td class="WARNING">14000
@@ -8549,6 +9770,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8562,6 +9791,10 @@ span.var {
 					</td>
 					<td class="ERROR">TOOLARGE2
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td class="ERROR">140000
@@ -8597,6 +9830,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8610,6 +9851,10 @@ span.var {
 					</td>
 					<td class="ERROR">NANAA
 					</td>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
 					<td class="ERROR"/>
 					<td class="ERROR">-100
 					</td>
@@ -8668,6 +9913,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8677,6 +9930,10 @@ span.var {
 				<tr>
 					<td class="linenr">L8
 					</td>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
 					<td class="ERROR"/>
 					<td class="ERROR"/>
 					<td class="ERROR">timed
@@ -8705,7 +9962,7 @@ span.var {
 				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
-					<td class="fieldname">from_stop_id, to_stop_id
+					<td class="fieldname">from_route_id, from_stop_id, from_trip_id, to_route_id, to_stop_id, to_trip_id
 					</td>
 					<td class="issue">Missing mandatory object ID
 					</td>
@@ -8722,6 +9979,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -8735,6 +10000,10 @@ span.var {
 					</td>
 					<td class="ERROR">BEATTY_AIRPORT_ENTRANCE_NORTH
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td>3400
@@ -8760,13 +10029,659 @@ span.var {
 				</tr>
 			</table>
 		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L10
+					</td>
+					<td/>
+					<td/>
+					<td class="ERROR">R1
+					</td>
+					<td class="ERROR">R2
+					</td>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_route_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>R1</span>, it should reference an existing <span class='pre'>route_id</span> in table <span class='pre'>routes.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">to_route_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>R2</span>, it should reference an existing <span class='pre'>route_id</span> in table <span class='pre'>routes.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">BFC2
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>BFC2</span> (arriving at 12:00:00) and <span class='id'>BFC1</span> (departing at 8:20:00), duration of -3h40m00s is invalid (time travel) (max 10m00s)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td>BFC2
+					</td>
+					<td>BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td>AAMV1
+					</td>
+					<td>BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td>AAMV2
+					</td>
+					<td>BFC1
+					</td>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>trips.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td>BFC
+					</td>
+					<td class="ERROR">FULLW
+					</td>
+					<td>BFC2
+					</td>
+					<td>to Bullfrog
+					</td>
+					<td>1
+					</td>
+					<td>2
+					</td>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td>AAMV
+					</td>
+					<td class="ERROR">WE
+					</td>
+					<td>AAMV1
+					</td>
+					<td>to Amargosa Valley
+					</td>
+					<td>0
+					</td>
+					<td/>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td>AAMV
+					</td>
+					<td class="ERROR">WE
+					</td>
+					<td>AAMV2
+					</td>
+					<td>to Airport
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">frm_trip_id, service_id
+					</td>
+					<td class="issue">In a 1-to-N, N-to-1 or N-to-N trip transfer continuation, all group of N trips must have the same service ID. Here <span class='var'>2</span> services (<span class='id'>FULLW</span>, <span class='id'>WE</span>) are used for <span class='var'>3</span> trips (<span class='id'>AAMV1</span>, <span class='id'>AAMV2</span>, <span class='id'>BFC2</span>) in <span class='var'>3</span> transfers.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV1
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV1</span> (arriving at 9:00:00) and <span class='id'>BFC1</span> (departing at 8:20:00), duration of -40m00s is invalid (time travel) (max 10m00s)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV1
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>stops.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+						<td>level_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L14
+					</td>
+					<td>AMV
+					</td>
+					<td>Amargosa Valley (Demo)
+					</td>
+					<td>Amargosa Valley (Demo)
+					</td>
+					<td class="ERROR">36.641496
+					</td>
+					<td class="ERROR">-116.40094
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L8
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>Bullfrog (Demo)
+					</td>
+					<td/>
+					<td class="ERROR">36.88108
+					</td>
+					<td class="ERROR">-116.81797
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, stop_lat, stop_lon, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV1</span> (arriving at stop <span class='id'>AMV</span>) and <span class='id'>BFC1</span> (departing from stop <span class='id'>BULLFROG</span>), distance between stops 45714.74m is too large (max 100.00m)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV2
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV2</span> (arriving at 11:00:00) and <span class='id'>BFC1</span> (departing at 8:20:00), duration of -2h40m00s is invalid (time travel) (max 10m00s)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV2
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>stops.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+						<td>level_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>Nye County Airport (Demo)
+					</td>
+					<td/>
+					<td class="ERROR">36.868446
+					</td>
+					<td class="ERROR">-116.784582
+					</td>
+					<td/>
+					<td/>
+					<td>1235
+					</td>
+					<td>0
+					</td>
+					<td>BEATTY_AIRPORT_STATION
+					</td>
+					<td>America/Phoenix
+					</td>
+					<td/>
+					<td>ground_level
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L8
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>Bullfrog (Demo)
+					</td>
+					<td/>
+					<td class="ERROR">36.88108
+					</td>
+					<td class="ERROR">-116.81797
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, stop_lat, stop_lon, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV2</span> (arriving at stop <span class='id'>BEATTY_AIRPORT</span>) and <span class='id'>BFC1</span> (departing from stop <span class='id'>BULLFROG</span>), distance between stops 3285.38m is too large (max 100.00m)
+					</td>
+				</tr>
+			</table>
+		</div>
 		<h2>translations.txt
+			<span class="smaller"> - 3
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
 			<span class="smaller"> - 3
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
 		</h2>
 		<ul>
+			<li>3
+				<span class="smaller badge WARNING">WARNING
+				</span>Inconsistent number of fields
+			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Duplicated ID table_name, field_name, language, record_id, record_sub_id, field_value
@@ -8780,6 +10695,57 @@ span.var {
 				</span>Missing object ID
 			</li>
 		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>table_name
+						</td>
+						<td>field_name
+						</td>
+						<td>language
+						</td>
+						<td>translation
+						</td>
+						<td>record_id
+						</td>
+						<td>record_sub_id
+						</td>
+						<td>field_value
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td>routes
+					</td>
+					<td>route_long_name
+					</td>
+					<td>fr
+					</td>
+					<td>Aéroport vers la Grosse Grenouille
+					</td>
+					<td>AB
+					</td>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>8</span> fields, expected <span class='var'>7</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div class="subcategory">
 			<table class="sourceinfo">
 				<thead>
@@ -8871,6 +10837,57 @@ span.var {
 					</tr>
 				</thead>
 				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>routes
+					</td>
+					<td>route_long_name
+					</td>
+					<td>fr
+					</td>
+					<td>Aéroport vers Grenouille
+					</td>
+					<td>AB
+					</td>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>8</span> fields, expected <span class='var'>7</span> as defined in the header.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>table_name
+						</td>
+						<td>field_name
+						</td>
+						<td>language
+						</td>
+						<td>translation
+						</td>
+						<td>record_id
+						</td>
+						<td>record_sub_id
+						</td>
+						<td>field_value
+						</td>
+					</tr>
+				</thead>
+				<tr>
 					<td class="linenr">L4
 					</td>
 					<td class="ERROR">stop
@@ -8889,6 +10906,14 @@ span.var {
 				</tr>
 			</table>
 			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">
+					</td>
+					<td class="issue">Found <span class='var'>8</span> fields, expected <span class='var'>7</span> as defined in the header.
+					</td>
+				</tr>
 				<tr>
 					<td class="severity ERROR">ERROR
 					</td>
@@ -9459,6 +11484,7 @@ span.var {
 			</table>
 		</div>
 		<hr/>
-		<p class="comments">Validation done at Wed Sep 16 14:08:47 CEST 2020 by GTFSVTOR - Copyright (c) 2020 Mecatran
+		<p class="comments">Validation done at 2020-01-01 by GTFSVTOR - Copyright (c) 2020 Mecatran
 		</p>
-	</head>
+	</body>
+</html>

@@ -1,9 +1,9 @@
 {
   "dataVersion" : "1.0",
   "reports" : [ {
-    "timestamp" : 1600258127814,
+    "timestamp" : 1577836800000,
     "input" : {
-      "filename" : "src/test/resources/data/verybad/"
+      "filename" : "src/test/resources/data/verybad"
     },
     "validator" : {
       "name" : "GTFSVTOR",
@@ -19,11 +19,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
-        "totalCount" : 112,
+        "totalCount" : 111,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 134,
+        "totalCount" : 152,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -82,11 +82,6 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
-        "categoryName" : "Expired feed",
-        "totalCount" : 1,
-        "reportedCount" : 0
-      }, {
-        "severity" : "WARNING",
         "categoryName" : "Extra space in column header",
         "totalCount" : 3,
         "reportedCount" : 0
@@ -142,11 +137,6 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
-        "categoryName" : "Too fast travel",
-        "totalCount" : 1,
-        "reportedCount" : 0
-      }, {
-        "severity" : "WARNING",
         "categoryName" : "Too fast walking speed",
         "totalCount" : 1,
         "reportedCount" : 0
@@ -163,6 +153,11 @@
       }, {
         "severity" : "WARNING",
         "categoryName" : "Unused agency",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
+        "categoryName" : "Unused area",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
@@ -214,6 +209,16 @@
         "severity" : "WARNING",
         "categoryName" : "Useless timepoint",
         "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID area_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID area_id, stop_id",
+        "totalCount" : 1,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -307,6 +312,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Invalid area_id reference",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Invalid attribution_email format",
         "totalCount" : 1,
         "reportedCount" : 0
@@ -363,6 +373,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Invalid feed_end_date value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid from_route_id reference",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
@@ -457,6 +472,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Invalid stop_id reference",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Invalid stop_lat/stop_lon coordinate",
         "totalCount" : 1,
         "reportedCount" : 0
@@ -473,6 +493,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Invalid table_name format",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid to_route_id reference",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
@@ -548,6 +573,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Missing mandatory from_stop_id value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory from_trip_id/to_trip_id value",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
@@ -638,7 +668,7 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Missing object ID",
-        "totalCount" : 4,
+        "totalCount" : 7,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -673,6 +703,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Too fast travel",
+        "totalCount" : 6,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Trip transfer issues",
         "totalCount" : 6,
         "reportedCount" : 0
       }, {
