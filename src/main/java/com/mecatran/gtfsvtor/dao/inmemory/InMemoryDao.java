@@ -719,13 +719,17 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public void addTransfer(GtfsTransfer transfer,
 			SourceContext sourceContext) {
-		// Do not add transfer w/o from/to stop ID
-		if (transfer.getFromStopId() == null
-				|| transfer.getToStopId() == null) {
+		// Do not add transfer missing ID
+		if (transfer.getFromStopId() == null && transfer.getToStopId() == null
+				&& transfer.getFromRouteId() == null
+				&& transfer.getToRouteId() == null
+				&& transfer.getFromTripId() == null
+				&& transfer.getToTripId() == null) {
 			sourceContext.getReportSink()
 					.report(new MissingObjectIdError(
 							sourceContext.getSourceRef(), "from_stop_id",
-							"to_stop_id"));
+							"to_stop_id", "from_route_id", "to_route_id",
+							"from_trip_id", "to_trip_id"));
 			return;
 		}
 		GtfsTransfer existingTransfer = getTransfer(transfer.getId());
