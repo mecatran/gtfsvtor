@@ -45,6 +45,7 @@ public class TestUtils {
 		public String gtfsFileOrDirectory;
 		public int maxStopTimesInterleaving = 3;
 		public int maxShapePointsInterleaving = 3;
+		public boolean printIssues = false;
 		public StopTimesDaoMode stopTimesDaoMode = StopTimesDaoMode.AUTO;
 		public ShapePointsDaoMode shapePointsDaoMode = ShapePointsDaoMode.PACKED;
 		public String htmlOutputFile = null;
@@ -104,6 +105,11 @@ public class TestUtils {
 		@Override
 		public ShapePointsDaoMode getShapePointsDaoMode() {
 			return shapePointsDaoMode;
+		}
+
+		@Override
+		public boolean isPrintIssues() {
+			return printIssues;
 		}
 
 		@Override
