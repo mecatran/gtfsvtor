@@ -137,12 +137,14 @@ public class TestUtils {
 	}
 
 	public static TestBundle loadAndValidate(String localGtfsFileOrDirectory) {
-		return new TestScenario(localGtfsFileOrDirectory).run();
+		TestScenario testScenario = new TestScenario(localGtfsFileOrDirectory);
+		return testScenario.run();
 	}
 
 	public static TestBundle loadAndValidate(String localGtfsFileOrDirectory,
 			String localConfigFile) {
-		return new TestScenario(localGtfsFileOrDirectory, localConfigFile)
-				.run();
+		TestScenario testScenario = new TestScenario(localGtfsFileOrDirectory,
+				localConfigFile);
+		return testScenario.run();
 	}
 }
