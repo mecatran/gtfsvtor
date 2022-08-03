@@ -19,9 +19,9 @@ public class TestVeryBad {
 
 		// This *will* break, check and adjust when necessary
 		assertEquals(6, tb.issuesCountOfSeverities(ReportIssueSeverity.INFO));
-		assertEquals(110,
+		assertEquals(111,
 				tb.issuesCountOfSeverities(ReportIssueSeverity.WARNING));
-		assertEquals(134,
+		assertEquals(152,
 				tb.issuesCountOfSeverities(ReportIssueSeverity.ERROR));
 		assertEquals(0,
 				tb.issuesCountOfSeverities(ReportIssueSeverity.CRITICAL));
