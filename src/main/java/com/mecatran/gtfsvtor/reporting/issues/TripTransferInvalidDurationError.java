@@ -13,7 +13,7 @@ import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 import com.mecatran.gtfsvtor.reporting.SourceRefWithFields;
 
 @ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Trip transfer issues")
-public class TripTransferTooLongDurationError implements ReportIssue {
+public class TripTransferInvalidDurationError implements ReportIssue {
 
 	private GtfsTransfer transfer;
 	private GtfsTrip fromTrip, toTrip;
@@ -21,7 +21,7 @@ public class TripTransferTooLongDurationError implements ReportIssue {
 	private int maxDurationSec;
 	private List<SourceRefWithFields> sourceInfos;
 
-	public TripTransferTooLongDurationError(GtfsTransfer transfer,
+	public TripTransferInvalidDurationError(GtfsTransfer transfer,
 			GtfsTrip fromTrip, GtfsTrip toTrip, GtfsLogicalTime lastFromArrTime,
 			GtfsLogicalTime firstToDepTime, int maxDurationSec) {
 		this.transfer = transfer;
@@ -53,12 +53,14 @@ public class TripTransferTooLongDurationError implements ReportIssue {
 
 	@Override
 	public void format(IssueFormatter fmt) {
+		int durationSec = firstToDepTime.getSecondSinceMidnight()
+				- lastFromArrTime.getSecondSinceMidnight();
 		fmt.text(
-				"Transfer between trip {0} (arriving at {1}) and {2} (departing at {3}), duration of {4} is too long (max {5})",
+				"Transfer between trip {0} (arriving at {1}) and {2} (departing at {3}), duration of {4} is {5} (max {6})",
 				fmt.id(fromTrip.getId()), fmt.time(lastFromArrTime),
 				fmt.id(toTrip.getId()), fmt.time(firstToDepTime),
-				fmt.durationSec(firstToDepTime.getSecondSinceMidnight()
-						- lastFromArrTime.getSecondSinceMidnight()),
+				fmt.durationSec(durationSec),
+				durationSec < 0 ? "invalid (time travel)" : "too large",
 				fmt.durationSec(maxDurationSec));
 	}
 }

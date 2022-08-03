@@ -109,7 +109,7 @@ import com.mecatran.gtfsvtor.reporting.issues.TooFastWalkingSpeed;
 import com.mecatran.gtfsvtor.reporting.issues.TooManyDaysWithoutServiceIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TripTransferDifferentCalendarError;
 import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLargeDistanceError;
-import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLongDurationError;
+import com.mecatran.gtfsvtor.reporting.issues.TripTransferInvalidDurationError;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
@@ -1738,8 +1738,8 @@ public class TestGtfs {
 		List<DuplicatedObjectIdError> doie = tb
 				.issuesOfCategory(DuplicatedObjectIdError.class);
 		assertEquals(1, doie.size());
-		List<TripTransferTooLongDurationError> tttlde = tb
-				.issuesOfCategory(TripTransferTooLongDurationError.class);
+		List<TripTransferInvalidDurationError> tttlde = tb
+				.issuesOfCategory(TripTransferInvalidDurationError.class);
 		assertEquals(1, tttlde.size());
 		List<TripTransferDifferentCalendarError> ttdce = tb
 				.issuesOfCategory(TripTransferDifferentCalendarError.class);

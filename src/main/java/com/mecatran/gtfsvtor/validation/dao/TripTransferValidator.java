@@ -24,7 +24,7 @@ import com.mecatran.gtfsvtor.reporting.ReportSink;
 import com.mecatran.gtfsvtor.reporting.issues.TripTransferDifferentCalendarError;
 import com.mecatran.gtfsvtor.reporting.issues.TripTransferDisjointCalendarError;
 import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLargeDistanceError;
-import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLongDurationError;
+import com.mecatran.gtfsvtor.reporting.issues.TripTransferInvalidDurationError;
 import com.mecatran.gtfsvtor.utils.Pair;
 import com.mecatran.gtfsvtor.validation.ConfigurableOption;
 import com.mecatran.gtfsvtor.validation.DaoValidator;
@@ -109,7 +109,7 @@ public class TripTransferValidator implements DaoValidator {
 					int delta = firstToStopTimeDep.getSecondSinceMidnight()
 							- lastFromStopTimeArr.getSecondSinceMidnight();
 					if (delta < 0 || delta > maxTransferDurationSeconds) {
-						reportSink.report(new TripTransferTooLongDurationError(
+						reportSink.report(new TripTransferInvalidDurationError(
 								transfer, fromTrip, toTrip, lastFromStopTimeArr,
 								firstToStopTimeDep,
 								maxTransferDurationSeconds));
