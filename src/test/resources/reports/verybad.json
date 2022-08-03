@@ -19,11 +19,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
-        "totalCount" : 110,
+        "totalCount" : 111,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 134,
+        "totalCount" : 144,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -88,7 +88,7 @@
       }, {
         "severity" : "WARNING",
         "categoryName" : "Inconsistent number of fields",
-        "totalCount" : 51,
+        "totalCount" : 52,
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
@@ -357,6 +357,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Invalid from_route_id reference",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Invalid from_stop_id reference",
         "totalCount" : 1,
         "reportedCount" : 0
@@ -467,8 +472,18 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Invalid to_route_id reference",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Invalid to_stop_id reference",
         "totalCount" : 3,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid to_trip_id reference",
+        "totalCount" : 1,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -623,7 +638,7 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Missing mandatory transfer_type value",
-        "totalCount" : 1,
+        "totalCount" : 2,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -663,6 +678,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Too fast travel",
+        "totalCount" : 6,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Trip transfer issues",
         "totalCount" : 6,
         "reportedCount" : 0
       }, {

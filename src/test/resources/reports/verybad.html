@@ -172,7 +172,7 @@ span.var {
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="xsmaller"> - 134 
+			<span class="xsmaller"> - 143 
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -440,6 +440,10 @@ span.var {
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid from_route_id reference
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid from_stop_id reference
 			</li>
 			<li>3 
@@ -526,6 +530,10 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid table_name format
 			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid to_route_id reference
+			</li>
 			<li>3 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid to_stop_id reference
@@ -585,6 +593,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory from_stop_id value
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory from_trip_id/to_trip_id value
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -685,6 +697,10 @@ span.var {
 			<li>6 
 				<span class="smaller badge ERROR">ERROR
 				</span>Too fast travel
+			</li>
+			<li>6 
+				<span class="smaller badge ERROR">ERROR
+				</span>Trip transfer issues
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -792,7 +808,7 @@ span.var {
 					</td>
 					<td class="fieldname">
 					</td>
-					<td class="issue">Loaded 1 feed-info, 2 agencies, 8 routes, 21 stops, 6 calendars, 17 calendar dates, 15 trips, 42 stop times, 6 transfers, 3 pathways, 3 fare attributes, 8 fare rules, 1 translations
+					<td class="issue">Loaded 1 feed-info, 2 agencies, 8 routes, 21 stops, 6 calendars, 17 calendar dates, 15 trips, 42 stop times, 10 transfers, 3 pathways, 3 fare attributes, 8 fare rules, 1 translations
 					</td>
 				</tr>
 			</table>
@@ -9053,7 +9069,7 @@ span.var {
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="smaller"> - 16
+			<span class="smaller"> - 25
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -9077,6 +9093,10 @@ span.var {
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
+				</span>Invalid from_route_id reference
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
 				</span>Invalid from_stop_id reference
 			</li>
 			<li>3
@@ -9091,6 +9111,10 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid min_transfer_time value
 			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid to_route_id reference
+			</li>
 			<li>3
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid to_stop_id reference
@@ -9101,11 +9125,19 @@ span.var {
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
+				</span>Missing mandatory from_trip_id/to_trip_id value
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory transfer_type value
 			</li>
 			<li>1
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing object ID
+			</li>
+			<li>6
+				<span class="smaller badge ERROR">ERROR
+				</span>Trip transfer issues
 			</li>
 			<li>2
 				<span class="smaller badge ERROR">ERROR
@@ -9122,6 +9154,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9135,6 +9175,10 @@ span.var {
 					</td>
 					<td class="ERROR">NANAA
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>3
 					</td>
 					<td/>
@@ -9161,6 +9205,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9174,6 +9226,10 @@ span.var {
 					</td>
 					<td class="ERROR">NANAA
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td>1200
@@ -9209,6 +9265,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9222,6 +9286,10 @@ span.var {
 					</td>
 					<td class="ERROR">BOGUS
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>1
 					</td>
 					<td class="WARNING">1200
@@ -9265,6 +9333,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9278,6 +9354,10 @@ span.var {
 					</td>
 					<td class="ERROR">TOOLARGE1
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td class="WARNING">14000
@@ -9313,6 +9393,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9326,6 +9414,10 @@ span.var {
 					</td>
 					<td class="ERROR">TOOLARGE2
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td class="ERROR">140000
@@ -9361,6 +9453,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9374,6 +9474,10 @@ span.var {
 					</td>
 					<td class="ERROR">NANAA
 					</td>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
 					<td class="ERROR"/>
 					<td class="ERROR">-100
 					</td>
@@ -9432,6 +9536,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9441,6 +9553,10 @@ span.var {
 				<tr>
 					<td class="linenr">L8
 					</td>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
 					<td class="ERROR"/>
 					<td class="ERROR"/>
 					<td class="ERROR">timed
@@ -9486,6 +9602,14 @@ span.var {
 						</td>
 						<td>to_stop_id
 						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
 						<td>transfer_type
 						</td>
 						<td>min_transfer_time
@@ -9499,6 +9623,10 @@ span.var {
 					</td>
 					<td class="ERROR">BEATTY_AIRPORT_ENTRANCE_NORTH
 					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
 					<td>2
 					</td>
 					<td>3400
@@ -9520,6 +9648,644 @@ span.var {
 					<td class="fieldname">to_stop_id
 					</td>
 					<td class="issue">Wrong type <span class='pre'>ENTRANCE(2)</span> for <span class='pre'>to_stop_id</span> <span class='id'>BEATTY_AIRPORT_ENTRANCE_NORTH</span> <span class='var'>Nye County Airport Entrance North</span>, should be type <span class='pre'>STOP(0)</span> or <span class='pre'>STATION(1)</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L10
+					</td>
+					<td/>
+					<td/>
+					<td class="ERROR">R1
+					</td>
+					<td class="ERROR">R2
+					</td>
+					<td class="ERROR"/>
+					<td class="ERROR"/>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_route_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>R1</span>, it should reference an existing <span class='pre'>route_id</span> in table <span class='pre'>routes.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">to_route_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>R2</span>, it should reference an existing <span class='pre'>route_id</span> in table <span class='pre'>routes.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Missing mandatory value
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">BFC2
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>BFC2</span> (arriving at 12:00:00) and <span class='id'>BFC1</span> (departing at 8:20:00), duration of -3h40m00s is invalid (time travel) (max 10m00s)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td>BFC2
+					</td>
+					<td>BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td>AAMV1
+					</td>
+					<td>BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td>AAMV2
+					</td>
+					<td>BFC1
+					</td>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>trips.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>route_id
+						</td>
+						<td>service_id
+						</td>
+						<td>trip_id
+						</td>
+						<td>trip_headsign
+						</td>
+						<td>direction_id
+						</td>
+						<td>block_id
+						</td>
+						<td>shape_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td>BFC
+					</td>
+					<td class="ERROR">FULLW
+					</td>
+					<td>BFC2
+					</td>
+					<td>to Bullfrog
+					</td>
+					<td>1
+					</td>
+					<td>2
+					</td>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td>AAMV
+					</td>
+					<td class="ERROR">WE
+					</td>
+					<td>AAMV1
+					</td>
+					<td>to Amargosa Valley
+					</td>
+					<td>0
+					</td>
+					<td/>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td>AAMV
+					</td>
+					<td class="ERROR">WE
+					</td>
+					<td>AAMV2
+					</td>
+					<td>to Airport
+					</td>
+					<td>2
+					</td>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">frm_trip_id, service_id
+					</td>
+					<td class="issue">In a 1-to-N, N-to-1 or N-to-N trip transfer continuation, all group of N trips must have the same service ID. Here <span class='var'>2</span> services (<span class='id'>FULLW</span>, <span class='id'>WE</span>) are used for <span class='var'>3</span> trips (<span class='id'>AAMV1</span>, <span class='id'>AAMV2</span>, <span class='id'>BFC2</span>) in <span class='var'>3</span> transfers.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV1
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV1</span> (arriving at 9:00:00) and <span class='id'>BFC1</span> (departing at 8:20:00), duration of -40m00s is invalid (time travel) (max 10m00s)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV1
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>4
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>stops.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+						<td>level_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L14
+					</td>
+					<td>AMV
+					</td>
+					<td>Amargosa Valley (Demo)
+					</td>
+					<td>Amargosa Valley (Demo)
+					</td>
+					<td class="ERROR">36.641496
+					</td>
+					<td class="ERROR">-116.40094
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+				<tr>
+					<td class="linenr">L8
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>Bullfrog (Demo)
+					</td>
+					<td/>
+					<td class="ERROR">36.88108
+					</td>
+					<td class="ERROR">-116.81797
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, stop_lat, stop_lon, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV1</span> (arriving at stop <span class='id'>AMV</span>) and <span class='id'>BFC1</span> (departing from stop <span class='id'>BULLFROG</span>), distance between stops 45714.74m is too large (max 100.00m)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV2
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV2</span> (arriving at 11:00:00) and <span class='id'>BFC1</span> (departing at 8:20:00), duration of -2h40m00s is invalid (time travel) (max 10m00s)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>from_stop_id
+						</td>
+						<td>to_stop_id
+						</td>
+						<td>from_route_id
+						</td>
+						<td>to_route_id
+						</td>
+						<td>from_trip_id
+						</td>
+						<td>to_trip_id
+						</td>
+						<td>transfer_type
+						</td>
+						<td>min_transfer_time
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L13
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td class="ERROR">AAMV2
+					</td>
+					<td class="ERROR">BFC1
+					</td>
+					<td>5
+					</td>
+					<td/>
+				</tr>
+			</table>
+			<table class="sourceinfo">
+				<caption>stops.txt
+				</caption>
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>stop_id
+						</td>
+						<td>stop_name
+						</td>
+						<td>stop_desc
+						</td>
+						<td>stop_lat
+						</td>
+						<td>stop_lon
+						</td>
+						<td>zone_id
+						</td>
+						<td>stop_url
+						</td>
+						<td>stop_code
+						</td>
+						<td>location_type
+						</td>
+						<td>parent_station
+						</td>
+						<td>stop_timezone
+						</td>
+						<td>fancy_extra_field
+						</td>
+						<td>level_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+					<td>Nye County Airport (Demo)
+					</td>
+					<td/>
+					<td class="ERROR">36.868446
+					</td>
+					<td class="ERROR">-116.784582
+					</td>
+					<td/>
+					<td/>
+					<td>1235
+					</td>
+					<td>0
+					</td>
+					<td>BEATTY_AIRPORT_STATION
+					</td>
+					<td>America/Phoenix
+					</td>
+					<td/>
+					<td>ground_level
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L8
+					</td>
+					<td>BULLFROG
+					</td>
+					<td>Bullfrog (Demo)
+					</td>
+					<td/>
+					<td class="ERROR">36.88108
+					</td>
+					<td class="ERROR">-116.81797
+					</td>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+					<td/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">from_trip_id, stop_lat, stop_lon, to_trip_id
+					</td>
+					<td class="issue">Transfer between trip <span class='id'>AAMV2</span> (arriving at stop <span class='id'>BEATTY_AIRPORT</span>) and <span class='id'>BFC1</span> (departing from stop <span class='id'>BULLFROG</span>), distance between stops 3285.38m is too large (max 100.00m)
 					</td>
 				</tr>
 			</table>
