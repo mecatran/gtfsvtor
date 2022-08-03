@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsArea;
 import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
@@ -18,6 +19,7 @@ import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsStop;
+import com.mecatran.gtfsvtor.model.GtfsStopArea;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTranslation;
 import com.mecatran.gtfsvtor.model.GtfsTranslationTable;
@@ -98,6 +100,12 @@ public interface ReadOnlyDao {
 	public Stream<GtfsAttribution> getAttributions();
 
 	public GtfsAttribution getAttribution(GtfsAttribution.Id attributionId);
+
+	public Stream<GtfsArea> getAreas();
+
+	public GtfsArea getArea(GtfsArea.Id areaId);
+
+	public Stream<GtfsStopArea> getStopAreas();
 
 	public GtfsObject<?> getObject(GtfsTranslationTable table, String recordId,
 			Optional<String> recordSubId);

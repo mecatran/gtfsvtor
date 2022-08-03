@@ -31,6 +31,7 @@ import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsArea;
 import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsBlockId;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
@@ -350,6 +351,15 @@ public class TestGtfs {
 		assertTrue(mecatran.getIsProducer().get());
 		assertFalse(mecatran.getIsAuthority().isPresent());
 		assertFalse(mecatran.getIsOperator().isPresent());
+
+		assertEquals(3, dao.getStopAreas().count());
+		assertEquals(2, dao.getStopsOfArea(GtfsArea.id("AREA1")).count());
+		assertEquals(1, dao.getStopsOfArea(GtfsArea.id("AREA2")).count());
+		assertEquals(2, dao.getAreasOfStop(GtfsStop.id("BULLFROG")).count());
+		GtfsStop.Id beattyAirportStnId = GtfsStop.id("BEATTY_AIRPORT_STATION");
+		GtfsStop.Id beattyAirportId = GtfsStop.id("BEATTY_AIRPORT");
+		assertEquals(1, dao.getAreasOfStop(beattyAirportStnId).count());
+		assertEquals(0, dao.getAreasOfStop(beattyAirportId).count());
 	}
 
 	@Test
@@ -1695,6 +1705,28 @@ public class TestGtfs {
 					shapeId -> tb.dao.getPointsOfShape(shapeId).stream())
 					.count());
 		}
+	}
+
+	@Test
+	public void testStopAreas() {
+		TestBundle tb = loadAndValidate("stop_areas");
+		List<MissingObjectIdError> moie = tb
+				.issuesOfCategory(MissingObjectIdError.class);
+		assertEquals(1, moie.size());
+		List<DuplicatedObjectIdError> doie = tb
+				.issuesOfCategory(DuplicatedObjectIdError.class);
+		assertEquals(2, doie.size());
+		List<InvalidReferenceError> ivre = tb
+				.issuesOfCategory(InvalidReferenceError.class);
+		assertEquals(4, ivre.size());
+		List<UnusedObjectWarning> uow = tb
+				.issuesOfCategory(UnusedObjectWarning.class);
+		assertEquals(1, uow.size());
+		assertEquals(4, tb.dao.getAreas().count());
+		assertEquals(8, tb.dao.getStopAreas().count());
+		assertEquals(2, tb.dao.getStopsOfArea(GtfsArea.id("AREA1")).count());
+		assertEquals(1, tb.dao.getStopsOfArea(GtfsArea.id("AREA3")).count());
+		assertEquals(0, tb.dao.getStopsOfArea(GtfsArea.id("AREA4")).count());
 	}
 
 	@Test

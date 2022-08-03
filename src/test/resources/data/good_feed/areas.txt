@@ -1,0 +1,3 @@
+area_id,area_name
+AREA1,First Area
+AREA2,Second Area

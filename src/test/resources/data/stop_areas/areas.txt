@@ -1,0 +1,7 @@
+area_id,area_name
+AREA1,First Area
+AREA2,Second Area
+AREA1,
+,Missing ID area
+AREA3,
+AREA4,Unused area

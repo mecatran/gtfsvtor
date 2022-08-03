@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsArea;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
@@ -58,6 +59,10 @@ public interface IndexedReadOnlyDao extends ReadOnlyDao {
 	public Stream<GtfsTrip> getTripsOfCalendar(GtfsCalendar.Id calendarId);
 
 	public Stream<GtfsFrequency> getFrequenciesOfTrip(GtfsTrip.Id tripId);
+
+	public Stream<GtfsStop> getStopsOfArea(GtfsArea.Id areaId);
+
+	public Stream<GtfsArea> getAreasOfStop(GtfsStop.Id stopId);
 
 	public CalendarIndex getCalendarIndex();
 

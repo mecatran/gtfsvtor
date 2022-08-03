@@ -44,7 +44,11 @@ public class DefaultGtfsTableSchema implements GtfsTableSchema {
 				// Translation reference a lot of other tables
 				new GtfsTranslationTableDescriptor(),
 				// Attribution reference agencies, routes, trips
-				new GtfsAttributionTableDescriptor());
+				new GtfsAttributionTableDescriptor(),
+				//
+				new GtfsAreaTableDescriptor(),
+				// reference areas, stops
+				new GtfsStopAreaTableDescriptor());
 	}
 
 	@Override

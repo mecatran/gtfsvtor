@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.dao;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsArea;
 import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
@@ -15,6 +16,7 @@ import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
+import com.mecatran.gtfsvtor.model.GtfsStopArea;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
 import com.mecatran.gtfsvtor.model.GtfsTranslation;
@@ -71,6 +73,10 @@ public interface AppendableDao {
 
 	public void addAttribution(GtfsAttribution attribution,
 			SourceContext sourceContext);
+
+	public void addArea(GtfsArea area, SourceContext sourceContext);
+
+	public void addStopArea(GtfsStopArea stopArea, SourceContext sourceContext);
 
 	public void close();
 }

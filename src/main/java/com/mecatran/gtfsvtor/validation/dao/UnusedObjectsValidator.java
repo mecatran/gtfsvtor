@@ -106,6 +106,14 @@ public class UnusedObjectsValidator implements DaoValidator {
 					level.getSourceRef(), "level_id"));
 		}
 
+		/* Look for unused areas */
+		dao.getAreas().forEach(area -> {
+			if (dao.getStopsOfArea(area.getId()).count() == 0) {
+				reportSink.report(new UnusedObjectWarning("area", area.getId(),
+						area.getSourceRef(), "area_id"));
+			}
+		});
+
 		/* Empty (or single stop) trips do have a special validator */
 	}
 }

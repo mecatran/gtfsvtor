@@ -31,6 +31,7 @@ import com.mecatran.gtfsvtor.dao.stoptimes.StopTimesDao;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.ShapePointsDaoMode;
 import com.mecatran.gtfsvtor.lib.GtfsVtorOptions.StopTimesDaoMode;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsArea;
 import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendar.Id;
@@ -46,6 +47,7 @@ import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShape;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
 import com.mecatran.gtfsvtor.model.GtfsStop;
+import com.mecatran.gtfsvtor.model.GtfsStopArea;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
 import com.mecatran.gtfsvtor.model.GtfsTransfer;
@@ -84,6 +86,8 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Map<GtfsTranslation.Id, GtfsTranslation> translations = new HashMap<>();
 	private List<GtfsAttribution> attributions = new ArrayList<>();
 	private Map<GtfsAttribution.Id, GtfsAttribution> attributionsPerId = new HashMap<>();
+	private Map<GtfsArea.Id, GtfsArea> areas = new HashMap<>();
+	private Map<GtfsStopArea.Id, GtfsStopArea> stopAreas = new HashMap<>();
 	private Multimap<GtfsAgency.Id, GtfsRoute> routesPerAgency = ArrayListMultimap
 			.create();
 	private Multimap<GtfsRoute.Id, GtfsTrip> tripsPerRoute = ArrayListMultimap
@@ -99,6 +103,10 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Multimap<GtfsStop.Id, GtfsStop> nodesPerStation = ArrayListMultimap
 			.create();
 	private Multimap<GtfsStop.Id, GtfsStop> boardingAreasPerStop = ArrayListMultimap
+			.create();
+	private Multimap<GtfsStop.Id, GtfsArea.Id> areasPerStop = ArrayListMultimap
+			.create();
+	private Multimap<GtfsArea.Id, GtfsStop.Id> stopsPerArea = ArrayListMultimap
 			.create();
 
 	private CalendarIndex calendarIndex = null;
@@ -322,6 +330,21 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	}
 
 	@Override
+	public Stream<GtfsArea> getAreas() {
+		return areas.values().stream();
+	}
+
+	@Override
+	public GtfsArea getArea(GtfsArea.Id areaId) {
+		return areas.get(areaId);
+	}
+
+	@Override
+	public Stream<GtfsStopArea> getStopAreas() {
+		return stopAreas.values().stream();
+	}
+
+	@Override
 	public GtfsObject<?> getObject(GtfsTranslationTable table, String recordId,
 			Optional<String> recordSubId) {
 		switch (table) {
@@ -422,6 +445,18 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	public List<GtfsShapePoint> getPointsOfShape(GtfsShape.Id shapeId) {
 		return shapePointsDao.getPointsOfShape(shapeId)
 				.orElse(Collections.emptyList());
+	}
+
+	@Override
+	public Stream<GtfsStop> getStopsOfArea(GtfsArea.Id areaId) {
+		return stopsPerArea.get(areaId).stream().map(this::getStop)
+				.filter(s -> s != null);
+	}
+
+	@Override
+	public Stream<GtfsArea> getAreasOfStop(GtfsStop.Id stopId) {
+		return areasPerStop.get(stopId).stream().map(this::getArea)
+				.filter(a -> a != null);
 	}
 
 	@Override
@@ -837,6 +872,55 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			// Add to map
 			attributionsPerId.put(oid.get(), attribution);
 		}
+	}
+
+	@Override
+	public void addArea(GtfsArea area, SourceContext sourceContext) {
+		// Do not add areas w/o ID
+		if (area.getId() == null) {
+			sourceContext.getReportSink()
+					.report(new MissingObjectIdError(
+							sourceContext.getSourceRef(), "area_id"),
+							sourceContext.getSourceInfo());
+			return;
+		}
+		GtfsArea existingArea = getArea(area.getId());
+		if (existingArea != null) {
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							existingArea.getSourceRef(),
+							sourceContext.getSourceRef(), existingArea.getId(),
+							"area_id"), null, sourceContext.getSourceInfo());
+			return;
+		}
+		areas.put(area.getId(), area);
+	}
+
+	@Override
+	public void addStopArea(GtfsStopArea stopArea,
+			SourceContext sourceContext) {
+		// Do not add stop_area w/o IDs (area_id or stop_id)
+		if (stopArea.getId() == null) {
+			sourceContext.getReportSink()
+					.report(new MissingObjectIdError(
+							sourceContext.getSourceRef(), "area_id", "stop_id"),
+							sourceContext.getSourceInfo());
+			return;
+		}
+		GtfsStopArea existingStopArea = stopAreas.get(stopArea.getId());
+		if (existingStopArea != null) {
+			sourceContext.getReportSink().report(
+					new DuplicatedObjectIdError(existingStopArea.getSourceRef(),
+							sourceContext.getSourceRef(),
+							existingStopArea.getId(), "area_id", "stop_id"),
+					null, sourceContext.getSourceInfo());
+			return;
+		}
+		stopAreas.put(stopArea.getId(), stopArea);
+		stopsPerArea.put(stopArea.getId().getAreaId(),
+				stopArea.getId().getStopId());
+		areasPerStop.put(stopArea.getId().getStopId(),
+				stopArea.getId().getAreaId());
 	}
 
 	@Override
