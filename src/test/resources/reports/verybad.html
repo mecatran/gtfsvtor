@@ -168,11 +168,11 @@ span.var {
 				<span class="badge INFO">INFO
 				</span>
 			</span>
-			<span class="xsmaller"> - 110 
+			<span class="xsmaller"> - 111 
 				<span class="badge WARNING">WARNING
 				</span>
 			</span>
-			<span class="xsmaller"> - 143 
+			<span class="xsmaller"> - 152 
 				<span class="badge ERROR">ERROR
 				</span>
 			</span>
@@ -278,6 +278,10 @@ span.var {
 				<span class="smaller badge WARNING">WARNING
 				</span>Unused agency
 			</li>
+			<li>1 
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused area
+			</li>
 			<li>4 
 				<span class="smaller badge WARNING">WARNING
 				</span>Unused calendar
@@ -317,6 +321,14 @@ span.var {
 			<li>2 
 				<span class="smaller badge WARNING">WARNING
 				</span>Useless timepoint
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id
+			</li>
+			<li>1 
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id, stop_id
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -389,6 +401,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid agency_url format
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid area_id reference
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -513,6 +529,10 @@ span.var {
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
 				</span>Invalid station(1) parent type
+			</li>
+			<li>2 
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_id reference
 			</li>
 			<li>1 
 				<span class="smaller badge ERROR">ERROR
@@ -666,7 +686,7 @@ span.var {
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing mandatory transfer_type value
 			</li>
-			<li>4 
+			<li>7 
 				<span class="smaller badge ERROR">ERROR
 				</span>Missing object ID
 			</li>
@@ -1201,6 +1221,133 @@ span.var {
 					<td class="fieldname">agency_id
 					</td>
 					<td class="issue">Unused <span class='var'>agency</span> ID <span class='id'>DTA_UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>areas.txt
+			<span class="smaller"> - 1
+				<span class="badge WARNING">WARNING
+				</span>
+			</span>
+			<span class="smaller"> - 2
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge WARNING">WARNING
+				</span>Unused area
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id
+			</li>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing object ID
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>area_name
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td>First Area
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L4
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td>Duplicated Area
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>AREA1</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>area_name
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L5
+					</td>
+					<td class="ERROR"/>
+					<td>Missing ID area
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Missing mandatory object ID
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>area_name
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td class="WARNING">AREA4
+					</td>
+					<td>Unused area
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity WARNING">WARNING
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Unused <span class='var'>area</span> ID <span class='id'>AREA4</span>
 					</td>
 				</tr>
 			</table>
@@ -4657,6 +4804,236 @@ span.var {
 					<td class="fieldname">route_id
 					</td>
 					<td class="issue">Unused <span class='var'>route</span> ID <span class='id'>UNUSED</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<h2>stop_areas.txt
+			<span class="smaller"> - 7
+				<span class="badge ERROR">ERROR
+				</span>
+			</span>
+		</h2>
+		<ul>
+			<li>1
+				<span class="smaller badge ERROR">ERROR
+				</span>Duplicated ID area_id, stop_id
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid area_id reference
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Invalid stop_id reference
+			</li>
+			<li>2
+				<span class="smaller badge ERROR">ERROR
+				</span>Missing object ID
+			</li>
+		</ul>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L2
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td class="ERROR">BEATTY_AIRPORT
+					</td>
+				</tr>
+				<tr>
+					<td class="linenr">L3
+					</td>
+					<td class="ERROR">AREA1
+					</td>
+					<td class="ERROR">BEATTY_AIRPORT
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id, stop_id
+					</td>
+					<td class="issue">Duplicated object ID <span class='id'>{AREA1, BEATTY_AIRPORT}</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L5
+					</td>
+					<td>AREA1
+					</td>
+					<td class="ERROR">MISSING_STOP
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>MISSING_STOP</span>, it should reference an existing <span class='pre'>stop_id</span> in table <span class='pre'>stops.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L6
+					</td>
+					<td class="ERROR">AREA9
+					</td>
+					<td>BEATTY_AIRPORT
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>AREA9</span>, it should reference an existing <span class='pre'>area_id</span> in table <span class='pre'>areas.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L7
+					</td>
+					<td class="ERROR">AREA9
+					</td>
+					<td class="ERROR">MISSING_STOP
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>AREA9</span>, it should reference an existing <span class='pre'>area_id</span> in table <span class='pre'>areas.txt</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">stop_id
+					</td>
+					<td class="issue">Invalid ID <span class='id'>MISSING_STOP</span>, it should reference an existing <span class='pre'>stop_id</span> in table <span class='pre'>stops.txt</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L11
+					</td>
+					<td class="ERROR"/>
+					<td class="ERROR">MISSING
+					</td>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id, stop_id
+					</td>
+					<td class="issue">Missing mandatory object ID
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subcategory">
+			<table class="sourceinfo">
+				<thead>
+					<tr>
+						<td class="linenr">
+						</td>
+						<td>area_id
+						</td>
+						<td>stop_id
+						</td>
+					</tr>
+				</thead>
+				<tr>
+					<td class="linenr">L12
+					</td>
+					<td class="ERROR">MISSING
+					</td>
+					<td class="ERROR"/>
+				</tr>
+			</table>
+			<table class="issuelist">
+				<tr>
+					<td class="severity ERROR">ERROR
+					</td>
+					<td class="fieldname">area_id, stop_id
+					</td>
+					<td class="issue">Missing mandatory object ID
 					</td>
 				</tr>
 			</table>

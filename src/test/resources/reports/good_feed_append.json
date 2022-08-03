@@ -97,7 +97,7 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
-        "totalCount" : 144,
+        "totalCount" : 152,
         "reportedCount" : 0
       }, {
         "severity" : "CRITICAL",
@@ -162,7 +162,7 @@
       }, {
         "severity" : "WARNING",
         "categoryName" : "Inconsistent number of fields",
-        "totalCount" : 52,
+        "totalCount" : 51,
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
@@ -231,6 +231,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "WARNING",
+        "categoryName" : "Unused area",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "WARNING",
         "categoryName" : "Unused calendar",
         "totalCount" : 4,
         "reportedCount" : 0
@@ -278,6 +283,16 @@
         "severity" : "WARNING",
         "categoryName" : "Useless timepoint",
         "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID area_id",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Duplicated ID area_id, stop_id",
+        "totalCount" : 1,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -368,6 +383,11 @@
         "severity" : "ERROR",
         "categoryName" : "Invalid agency_url format",
         "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Invalid area_id reference",
+        "totalCount" : 2,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -526,6 +546,11 @@
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
+        "categoryName" : "Invalid stop_id reference",
+        "totalCount" : 2,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
         "categoryName" : "Invalid stop_lat/stop_lon coordinate",
         "totalCount" : 1,
         "reportedCount" : 0
@@ -553,11 +578,6 @@
         "severity" : "ERROR",
         "categoryName" : "Invalid to_stop_id reference",
         "totalCount" : 3,
-        "reportedCount" : 0
-      }, {
-        "severity" : "ERROR",
-        "categoryName" : "Invalid to_trip_id reference",
-        "totalCount" : 1,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
@@ -627,6 +647,11 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Missing mandatory from_stop_id value",
+        "totalCount" : 1,
+        "reportedCount" : 0
+      }, {
+        "severity" : "ERROR",
+        "categoryName" : "Missing mandatory from_trip_id/to_trip_id value",
         "totalCount" : 1,
         "reportedCount" : 0
       }, {
@@ -712,12 +737,12 @@
       }, {
         "severity" : "ERROR",
         "categoryName" : "Missing mandatory transfer_type value",
-        "totalCount" : 2,
+        "totalCount" : 1,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
         "categoryName" : "Missing object ID",
-        "totalCount" : 4,
+        "totalCount" : 7,
         "reportedCount" : 0
       }, {
         "severity" : "ERROR",
