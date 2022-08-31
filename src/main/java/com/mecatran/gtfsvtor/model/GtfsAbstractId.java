@@ -9,7 +9,6 @@ public abstract class GtfsAbstractId<U, V extends GtfsObject<U>>
 
 	protected GtfsAbstractId(U id) {
 		if (id == null) {
-			// Should we do that?
 			throw new IllegalArgumentException("NULL IDs are not allowed.");
 		}
 		this.id = id;
