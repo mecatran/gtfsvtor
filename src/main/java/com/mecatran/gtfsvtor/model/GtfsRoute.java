@@ -18,6 +18,7 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 	private GtfsColor color;
 	private GtfsColor textColor;
 	private Integer sortOrder;
+	private GtfsNetwork.Id networkId;
 
 	private long sourceLineNumber;
 
@@ -72,6 +73,10 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 	public Integer getSortOrder() {
 		return sortOrder;
+	}
+
+	public Optional<GtfsNetwork.Id> getNetworkId() {
+		return Optional.ofNullable(networkId);
 	}
 
 	@Override
@@ -157,6 +162,11 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 		public Builder withSortOrder(Integer sortOrder) {
 			route.sortOrder = sortOrder;
+			return this;
+		}
+
+		public Builder withNetworkId(GtfsNetwork.Id networkId) {
+			route.networkId = networkId;
 			return this;
 		}
 

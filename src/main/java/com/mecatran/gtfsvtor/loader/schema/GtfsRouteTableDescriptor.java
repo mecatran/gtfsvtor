@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.loader.schema;
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
 import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
 import com.mecatran.gtfsvtor.model.GtfsAgency;
+import com.mecatran.gtfsvtor.model.GtfsNetwork;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsRouteType;
@@ -28,7 +29,8 @@ public class GtfsRouteTableDescriptor implements GtfsTableDescriptor {
 				.withColor(erow.getColor("route_color"))
 				.withTextColor(erow.getColor("route_text_color"))
 				.withSortOrder(erow.getInteger("route_sort_order",
-						Requiredness.OPTIONAL));
+						Requiredness.OPTIONAL))
+				.withNetworkId(GtfsNetwork.id(erow.getString("network_id")));
 		GtfsRoute route = builder.build();
 		context.getAppendableDao().addRoute(route, context.getSourceContext());
 		return route;
