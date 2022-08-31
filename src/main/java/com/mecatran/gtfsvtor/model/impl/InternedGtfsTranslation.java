@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
+import com.mecatran.gtfsvtor.model.GtfsCompositeId;
 import com.mecatran.gtfsvtor.model.GtfsTranslation;
 import com.mecatran.gtfsvtor.model.GtfsTranslationTable;
 
@@ -17,7 +18,8 @@ import com.mecatran.gtfsvtor.model.GtfsTranslationTable;
  */
 public class InternedGtfsTranslation implements GtfsTranslation {
 
-	private InternedId id; // Combine all fields except translation
+	private GtfsTranslationColRef colRef;
+	private GtfsTranslationValRef valRef;
 	private String translation;
 
 	private long sourceLineNumber;
@@ -29,17 +31,17 @@ public class InternedGtfsTranslation implements GtfsTranslation {
 
 	@Override
 	public GtfsTranslationTable getTableName() {
-		return id.getColRef().getTableName();
+		return colRef.getTableName();
 	}
 
 	@Override
 	public String getFieldName() {
-		return id.getColRef().getFieldName();
+		return colRef.getFieldName();
 	}
 
 	@Override
 	public Locale getLanguage() {
-		return id.getColRef().getLanguage();
+		return colRef.getLanguage();
 	}
 
 	@Override
@@ -49,30 +51,30 @@ public class InternedGtfsTranslation implements GtfsTranslation {
 
 	@Override
 	public Optional<String> getRecordId() {
-		return id.getValRef().getRecordId();
+		return valRef.getRecordId();
 	}
 
 	@Override
 	public Optional<String> getRecordSubId() {
-		return id.getValRef().getRecordSubId();
+		return valRef.getRecordSubId();
 	}
 
 	@Override
 	public Optional<String> getFieldValue() {
-		return id.getValRef().getFieldValue();
+		return valRef.getFieldValue();
 	}
 
 	@Override
 	public InternedId getId() {
-		return id;
+		return id(colRef, valRef);
 	}
 
 	GtfsTranslationColRef getColRef() {
-		return id.getColRef();
+		return colRef;
 	}
 
 	GtfsTranslationValRef getValRef() {
-		return id.getValRef();
+		return valRef;
 	}
 
 	@Override
@@ -143,86 +145,42 @@ public class InternedGtfsTranslation implements GtfsTranslation {
 
 		@Override
 		public InternedGtfsTranslation build() {
-			translation.id = new InternedId(colRefBuilder.build(),
-					valRefBuilder.build());
+			translation.colRef = colRefBuilder.build();
+			translation.valRef = valRefBuilder.build();
 			return translation;
 		}
 	}
 
 	public static InternedId id(GtfsTranslationTable tableName,
 			String fieldName, Locale language, String fieldValue) {
-		return new InternedId(
-				new GtfsTranslationColRef.Builder().withTableName(tableName)
-						.withFieldName(fieldName).withLanguage(language)
-						.build(),
-				new GtfsTranslationValRef.Builder().withFieldValue(fieldValue)
-						.build());
+		return new InternedId(tableName, fieldName, language, fieldValue, null,
+				null);
 	}
 
 	public static InternedId id(GtfsTranslationTable tableName,
 			String fieldName, Locale language, String recordId,
 			String recordSubId) {
-		return new InternedId(
-				new GtfsTranslationColRef.Builder().withTableName(tableName)
-						.withFieldName(fieldName).withLanguage(language)
-						.build(),
-				new GtfsTranslationValRef.Builder().withRecordId(recordId)
-						.withRecordSubId(recordSubId).build());
+		return new InternedId(tableName, fieldName, language, null, recordId,
+				recordSubId);
 	}
 
-	static class InternedId implements Id {
-		private GtfsTranslationColRef colRef;
-		private GtfsTranslationValRef valRef;
+	public static InternedId id(GtfsTranslationColRef colRef,
+			GtfsTranslationValRef valRef) {
+		return new InternedId(colRef.getTableName(), colRef.fieldName,
+				colRef.getLanguage(), valRef.getFieldValue().orElse(null),
+				valRef.getRecordId().orElse(null),
+				valRef.getRecordSubId().orElse(null));
+	}
 
-		private InternedId(GtfsTranslationColRef colRef,
-				GtfsTranslationValRef valRef) {
-			this.colRef = colRef;
-			this.valRef = valRef;
-		}
+	public static class InternedId
+			extends GtfsCompositeId<String, GtfsTranslation>
+			implements GtfsTranslation.Id {
 
-		@Override
-		public Id getInternalId() {
-			return this;
-		}
-
-		GtfsTranslationColRef getColRef() {
-			return colRef;
-		}
-
-		GtfsTranslationValRef getValRef() {
-			return valRef;
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(colRef, valRef);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null)
-				return false;
-			if (obj == this)
-				return true;
-			if (!(obj instanceof InternedId)) {
-				return false;
-			}
-			InternedId other = (InternedId) obj;
-			return Objects.equals(colRef, other.colRef)
-					&& Objects.equals(valRef, other.valRef);
-		}
-
-		@Override
-		public String toString() {
-			/*
-			 * Be careful, this toString() will end-up in reports. Be
-			 * consistent.
-			 */
-			return String.format("{%s, %s, %s, %s, %s, %s}",
-					colRef.getTableName().getValue(), colRef.getFieldName(),
-					colRef.getLanguage(), valRef.getFieldValue().orElse(""),
-					valRef.getRecordId().orElse(""),
-					valRef.getRecordSubId().orElse(""));
+		private InternedId(GtfsTranslationTable tableName, String fieldName,
+				Locale language, String fieldValue, String recordId,
+				String recordSubId) {
+			super(tableName.getValue(), fieldName, language.getLanguage(),
+					fieldValue, recordId, recordSubId);
 		}
 	}
 

@@ -17,7 +17,7 @@ public interface IssueFormatter {
 
 	/** Format an object ID */
 	public default <U, V extends GtfsObject<U>> String id(GtfsId<U, V> id) {
-		return id(id == null ? "(null)" : id.getInternalId().toString());
+		return id(id == null ? "(null)" : id.toString());
 	}
 
 	/** Return the formatting options to use */

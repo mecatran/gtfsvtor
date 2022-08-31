@@ -1,10 +1,11 @@
 package com.mecatran.gtfsvtor.model;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 public interface GtfsTranslation
-		extends GtfsObject<GtfsTranslation.Id>, GtfsObjectWithSourceRef {
+		extends GtfsObject<List<String>>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "translations.txt";
 
@@ -34,7 +35,7 @@ public interface GtfsTranslation
 	 * A translation can be queried via two IDs: either using
 	 * record_id+record_sub_id, or field_value.
 	 */
-	public interface Id extends GtfsId<Id, GtfsTranslation> {
+	public interface Id extends GtfsId<List<String>, GtfsTranslation> {
 	}
 
 	public interface Builder {

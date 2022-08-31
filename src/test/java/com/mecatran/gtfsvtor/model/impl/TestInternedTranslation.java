@@ -69,7 +69,7 @@ public class TestInternedTranslation {
 		builder.withFieldValue("Third route");
 		InternedGtfsTranslation tr2 = builder.build();
 
-		assertTrue(tr1.getId().getColRef() == tr2.getId().getColRef());
+		assertTrue(tr1.getColRef() == tr2.getColRef());
 
 		builder = new InternedGtfsTranslation.Builder();
 		builder.withTableName(GtfsTranslationTable.ROUTES);
@@ -79,7 +79,7 @@ public class TestInternedTranslation {
 		builder.withFieldValue("Third route");
 		InternedGtfsTranslation tr3 = builder.build();
 
-		assertTrue(tr2.getId().getValRef() == tr3.getId().getValRef());
+		assertTrue(tr2.getValRef() == tr3.getValRef());
 	}
 
 }

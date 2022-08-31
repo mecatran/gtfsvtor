@@ -1,24 +1,25 @@
 package com.mecatran.gtfsvtor.model;
 
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.function.Function;
 
 public class GtfsTransfer
-		implements GtfsObject<GtfsTransfer.Id>, GtfsObjectWithSourceRef {
+		implements GtfsObject<List<String>>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "transfers.txt";
 
-	private Id id;
+	private GtfsStop.Id fromStopId, toStopId;
+	private GtfsRoute.Id fromRouteId, toRouteId;
+	private GtfsTrip.Id fromTripId, toTripId;
 	private GtfsTransferType transferType;
 	private Integer minTransferTime;
 
 	private long sourceLineNumber;
 
 	public GtfsTransfer.Id getId() {
-		return id;
+		return id(fromStopId, toStopId, fromRouteId, toRouteId, fromTripId,
+				toTripId);
 	}
 
 	@Override
@@ -27,27 +28,27 @@ public class GtfsTransfer
 	}
 
 	public GtfsStop.Id getFromStopId() {
-		return id.getFromStopId();
+		return fromStopId;
 	}
 
 	public GtfsStop.Id getToStopId() {
-		return id.getToStopId();
+		return toStopId;
 	}
 
 	public GtfsRoute.Id getFromRouteId() {
-		return id.getFromRouteId();
+		return fromRouteId;
 	}
 
 	public GtfsRoute.Id getToRouteId() {
-		return id.getToRouteId();
+		return toRouteId;
 	}
 
 	public GtfsTrip.Id getFromTripId() {
-		return id.getFromTripId();
+		return fromTripId;
 	}
 
 	public GtfsTrip.Id getToTripId() {
-		return id.getToTripId();
+		return toTripId;
 	}
 
 	public Optional<GtfsTransferType> getType() {
@@ -65,155 +66,36 @@ public class GtfsTransfer
 
 	@Override
 	public String toString() {
-		return "Transfer{from=" + id.getFromStopId() + ",to=" + id.getToStopId()
-				+ ",type=" + transferType + "}";
+		return "Transfer{from=" + fromStopId + ",to=" + toStopId + ",type="
+				+ transferType + "}";
 	}
 
 	public static Id id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId) {
-		return new Id.Builder().withFromStopId(fromStopId)
-				.withToStopId(toStopId).build();
+		return new Id(fromStopId, toStopId, null, null, null, null);
 	}
 
 	public static Id id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
 			GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId,
 			GtfsTrip.Id fromTripId, GtfsTrip.Id toTripId) {
-		return new Id.Builder().withFromStopId(fromStopId)
-				.withToStopId(toStopId).withFromRouteId(fromRouteId)
-				.withToRouteId(toRouteId).withFromTripId(fromTripId)
-				.withToTripId(toTripId).build();
+		return new Id(fromStopId, toStopId, fromRouteId, toRouteId, fromTripId,
+				toTripId);
 	}
 
-	public static class Id implements GtfsId<Id, GtfsTransfer> {
+	public static class Id extends GtfsCompositeId<String, GtfsTransfer> {
 
-		private GtfsStop.Id fromStopId;
-		private GtfsStop.Id toStopId;
-		private GtfsRoute.Id fromRouteId;
-		private GtfsRoute.Id toRouteId;
-		private GtfsTrip.Id fromTripId;
-		private GtfsTrip.Id toTripId;
-
-		private Id() {
-		}
-
-		@Override
-		public Id getInternalId() {
-			return this;
-		}
-
-		public GtfsStop.Id getFromStopId() {
-			return fromStopId;
-		}
-
-		public GtfsStop.Id getToStopId() {
-			return toStopId;
-		}
-
-		public GtfsRoute.Id getFromRouteId() {
-			return fromRouteId;
-		}
-
-		public GtfsRoute.Id getToRouteId() {
-			return toRouteId;
-		}
-
-		public GtfsTrip.Id getFromTripId() {
-			return fromTripId;
-		}
-
-		public GtfsTrip.Id getToTripId() {
-			return toTripId;
-		}
-
-		private static ConcurrentMap<Id, Id> CACHE = new ConcurrentHashMap<>();
-
-		private Id intern() {
-			return CACHE.computeIfAbsent(this, Function.identity());
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(fromStopId, toStopId, fromRouteId, toRouteId,
-					fromTripId, toTripId);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null)
-				return false;
-			if (obj == this)
-				return true;
-			if (!(obj instanceof Id)) {
-				return false;
-			}
-			Id other = (Id) obj;
-			return Objects.equals(fromStopId, other.fromStopId)
-					&& Objects.equals(toStopId, other.toStopId)
-					&& Objects.equals(fromRouteId, other.fromRouteId)
-					&& Objects.equals(toRouteId, other.toRouteId)
-					&& Objects.equals(fromTripId, other.fromTripId)
-					&& Objects.equals(toTripId, other.toTripId);
-		}
-
-		@Override
-		public String toString() {
-			/*
-			 * Be careful, this toString() will end-up in reports. Be
-			 * consistent.
-			 */
-			return String.format("{%s, %s, %s, %s, %s, %s}", fromStopId,
-					toStopId, fromRouteId, toRouteId, fromTripId, toTripId);
-		}
-
-		private static class Builder {
-			private Id id;
-
-			private Builder() {
-				id = new Id();
-			}
-
-			public Builder withFromStopId(GtfsStop.Id fromStopId) {
-				id.fromStopId = fromStopId;
-				return this;
-			}
-
-			public Builder withToStopId(GtfsStop.Id toStopId) {
-				id.toStopId = toStopId;
-				return this;
-			}
-
-			public Builder withFromRouteId(GtfsRoute.Id fromRouteId) {
-				id.fromRouteId = fromRouteId;
-				return this;
-			}
-
-			public Builder withToRouteId(GtfsRoute.Id toRouteId) {
-				id.toRouteId = toRouteId;
-				return this;
-			}
-
-			public Builder withFromTripId(GtfsTrip.Id fromTripId) {
-				id.fromTripId = fromTripId;
-				return this;
-			}
-
-			public Builder withToTripId(GtfsTrip.Id toTripId) {
-				id.toTripId = toTripId;
-				return this;
-			}
-
-			public Id build() {
-				return id.intern();
-			}
+		private Id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
+				GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId,
+				GtfsTrip.Id fromTripId, GtfsTrip.Id toTripId) {
+			super(Arrays.asList(fromStopId, toStopId, fromRouteId, toRouteId,
+					fromTripId, toTripId));
 		}
 	}
 
 	public static class Builder {
 		private GtfsTransfer transfer;
-		private Id.Builder idBuilder;
 
 		public Builder() {
 			transfer = new GtfsTransfer();
-			idBuilder = new Id.Builder();
 		}
 
 		public Builder withSourceLineNumber(long lineNumber) {
@@ -222,32 +104,32 @@ public class GtfsTransfer
 		}
 
 		public Builder withFromStopId(GtfsStop.Id fromStopId) {
-			idBuilder.withFromStopId(fromStopId);
+			transfer.fromStopId = fromStopId;
 			return this;
 		}
 
 		public Builder withToStopId(GtfsStop.Id toStopId) {
-			idBuilder.withToStopId(toStopId);
+			transfer.toStopId = toStopId;
 			return this;
 		}
 
 		public Builder withFromRouteId(GtfsRoute.Id fromRouteId) {
-			idBuilder.withFromRouteId(fromRouteId);
+			transfer.fromRouteId = fromRouteId;
 			return this;
 		}
 
 		public Builder withToRouteId(GtfsRoute.Id toRouteId) {
-			idBuilder.withToRouteId(toRouteId);
+			transfer.toRouteId = toRouteId;
 			return this;
 		}
 
 		public Builder withFromTripId(GtfsTrip.Id fromTripId) {
-			idBuilder.withFromTripId(fromTripId);
+			transfer.fromTripId = fromTripId;
 			return this;
 		}
 
 		public Builder withToTripId(GtfsTrip.Id toTripId) {
-			idBuilder.withToTripId(toTripId);
+			transfer.toTripId = toTripId;
 			return this;
 		}
 
@@ -262,7 +144,6 @@ public class GtfsTransfer
 		}
 
 		public GtfsTransfer build() {
-			transfer.id = idBuilder.build();
 			return transfer;
 		}
 	}
