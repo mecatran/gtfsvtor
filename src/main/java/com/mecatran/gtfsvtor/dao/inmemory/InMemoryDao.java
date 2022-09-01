@@ -44,7 +44,9 @@ import com.mecatran.gtfsvtor.model.GtfsFareTransferRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsId;
+import com.mecatran.gtfsvtor.model.GtfsLegGroup;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
+import com.mecatran.gtfsvtor.model.GtfsNetwork;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsObjectWithSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
@@ -71,6 +73,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private GtfsFeedInfo feedInfo;
 	private Map<GtfsAgency.Id, GtfsAgency> agencies = new HashMap<>();
 	private Map<GtfsRoute.Id, GtfsRoute> routes = new HashMap<>();
+	private Set<GtfsNetwork.Id> networkIds = new HashSet<>();
 	private Map<GtfsStop.Id, GtfsStop> stops = new HashMap<>();
 	private Set<GtfsZone.Id> zoneIds = new HashSet<>();
 	private Map<GtfsCalendar.Id, GtfsCalendar> calendars = new HashMap<>();
@@ -89,6 +92,7 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			.create();
 	private Map<GtfsFareProduct.Id, GtfsFareProduct> fareProducts = new HashMap<>();
 	private Map<GtfsFareLegRule.Id, GtfsFareLegRule> fareLegRules = new HashMap<>();
+	private Set<GtfsLegGroup.Id> legGroupIds = new HashSet<>();
 	private Map<GtfsFareTransferRule.Id, GtfsFareTransferRule> fareTransferRules = new HashMap<>();
 	private Map<GtfsLevel.Id, GtfsLevel> levels = new HashMap<>();
 	private Map<GtfsTranslation.Id, GtfsTranslation> translations = new HashMap<>();
@@ -183,6 +187,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public GtfsRoute getRoute(GtfsRoute.Id routeId) {
 		return routes.get(routeId);
+	}
+
+	@Override
+	public boolean hasNetworkId(GtfsNetwork.Id networkId) {
+		return networkIds.contains(networkId);
 	}
 
 	@Override
@@ -313,6 +322,11 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public GtfsFareLegRule getFareLegRule(GtfsFareLegRule.Id fareLegRuleId) {
 		return fareLegRules.get(fareLegRuleId);
+	}
+
+	@Override
+	public boolean hasLegGroupId(GtfsLegGroup.Id legGroupId) {
+		return legGroupIds.contains(legGroupId);
 	}
 
 	@Override
@@ -573,6 +587,9 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		routes.put(route.getId(), route);
 		// Note: this will also work for null agency IDs
 		routesPerAgency.put(route.getAgencyId(), route);
+		if (route.getNetworkId().isPresent()) {
+			networkIds.add(route.getNetworkId().get());
+		}
 	}
 
 	@Override
@@ -754,6 +771,9 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 			return;
 		}
 		fareLegRules.put(fareLegRule.getId(), fareLegRule);
+		if (fareLegRule.getLegGroupId().isPresent()) {
+			legGroupIds.add(fareLegRule.getLegGroupId().get());
+		}
 		// TODO Index leg rule on various fields for checks
 	}
 

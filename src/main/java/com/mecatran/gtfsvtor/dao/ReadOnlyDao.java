@@ -16,7 +16,9 @@ import com.mecatran.gtfsvtor.model.GtfsFareRule;
 import com.mecatran.gtfsvtor.model.GtfsFareTransferRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
+import com.mecatran.gtfsvtor.model.GtfsLegGroup;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
+import com.mecatran.gtfsvtor.model.GtfsNetwork;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
@@ -47,6 +49,8 @@ public interface ReadOnlyDao {
 	public Stream<GtfsRoute> getRoutes();
 
 	public GtfsRoute getRoute(GtfsRoute.Id routeId);
+
+	public boolean hasNetworkId(GtfsNetwork.Id networkId);
 
 	public Stream<GtfsStop> getStops();
 
@@ -94,6 +98,8 @@ public interface ReadOnlyDao {
 	public Stream<GtfsFareLegRule> getFareLegRules();
 
 	public GtfsFareLegRule getFareLegRule(GtfsFareLegRule.Id fareLegRuleId);
+
+	public boolean hasLegGroupId(GtfsLegGroup.Id legGroupId);
 
 	public Stream<GtfsFareTransferRule> getFareTransferRules();
 
