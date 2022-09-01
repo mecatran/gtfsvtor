@@ -50,7 +50,11 @@ public class DefaultGtfsTableSchema implements GtfsTableSchema {
 				// reference areas, stops
 				new GtfsStopAreaTableDescriptor(),
 				//
-				new GtfsFareProductTableDescriptor());
+				new GtfsFareProductTableDescriptor(),
+				// reference networks, areas, fare products
+				new GtfsFareLegRuleTableDescriptor(),
+				// reference leg groups, fare products
+				new GtfsFareTransferRuleTableDescriptor());
 	}
 
 	@Override
