@@ -1,6 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
 import java.util.List;
+import java.util.Optional;
 
 public class GtfsFareTransferRule
 		implements GtfsObject<List<String>>, GtfsObjectWithSourceRef {
@@ -27,32 +28,32 @@ public class GtfsFareTransferRule
 		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
-	public GtfsLegGroup.Id getFromLegGroupId() {
-		return fromLegGroupId;
+	public Optional<GtfsLegGroup.Id> getFromLegGroupId() {
+		return Optional.ofNullable(fromLegGroupId);
 	}
 
-	public GtfsLegGroup.Id getToLegGroupId() {
-		return toLegGroupId;
+	public Optional<GtfsLegGroup.Id> getToLegGroupId() {
+		return Optional.ofNullable(toLegGroupId);
 	}
 
-	public Integer getTransferCount() {
-		return transferCount;
+	public Optional<Integer> getTransferCount() {
+		return Optional.ofNullable(transferCount);
 	}
 
-	public Integer getDurationLimit() {
-		return durationLimit;
+	public Optional<Integer> getDurationLimit() {
+		return Optional.ofNullable(durationLimit);
 	}
 
-	public GtfsFareDurationLimitType getDurationLimitType() {
-		return durationLimitType;
+	public Optional<GtfsFareDurationLimitType> getDurationLimitType() {
+		return Optional.ofNullable(durationLimitType);
 	}
 
 	public GtfsFareTransferType getFareTransferType() {
 		return fareTransferType;
 	}
 
-	public GtfsFareProduct.Id getFareProductId() {
-		return fareProductId;
+	public Optional<GtfsFareProduct.Id> getFareProductId() {
+		return Optional.ofNullable(fareProductId);
 	}
 
 	@Override

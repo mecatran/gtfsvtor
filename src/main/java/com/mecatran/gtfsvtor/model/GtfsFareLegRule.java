@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class GtfsFareLegRule
 		implements GtfsObject<List<String>>, GtfsObjectWithSourceRef {
@@ -25,20 +26,20 @@ public class GtfsFareLegRule
 		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
-	public GtfsLegGroup.Id getLegGroupId() {
-		return legGroupId;
+	public Optional<GtfsLegGroup.Id> getLegGroupId() {
+		return Optional.ofNullable(legGroupId);
 	}
 
-	public GtfsNetwork.Id getNetworkId() {
-		return networkId;
+	public Optional<GtfsNetwork.Id> getNetworkId() {
+		return Optional.ofNullable(networkId);
 	}
 
-	public GtfsArea.Id getFromAreaId() {
-		return fromAreaId;
+	public Optional<GtfsArea.Id> getFromAreaId() {
+		return Optional.ofNullable(fromAreaId);
 	}
 
-	public GtfsArea.Id getToAreaId() {
-		return toAreaId;
+	public Optional<GtfsArea.Id> getToAreaId() {
+		return Optional.ofNullable(toAreaId);
 	}
 
 	public GtfsFareProduct.Id getFareProductId() {

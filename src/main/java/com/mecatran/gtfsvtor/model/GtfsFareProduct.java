@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.model;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class GtfsFareProduct
 		implements GtfsObject<String>, GtfsObjectWithSourceRef {
@@ -25,8 +26,8 @@ public class GtfsFareProduct
 		return new DataObjectSourceRef(TABLE_NAME, sourceLineNumber);
 	}
 
-	public String getName() {
-		return name;
+	public Optional<String> getName() {
+		return Optional.ofNullable(name);
 	}
 
 	public Double getAmount() {
