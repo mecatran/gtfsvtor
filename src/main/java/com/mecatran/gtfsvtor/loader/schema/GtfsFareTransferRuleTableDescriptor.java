@@ -30,7 +30,7 @@ public class GtfsFareTransferRuleTableDescriptor
 				.withFareTransferType(
 						erow.getFareTransferType("fare_transfer_type"))
 				.withFareProductId(GtfsFareProduct.id(erow
-						.getString("fare_product_id", Requiredness.MANDATORY)));
+						.getString("fare_product_id", Requiredness.OPTIONAL)));
 		GtfsFareTransferRule fareTransferRule = builder.build();
 		context.getAppendableDao().addFareTransferRule(fareTransferRule,
 				context.getSourceContext());
