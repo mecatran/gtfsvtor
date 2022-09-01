@@ -1,0 +1,6 @@
+leg_group_id,network_id,from_area_id,to_area_id,fare_product_id
+LG1,N1,,,SINGLE
+LG2,N2,,,SINGLE
+,NX,AREA1,AREA3,UNKNOWN
+,,AREA1,AREA2,SINGLE
+,,AREA1,AREA2,SINGLE

@@ -1,0 +1,3 @@
+fare_product_id,fare_product_name,amount,currency
+SINGLE,Single ticket,1.00,USD
+,Missing everything,,

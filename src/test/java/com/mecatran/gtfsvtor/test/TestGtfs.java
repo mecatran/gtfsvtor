@@ -1754,6 +1754,23 @@ public class TestGtfs {
 	}
 
 	@Test
+	public void testFareV2() {
+		TestBundle tb = loadAndValidate("fares_v2");
+		List<MissingMandatoryValueError> mmve = tb
+				.issuesOfCategory(MissingMandatoryValueError.class);
+		assertEquals(5, mmve.size());
+		List<InvalidReferenceError> ire = tb
+				.issuesOfCategory(InvalidReferenceError.class);
+		assertEquals(3, ire.size());
+		List<MissingObjectIdError> moie = tb
+				.issuesOfCategory(MissingObjectIdError.class);
+		assertEquals(1, moie.size());
+		List<DuplicatedObjectIdError> doie = tb
+				.issuesOfCategory(DuplicatedObjectIdError.class);
+		assertEquals(2, doie.size());
+	}
+
+	@Test
 	public void testLoadingAll() {
 		// Disabled: we already test all the test sets
 		// File base = new File("src/test/resources/data");
