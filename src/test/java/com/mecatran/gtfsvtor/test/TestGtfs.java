@@ -108,8 +108,8 @@ import com.mecatran.gtfsvtor.reporting.issues.TooFastTravelIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TooFastWalkingSpeed;
 import com.mecatran.gtfsvtor.reporting.issues.TooManyDaysWithoutServiceIssue;
 import com.mecatran.gtfsvtor.reporting.issues.TripTransferDifferentCalendarError;
-import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLargeDistanceError;
 import com.mecatran.gtfsvtor.reporting.issues.TripTransferInvalidDurationError;
+import com.mecatran.gtfsvtor.reporting.issues.TripTransferTooLargeDistanceError;
 import com.mecatran.gtfsvtor.reporting.issues.UnknownFileInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnrecognizedColumnInfo;
 import com.mecatran.gtfsvtor.reporting.issues.UnusedObjectWarning;
@@ -147,6 +147,10 @@ public class TestGtfs {
 		assertNotNull(city);
 		assertEquals("Ō", city.getShortName());
 		assertEquals("Bar Circle", city.getLongName());
+		assertEquals("N2", city.getNetworkId().get().getInternalId());
+
+		GtfsRoute aamv = dao.getRoute(GtfsRoute.id("AAMV"));
+		assertFalse(aamv.getNetworkId().isPresent());
 
 		assertEquals(12, dao.getStops().count());
 		GtfsStop nadav = dao.getStop(GtfsStop.id("NADAV"));

@@ -21,19 +21,17 @@ public class StopAreaStreamingValidator
 
 		// Check area and stop reference
 		if (stopArea.getId() != null) {
-			if (dao.getArea(stopArea.getId().getAreaId()) == null) {
+			if (dao.getArea(stopArea.getAreaId()) == null) {
 				reportSink.report(
 						new InvalidReferenceError(context.getSourceRef(),
-								"area_id",
-								stopArea.getId().getAreaId().getInternalId(),
+								"area_id", stopArea.getAreaId().getInternalId(),
 								GtfsArea.TABLE_NAME, "area_id"),
 						context.getSourceInfo());
 			}
-			if (dao.getStop(stopArea.getId().getStopId()) == null) {
+			if (dao.getStop(stopArea.getStopId()) == null) {
 				reportSink.report(
 						new InvalidReferenceError(context.getSourceRef(),
-								"stop_id",
-								stopArea.getId().getStopId().getInternalId(),
+								"stop_id", stopArea.getStopId().getInternalId(),
 								GtfsStop.TABLE_NAME, "stop_id"),
 						context.getSourceInfo());
 			}

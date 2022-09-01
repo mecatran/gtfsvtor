@@ -8,7 +8,10 @@ import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
+import com.mecatran.gtfsvtor.model.GtfsFareLegRule;
+import com.mecatran.gtfsvtor.model.GtfsFareProduct;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
+import com.mecatran.gtfsvtor.model.GtfsFareTransferRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
@@ -65,6 +68,15 @@ public interface AppendableDao {
 			SourceContext sourceContext);
 
 	public void addFareRule(GtfsFareRule fareRule, SourceContext sourceContext);
+
+	public void addFareProduct(GtfsFareProduct fareProduct,
+			SourceContext sourceContext);
+
+	public void addFareLegRule(GtfsFareLegRule fareLegRule,
+			SourceContext sourceContext);
+
+	public void addFareTransferRule(GtfsFareTransferRule fareTransferRule,
+			SourceContext sourceContext);
 
 	public void addLevel(GtfsLevel level, SourceContext sourceContext);
 

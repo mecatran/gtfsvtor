@@ -13,6 +13,8 @@ import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.model.GtfsDirectionality;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsExactTime;
+import com.mecatran.gtfsvtor.model.GtfsFareDurationLimitType;
+import com.mecatran.gtfsvtor.model.GtfsFareTransferType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalDate;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsNumTransfers;
@@ -269,6 +271,18 @@ public class DataRowConverter {
 		return getTypeFromString(GtfsTranslationTable.class, field,
 				Requiredness.MANDATORY, "Table name (w/o .txt)",
 				GtfsTranslationTable::fromValue);
+	}
+
+	public GtfsFareDurationLimitType getFareDurationLimit(String field) {
+		return getTypeFromInteger(GtfsFareDurationLimitType.class, field,
+				Requiredness.OPTIONAL, "duration limit type (0, 1, 2, 3)",
+				GtfsFareDurationLimitType::fromValue);
+	}
+
+	public GtfsFareTransferType getFareTransferType(String field) {
+		return getTypeFromInteger(GtfsFareTransferType.class, field,
+				Requiredness.MANDATORY, "fare transfer type (0, 1, 2)",
+				GtfsFareTransferType::fromValue);
 	}
 
 	@FunctionalInterface

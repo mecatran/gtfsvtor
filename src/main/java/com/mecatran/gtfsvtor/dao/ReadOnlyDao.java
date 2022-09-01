@@ -10,7 +10,10 @@ import com.mecatran.gtfsvtor.model.GtfsAttribution;
 import com.mecatran.gtfsvtor.model.GtfsCalendar;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDate;
 import com.mecatran.gtfsvtor.model.GtfsFareAttribute;
+import com.mecatran.gtfsvtor.model.GtfsFareLegRule;
+import com.mecatran.gtfsvtor.model.GtfsFareProduct;
 import com.mecatran.gtfsvtor.model.GtfsFareRule;
+import com.mecatran.gtfsvtor.model.GtfsFareTransferRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
@@ -83,6 +86,19 @@ public interface ReadOnlyDao {
 	public GtfsFareAttribute getFareAttribute(GtfsFareAttribute.Id fareId);
 
 	public Stream<GtfsFareRule> getRulesOfFare(GtfsFareAttribute.Id fareId);
+
+	public Stream<GtfsFareProduct> getFareProducts();
+
+	public GtfsFareProduct getFareProduct(GtfsFareProduct.Id fareProductId);
+
+	public Stream<GtfsFareLegRule> getFareLegRules();
+
+	public GtfsFareLegRule getFareLegRule(GtfsFareLegRule.Id fareLegRuleId);
+
+	public Stream<GtfsFareTransferRule> getFareTransferRules();
+
+	public GtfsFareTransferRule getFareTransferRule(
+			GtfsFareTransferRule.Id fareTransferRuleId);
 
 	public Stream<GtfsLevel> getLevels();
 

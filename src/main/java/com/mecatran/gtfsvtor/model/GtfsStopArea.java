@@ -1,9 +1,7 @@
 package com.mecatran.gtfsvtor.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.mecatran.gtfsvtor.utils.Pair;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A transient object used to load a stop-area relationship, but not stored in
@@ -11,16 +9,25 @@ import com.mecatran.gtfsvtor.utils.Pair;
  * duplicated pairs.
  */
 public class GtfsStopArea
-		implements GtfsObject<Pair<String, String>>, GtfsObjectWithSourceRef {
+		implements GtfsObject<List<String>>, GtfsObjectWithSourceRef {
 
 	public static final String TABLE_NAME = "stop_areas.txt";
 
-	private GtfsStopArea.Id id;
+	private GtfsArea.Id areaId;
+	private GtfsStop.Id stopId;
 
 	private long sourceLineNumber;
 
 	public GtfsStopArea.Id getId() {
-		return id;
+		return id(areaId, stopId);
+	}
+
+	public GtfsArea.Id getAreaId() {
+		return areaId;
+	}
+
+	public GtfsStop.Id getStopId() {
+		return stopId;
 	}
 
 	@Override
@@ -30,47 +37,29 @@ public class GtfsStopArea
 
 	@Override
 	public String toString() {
-		return "StopArea{id=" + id + "}";
+		return "StopArea{areaId=" + areaId + ",stopId=" + stopId + "}";
 	}
 
-	public static Id id(String areaId, String stopId) {
-		return areaId == null || stopId == null || areaId.isEmpty()
-				|| stopId.isEmpty() ? null : Id.build(areaId, stopId);
+	public static Id id(GtfsArea.Id areaId, GtfsStop.Id stopId) {
+		if (areaId == null || stopId == null)
+			return null;
+		return new Id(areaId, stopId);
 	}
 
-	public static class Id
-			extends GtfsAbstractId<Pair<String, String>, GtfsStopArea> {
+	public static class Id extends GtfsCompositeId<String, GtfsStopArea> {
 
-		private Id(Pair<String, String> areaAndStopIds) {
-			super(areaAndStopIds);
-		}
-
-		private static Map<Pair<String, String>, Id> CACHE = new HashMap<>();
-
-		private static synchronized Id build(String areaId, String stopId) {
-			return CACHE.computeIfAbsent(new Pair<>(areaId, stopId), Id::new);
-		}
-
-		public GtfsArea.Id getAreaId() {
-			return GtfsArea.id(getInternalId().getFirst());
-		}
-
-		public GtfsStop.Id getStopId() {
-			return GtfsStop.id(getInternalId().getSecond());
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return super.doEquals(obj, Id.class);
+		private Id(GtfsArea.Id areaId, GtfsStop.Id stopId) {
+			super(Arrays.asList(areaId, stopId));
 		}
 	}
 
 	public static class Builder {
 		private GtfsStopArea stopArea;
 
-		public Builder(String areaId, String stopId) {
+		public Builder(GtfsArea.Id areaId, GtfsStop.Id stopId) {
 			stopArea = new GtfsStopArea();
-			stopArea.id = GtfsStopArea.id(areaId, stopId);
+			stopArea.areaId = areaId;
+			stopArea.stopId = stopId;
 		}
 
 		public Builder withSourceLineNumber(long lineNumber) {

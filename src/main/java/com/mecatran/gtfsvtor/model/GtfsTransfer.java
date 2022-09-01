@@ -77,6 +77,9 @@ public class GtfsTransfer
 	public static Id id(GtfsStop.Id fromStopId, GtfsStop.Id toStopId,
 			GtfsRoute.Id fromRouteId, GtfsRoute.Id toRouteId,
 			GtfsTrip.Id fromTripId, GtfsTrip.Id toTripId) {
+		if (fromStopId == null && toStopId == null && fromRouteId == null
+				&& toRouteId == null && fromTripId == null && toTripId == null)
+			return null;
 		return new Id(fromStopId, toStopId, fromRouteId, toRouteId, fromTripId,
 				toTripId);
 	}

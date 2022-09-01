@@ -166,10 +166,21 @@ public class InternedGtfsTranslation implements GtfsTranslation {
 
 	public static InternedId id(GtfsTranslationColRef colRef,
 			GtfsTranslationValRef valRef) {
-		return new InternedId(colRef.getTableName(), colRef.fieldName,
-				colRef.getLanguage(), valRef.getFieldValue().orElse(null),
-				valRef.getRecordId().orElse(null),
-				valRef.getRecordSubId().orElse(null));
+		if (colRef == null || valRef == null) {
+			return null;
+		}
+		GtfsTranslationTable tableName = colRef.getTableName();
+		String fieldName = colRef.getFieldName();
+		Locale lang = colRef.getLanguage();
+		String fieldValue = valRef.getFieldValue().orElse(null);
+		String recordId = valRef.getRecordId().orElse(null);
+		String recordSubId = valRef.getRecordSubId().orElse(null);
+		if (tableName == null || fieldName == null || lang == null
+				|| (fieldValue == null && recordId == null)) {
+			return null;
+		}
+		return new InternedId(tableName, fieldName, lang, fieldValue, recordId,
+				recordSubId);
 	}
 
 	public static class InternedId
