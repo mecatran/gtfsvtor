@@ -93,7 +93,7 @@ Docker
 Run a dockerized GTFSVTOR using the [`laurentgregoire/gtfsvtor` Docker image](https://hub.docker.com/r/laurentgregoire/gtfsvtor):
 
 ```sh
-docker run -rm -v <path_data_directory, e.g. $(PWD)>:/data -e TZ=Europe/Berlin laurentgregoire/gtfsvtor /data/<gtfs-file>
+docker run --rm -i -v <path_data_directory, e.g. $(PWD)>:/data -e TZ=Europe/Berlin laurentgregoire/gtfsvtor /data/<gtfs-file>
 ```
 
 GTFSVTOR is executed in the mounted `/data` dir. If you'd like to use a custom config.properties, 
