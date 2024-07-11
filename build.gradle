@@ -17,7 +17,6 @@ startScripts {
     applicationName = 'gtfsvtor'
 }
 distZip {
-    archiveName "gtfsvtor.zip"
 }
 tasks.distTar.enabled = false
 
