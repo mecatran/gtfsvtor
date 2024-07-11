@@ -48,15 +48,17 @@ public class TimeTravelError implements ReportIssue {
 	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text(
-				"Time-travel between stop {0} {1} seq {2} @{3} and stop {4} {5} seq {6} @{7}, in trip {8} of route {9} {10}, arrival before departure.",
+				"Time-travel between stop {0} {1} {2} seq {3} @{4} and stop {5} {6} {7} seq {8} @{9}, in trip {10} of route {11} {12}, arrival before departure.",
 				fmt.id(stop1 == null ? null : stop1.getId()),
+				fmt.id(stop1 == null ? null : stop1.getCode()),
 				fmt.var(stop1 == null ? null : stop1.getName()),
 				fmt.id(stopTime1.getStopSequence().toString()),
 				fmt.time(stopTime1.getDepartureOrArrivalTime()),
 				fmt.id(stop2 == null ? null : stop2.getId()),
+				fmt.id(stop2 == null ? null : stop2.getCode()),
 				fmt.var(stop2 == null ? null : stop2.getName()),
 				fmt.id(stopTime2.getStopSequence().toString()),
-				fmt.time(stopTime2.getDepartureOrArrivalTime()),
+				fmt.time(stopTime2.getArrivalOrDepartureTime()),
 				fmt.id(trip.getId()), fmt.id(route.getId()),
 				fmt.var(route.getShortName()));
 	}
