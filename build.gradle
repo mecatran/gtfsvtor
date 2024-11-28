@@ -2,13 +2,17 @@ plugins {
   id 'java'
   id 'application'
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
 
 description = 'GTFSVTOR - General Transit Feed Specification Validator'
 version = '1.0.3'
-mainClassName = 'com.mecatran.gtfsvtor.cmdline.GtfsVtorMain'
-applicationDefaultJvmArgs = [ "-Xmx4G" ]
+application {
+	mainClass = 'com.mecatran.gtfsvtor.cmdline.GtfsVtorMain'
+	applicationDefaultJvmArgs = [ "-Xmx4G" ]
+}
 
 repositories {
   mavenCentral()
@@ -17,20 +21,14 @@ startScripts {
     applicationName = 'gtfsvtor'
 }
 distZip {
+    archiveFileName = "gtfsvtor.zip"
 }
 tasks.distTar.enabled = false
 
 // Return the current commit hash from git
-def scmRevisionInfo() {
-  new ByteArrayOutputStream().withStream { os ->
-    def result = exec {
-      executable = 'git'
-      args = [ 'rev-parse', 'HEAD' ]
-      standardOutput = os
-    }
-    return os.toString().trim()
-  }
-}
+ext.scmRevision = providers.exec {
+    commandLine('git', 'rev-parse', 'HEAD')
+}.standardOutput.asText.get().trim()
 
 def utcDateTime() {
   def df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm 'UTC'");
@@ -44,7 +42,7 @@ jar {
                'Implementation-Version': version,
                'Built-By'              : System.properties['user.name'],
                'Build-Date'            : utcDateTime(),
-               'Build-Revision'        : scmRevisionInfo(),
+               'Build-Revision'        : scmRevision,
                'Created-By'            : "Gradle ${gradle.gradleVersion}",
                'Build-Jdk'             : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
                'Build-OS'              : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
