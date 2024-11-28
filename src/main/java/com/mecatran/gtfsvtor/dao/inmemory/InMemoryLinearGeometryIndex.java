@@ -210,8 +210,10 @@ public class InMemoryLinearGeometryIndex implements LinearGeometryIndex {
 				.getPointsOfShape(trip.getShapeId());
 
 		ProjectedShapePatternImpl ret;
-		if (trip.getShapeId() == null || shapePoints.size() < 2) {
-			// No shape, linear index on inter-stop distance
+		if (trip.getShapeId() == null || shapePoints.size() < 2
+				|| shapePoints.stream().anyMatch(
+						p -> p == null || p.getCoordinates() == null)) {
+			// No shape or broken, linear index on inter-stop distance
 			ret = computeShapelessPatternIndex(trip, stopTimes, dao);
 		} else {
 			// A shape is present, check shape_dist_traveled
