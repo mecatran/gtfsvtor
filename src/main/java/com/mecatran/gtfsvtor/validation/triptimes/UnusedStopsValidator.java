@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.mecatran.gtfsvtor.dao.IndexedReadOnlyDao;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroupStop;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsStopType;
@@ -30,7 +32,13 @@ public class UnusedStopsValidator implements TripTimesValidator {
 	public void validate(Context context, GtfsTripAndTimes tripAndTimes) {
 		/* Remove all stops from unused stops */
 		for (GtfsStopTime stopTime : tripAndTimes.getStopTimes()) {
-			unusedStopsIds.remove(stopTime.getStopId());
+			if (stopTime.getStopId() != null) {
+				unusedStopsIds.remove(stopTime.getStopId());
+			} else {
+				context.getDao().getLocationGroupStops(stopTime.getLocationGroupId()).forEach(locationGroupStop -> {
+					unusedStopsIds.remove(locationGroupStop.getStopId());
+				});
+			}
 		}
 	}
 

@@ -26,12 +26,12 @@ public class FirstAndLastStopTimeSetValidator implements TripTimesValidator {
 
 		GtfsStopTime firstStopTime = stopTimes.get(0);
 		GtfsStopTime lastStopTime = stopTimes.get(stopTimes.size() - 1);
-		if (firstStopTime.getDepartureTime() == null) {
+		if (firstStopTime.getDepartureTime() == null && firstStopTime.getStartPickupDropOffWindow() == null) {
 			GtfsRoute route = dao.getRoute(trip.getRouteId());
 			reportSink.report(new FirstOrLastStopTimeMissingError(true, route,
 					trip, firstStopTime));
 		}
-		if (lastStopTime.getDepartureTime() == null) {
+		if (lastStopTime.getDepartureTime() == null && lastStopTime.getStartPickupDropOffWindow() == null) {
 			GtfsRoute route = dao.getRoute(trip.getRouteId());
 			reportSink.report(new FirstOrLastStopTimeMissingError(false, route,
 					trip, lastStopTime));

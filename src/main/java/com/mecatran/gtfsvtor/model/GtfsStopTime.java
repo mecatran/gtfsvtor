@@ -15,6 +15,10 @@ public interface GtfsStopTime extends GtfsObject<String> {
 
 	public GtfsLogicalTime getDepartureTime();
 
+	public GtfsLogicalTime getStartPickupDropOffWindow();
+
+	public GtfsLogicalTime getEndPickupDropOffWindow();
+
 	public default GtfsLogicalTime getDepartureOrArrivalTime() {
 		GtfsLogicalTime dep = getDepartureTime();
 		return dep != null ? dep : getArrivalTime();
@@ -28,6 +32,8 @@ public interface GtfsStopTime extends GtfsObject<String> {
 	}
 
 	public GtfsStop.Id getStopId();
+
+	public GtfsLocationGroup.Id getLocationGroupId();
 
 	public GtfsTripStopSequence getStopSequence();
 
@@ -61,6 +67,10 @@ public interface GtfsStopTime extends GtfsObject<String> {
 
 		public Builder withArrivalTime(GtfsLogicalTime arrivalTime);
 
+		public Builder withStartPickupDropOffWindow(GtfsLogicalTime startPickupDropOffTimeWindow);
+
+		public Builder withEndPickupDropOffWindow(GtfsLogicalTime endPickupDropOffTimeWindow);
+
 		public Builder withStopId(GtfsStop.Id stopId);
 
 		public Builder withStopSequence(GtfsTripStopSequence stopSequence);
@@ -74,6 +84,8 @@ public interface GtfsStopTime extends GtfsObject<String> {
 		public Builder withShapeDistTraveled(Double shapeDistTraveled);
 
 		public Builder withTimepoint(GtfsTimepoint timepoint);
+
+		public Builder withLocationGroupId(GtfsLocationGroup.Id locationGroupId);
 
 		public GtfsStopTime build();
 	}

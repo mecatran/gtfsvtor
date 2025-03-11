@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -30,7 +31,11 @@ public class PackedUnsortedStopTimes {
 
 		public int indexStopId(GtfsStop.Id stopId);
 
+		public int indexLocationGroupId(GtfsLocationGroup.Id locationGroupId);
+
 		public GtfsStop.Id getStopIdIndex(int stopIdIndex);
+
+		public GtfsLocationGroup.Id getLocationGroupIdIndex(int locationGroupIdIndex);
 
 		public PackedUnsortedTimePattern intern(
 				PackedUnsortedTimePattern tData);
@@ -65,10 +70,14 @@ public class PackedUnsortedStopTimes {
 	private static final int NULL_TIMEPOINT = 0x3;
 
 	// sdata
-	// 32 bits -> stop ID index (could be lower)
-	private static final long STOPIDX_MASK = 0x00000000FFFFFFFFL;
-	private static final int STOPIDX_SHIFT = 0;
-	private static final int NULL_STOPIDX = 0xFFFFFFFF;
+	// 1 bit -> is Flex
+	private static final long ISFLEX_MASK = 0x0000000000000001L;
+	private static final int ISFLEX_SHIFT = 0;
+	private static final int ISFLEX_FLAG = 1;
+	// 31 bits -> stop ID index (could be lower)
+	private static final long STOPIDX_MASK = 0x00000000FFFFFFFEL;
+	private static final int STOPIDX_SHIFT = 1;
+	private static final int NULL_STOPIDX = 0xFFFFFFFE;
 	// 32 bits -> stop seq
 	private static final long STOPSEQ_MASK = 0xFFFFFFFF00000000L;
 	private static final int STOPSEQ_SHIFT = 32;
@@ -85,14 +94,26 @@ public class PackedUnsortedStopTimes {
 
 	public void addStopTime(Context context, GtfsStopTime stopTime) {
 		long tdata = 0L;
-		GtfsLogicalTime arrTime = stopTime.getArrivalTime();
-		tdata = setData(tdata, ARRTIME_MASK, ARRTIME_SHIFT, arrTime == null
-				? NULL_TIME
-				: arrTime.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
-		GtfsLogicalTime depTime = stopTime.getDepartureTime();
-		tdata = setData(tdata, DEPTIME_MASK, DEPTIME_SHIFT, depTime == null
-				? NULL_TIME
-				: depTime.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
+		boolean isFlex = stopTime.getLocationGroupId() != null;
+		if (isFlex) {
+			GtfsLogicalTime startWindow = stopTime.getStartPickupDropOffWindow();
+			tdata = setData(tdata, ARRTIME_MASK, ARRTIME_SHIFT, startWindow == null
+					? NULL_TIME
+					: startWindow.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
+			GtfsLogicalTime endWindow = stopTime.getEndPickupDropOffWindow();
+			tdata = setData(tdata, DEPTIME_MASK, DEPTIME_SHIFT, endWindow == null
+					? NULL_TIME
+					: endWindow.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
+		} else {
+			GtfsLogicalTime arrTime = stopTime.getArrivalTime();
+			tdata = setData(tdata, ARRTIME_MASK, ARRTIME_SHIFT, arrTime == null
+					? NULL_TIME
+					: arrTime.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
+			GtfsLogicalTime depTime = stopTime.getDepartureTime();
+			tdata = setData(tdata, DEPTIME_MASK, DEPTIME_SHIFT, depTime == null
+					? NULL_TIME
+					: depTime.getSecondSinceMidnight() + TIME_SHIFT - baseTime);
+		}
 		GtfsDropoffType dropoff = stopTime.getDropoffType().orElse(null);
 		tdata = setData(tdata, DROPOFF_MASK, DROPOFF_SHIFT,
 				dropoff == null ? NULL_DROPOFF : dropoff.getValue());
@@ -105,9 +126,16 @@ public class PackedUnsortedStopTimes {
 		timeData.addTData(tdata);
 
 		long sdata = 0L;
-		int stopIndex = stopTime.getStopId() == null ? NULL_STOPIDX
-				: context.indexStopId(stopTime.getStopId());
-		sdata = setData(sdata, STOPIDX_MASK, STOPIDX_SHIFT, stopIndex);
+		if (isFlex) {
+			sdata = setData(sdata, ISFLEX_MASK, ISFLEX_SHIFT, ISFLEX_FLAG);
+			int locationGroupIndex = stopTime.getLocationGroupId() == null ? NULL_STOPIDX
+					: context.indexLocationGroupId(stopTime.getLocationGroupId());
+			sdata = setData(sdata, STOPIDX_MASK, STOPIDX_SHIFT, locationGroupIndex);
+		} else {
+			int stopIndex = stopTime.getStopId() == null ? NULL_STOPIDX
+					: context.indexStopId(stopTime.getStopId());
+			sdata = setData(sdata, STOPIDX_MASK, STOPIDX_SHIFT, stopIndex);
+		}
 		sdata = setData(sdata, STOPSEQ_MASK, STOPSEQ_SHIFT,
 				stopTime.getStopSequence().getSequence());
 		Double shapeDistTraveled = stopTime.getShapeDistTraveled();
@@ -157,15 +185,47 @@ public class PackedUnsortedStopTimes {
 			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
 			builder.withTripId(tripId);
 
+			long sdata = stopData.getSData(i);
+			boolean isFlex = getData(sdata, ISFLEX_MASK, ISFLEX_SHIFT) == ISFLEX_FLAG;
+
+			if (isFlex) {
+				int locationGroupIndex = getData(sdata, STOPIDX_MASK, STOPIDX_SHIFT);
+				if (locationGroupIndex != NULL_STOPIDX) {
+					builder.withLocationGroupId(context.getLocationGroupIdIndex(locationGroupIndex));
+				}
+			} else {
+				int stopIndex = getData(sdata, STOPIDX_MASK, STOPIDX_SHIFT);
+				if (stopIndex != NULL_STOPIDX) {
+					builder.withStopId(context.getStopIdIndex(stopIndex));
+				}
+			}
+
+			int stopseq = getData(sdata, STOPSEQ_MASK, STOPSEQ_SHIFT);
+			builder.withStopSequence(
+					GtfsTripStopSequence.fromSequence(stopseq));
+			builder.withShapeDistTraveled(stopData.getShapeDist(i));
+			builder.withStopHeadsign(stopData.getHeadsign(i));
+
 			long tdata = timeData.getTData(i);
-			int arr = getData(tdata, ARRTIME_MASK, ARRTIME_SHIFT);
-			if (arr != NULL_TIME)
-				builder.withArrivalTime(
-						GtfsLogicalTime.getTime(arr - TIME_SHIFT + baseTime));
-			int dep = getData(tdata, DEPTIME_MASK, DEPTIME_SHIFT);
-			if (dep != NULL_TIME)
-				builder.withDepartureTime(
-						GtfsLogicalTime.getTime(dep - TIME_SHIFT + baseTime));
+			if (isFlex) {
+				int startWindow = getData(tdata, ARRTIME_MASK, ARRTIME_SHIFT);
+				if (startWindow != NULL_TIME)
+					builder.withStartPickupDropOffWindow(
+							GtfsLogicalTime.getTime(startWindow - TIME_SHIFT + baseTime));
+				int endWindow = getData(tdata, DEPTIME_MASK, DEPTIME_SHIFT);
+				if (endWindow != NULL_TIME)
+					builder.withEndPickupDropOffWindow(
+							GtfsLogicalTime.getTime(endWindow - TIME_SHIFT + baseTime));
+			} else {
+				int arr = getData(tdata, ARRTIME_MASK, ARRTIME_SHIFT);
+				if (arr != NULL_TIME)
+					builder.withArrivalTime(
+							GtfsLogicalTime.getTime(arr - TIME_SHIFT + baseTime));
+				int dep = getData(tdata, DEPTIME_MASK, DEPTIME_SHIFT);
+				if (dep != NULL_TIME)
+					builder.withDepartureTime(
+							GtfsLogicalTime.getTime(dep - TIME_SHIFT + baseTime));
+			}
 			int dropoff = getData(tdata, DROPOFF_MASK, DROPOFF_SHIFT);
 			if (dropoff != NULL_DROPOFF)
 				builder.withDropoffType(GtfsDropoffType.fromValue(dropoff));
@@ -176,16 +236,6 @@ public class PackedUnsortedStopTimes {
 			if (timepoint != NULL_TIMEPOINT)
 				builder.withTimepoint(GtfsTimepoint.fromValue(timepoint));
 
-			long sdata = stopData.getSData(i);
-			int stopIndex = getData(sdata, STOPIDX_MASK, STOPIDX_SHIFT);
-			if (stopIndex != NULL_STOPIDX) {
-				builder.withStopId(context.getStopIdIndex(stopIndex));
-			}
-			int stopseq = getData(sdata, STOPSEQ_MASK, STOPSEQ_SHIFT);
-			builder.withStopSequence(
-					GtfsTripStopSequence.fromSequence(stopseq));
-			builder.withShapeDistTraveled(stopData.getShapeDist(i));
-			builder.withStopHeadsign(stopData.getHeadsign(i));
 
 			ret.add(builder.build());
 		}

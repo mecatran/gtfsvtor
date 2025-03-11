@@ -22,14 +22,18 @@ public class DefaultGtfsTableSchema implements GtfsTableSchema {
 				// Stop reference levels
 				new GtfsStopTableDescriptor(),
 				//
+				new GtfsLocationGroupTableDescriptor(),
+				//
 				new GtfsCalendarTableDescriptor(),
 				//
 				new GtfsCalendarDateTableDescriptor(),
 				//
 				new GtfsShapePointTableDescriptor(),
+				// LocationGroupStop reference location groups, stops
+				new GtfsLocationGroupStopTableDescriptor(),
 				// Trip reference routes, calendars, shapes
 				new GtfsTripTableDescriptor(),
-				// StopTime reference trips, stops
+				// StopTime reference trips, stops, location groups
 				new GtfsStopTimeTableDescriptor(),
 				// Frequency reference trips
 				new GtfsFrequencyTableDescriptor(),

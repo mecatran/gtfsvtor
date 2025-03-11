@@ -29,7 +29,10 @@ public class StopTimeStreamingValidator
 			GtfsStopTime stopTime, StreamingValidator.Context context) {
 		ReportSink reportSink = context.getReportSink();
 		// Trip id / stop sequence is primary key and tested by DAO
-		checkNonNull(stopTime::getStopId, "stop_id", context);
+		if (stopTime.getLocationGroupId() == null) {
+			// stopId is conditionally required
+			checkNonNull(stopTime::getStopId, "stop_id", context);
+		}
 		if (stopTime.getStopSequence() != null
 				&& stopTime.getStopSequence().getSequence() < 0)
 			reportSink.report(new InvalidFieldFormatError(
@@ -68,6 +71,8 @@ public class StopTimeStreamingValidator
 				}
 			}
 		}
+		// TODO validate for existance of LocationGroup
+
 		// Departure/arrival should be either set or not
 		if (stopTime.getDepartureTime() == null
 				&& stopTime.getArrivalTime() != null) {

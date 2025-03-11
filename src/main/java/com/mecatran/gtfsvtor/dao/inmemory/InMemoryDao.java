@@ -47,6 +47,8 @@ import com.mecatran.gtfsvtor.model.GtfsId;
 import com.mecatran.gtfsvtor.model.GtfsLegGroup;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsNetwork;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroupStop;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsObjectWithSourceRef;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
@@ -75,15 +77,19 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	private Map<GtfsRoute.Id, GtfsRoute> routes = new HashMap<>();
 	private Set<GtfsNetwork.Id> networkIds = new HashSet<>();
 	private Map<GtfsStop.Id, GtfsStop> stops = new HashMap<>();
+	private Map<GtfsLocationGroup.Id, GtfsLocationGroup> locationGroups = new HashMap<>();
 	private Set<GtfsZone.Id> zoneIds = new HashSet<>();
 	private Map<GtfsCalendar.Id, GtfsCalendar> calendars = new HashMap<>();
 	private Map<GtfsTrip.Id, GtfsTrip> trips = new HashMap<>();
 	private GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer = new GtfsIdIndexer.GtfsStopIdIndexer();
+	private GtfsIdIndexer.GtfsLocationGroupIdIndexer locationGroupIdIndexer = new GtfsIdIndexer.GtfsLocationGroupIdIndexer();
 	private StopTimesDao stopTimesDao;
 	private ShapePointsDao shapePointsDao;
 	private ListMultimap<GtfsTrip.Id, GtfsFrequency> frequencies = ArrayListMultimap
 			.create();
 	private Multimap<GtfsCalendar.Id, GtfsCalendarDate> calendarDates = ArrayListMultimap
+			.create();
+	private Multimap<GtfsLocationGroup.Id, GtfsLocationGroupStop> locationGroupStops = ArrayListMultimap
 			.create();
 	private Map<GtfsTransfer.Id, GtfsTransfer> transfers = new HashMap<>();
 	private Map<GtfsPathway.Id, GtfsPathway> pathways = new HashMap<>();
@@ -132,14 +138,14 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 		switch (stopTimesDaoMode) {
 		case AUTO:
 			stopTimesDao = new AutoSwitchStopTimesDao(
-					maxShapePointsInterleaving, stopIdIndexer);
+					maxShapePointsInterleaving, stopIdIndexer, locationGroupIdIndexer);
 			break;
 		case PACKED:
 			stopTimesDao = new PackingStopTimesDao(maxShapePointsInterleaving,
 					stopIdIndexer);
 			break;
 		case UNSORTED:
-			stopTimesDao = new PackingUnsortedStopTimesDao(stopIdIndexer);
+			stopTimesDao = new PackingUnsortedStopTimesDao(stopIdIndexer, locationGroupIdIndexer);
 			break;
 		}
 		switch (shapePointsDaoMode) {
@@ -202,6 +208,20 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 	@Override
 	public GtfsStop getStop(GtfsStop.Id stopId) {
 		return stops.get(stopId);
+	}
+
+	@Override
+	public Stream<GtfsLocationGroup> getLocationGroups() {
+		return locationGroups.values().stream();
+	}
+
+	public GtfsLocationGroup getLocationGroup(GtfsLocationGroup.Id locationGroupId) {
+		return locationGroups.get(locationGroupId);
+	}
+
+	@Override
+	public Stream<GtfsLocationGroupStop> getLocationGroupStops(GtfsLocationGroup.Id locationGroupId) {
+		return locationGroupStops.get(locationGroupId).stream();
 	}
 
 	@Override
@@ -625,6 +645,32 @@ public class InMemoryDao implements IndexedReadOnlyDao, AppendableDao {
 				// Nothing to index
 			}
 		}
+	}
+
+	public void addLocationGroup(GtfsLocationGroup locationGroup, SourceContext sourceContext) {
+		if (locationGroup.getId() == null) {
+			sourceContext.getReportSink()
+					.report(new MissingObjectIdError(
+									sourceContext.getSourceRef(), "location_group_id"),
+							sourceContext.getSourceInfo());
+			return;
+		}
+		GtfsLocationGroup existingLocationGroup = getLocationGroup(locationGroup.getId());
+		if (existingLocationGroup != null) {
+			sourceContext.getReportSink()
+					.report(new DuplicatedObjectIdError(
+							existingLocationGroup.getSourceRef(),
+							sourceContext.getSourceRef(), locationGroup.getId(),
+							"location_group_id"), null, sourceContext.getSourceInfo());
+			return;
+		}
+		locationGroups.put(locationGroup.getId(), locationGroup);
+	}
+
+	@Override
+	public void addLocationGroupStop(GtfsLocationGroupStop locationGroupStop, SourceContext sourceContext) {
+		// TODO check for existance and not null
+		locationGroupStops.put(locationGroupStop.getLocationGroupId(), locationGroupStop);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
 import com.mecatran.gtfsvtor.model.GtfsStop;
@@ -28,6 +29,9 @@ public class SimpleGtfsStopTime implements GtfsStopTime {
 	private GtfsDropoffType dropoffType;
 	private Double shapeDistTraveled;
 	private GtfsTimepoint timepoint;
+	private GtfsLocationGroup.Id locationGroupId;
+	private GtfsLogicalTime startPickupDropOffWindow;
+	private GtfsLogicalTime endPickupDropOffWindow;
 
 	public GtfsTrip.Id getTripId() {
 		return tripId;
@@ -41,8 +45,20 @@ public class SimpleGtfsStopTime implements GtfsStopTime {
 		return arrivalTime;
 	}
 
+	public GtfsLogicalTime getStartPickupDropOffWindow() {
+		return 	startPickupDropOffWindow;
+	}
+
+	public GtfsLogicalTime getEndPickupDropOffWindow() {
+		return 	endPickupDropOffWindow;
+	}
+
 	public GtfsStop.Id getStopId() {
 		return stopId;
+	}
+
+	public GtfsLocationGroup.Id getLocationGroupId() {
+		return locationGroupId;
 	}
 
 	public GtfsTripStopSequence getStopSequence() {
@@ -139,6 +155,24 @@ public class SimpleGtfsStopTime implements GtfsStopTime {
 		@Override
 		public Builder withTimepoint(GtfsTimepoint timepoint) {
 			stopTime.timepoint = timepoint;
+			return this;
+		}
+
+		@Override
+		public Builder withLocationGroupId(GtfsLocationGroup.Id locationGroupId) {
+			stopTime.locationGroupId = locationGroupId;
+			return this;
+		}
+
+		@Override
+		public Builder withStartPickupDropOffWindow(GtfsLogicalTime startPickupDropOffWindow) {
+			stopTime.startPickupDropOffWindow = startPickupDropOffWindow;
+			return this;
+		}
+
+		@Override
+		public Builder withEndPickupDropOffWindow(GtfsLogicalTime endPickupDropOffWindow) {
+			stopTime.endPickupDropOffWindow = endPickupDropOffWindow;
 			return this;
 		}
 

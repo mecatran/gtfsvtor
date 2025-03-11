@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.mecatran.gtfsvtor.dao.packing.GtfsIdIndexer;
 import com.mecatran.gtfsvtor.dao.packing.GtfsIdIndexer.GtfsStopIdIndexer;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
 import com.mecatran.gtfsvtor.model.GtfsTrip;
@@ -20,13 +21,15 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 	public static class DefaultContext
 			implements PackedUnsortedStopTimes.Context {
 		private GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer;
+		private GtfsIdIndexer.GtfsLocationGroupIdIndexer locationGroupIdIndexer;
 		private GenericInterner<PackedUnsortedTimePattern> tDataInterner = new GenericInterner<>(
 				true);
 		private GenericInterner<PackedUnsortedStopPattern> sDataInterner = new GenericInterner<>(
 				true);
 
-		public DefaultContext(GtfsStopIdIndexer stopIdIndexer) {
+		public DefaultContext(GtfsStopIdIndexer stopIdIndexer, GtfsIdIndexer.GtfsLocationGroupIdIndexer locationGroupIdIndexer) {
 			this.stopIdIndexer = stopIdIndexer;
+			this.locationGroupIdIndexer = locationGroupIdIndexer;
 		}
 
 		@Override
@@ -35,8 +38,18 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 		}
 
 		@Override
+		public int indexLocationGroupId(GtfsLocationGroup.Id locationGroupId) {
+			return locationGroupIdIndexer.index(locationGroupId);
+		}
+
+		@Override
 		public GtfsStop.Id getStopIdIndex(int stopIdIndex) {
 			return stopIdIndexer.unindex(stopIdIndex);
+		}
+
+		@Override
+		public GtfsLocationGroup.Id getLocationGroupIdIndex(int locationGroupIdIndex) {
+			return locationGroupIdIndexer.unindex(locationGroupIdIndex);
 		}
 
 		@Override
@@ -59,8 +72,8 @@ public class PackingUnsortedStopTimesDao implements StopTimesDao {
 	private boolean closed = false;
 
 	public PackingUnsortedStopTimesDao(
-			GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer) {
-		context = new DefaultContext(stopIdIndexer);
+			GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer, GtfsIdIndexer.GtfsLocationGroupIdIndexer locationGroupIdIndexer) {
+		context = new DefaultContext(stopIdIndexer, locationGroupIdIndexer);
 	}
 
 	public PackingUnsortedStopTimesDao withVerbose(boolean verbose) {

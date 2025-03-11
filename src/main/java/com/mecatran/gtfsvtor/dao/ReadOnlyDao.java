@@ -19,6 +19,8 @@ import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsLegGroup;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
 import com.mecatran.gtfsvtor.model.GtfsNetwork;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroupStop;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
@@ -55,6 +57,12 @@ public interface ReadOnlyDao {
 	public Stream<GtfsStop> getStops();
 
 	public GtfsStop getStop(GtfsStop.Id stopId);
+
+	public Stream<GtfsLocationGroup> getLocationGroups();
+
+	public GtfsLocationGroup getLocationGroup(GtfsLocationGroup.Id locationGroupId);
+
+	public Stream<GtfsLocationGroupStop> getLocationGroupStops(GtfsLocationGroup.Id locationGroupId) ;
 
 	public boolean hasZoneId(GtfsZone.Id zoneId);
 

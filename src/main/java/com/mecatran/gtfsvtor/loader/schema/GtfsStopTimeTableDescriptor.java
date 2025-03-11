@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.loader.schema;
 
 import com.mecatran.gtfsvtor.loader.DataRowConverter;
 import com.mecatran.gtfsvtor.loader.DataRowConverter.Requiredness;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 import com.mecatran.gtfsvtor.model.GtfsStopTime;
@@ -28,7 +29,10 @@ public class GtfsStopTimeTableDescriptor implements GtfsTableDescriptor {
 				.withDropoffType(erow.getDropoffType("drop_off_type"))
 				.withShapeDistTraveled(erow.getDouble("shape_dist_traveled",
 						Requiredness.OPTIONAL))
-				.withTimepoint(erow.getTimepoint("timepoint"));
+				.withTimepoint(erow.getTimepoint("timepoint"))
+				.withLocationGroupId(GtfsLocationGroup.id(erow.getString("location_group_id")))
+				.withStartPickupDropOffWindow(erow.getLogicalTime("start_pickup_drop_off_window", Requiredness.OPTIONAL))
+				.withEndPickupDropOffWindow(erow.getLogicalTime("end_pickup_drop_off_window", Requiredness.OPTIONAL));;
 		GtfsStopTime stopTime = builder.build();
 		context.getAppendableDao().addStopTime(stopTime,
 				context.getSourceContext());

@@ -109,6 +109,10 @@ public class DuplicatedTripsValidator implements TripTimesValidator {
 			retval.add(stopTime.getStopId());
 			retval.add(stopTime.getDepartureTime());
 			retval.add(stopTime.getArrivalTime());
+			retval.add(stopTime.getLocationGroupId());
+			retval.add(stopTime.getStartPickupDropOffWindow());
+			retval.add(stopTime.getEndPickupDropOffWindow());
+
 			// TODO Add option to include other fields
 		}
 		return retval;

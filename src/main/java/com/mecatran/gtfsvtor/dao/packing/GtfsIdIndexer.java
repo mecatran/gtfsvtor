@@ -3,6 +3,7 @@ package com.mecatran.gtfsvtor.dao.packing;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mecatran.gtfsvtor.model.GtfsId;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
 import com.mecatran.gtfsvtor.model.GtfsObject;
 import com.mecatran.gtfsvtor.model.GtfsStop;
 
@@ -19,6 +20,10 @@ public class GtfsIdIndexer<U, V extends GtfsObject<U>, T extends GtfsId<U, V>> {
 
 	public static class GtfsStopIdIndexer
 			extends GtfsIdIndexer<String, GtfsStop, GtfsStop.Id> {
+	};
+
+	public static class GtfsLocationGroupIdIndexer
+			extends GtfsIdIndexer<String, GtfsLocationGroup, GtfsLocationGroup.Id> {
 	};
 
 	/**

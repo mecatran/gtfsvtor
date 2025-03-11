@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
 import org.junit.Test;
 
 import com.mecatran.gtfsvtor.dao.packing.GtfsIdIndexer;
@@ -29,7 +30,17 @@ public class TestPackedStopTimes {
 		private PackingStopTimesDao.DefaultContext psContext = new PackingStopTimesDao.DefaultContext(
 				new GtfsIdIndexer.GtfsStopIdIndexer());
 		private PackedUnsortedStopTimes.Context pusContext = new PackingUnsortedStopTimesDao.DefaultContext(
-				new GtfsIdIndexer.GtfsStopIdIndexer());
+				new GtfsIdIndexer.GtfsStopIdIndexer(), new GtfsIdIndexer.GtfsLocationGroupIdIndexer());
+	}
+
+	@Test
+	public void testLocationGroupStopTime() throws ParseException {
+		PackingBundle pb = new PackingBundle();
+		List<GtfsStopTime> stopTimes = new ArrayList<>();
+		// Simple basic test
+		stopTimes.add(
+				stopTimeLocationGroup("T1", 0, "S1", 0, "8:00:00", 0, "8:00:00", 0.0, null));
+		testListUnsorted(pb, stopTimes);
 	}
 
 	@Test
@@ -182,6 +193,28 @@ public class TestPackedStopTimes {
 		}
 	}
 
+	private GtfsStopTime stopTimeLocationGroup(String tripId, int seq, String locationGroupId,
+																Integer dropoff, String startWindow, Integer pickup, String endWindow,
+																Double shapeDist, String headsign) {
+		try {
+			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder()
+					.withTripId(GtfsTrip.id(tripId));
+			builder.withStopSequence(GtfsTripStopSequence.fromSequence(seq))
+					.withLocationGroupId(GtfsLocationGroup.id(locationGroupId))
+					.withStartPickupDropOffWindow(startWindow == null ? null : GtfsLogicalTime.parseFromHH_MM_SS(startWindow))
+					.withEndPickupDropOffWindow(endWindow == null ? null : GtfsLogicalTime.parseFromHH_MM_SS(endWindow))
+					.withShapeDistTraveled(shapeDist)
+					.withStopHeadsign(headsign);;
+			if (dropoff != null)
+				builder.withDropoffType(GtfsDropoffType.fromValue(dropoff));
+			if (pickup != null)
+				builder.withPickupType(GtfsPickupType.fromValue(pickup));
+			return builder.build();
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private GtfsStopTime stopTime(String tripId, int seq, String stopId,
 			Integer dropoff, GtfsLogicalTime arr, Integer pickup,
 			GtfsLogicalTime dep, Double shapeDist, String headsign) {
@@ -198,6 +231,20 @@ public class TestPackedStopTimes {
 		builder.withShapeDistTraveled(shapeDist);
 		builder.withStopHeadsign(headsign);
 		return builder.build();
+	}
+
+	private void testListUnsorted(PackingBundle pb, List<GtfsStopTime> stopTimesRef) {
+		GtfsTrip.Id tripId = stopTimesRef.get(0).getTripId();
+
+		PackedUnsortedStopTimes pust = new PackedUnsortedStopTimes();
+		stopTimesRef.forEach(st -> pust.addStopTime(pb.pusContext, st));
+		List<GtfsStopTime> stopTimes2 = pust.getStopTimes(tripId,
+				pb.pusContext);
+		assertStopTimes(stopTimesRef, stopTimes2);
+		pust.sort(pb.pusContext);
+		List<GtfsStopTime> stopTimes3 = pust.getStopTimes(tripId,
+				pb.pusContext);
+		assertStopTimes(stopTimesRef, stopTimes3);
 	}
 
 	private void testList(PackingBundle pb, List<GtfsStopTime> stopTimesRef) {
@@ -229,6 +276,9 @@ public class TestPackedStopTimes {
 			assertEquals(st1.getDropoffType(), st2.getDropoffType());
 			assertEquals(st1.getPickupType(), st2.getPickupType());
 			assertEquals(st1.getTimepoint(), st2.getTimepoint());
+			assertEquals(st1.getLocationGroupId(), st2.getLocationGroupId());
+			assertEquals(st1.getStartPickupDropOffWindow(), st2.getStartPickupDropOffWindow());
+			assertEquals(st1.getEndPickupDropOffWindow(), st2.getEndPickupDropOffWindow());
 			Double sh1 = st1.getShapeDistTraveled();
 			Double sh2 = st2.getShapeDistTraveled();
 			assertTrue((sh1 == null && sh2 == null)

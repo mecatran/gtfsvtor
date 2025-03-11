@@ -17,14 +17,17 @@ import com.mecatran.gtfsvtor.model.GtfsTripAndTimes;
 public class AutoSwitchStopTimesDao implements StopTimesDao {
 
 	private GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer;
+	private GtfsIdIndexer.GtfsLocationGroupIdIndexer locationGroupIdIndexer;
 	private PackingStopTimesDao pstDao;
 	private PackingUnsortedStopTimesDao pustDao;
 	private StopTimesDao currentDao;
 	private boolean verbose = false;
 
 	public AutoSwitchStopTimesDao(int maxInterleaving,
-			GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer) {
+			GtfsIdIndexer.GtfsStopIdIndexer stopIdIndexer,
+			GtfsIdIndexer.GtfsLocationGroupIdIndexer locationGroupIdIndexer) {
 		this.stopIdIndexer = stopIdIndexer;
+		this.locationGroupIdIndexer = locationGroupIdIndexer;
 		pstDao = new PackingStopTimesDao(maxInterleaving, stopIdIndexer)
 				.withInterleavingOverflowCallback(this::handleOverflow);
 		pustDao = null;
@@ -70,7 +73,7 @@ public class AutoSwitchStopTimesDao implements StopTimesDao {
 				"Interleaving stop times overflow detected. Switching to relevant DAO implementation to better handle this.\nThis will increase memory consumption, though.");
 		pstDao.withVerbose(false);
 		pstDao.close();
-		pustDao = new PackingUnsortedStopTimesDao(stopIdIndexer)
+		pustDao = new PackingUnsortedStopTimesDao(stopIdIndexer, locationGroupIdIndexer)
 				.withVerbose(verbose);
 		// Copy over
 		pstDao.getStopTimes().forEach(pustDao::addStopTime);

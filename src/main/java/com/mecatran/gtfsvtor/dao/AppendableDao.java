@@ -15,6 +15,8 @@ import com.mecatran.gtfsvtor.model.GtfsFareTransferRule;
 import com.mecatran.gtfsvtor.model.GtfsFeedInfo;
 import com.mecatran.gtfsvtor.model.GtfsFrequency;
 import com.mecatran.gtfsvtor.model.GtfsLevel;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroup;
+import com.mecatran.gtfsvtor.model.GtfsLocationGroupStop;
 import com.mecatran.gtfsvtor.model.GtfsPathway;
 import com.mecatran.gtfsvtor.model.GtfsRoute;
 import com.mecatran.gtfsvtor.model.GtfsShapePoint;
@@ -89,6 +91,11 @@ public interface AppendableDao {
 	public void addArea(GtfsArea area, SourceContext sourceContext);
 
 	public void addStopArea(GtfsStopArea stopArea, SourceContext sourceContext);
+
+	public void addLocationGroup(GtfsLocationGroup locationGroup,
+															 SourceContext sourceContext);
+
+	public void addLocationGroupStop(GtfsLocationGroupStop locationGroupStop, SourceContext sourceContext);
 
 	public void close();
 }
