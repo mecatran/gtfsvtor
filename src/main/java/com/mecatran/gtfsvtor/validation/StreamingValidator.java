@@ -1,5 +1,7 @@
 package com.mecatran.gtfsvtor.validation;
 
+import java.util.List;
+
 import com.mecatran.gtfsvtor.dao.ReadOnlyDao;
 import com.mecatran.gtfsvtor.loader.DataObjectSourceInfo;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
@@ -21,6 +23,16 @@ public interface StreamingValidator<T extends GtfsObject<?>> {
 		public DataObjectSourceRef getSourceRef();
 
 		public DataObjectSourceInfo getSourceInfo();
+
+		/** Value of a source column on the current row, or null when absent. */
+		public default String getFieldValue(String name) {
+			DataObjectSourceInfo source = getSourceInfo();
+			if (source == null || source.getFields() == null)
+				return null;
+			List<String> fields = source.getFields();
+			int index = source.getTable().getHeaderColumns().indexOf(name);
+			return index >= 0 && index < fields.size() ? fields.get(index) : null;
+		}
 
 		public ReadOnlyDao getPartialDao();
 	}

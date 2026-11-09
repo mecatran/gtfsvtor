@@ -26,6 +26,8 @@ public class GtfsStopTimeTableDescriptor implements GtfsTableDescriptor {
 				.withStopHeadsign(erow.getString("stop_headsign"))
 				.withPickupType(erow.getPickupType("pickup_type"))
 				.withDropoffType(erow.getDropoffType("drop_off_type"))
+				.withContinuousPickup(erow.getContinuousStop("continuous_pickup"))
+				.withContinuousDropoff(erow.getContinuousStop("continuous_drop_off"))
 				.withShapeDistTraveled(erow.getDouble("shape_dist_traveled",
 						Requiredness.OPTIONAL))
 				.withTimepoint(erow.getTimepoint("timepoint"));

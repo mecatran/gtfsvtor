@@ -45,6 +45,26 @@ public interface GtfsStopTime extends GtfsObject<String> {
 		return getDropoffType().orElse(GtfsDropoffType.DEFAULT_DROPOFF);
 	}
 
+	public default Optional<GtfsContinuousStop> getContinuousPickup() {
+		return Optional.empty();
+	}
+
+	public default GtfsContinuousStop getContinuousPickup(GtfsRoute route) {
+		return getContinuousPickup().orElseGet(() ->
+				route == null ? GtfsContinuousStop.NONE
+						: route.getContinuousPickup().orElse(GtfsContinuousStop.NONE));
+	}
+
+	public default Optional<GtfsContinuousStop> getContinuousDropoff() {
+		return Optional.empty();
+	}
+
+	public default GtfsContinuousStop getContinuousDropoff(GtfsRoute route) {
+		return getContinuousDropoff().orElseGet(() ->
+				route == null ? GtfsContinuousStop.NONE
+						: route.getContinuousDropoff().orElse(GtfsContinuousStop.NONE));
+	}
+
 	public Double getShapeDistTraveled();
 
 	public Optional<GtfsTimepoint> getTimepoint();
@@ -70,6 +90,10 @@ public interface GtfsStopTime extends GtfsObject<String> {
 		public Builder withPickupType(GtfsPickupType pickupType);
 
 		public Builder withDropoffType(GtfsDropoffType dropoffType);
+
+		public Builder withContinuousPickup(GtfsContinuousStop value);
+
+		public Builder withContinuousDropoff(GtfsContinuousStop value);
 
 		public Builder withShapeDistTraveled(Double shapeDistTraveled);
 

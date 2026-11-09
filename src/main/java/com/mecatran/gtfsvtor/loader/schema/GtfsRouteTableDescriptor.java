@@ -28,6 +28,8 @@ public class GtfsRouteTableDescriptor implements GtfsTableDescriptor {
 				.withUrl(erow.getString("route_url"))
 				.withColor(erow.getColor("route_color"))
 				.withTextColor(erow.getColor("route_text_color"))
+				.withContinuousPickup(erow.getContinuousStop("continuous_pickup"))
+				.withContinuousDropoff(erow.getContinuousStop("continuous_drop_off"))
 				.withSortOrder(erow.getInteger("route_sort_order",
 						Requiredness.OPTIONAL))
 				.withNetworkId(GtfsNetwork.id(erow.getString("network_id")));

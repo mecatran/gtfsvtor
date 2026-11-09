@@ -15,6 +15,9 @@ import com.mecatran.gtfsvtor.dao.stoptimes.PackedStopTimes;
 import com.mecatran.gtfsvtor.dao.stoptimes.PackedUnsortedStopTimes;
 import com.mecatran.gtfsvtor.dao.stoptimes.PackingStopTimesDao;
 import com.mecatran.gtfsvtor.dao.stoptimes.PackingUnsortedStopTimesDao;
+import com.mecatran.gtfsvtor.model.GtfsContinuousStop;
+import com.mecatran.gtfsvtor.model.GtfsRoute;
+import com.mecatran.gtfsvtor.model.GtfsTimepoint;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -30,6 +33,37 @@ public class TestPackedStopTimes {
 				new GtfsIdIndexer.GtfsStopIdIndexer());
 		private PackedUnsortedStopTimes.Context pusContext = new PackingUnsortedStopTimesDao.DefaultContext(
 				new GtfsIdIndexer.GtfsStopIdIndexer());
+	}
+
+	@Test
+	public void testContinuousStopOverridesSurvivePacking() {
+		List<GtfsStopTime> stops = new ArrayList<>();
+		GtfsRoute route = new GtfsRoute.Builder("R")
+				.withContinuousPickup(GtfsContinuousStop.PHONE_AGENCY).build();
+		int sequence = 0;
+		for (int pickup = -1; pickup <= 3; pickup++) {
+			for (int dropoff = -1; dropoff <= 3; dropoff++) {
+				for (GtfsTimepoint timepoint : new GtfsTimepoint[] {
+						null, GtfsTimepoint.APPROXIMATE, GtfsTimepoint.EXACT }) {
+					GtfsContinuousStop p = pickup < 0 ? null : GtfsContinuousStop.fromValue(pickup);
+					GtfsContinuousStop d = dropoff < 0 ? null : GtfsContinuousStop.fromValue(dropoff);
+					GtfsStopTime stop = new SimpleGtfsStopTime.Builder()
+							.withTripId(GtfsTrip.id("T")).withStopId(GtfsStop.id("S"))
+							.withStopSequence(GtfsTripStopSequence.fromSequence(sequence++))
+							.withContinuousPickup(p).withContinuousDropoff(d)
+							.withPickupType(GtfsPickupType.NO_PICKUP)
+							.withTimepoint(timepoint).build();
+					assertEquals(p == null ? GtfsContinuousStop.PHONE_AGENCY : p, stop.getContinuousPickup(route));
+					assertEquals(d == null ? GtfsContinuousStop.NONE : d, stop.getContinuousDropoff(route));
+					GtfsStopTime small = new SmallGtfsStopTime.Builder()
+							.withContinuousPickup(p).withContinuousDropoff(d).build();
+					assertEquals(stop.getContinuousPickup(), small.getContinuousPickup());
+					assertEquals(stop.getContinuousDropoff(), small.getContinuousDropoff());
+					stops.add(stop);
+				}
+			}
+		}
+		testList(new PackingBundle(), stops);
 	}
 
 	@Test
@@ -228,6 +262,8 @@ public class TestPackedStopTimes {
 			assertEquals(st1.getStopSequence(), st2.getStopSequence());
 			assertEquals(st1.getDropoffType(), st2.getDropoffType());
 			assertEquals(st1.getPickupType(), st2.getPickupType());
+			assertEquals(st1.getContinuousPickup(), st2.getContinuousPickup());
+			assertEquals(st1.getContinuousDropoff(), st2.getContinuousDropoff());
 			assertEquals(st1.getTimepoint(), st2.getTimepoint());
 			Double sh1 = st1.getShapeDistTraveled();
 			Double sh2 = st2.getShapeDistTraveled();

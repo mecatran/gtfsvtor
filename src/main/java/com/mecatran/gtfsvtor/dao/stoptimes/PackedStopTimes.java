@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mecatran.gtfsvtor.model.GtfsContinuousStop;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -51,7 +52,7 @@ public class PackedStopTimes {
 		int n = stopTimes.size();
 		// Pre-allocate, being conservative
 		byte[] tdata = new byte[n * (1 + 3 + 3)];
-		byte[] sdata = new byte[n * (1 + 1 + 3 + 4 + 2 + 4) + 3];
+		byte[] sdata = new byte[n * (1 + 1 + 1 + 3 + 4 + 2 + 4) + 3];
 		Map<String, Integer> stopHeadsignIndexes = new HashMap<>();
 		List<String> headsigns = new ArrayList<>();
 		baseTime = Integer.MAX_VALUE; // ie, null
@@ -277,9 +278,16 @@ public class PackedStopTimes {
 			GtfsPickupType pickup = stopTime.getPickupType().orElse(null);
 			firstSByte |= (pickup == null ? 0b111 : pickup.getValue()) << 3;
 			GtfsTimepoint timepoint = stopTime.getTimepoint().orElse(null);
-			firstSByte |= (timepoint == null ? 0b11
-					: timepoint.getValue()) << 6;
-			sdata[si++] = (byte) (firstSByte & 0xFF);
+			int timepointCode = timepoint == null ? 0b11 : timepoint.getValue();
+			int continuousPickup = stopTime.getContinuousPickup().map(v -> v.getValue() + 1).orElse(0);
+			int continuousDropoff = stopTime.getContinuousDropoff().map(v -> v.getValue() + 1).orElse(0);
+			if (continuousPickup == 0 && continuousDropoff == 0) {
+				sdata[si++] = (byte) (firstSByte | (timepointCode << 6));
+			} else {
+				// The reserved timepoint code 2 signals an extra stop-pattern byte.
+				sdata[si++] = (byte) (firstSByte | (2 << 6));
+				sdata[si++] = (byte) (timepointCode | (continuousPickup << 2) | (continuousDropoff << 5));
+			}
 
 			if (_DEBUG) {
 				System.out.println(String.format("%03d: First S byte: %02x", i,
@@ -677,6 +685,16 @@ public class PackedStopTimes {
 			int drpVal = (firstSByte & 0b111);
 			int pckVal = (firstSByte >> 3) & 0b111;
 			int tptVal = (firstSByte >> 6) & 0b11;
+			if (tptVal == 2) {
+				int extra = sdata[si++] & 0xff;
+				tptVal = extra & 3;
+				int continuousPickup = (extra >>> 2) & 7;
+				int continuousDropoff = extra >>> 5;
+				if (continuousPickup != 0)
+					builder.withContinuousPickup(GtfsContinuousStop.fromValue(continuousPickup - 1));
+				if (continuousDropoff != 0)
+					builder.withContinuousDropoff(GtfsContinuousStop.fromValue(continuousDropoff - 1));
+			}
 			if (_DEBUG) {
 				System.out.println(String.format(
 						"%3d: First S byte: %02x drp=%d pck=%d tpt=%d", i,

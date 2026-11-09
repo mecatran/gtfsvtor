@@ -17,10 +17,20 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 	private String url;
 	private GtfsColor color;
 	private GtfsColor textColor;
+	private GtfsContinuousStop continuousPickup;
+	private GtfsContinuousStop continuousDropoff;
 	private Integer sortOrder;
 	private GtfsNetwork.Id networkId;
 
 	private long sourceLineNumber;
+
+	public Optional<GtfsContinuousStop> getContinuousPickup() {
+		return Optional.ofNullable(continuousPickup);
+	}
+
+	public Optional<GtfsContinuousStop> getContinuousDropoff() {
+		return Optional.ofNullable(continuousDropoff);
+	}
 
 	public GtfsRoute.Id getId() {
 		return id;
@@ -157,6 +167,16 @@ public class GtfsRoute implements GtfsObject<String>, GtfsObjectWithSourceRef {
 
 		public Builder withTextColor(GtfsColor textColor) {
 			route.textColor = textColor;
+			return this;
+		}
+
+		public Builder withContinuousPickup(GtfsContinuousStop value) {
+			route.continuousPickup = value;
+			return this;
+		}
+
+		public Builder withContinuousDropoff(GtfsContinuousStop value) {
+			route.continuousDropoff = value;
 			return this;
 		}
 

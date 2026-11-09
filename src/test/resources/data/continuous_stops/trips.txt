@@ -1,0 +1,7 @@
+route_id,service_id,trip_id,shape_id
+R,W,inherited,
+S,W,overridden,
+R,W,cancelled,
+S,W,shaped,P
+I,W,invalid,
+S,W,final-only,

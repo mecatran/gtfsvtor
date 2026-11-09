@@ -1,0 +1,13 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence,continuous_pickup,continuous_drop_off,start_pickup_drop_off_window,end_pickup_drop_off_window
+inherited,08:00:00,08:00:00,A1,1,,,,
+inherited,08:05:00,08:05:00,A2,2,,,,
+overridden,09:00:00,09:00:00,A1,1,,2,,09:10:00
+overridden,09:05:00,09:05:00,A2,2,,,,
+cancelled,10:00:00,10:00:00,A1,1,1,1,10:00:00,
+cancelled,10:05:00,10:05:00,A2,2,,,,
+shaped,11:00:00,11:00:00,A1,1,0,3,,
+shaped,11:05:00,11:05:00,A2,2,,,,
+invalid,12:00:00,12:00:00,A1,1,,x,,
+invalid,12:05:00,12:05:00,A2,2,,,,
+final-only,13:00:00,13:00:00,A1,1,,,,
+final-only,13:05:00,13:05:00,A2,2,2,,,

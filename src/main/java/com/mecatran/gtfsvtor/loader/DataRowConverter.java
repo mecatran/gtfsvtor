@@ -11,6 +11,7 @@ import com.mecatran.gtfsvtor.model.GtfsBlockId;
 import com.mecatran.gtfsvtor.model.GtfsCalendarDateExceptionType;
 import com.mecatran.gtfsvtor.model.GtfsColor;
 import com.mecatran.gtfsvtor.model.GtfsDirectionality;
+import com.mecatran.gtfsvtor.model.GtfsContinuousStop;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsExactTime;
 import com.mecatran.gtfsvtor.model.GtfsFareDurationLimitType;
@@ -181,6 +182,12 @@ public class DataRowConverter {
 		return getTypeFromInteger(GtfsShapePointSequence.class, field,
 				Requiredness.OPTIONAL, "point sequence (integer)",
 				GtfsShapePointSequence::fromSequence);
+	}
+
+	public GtfsContinuousStop getContinuousStop(String field) {
+		return getTypeFromInteger(GtfsContinuousStop.class, field,
+				Requiredness.OPTIONAL, "continuous stopping type (0, 1, 2 or 3)",
+				GtfsContinuousStop::fromValue);
 	}
 
 	public GtfsPickupType getPickupType(String field) {

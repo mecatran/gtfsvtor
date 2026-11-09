@@ -1,0 +1,3 @@
+stop_id,stop_name,stop_lat,stop_lon
+A1,Bridge,42.10,-72.20
+A2,Library,42.11,-72.21
