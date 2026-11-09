@@ -7,8 +7,9 @@ import com.mecatran.gtfsvtor.reporting.ReportIssue;
 import com.mecatran.gtfsvtor.reporting.ReportIssuePolicy;
 import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
 
-@ReportIssuePolicy(severity = ReportIssueSeverity.INFO, categoryName = "Mixed line endings")
-public class MixedLineEndingsInfo implements ReportIssue {
+/** Per-file consistency check inherited from the legacy feed validator. */
+@ReportIssuePolicy(severity = ReportIssueSeverity.ERROR, categoryName = "Mixed line endings")
+public class MixedLineEndingsError implements ReportIssue {
 
 	private final String tableName;
 	private final long lfCount;
@@ -16,7 +17,7 @@ public class MixedLineEndingsInfo implements ReportIssue {
 	private final long crlfCount;
 	private final List<Long> crlfLines;
 
-	public MixedLineEndingsInfo(String tableName, long lfCount, List<Long> lfLines,
+	public MixedLineEndingsError(String tableName, long lfCount, List<Long> lfLines,
 			long crlfCount, List<Long> crlfLines) {
 		this.tableName = tableName;
 		this.lfCount = lfCount;

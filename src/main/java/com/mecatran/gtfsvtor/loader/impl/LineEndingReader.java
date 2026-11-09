@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsInfo;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsError;
 
 /** Observes physical line endings without changing the CSV parser's input. */
 final class LineEndingReader extends Reader {
@@ -43,10 +43,10 @@ final class LineEndingReader extends Reader {
 		return count;
 	}
 
-	Optional<MixedLineEndingsInfo> getMixedLineEndings(String tableName) {
+	Optional<MixedLineEndingsError> getMixedLineEndings(String tableName) {
 		if (lfCount == 0 || crlfCount == 0)
 			return Optional.empty();
-		return Optional.of(new MixedLineEndingsInfo(tableName, lfCount, lfLines,
+		return Optional.of(new MixedLineEndingsError(tableName, lfCount, lfLines,
 				crlfCount, crlfLines));
 	}
 

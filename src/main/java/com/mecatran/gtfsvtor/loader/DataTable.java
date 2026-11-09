@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import com.mecatran.gtfsvtor.loader.impl.DataObjectSourceInfoImpl;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
-import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsInfo;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsError;
 
 public interface DataTable extends Closeable, Iterable<DataRow> {
 
@@ -44,7 +44,7 @@ public interface DataTable extends Closeable, Iterable<DataRow> {
 	public List<String> getRawColumnHeaders();
 
 	/** File-level diagnostic available after all rows have been read. */
-	public default Optional<MixedLineEndingsInfo> getMixedLineEndings() {
+	public default Optional<MixedLineEndingsError> getMixedLineEndings() {
 		return Optional.empty();
 	}
 

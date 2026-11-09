@@ -35,6 +35,25 @@ public class TestLineEndingReader {
 	}
 
 	@Test
+	public void bothParsersReportMixedEndingsAfterDecodingBom() throws Exception {
+		for (DataTable.Factory factory : List.of(UnivocityCsvDataTable.factory(),
+				ApacheCommonsCsvDataTable.factory())) {
+			byte[] csv = "\uFEFFname\none\r\ntwo\n".getBytes(StandardCharsets.UTF_16LE);
+			try (DataTable table = factory.createDataTable("test.txt", new ByteArrayInputStream(csv))) {
+				List<String> rows = new ArrayList<>();
+				for (DataRow row : table)
+					rows.add(row.getString("name"));
+				assertEquals(List.of("one", "two"), rows);
+				PlainTextIssueFormatter formatter = new PlainTextIssueFormatter(null);
+				table.getMixedLineEndings().get().format(formatter);
+				assertEquals("test.txt mixes LF and CRLF line endings. "
+						+ "LF count: 2 (first lines: [1, 3]). CRLF count: 1 (first lines: [2]).",
+						formatter.getPlainTextResult());
+			}
+		}
+	}
+
+	@Test
 	public void bothParsersPreserveRowsAndAcceptEitherUniformStyle() throws Exception {
 		for (DataTable.Factory factory : List.of(UnivocityCsvDataTable.factory(),
 				ApacheCommonsCsvDataTable.factory())) {

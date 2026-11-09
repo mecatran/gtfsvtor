@@ -27,7 +27,7 @@ import org.apache.commons.io.input.BOMInputStream;
 import com.mecatran.gtfsvtor.loader.DataRow;
 import com.mecatran.gtfsvtor.loader.DataTable;
 import com.mecatran.gtfsvtor.loader.TableSourceInfo;
-import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsInfo;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsError;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 
@@ -212,7 +212,7 @@ public class UnivocityCsvDataTable implements DataTable, Closeable {
 	}
 
 	@Override
-	public Optional<MixedLineEndingsInfo> getMixedLineEndings() {
+	public Optional<MixedLineEndingsError> getMixedLineEndings() {
 		return lineEndings.getMixedLineEndings(tableName);
 	}
 

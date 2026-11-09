@@ -82,7 +82,7 @@ import com.mecatran.gtfsvtor.reporting.issues.FirstOrLastStopTimeMissingError;
 import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
 import com.mecatran.gtfsvtor.reporting.impl.PlainTextIssueFormatter;
 import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
-import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsInfo;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCoordinateError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
@@ -411,8 +411,9 @@ public class TestGtfs {
 	@Test
 	public void testBadEol() {
 		TestBundle tb = loadAndValidate("bad_eol.zip");
-		List<MixedLineEndingsInfo> issues = tb.issuesOfCategory(MixedLineEndingsInfo.class);
+		List<MixedLineEndingsError> issues = tb.issuesOfCategory(MixedLineEndingsError.class);
 		assertEquals(1, issues.size());
+		assertEquals(ReportIssueSeverity.ERROR, issues.get(0).getSeverity());
 		PlainTextIssueFormatter formatter = new PlainTextIssueFormatter(null);
 		issues.get(0).format(formatter);
 		assertEquals("calendar.txt mixes LF and CRLF line endings. "
