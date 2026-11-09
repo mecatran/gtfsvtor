@@ -163,7 +163,7 @@ public class PackedUnsortedStopTimes {
 			Context context) {
 		List<GtfsStopTime> ret = new ArrayList<>(timeData.size());
 		for (int i = 0; i < timeData.size(); i++) {
-			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
+			SimpleGtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
 			builder.withTripId(tripId);
 
 			long tdata = timeData.getTData(i);

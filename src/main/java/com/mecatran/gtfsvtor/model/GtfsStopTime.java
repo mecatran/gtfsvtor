@@ -91,10 +91,6 @@ public interface GtfsStopTime extends GtfsObject<String> {
 
 		public Builder withDropoffType(GtfsDropoffType dropoffType);
 
-		public Builder withContinuousPickup(GtfsContinuousStop value);
-
-		public Builder withContinuousDropoff(GtfsContinuousStop value);
-
 		public Builder withShapeDistTraveled(Double shapeDistTraveled);
 
 		public Builder withTimepoint(GtfsTimepoint timepoint);

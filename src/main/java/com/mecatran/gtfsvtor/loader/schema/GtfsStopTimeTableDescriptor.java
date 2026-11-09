@@ -15,7 +15,7 @@ public class GtfsStopTimeTableDescriptor implements GtfsTableDescriptor {
 
 	@Override
 	public GtfsObject<?> parseAndSave(DataRowConverter erow, Context context) {
-		GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
+		SimpleGtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
 		builder.withTripId(GtfsTrip.id(erow.getString("trip_id")))
 				.withArrivalTime(erow.getLogicalTime("arrival_time",
 						Requiredness.OPTIONAL))

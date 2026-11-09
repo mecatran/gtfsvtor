@@ -194,14 +194,12 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 			return this;
 		}
 
-		@Override
 		public Builder withContinuousPickup(GtfsContinuousStop value) {
 			stopTime.setData(7L << CONTINUOUS_PICKUP_SHIFT, CONTINUOUS_PICKUP_SHIFT,
 					value == null ? 0 : 1 + value.getValue());
 			return this;
 		}
 
-		@Override
 		public Builder withContinuousDropoff(GtfsContinuousStop value) {
 			stopTime.setData(7L << CONTINUOUS_DROPOFF_SHIFT, CONTINUOUS_DROPOFF_SHIFT,
 					value == null ? 0 : 1 + value.getValue());

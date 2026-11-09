@@ -141,13 +141,11 @@ public class SimpleGtfsStopTime implements GtfsStopTime {
 			return this;
 		}
 
-		@Override
 		public Builder withContinuousPickup(GtfsContinuousStop value) {
 			stopTime.continuousPickup = value;
 			return this;
 		}
 
-		@Override
 		public Builder withContinuousDropoff(GtfsContinuousStop value) {
 			stopTime.continuousDropoff = value;
 			return this;

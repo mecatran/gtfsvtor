@@ -507,7 +507,7 @@ public class PackedStopTimes {
 		}
 
 		for (int i = 0; i < n; i++) {
-			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder()
+			SimpleGtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder()
 					.withTripId(tripId);
 
 			// Load T data (time deltas)
