@@ -90,6 +90,7 @@ public class GtfsDataLoader implements DataLoader {
 		checkColumns(context.getReportSink(), table,
 				tableDescriptor.getMandatoryColumns(nObjects),
 				tableDescriptor.getDeprecatedColumns(nObjects));
+		table.getMixedLineEndings().ifPresent(context.getReportSink()::report);
 		closeTable(table, context.getReportSink(),
 				tableDescriptor.getDeprecatedColumns(nObjects));
 	}

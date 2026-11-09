@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -26,6 +27,7 @@ import org.apache.commons.io.input.BOMInputStream;
 import com.mecatran.gtfsvtor.loader.DataRow;
 import com.mecatran.gtfsvtor.loader.DataTable;
 import com.mecatran.gtfsvtor.loader.TableSourceInfo;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsInfo;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 
@@ -35,6 +37,7 @@ public class UnivocityCsvDataTable implements DataTable, Closeable {
 	private CsvParser csvParser;
 	private Set<String> readFields = new HashSet<>();
 	private Charset charset;
+	private final LineEndingReader lineEndings;
 	private Map<String, Integer> headerIndex = new HashMap<>();
 	private int headerSize = 0;
 	// TODO Enable this option
@@ -78,8 +81,8 @@ public class UnivocityCsvDataTable implements DataTable, Closeable {
 
 		CharsetDecoder decoder = charset.newDecoder().replaceWith("\uFFFD")
 				.onMalformedInput(CodingErrorAction.REPLACE);
-		final BufferedReader br = new BufferedReader(
-				new InputStreamReader(bomIn, decoder));
+		lineEndings = new LineEndingReader(new InputStreamReader(bomIn, decoder));
+		final BufferedReader br = new BufferedReader(lineEndings);
 
 		CsvParserSettings settings = new CsvParserSettings();
 		settings.getFormat().setLineSeparator("\n");
@@ -206,6 +209,11 @@ public class UnivocityCsvDataTable implements DataTable, Closeable {
 			}
 		}
 		return Collections.unmodifiableList(ret);
+	}
+
+	@Override
+	public Optional<MixedLineEndingsInfo> getMixedLineEndings() {
+		return lineEndings.getMixedLineEndings(tableName);
 	}
 
 	@Override

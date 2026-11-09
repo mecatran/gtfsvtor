@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
@@ -25,6 +26,7 @@ import org.apache.commons.io.input.BOMInputStream;
 import com.mecatran.gtfsvtor.loader.DataRow;
 import com.mecatran.gtfsvtor.loader.DataTable;
 import com.mecatran.gtfsvtor.loader.TableSourceInfo;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsInfo;
 
 public class ApacheCommonsCsvDataTable implements DataTable {
 
@@ -33,6 +35,7 @@ public class ApacheCommonsCsvDataTable implements DataTable {
 	private Iterator<CSVRecord> csvIterator;
 	private Set<String> readFields = new HashSet<>();
 	private Charset charset;
+	private final LineEndingReader lineEndings;
 
 	private boolean checkRecordConsistent = false;
 
@@ -72,8 +75,8 @@ public class ApacheCommonsCsvDataTable implements DataTable {
 
 		CharsetDecoder decoder = charset.newDecoder().replaceWith("\uFFFD")
 				.onMalformedInput(CodingErrorAction.REPLACE);
-		final BufferedReader br = new BufferedReader(
-				new InputStreamReader(bomIn, decoder));
+		lineEndings = new LineEndingReader(new InputStreamReader(bomIn, decoder));
+		final BufferedReader br = new BufferedReader(lineEndings);
 		CSVFormat format = CSVFormat.DEFAULT.withDelimiter(',').withHeader()
 				.withNullString(null).withIgnoreSurroundingSpaces(true);
 		csvParser = new CSVParser(br, format);
@@ -158,6 +161,11 @@ public class ApacheCommonsCsvDataTable implements DataTable {
 		 * header name (the method getHeaderMapRaw() does not fit).
 		 */
 		return Collections.unmodifiableList(csvParser.getHeaderNames());
+	}
+
+	@Override
+	public Optional<MixedLineEndingsInfo> getMixedLineEndings() {
+		return lineEndings.getMixedLineEndings(tableName);
 	}
 
 	@Override

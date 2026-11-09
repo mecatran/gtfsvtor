@@ -6,9 +6,11 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import com.mecatran.gtfsvtor.loader.impl.DataObjectSourceInfoImpl;
 import com.mecatran.gtfsvtor.model.DataObjectSourceRef;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsInfo;
 
 public interface DataTable extends Closeable, Iterable<DataRow> {
 
@@ -40,6 +42,11 @@ public interface DataTable extends Closeable, Iterable<DataRow> {
 	public List<String> getColumnHeaders();
 
 	public List<String> getRawColumnHeaders();
+
+	/** File-level diagnostic available after all rows have been read. */
+	public default Optional<MixedLineEndingsInfo> getMixedLineEndings() {
+		return Optional.empty();
+	}
 
 	public Charset getCharset();
 
