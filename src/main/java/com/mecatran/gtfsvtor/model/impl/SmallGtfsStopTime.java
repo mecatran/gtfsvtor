@@ -2,6 +2,7 @@ package com.mecatran.gtfsvtor.model.impl;
 
 import java.util.Optional;
 
+import com.mecatran.gtfsvtor.model.GtfsContinuousStop;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -42,6 +43,10 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 	private static final long TIMEPOINT_MASK = 0x0300000000000000L;
 	private static final int TIMEPOINT_SHIFT = 56;
 	private static final int NULL_TIMEPOINT = 0x3;
+	// Three bits per continuous field; zero means the route value is inherited.
+	private static final int CONTINUOUS_PICKUP_SHIFT = 58;
+	private static final int CONTINUOUS_DROPOFF_SHIFT = 61;
+
 
 	// Trip ID will be interned by the builder
 	private GtfsTrip.Id tripId;
@@ -85,6 +90,16 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 		int pt = getData(DROPOFF_MASK, DROPOFF_SHIFT);
 		return pt == NULL_DROPOFF ? Optional.empty()
 				: Optional.of(GtfsDropoffType.fromValue(pt));
+	}
+
+	public Optional<GtfsContinuousStop> getContinuousPickup() {
+		int code = (int) ((data >>> CONTINUOUS_PICKUP_SHIFT) & 7);
+		return code == 0 ? Optional.empty() : Optional.of(GtfsContinuousStop.fromValue(code - 1));
+	}
+
+	public Optional<GtfsContinuousStop> getContinuousDropoff() {
+		int code = (int) ((data >>> CONTINUOUS_DROPOFF_SHIFT) & 7);
+		return code == 0 ? Optional.empty() : Optional.of(GtfsContinuousStop.fromValue(code - 1));
 	}
 
 	public Double getShapeDistTraveled() {
@@ -176,6 +191,18 @@ public class SmallGtfsStopTime implements GtfsStopTime {
 			stopTime.setData(DROPOFF_MASK, DROPOFF_SHIFT,
 					dropoffType == null ? NULL_DROPOFF
 							: dropoffType.getValue());
+			return this;
+		}
+
+		public Builder withContinuousPickup(GtfsContinuousStop value) {
+			stopTime.setData(7L << CONTINUOUS_PICKUP_SHIFT, CONTINUOUS_PICKUP_SHIFT,
+					value == null ? 0 : 1 + value.getValue());
+			return this;
+		}
+
+		public Builder withContinuousDropoff(GtfsContinuousStop value) {
+			stopTime.setData(7L << CONTINUOUS_DROPOFF_SHIFT, CONTINUOUS_DROPOFF_SHIFT,
+					value == null ? 0 : 1 + value.getValue());
 			return this;
 		}
 

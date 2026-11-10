@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.mecatran.gtfsvtor.model.GtfsContinuousStop;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -63,6 +64,10 @@ public class PackedUnsortedStopTimes {
 	private static final long TIMEPOINT_MASK = 0x0300000000000000L;
 	private static final int TIMEPOINT_SHIFT = 56;
 	private static final int NULL_TIMEPOINT = 0x3;
+	// Three bits per continuous field; zero means the route value is inherited.
+	private static final int CONTINUOUS_PICKUP_SHIFT = 58;
+	private static final int CONTINUOUS_DROPOFF_SHIFT = 61;
+
 
 	// sdata
 	// 32 bits -> stop ID index (could be lower)
@@ -102,6 +107,10 @@ public class PackedUnsortedStopTimes {
 		GtfsTimepoint timepoint = stopTime.getTimepoint().orElse(null);
 		tdata = setData(tdata, TIMEPOINT_MASK, TIMEPOINT_SHIFT,
 				timepoint == null ? NULL_TIMEPOINT : timepoint.getValue());
+		tdata |= (long) stopTime.getContinuousPickup().map(v -> v.getValue() + 1)
+				.orElse(0).intValue() << CONTINUOUS_PICKUP_SHIFT;
+		tdata |= (long) stopTime.getContinuousDropoff().map(v -> v.getValue() + 1)
+				.orElse(0).intValue() << CONTINUOUS_DROPOFF_SHIFT;
 		timeData.addTData(tdata);
 
 		long sdata = 0L;
@@ -154,7 +163,7 @@ public class PackedUnsortedStopTimes {
 			Context context) {
 		List<GtfsStopTime> ret = new ArrayList<>(timeData.size());
 		for (int i = 0; i < timeData.size(); i++) {
-			GtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
+			SimpleGtfsStopTime.Builder builder = new SimpleGtfsStopTime.Builder();
 			builder.withTripId(tripId);
 
 			long tdata = timeData.getTData(i);
@@ -175,6 +184,13 @@ public class PackedUnsortedStopTimes {
 			int timepoint = getData(tdata, TIMEPOINT_MASK, TIMEPOINT_SHIFT);
 			if (timepoint != NULL_TIMEPOINT)
 				builder.withTimepoint(GtfsTimepoint.fromValue(timepoint));
+
+			int continuousPickup = (int) ((tdata >>> CONTINUOUS_PICKUP_SHIFT) & 7);
+			if (continuousPickup != 0)
+				builder.withContinuousPickup(GtfsContinuousStop.fromValue(continuousPickup - 1));
+			int continuousDropoff = (int) ((tdata >>> CONTINUOUS_DROPOFF_SHIFT) & 7);
+			if (continuousDropoff != 0)
+				builder.withContinuousDropoff(GtfsContinuousStop.fromValue(continuousDropoff - 1));
 
 			long sdata = stopData.getSData(i);
 			int stopIndex = getData(sdata, STOPIDX_MASK, STOPIDX_SHIFT);

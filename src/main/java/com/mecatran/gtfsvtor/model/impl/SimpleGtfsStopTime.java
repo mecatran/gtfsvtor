@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.mecatran.gtfsvtor.model.GtfsContinuousStop;
 import com.mecatran.gtfsvtor.model.GtfsDropoffType;
 import com.mecatran.gtfsvtor.model.GtfsLogicalTime;
 import com.mecatran.gtfsvtor.model.GtfsPickupType;
@@ -26,8 +27,18 @@ public class SimpleGtfsStopTime implements GtfsStopTime {
 	private String stopHeadsign;
 	private GtfsPickupType pickupType;
 	private GtfsDropoffType dropoffType;
+	private GtfsContinuousStop continuousPickup;
+	private GtfsContinuousStop continuousDropoff;
 	private Double shapeDistTraveled;
 	private GtfsTimepoint timepoint;
+
+	public Optional<GtfsContinuousStop> getContinuousPickup() {
+		return Optional.ofNullable(continuousPickup);
+	}
+
+	public Optional<GtfsContinuousStop> getContinuousDropoff() {
+		return Optional.ofNullable(continuousDropoff);
+	}
 
 	public GtfsTrip.Id getTripId() {
 		return tripId;
@@ -127,6 +138,16 @@ public class SimpleGtfsStopTime implements GtfsStopTime {
 		@Override
 		public Builder withDropoffType(GtfsDropoffType dropoffType) {
 			stopTime.dropoffType = dropoffType;
+			return this;
+		}
+
+		public Builder withContinuousPickup(GtfsContinuousStop value) {
+			stopTime.continuousPickup = value;
+			return this;
+		}
+
+		public Builder withContinuousDropoff(GtfsContinuousStop value) {
+			stopTime.continuousDropoff = value;
 			return this;
 		}
 

@@ -234,6 +234,11 @@ public class GtfsDataLoader implements DataLoader {
 		}
 
 		@Override
+		public String getFieldValue(String name) {
+			return row == null ? null : row.getString(name);
+		}
+
+		@Override
 		public ReadOnlyDao getPartialDao() {
 			return context.getReadOnlyDao();
 		}
