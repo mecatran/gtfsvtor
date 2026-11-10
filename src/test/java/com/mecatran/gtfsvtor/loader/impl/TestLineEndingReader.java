@@ -13,7 +13,8 @@ import org.junit.Test;
 
 import com.mecatran.gtfsvtor.loader.DataRow;
 import com.mecatran.gtfsvtor.loader.DataTable;
-import com.mecatran.gtfsvtor.reporting.impl.PlainTextIssueFormatter;
+import com.mecatran.gtfsvtor.reporting.ReportIssueSeverity;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsError;
 
 public class TestLineEndingReader {
 
@@ -26,11 +27,13 @@ public class TestLineEndingReader {
 			while (reader.read(single, 1, 1) != -1)
 				copy.append(single[1]);
 			assertEquals(text, copy.toString());
-			PlainTextIssueFormatter formatter = new PlainTextIssueFormatter(null);
-			reader.getMixedLineEndings("test.txt").get().format(formatter);
-			assertEquals("test.txt mixes LF and CRLF line endings. "
-					+ "LF count: 4 (first lines: [1, 3, 4]). CRLF count: 1 (first lines: [2]).",
-					formatter.getPlainTextResult());
+			MixedLineEndingsError issue = reader.getMixedLineEndings("test.txt").get();
+			assertEquals(ReportIssueSeverity.ERROR, issue.getSeverity());
+			assertEquals("test.txt", issue.getTableName());
+			assertEquals(4L, issue.getLfCount());
+			assertEquals(List.of(1L, 3L, 4L), issue.getLfLines());
+			assertEquals(1L, issue.getCrlfCount());
+			assertEquals(List.of(2L), issue.getCrlfLines());
 		}
 	}
 
@@ -44,11 +47,13 @@ public class TestLineEndingReader {
 				for (DataRow row : table)
 					rows.add(row.getString("name"));
 				assertEquals(List.of("one", "two"), rows);
-				PlainTextIssueFormatter formatter = new PlainTextIssueFormatter(null);
-				table.getMixedLineEndings().get().format(formatter);
-				assertEquals("test.txt mixes LF and CRLF line endings. "
-						+ "LF count: 2 (first lines: [1, 3]). CRLF count: 1 (first lines: [2]).",
-						formatter.getPlainTextResult());
+				MixedLineEndingsError issue = table.getMixedLineEndings().get();
+				assertEquals(ReportIssueSeverity.ERROR, issue.getSeverity());
+				assertEquals("test.txt", issue.getTableName());
+				assertEquals(2L, issue.getLfCount());
+				assertEquals(List.of(1L, 3L), issue.getLfLines());
+				assertEquals(1L, issue.getCrlfCount());
+				assertEquals(List.of(2L), issue.getCrlfLines());
 			}
 		}
 	}

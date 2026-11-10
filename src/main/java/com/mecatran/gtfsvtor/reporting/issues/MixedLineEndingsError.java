@@ -26,6 +26,26 @@ public class MixedLineEndingsError implements ReportIssue {
 		this.crlfLines = List.copyOf(crlfLines);
 	}
 
+	public String getTableName() {
+		return tableName;
+	}
+
+	public long getLfCount() {
+		return lfCount;
+	}
+
+	public List<Long> getLfLines() {
+		return lfLines;
+	}
+
+	public long getCrlfCount() {
+		return crlfCount;
+	}
+
+	public List<Long> getCrlfLines() {
+		return crlfLines;
+	}
+
 	@Override
 	public void format(IssueFormatter fmt) {
 		fmt.text("{0} mixes LF and CRLF line endings. LF count: {1} (first lines: {2}). CRLF count: {3} (first lines: {4}).",

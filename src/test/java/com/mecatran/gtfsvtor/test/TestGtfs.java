@@ -80,7 +80,6 @@ import com.mecatran.gtfsvtor.reporting.issues.EmptyCalendarWarning;
 import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.FirstOrLastStopTimeMissingError;
 import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
-import com.mecatran.gtfsvtor.reporting.impl.PlainTextIssueFormatter;
 import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
 import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
@@ -413,12 +412,13 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("bad_eol.zip");
 		List<MixedLineEndingsError> issues = tb.issuesOfCategory(MixedLineEndingsError.class);
 		assertEquals(1, issues.size());
-		assertEquals(ReportIssueSeverity.ERROR, issues.get(0).getSeverity());
-		PlainTextIssueFormatter formatter = new PlainTextIssueFormatter(null);
-		issues.get(0).format(formatter);
-		assertEquals("calendar.txt mixes LF and CRLF line endings. "
-				+ "LF count: 2 (first lines: [1, 3]). CRLF count: 1 (first lines: [2]).",
-				formatter.getPlainTextResult());
+		MixedLineEndingsError issue = issues.get(0);
+		assertEquals(ReportIssueSeverity.ERROR, issue.getSeverity());
+		assertEquals("calendar.txt", issue.getTableName());
+		assertEquals(2L, issue.getLfCount());
+		assertEquals(List.of(1L, 3L), issue.getLfLines());
+		assertEquals(1L, issue.getCrlfCount());
+		assertEquals(List.of(2L), issue.getCrlfLines());
 	}
 
 	@Test
