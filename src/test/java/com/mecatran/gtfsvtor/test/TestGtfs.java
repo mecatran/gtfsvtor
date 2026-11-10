@@ -982,7 +982,7 @@ public class TestGtfs {
 		TestBundle tb = loadAndValidate("unused_data");
 		List<UnusedObjectWarning> uows = tb
 				.issuesOfCategory(UnusedObjectWarning.class);
-		assertEquals(7, uows.size());
+		assertEquals(9, uows.size());
 		Set<GtfsId<?, ?>> unusedIds = uows.stream()
 				.map(UnusedObjectWarning::getId).collect(Collectors.toSet());
 		for (GtfsId<?, ?> id : Arrays.asList(GtfsAgency.id("UNUSED_AGENCY"),
@@ -990,7 +990,8 @@ public class TestGtfs {
 				GtfsCalendar.id("UNUSED_CALENDAR"),
 				GtfsCalendar.id("UNUSED_CALENDAR_DATE"),
 				GtfsStop.id("UNUSED_STOP"), GtfsStop.id("UNUSED_STATION"),
-				GtfsShape.id("UNUSED_SHAPE"))) {
+				GtfsShape.id("UNUSED_SHAPE"), GtfsLevel.id("UNUSED_LEVEL"),
+				GtfsArea.id("UNUSED_AREA"))) {
 			assertTrue(unusedIds.contains(id));
 		}
 	}

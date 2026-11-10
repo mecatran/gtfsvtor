@@ -1,0 +1,2 @@
+area_id,area_name
+UNUSED_AREA,Unused area
