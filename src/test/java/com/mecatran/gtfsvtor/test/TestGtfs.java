@@ -81,6 +81,7 @@ import com.mecatran.gtfsvtor.reporting.issues.EmptyTableError;
 import com.mecatran.gtfsvtor.reporting.issues.FirstOrLastStopTimeMissingError;
 import com.mecatran.gtfsvtor.reporting.issues.GeneralIOError;
 import com.mecatran.gtfsvtor.reporting.issues.InconsistentNumberOfFieldsWarning;
+import com.mecatran.gtfsvtor.reporting.issues.MixedLineEndingsError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCharsetError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidCoordinateError;
 import com.mecatran.gtfsvtor.reporting.issues.InvalidEncodingError;
@@ -408,13 +409,16 @@ public class TestGtfs {
 
 	@Test
 	public void testBadEol() {
-		// See following issues for missing things to validate:
-		// https://github.com/mecatran/gtfsvtor/issues/13
-		// https://github.com/mecatran/gtfsvtor/issues/14
-		@SuppressWarnings("unused")
 		TestBundle tb = loadAndValidate("bad_eol.zip");
-		// assertEquals(1,
-		// tb.report.getReportItems(GeneralIOError.class).size());
+		List<MixedLineEndingsError> issues = tb.issuesOfCategory(MixedLineEndingsError.class);
+		assertEquals(1, issues.size());
+		MixedLineEndingsError issue = issues.get(0);
+		assertEquals(ReportIssueSeverity.ERROR, issue.getSeverity());
+		assertEquals("calendar.txt", issue.getTableName());
+		assertEquals(2L, issue.getLfCount());
+		assertEquals(List.of(1L, 3L), issue.getLfLines());
+		assertEquals(1L, issue.getCrlfCount());
+		assertEquals(List.of(2L), issue.getCrlfLines());
 	}
 
 	@Test
